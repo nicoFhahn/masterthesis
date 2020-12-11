@@ -1,11 +1,38 @@
-\documentclass[12pt]{article}
+\documentclass[12pt]{book}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage[backend=biber,style=alphabetic,citestyle=authoryear,autocite=footnote,citereset=section, maxcitenames=2]{biblatex}
+\bibliography{references.bib}
 
 \begin{document}
-\section{Introduction}
-\section{Corona Virus}
-\section{The Modeling of Geospatial Health Data}
-\section{Data Collection}
-\section{Data Analysis}
-\section{Results}
-\section{Final Thoughts}
+\chapter{Introduction}
+\chapter{Corona Virus}
+\chapter{The Modelling of Geospatial Health Data}
+\section{Exponential Families and the Conjugate Prior}
+In statistics and probability theory, and exponential family is a parametric set of probability distributions of a specific form. The distribution of a random variable $y$ is an exponential family, if the discrete or continuous density with respect to a $\sigma$-finite measure of $y$ follows the form
+\begin{equation}
+    f(y|\theta, \lambda)=\exp\left(\frac{y'\theta - b(\theta)}{\lambda}+c(y,\lambda) \right),
+\end{equation}
+with $c(y,\lambda)\geq 0$ and measurable. $\theta\in\Theta\subset\mathbb{R}^q$ is the \textit{natural} or \textit{canonical} parameter of the exponential family while $\lambda > 0$ is a \textit{dispersion} or \textit{nuisance} parameter. The natural parameter space $\Theta$ is the set of all $\theta$ satisfying $0<\int\exp\left(\frac{y'\theta - b(\theta)}{\lambda}+c(y,\lambda) \right)dy< \infty$. Furthermore, $b(\theta)$ is a twice differentiable function and all moments of $y$ exist. Specifically, 
+\begin{alignat}{3}
+    \mathbb{E}_\theta(y) &= \mu(\theta) =& \frac{\partial b(\theta)}{\partial\theta} \\
+    \hbox{Cov}_\theta(y) &= \Sigma(\theta) =& \lambda\frac{\partial^2b(\theta)}{\partial\theta\partial\theta'}.
+\end{alignat}
+The covariance matrix $\Sigma(\theta)$ is positive definite in $\Theta^0$, therefore $\mu:\Theta^0\rightarrow  M = \mu\left(\Theta^0\right)$ is injective. By inserting the inverse function $\theta(\mu)$ into $\frac{\partial^2b(\theta)}{\partial\theta\partial\theta'}$, the variance function 
+\begin{equation}
+    v(\mu)=\frac{\partial^2b(\theta(\mu))}{\partial\theta\partial\theta'}
+\end{equation}
+is given and the covariance can be written as
+\begin{equation}
+    \hbox{Cov}_\theta(y) = \lambda v(\mu).
+\end{equation}
+Important exponential families are the normal, binomial, Poisson, gamma and inverse Gaussian distribution. \autocite[Cf.][]{fahrmeir2013multivariate} One property of exponential families is, that they have conjugate priors which is and important property in Bayesian statistics. HIERNOCHWASCONJUGATE PRIOR
+\section{Latent Gaussian Models}
+\section{Markov Chain Monte Carlo Methods}
+\section{Integrated Nested Laplace Approximation}
+\chapter{Data Collection}
+\chapter{Data Analysis}
+\chapter{Results}
+\chapter{Final Thoughts}
 \end{document}
