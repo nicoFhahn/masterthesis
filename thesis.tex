@@ -1,25 +1,160 @@
 \documentclass[12pt]{book}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
 \usepackage{hyperref}
 \usepackage[backend=biber,style=alphabetic,citestyle=authoryear,autocite=footnote,citereset=section, maxcitenames=2]{biblatex}
 \bibliography{references.bib}
 
 \begin{document}
+\tableofcontents
 \chapter{Introduction}
 \chapter{Corona Virus}
 \chapter{The Modelling of Geospatial Health Data}
+\section{Introduction to Bayesian Inference}
+Bayesian Inference is a method of statistical inference that uses Bayes' theorem to update the probability of a hypothesis as more data is observed or more information becomes available. It is an essential technique in mathematical statistics and the polar opposite of the frequentist approach, which makes predictions based solely on data from an experiment. In the Bayesian approach a \textit{prior} distribution $p\left(\theta, \sigma^2\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\theta$ and $\sigma^2$ prior to obtaining the data. Using the prior distribution, the likelihood function $p\left(x|\theta,\sigma^2\right)$, and the observed data $x$, it is possible to calculate the probability distribution $p\left(\theta,\sigma^2\right|x)$ of $\theta$ and $\sigma^2$ given the data $x$. This distribution is called the \textit{posterior} distribution of $\theta$ and $\sigma^2$ an is used to make inferences about the parameters. \autocite[Cf.][]{box2011bayesian}
+\subsection{Bayes' theorem}
+At the heart of Bayesian inference is Bayes' theorem, which describes the probability of an event given prior knowledge of factors that might influence the event. \\
+Let $x'=\left(x_1,...,x_n\right)$ be a vector of $n$ observations whose probability distribution $p\left(x|\theta\right)$ depends on the values of $k$ parameters $\theta'=\left(\theta_1,...,\theta_k\right)$. Let $p\left(\theta\right)$ be the probability distribution of $\theta$. Then 
+\begin{equation}
+    p\left(x|\theta\right)p\left(\theta\right)=p\left(x, \theta\right) = p\left(\theta|x\right)p\left(x\right).
+\end{equation}
+Given the observed data $x$, the conditional distribution of $\theta$ is
+\begin{equation}
+    p\left(\theta|x\right)=\frac{p\left(x|\theta\right)p\left(\theta\right)}{p\left(x\right)}.
+\end{equation}
+This last statement is known as \textit{Bayes' theorem}. The \textit{prior} distribution $p\left(\theta\right)$ contains knowledge about $\theta$ without knowledge of the data. $p\left(\theta|x\right)$ contains what is known about $\theta$ given knowledge of the data and is the \textit{posterior} distribution of $\theta$ given $x$. \\
+If $p\left(x|\theta\right)$ is considered as a function of $\theta$ instead of $x$, it is called the \textit{likelihood function} of $theta$ given $x$ and can be written as $l\left(\theta|x\right)$. Thus Bayes' theorem can be written as
+\begin{equation}
+    p\left(\theta|x\right)=l\left(\theta|x\right)p\left(\theta\right).
+\end{equation}
+It is evident that the posterior distribution of $\theta$ given the data $x$ is proportional to the product of the distribution of $\theta$ prior to observing the data and the likelihood function of $\theta$ given $x$. Therefore,
+\begin{equation*}
+    \hbox{posterior distribution} \propto  \hbox{likelihood}\times\hbox{prior distribution}.
+\end{equation*}
+The data $x$ modifies the prior knowledge of $\theta$ through the likelihood function, and thus can be be regarded as a representation of the information about  $\theta$ derived from the data.\autocite[Cf.][]{box2011bayesian}
+\section{Markov-Chain-Monte-Carlo-Methods}
+Markov chain Monte Carlo methods, also referred to as MCMC methods, are a set of algorithms that enable sampling from probability distributions based on the construction of Markov chains. After a sufficient number of iterations, the stationary distribution of a Markov chain can be taken as the desired distribution, with the quality of this distribution improving as the number of iterations increases. Most of the time, the construction of such a chain is relatively simple; the real challenge is to determine how many steps are needed before convergence towards the stationary distribution is achieved. MCMC methods are mostly used to compute numerical approximations of multidimensional integrals, for instance in Bayesian statistics or computational biology. The two main concepts used in MCMC methods are Monte Carlo integration and the aforementioned Markov chains, hence the name Markov Chain Monte Carlo.
+\subsection{Monte Carlo Integration}
+Monte Carlo integration is a technique that uses the generation of random numbers for numerical computation of definite integrals and is especially useful for higher-dimensional integrals. The problem the method addresses is the computation of the integral
+\begin{equation}
+    \mathbb{E}_f\left[h\left(X\right)\right]=\int_\chi h(x)f(x)dx.
+\end{equation}
+The integral can be approximated by using a sample $\left(X_1,...,X_m\right)$ generated from $f$ and calculating the arithmetic mean
+\begin{equation}
+    \overline{h}_m=\frac{1}{m}\sum_{j=1}^mh\left(x_j\right).
+\end{equation}
+According to the Strong Law of Large Numbers, $\overline{h}_m$ is likely to converge to $\mathbb{E}_f\left[h\left(X\right)\right]$. When the expectation of $h^2$ under $f$ is finite, the convergence speed of $\overline{h}_m$ can be assessed. The variance too can be estimated from the sample $\left(X_1,...,X_N\right)$ through
+\begin{equation}
+    v_m=\frac{1}{m^2}\sum_{j=1}^m\left[h\left(x_j\right)-\overline{h}_m\right]^2.
+\end{equation}
+For $m$ large,
+\begin{equation}
+    \frac{\overline{h}_m-\mathbb{E}_f\left[h\left(X\right)\right]}{\sqrt{v_m}}
+\end{equation}
+is approximately distributed as a $N(0,1)$ variable. This can be used for constructing a convergence test and to calculate confidence bounds for the approximation of $\mathbb{E}_f\left[h\left(X\right)\right]$.\autocite[Cf.][]{robert2013monte}
+\subsection{Markov Chains}
+Markov chains are stochastic processes that aim to provide the probability of the occurrence of future events. A Markov chain is defined by the fact that even if only a limited history is known, predictions about future developments can be made just as reliably as if the entire history of a process were known. Thus, the probability of moving from the current state to any state depends only on the current state of the chain. These probabilities are defined by a \textit{transition kernel}, which is a function $K$ on $\mathcal{X} \times \mathcal{B}\left(\mathcal{X}\right)$, such that
+\begin{itemize}
+    \item[i.] $\forall x\in\mathcal{X}, K\left(x, \cdot\right)$ is a probability measure;
+    \item[ii.] $\forall A\in \mathcal{B}\left(\mathcal{X}\right), K\left(\cdot, A\right)$ is measureable.
+\end{itemize}
+In the discrete case, the transition kernel is a matrix $K$ with elements
+\begin{equation*}
+    P_{xy}=P\left(X_n=y|X_{n-1}=x\right), \hspace{20pt}x,y\in\mathcal{X}.
+\end{equation*}
+If $\mathcal{X}$ is continuous, the kernel denotes the conditional density $K\left(x,x'\right)$ of the transition $K\left(x,\cdot\right)$:
+\begin{equation*}
+    P\left(X\in A|x\right)=\int_AK\left(x,x'\right)dx'.
+\end{equation*}
+Given a transition kernel $K$, a sequence $X_0,X_1,...,X_n$ of random variables is a \textit{Markov chain} $\left(X_n\right)$, if, for any $t$, the conditional distribution of $X_t$ given the previous states is the same as the distribution of $X_t$ given the last state, $x_{t-1}$:
+\begin{align}
+    P\left(X_{k+1}\in A|x_0,x_1,x_2,...,x_k\right) &= P\left(X_{k+1}\in A|x_k\right) \nonumber\\
+    &= \int_A K\left(x_k, dx\right). 
+\end{align}
+Markov chains can have certain properties that affect their long-term behavior and are of particular importance for MCMC algorithms. Next, some of them will be introduced.
+\subsubsection{Irreducibility} 
+Irreducibility is critical to the construction of Markov chain Monte Carlo algorithms, as it ensures the convergence of such an algorithm. A Markov chain is \textit{irreducible} if all states communicate, that is, for all states $i$ and $j$ the probability of getting from $i$ to $j$ in finite time is true positive. \\
+Formally speaking, given a measure $\varphi$, a Markov chain $\left(X_n\right)$ with transition kernel $K\left(x,y\right)$ is $\varphi$-\textit{irreducible}, if, for every $A\in B\left(\mathcal{X}\right)$ with $\varphi\left(A\right)>0$, there exists $n$ such that $K^n\left(x,A\right) \forall x\in\mathcal{X}$. The chain is \textit{strongly} $\varphi$-\textit{irreducible} if $n=1\forall$ measurable $A$.
+\subsubsection{Periodicity} 
+The behaviour of a Markov chain can sometimes be limited by deterministic constraints on the transitions from $X_n$ to $X_{n+1}$. For discrete chains, the \textit{period} of a state $w\in\mathcal{X}$ is defined as. 
+\begin{equation*}
+    d\left(w\right)=\hbox{g.c.d. } \lbrace m\geq 1;K^m\left(w,w\right)>0\rbrace,
+\end{equation*}
+with g.c.d the greatest common denominator. If a Markov chain is irreducible, the transition matrix can be written as a block matrix
+\begin{equation}
+    P=\begin{pmatrix}
+    0 & D_1 & 0 & \dots & 0\\
+    0 & 0 & D_2 & \dots & 0 \\
+    \vdots & \vdots & \ddots  \\
+    D_d & 0 & 0 & & 0
+    \end{pmatrix},
+\end{equation}
+It is evident that at every $d$-th step there is a return to the initial group. There exists only one value for the period when a chain is irreducible. If this value is 1, the irreducible chain is \textit{aperiodic}.
+ \subsubsection{Transience and Recurrence} 
+To guarantee an acceptable approximation of a simulated model, a Markov chain needs to have good stability properties. Irreducibility is not strong enough to ensure that the trajectory of $\left(X_n\right)$ enters $A$ often enough. This leads to the formalisation of \textit{recurrence} and \textit{transience}.  \\
+In a finite space $\mathcal{X}$, a state $w\in\mathcal{X}$ is \textit{transient} if it is finitely often visited and \textit{recurrent} if it is almost certainly infinitely often visited. \\
+For irreducible chains, these two properties are properties of the chain, not of a particular state. 
+\subsubsection{Ergodicity}
+When looking at a Markov Chain $\left(X_n\right)$ from a temporal point of view, it is essential to establish to what the chain is converging. A natural candidate for the limiting distribution is the stationary distribution $\pi$ which leads to the need to define sufficient conditions on $\left(X_n\right)$ for $X_n$ to be asymptotically distributed according to $\pi$. There are several conditions that can be imposed on the convergence of $P^n$, the distribution of $X_n$ to $\pi$. The most fundamental ans important is that of \textit{ergodicity}, that is, independence of initial conditions. \\
+If a Markov chain $\left(X_n\right)$ is both aperiodic and positive recurrent, it is called an \textit{ergodic} Markov chain.
+\subsubsection{Stationary distribution} 
+A chain $\left(X_n\right)$ is more stable if the marginal distribution of $X_n$ is independent of $n$. This is a requirement for the existence of a probability distribution $\pi$ such that $X_{n+1}\sim\pi$ if $X_n\sim\pi$. Markov chain Monte Carlo methods rely on the fact that this condition can be satisfied. \\
+A $\sigma$-finite measure $\pi$ is \textit{invariant} for the transition kernel $K\left(\cdot,\cdot\right)$ if \begin{equation*}
+    \pi\left(B\right)=\int_\mathcal{X}K\left(x,B\right)\pi(dx), \hspace{20pt} \forall B\in\mathcal{B}\left(\mathcal{X}\right).
+\end{equation*}
+This distribution is referred to as \textit{stationary} if $\pi$ is a probability measure, as $X_0\sim\pi$ implies that $X_n\sim\pi$ is $\forall n$. An irreducible Markov chain has a stationary distribution precisely if it is positively recurrent. The distribution is then given by
+\begin{equation}
+    \pi_x=\left(\mathbb{E}_x\left[\tau_x\right]\right)^{-1}, \hspace{20pt} x\in\mathcal{X},
+\end{equation}
+where $\mathbb{E}_x\left[\tau_x\right]$ can be interpreted as the average number of transitions between two passages in $x$. \\
+In practice, the stationary distributions are often of special interest. If these distributions are defined as the starting distribution of $X_0$, then all following distributions of the states $X_n$ for any $n$ are equal to the starting distribution. The interesting question here is when such distributions exist and when any distribution converges against a stationary distribution of this kind. \autocite[Cf.][]{robert2013monte}
+\subsection{The Metropolis-Hastings Algorithm}
+Having established the basics of MCMC methods, one of the best known MCMC algorithms, the Metropolis-Hastings algorithm, is introduced next. It is a procedure for drawing random samples from a probability distribution from which direct sampling is difficult if a function proportional to the \textit{target density} $f$ is known. This function $q\left(y|x\right)$ is called the \textit{proposal density} and must be easy to simulate in order for the Metropolis-Hastings algorithm to be implementable. Moreover, it must be either explicitly present or \textit{symmetric}, meaning $q\left(x|y\right)=q\left(y|x\right)$. \\
+The Metropolis-Hastings algorithm of a target density $f$ and proposal density $q$ produces a Markov chain $\left(X^{(t)}\right)$ by the following transition.
+\begin{algorithm}
+\caption{The Metropolis-Hastings Algorithm}
+\begin{algorithmic}[1]
+\Statex Given $f\left(x\right)$ and $q\left(y|x\right)$
+\State Initialisation: Choose arbitrary $x_t$ as the first sample
+\For{each iteration $t$}
+    \State Generate $Y_t\sim q\left(y|x^{(t)}\right)$
+    \State Take 
+    \begin{align}
+        X^{(t+1)}&=\begin{cases}
+        Y_t & \hbox{with probability } \rho\left(x^{(t)}, Y_t\right) \\
+        x^{(t)} & \hbox{with probability } 1-\rho\left(x^{(t)}, Y_t\right)
+        \end{cases} \nonumber \\
+    \hbox{where} \nonumber\\
+    \rho\left(x,y\right) &= \min\left\lbrace\frac{f\left(y\right)}{f\left(x\right)}\frac{q\left(x|y\right)}{q\left(y|x\right)}, 1\right\rbrace.
+    \end{align} 
+    \EndFor
+\end{algorithmic}
+\end{algorithm} 
+$\rho\left(x,y\right)$ is the \textit{Metropolis-Hastings acceptance probability}. \\
+The algorithm always accepts values $y_t$ that lead to an increase in the ratio $\frac{f\left(y_t\right)}{q\left(y_t|x^{(t)}\right)}$ compared to the previous value $\frac{f\left(x^{(t)}\right)}{q\left(x^{(t)}|y_t\right)}$. In the symmetric case, the acceptance probability simplifies to
+\begin{equation*}
+     \rho\left(x,y\right) = \min\left\lbrace\frac{f\left(y\right)}{f\left(x\right)}, 1\right\rbrace.
+\end{equation*}
+If the Markov chain starts with a value $x^{(0)} > 0$, then $f\left(x^{(t)}\right) > 0 \forall t\in\mathbb{N}$ since the values of $y$ such that $f\left(y_t\right) = 0$ will all be rejected by the algorithm. As the number of iterations $t$ increases, the distribution of saved states $x_0,...,x_t$ will converge towards the target density $f(x)$.  \autocite[Cf.][]{robert2013monte}
+% hier könnten noch Diagnostics für MCMC methods / MH Algorithm sein, z.b. Traceplot. Außerdem sample mean für schätzung des posterior mean und sample variance für schätzung der varianz
+\subsection{The Gibbs Sampler}
+\subsection{Pros and Cons of MCMC methods}
+falls nichts besseres einfällt, dann bei lgminla intro
+%https://b-ok.cc/book/5023108/999c68
+%https://b-ok.cc/book/2298942/aa5289
 \section{Exponential Families and the Conjugate Prior}
-In statistics and probability theory, and exponential family is a parametric set of probability distributions of a specific form. The distribution of a random variable $y$ is an exponential family, if the discrete or continuous density with respect to a $\sigma$-finite measure of $y$ follows the form
+In statistics and probability theory, the exponential family is a parametric set of probability distributions of a specific form. The distribution of a random variable $y$ belongs to the exponential family if the discrete or continuous density with respect to a $\sigma$-finite measure of $y$ has the form
 \begin{equation}
     f(y|\theta, \lambda)=\exp\left(\frac{y'\theta - b(\theta)}{\lambda}+c(y,\lambda) \right),
 \end{equation}
-with $c(y,\lambda)\geq 0$ and measurable. $\theta\in\Theta\subset\mathbb{R}^q$ is the \textit{natural} or \textit{canonical} parameter of the exponential family while $\lambda > 0$ is a \textit{dispersion} or \textit{nuisance} parameter. The natural parameter space $\Theta$ is the set of all $\theta$ satisfying $0<\int\exp\left(\frac{y'\theta - b(\theta)}{\lambda}+c(y,\lambda) \right)dy< \infty$. Furthermore, $b(\theta)$ is a twice differentiable function and all moments of $y$ exist. Specifically, 
+with $c(y,\lambda)\geq 0$ and measurable. $\theta\in\Theta\subset\mathbb{R}^q$ is the \textit{natural} or \textit{canonical} parameter of the exponential family, while $\lambda > 0$ is a \textit{dispersion} or \textit{nuisance} parameter. The natural parameter space $\Theta$ is the set of all $\theta$ satisfying $0<\int\exp\left(\frac{y'\theta - b(\theta)}{\lambda}+c(y,\lambda) \right)dy< \infty$. Moreover, $b(\theta)$ is a twice differentiable  function and all moments of $y$ exist. Specifically, 
 \begin{alignat}{3}
     \mathbb{E}_\theta(y) &= \mu(\theta) =& \frac{\partial b(\theta)}{\partial\theta} \\
     \hbox{Cov}_\theta(y) &= \Sigma(\theta) =& \lambda\frac{\partial^2b(\theta)}{\partial\theta\partial\theta'}.
 \end{alignat}
-The covariance matrix $\Sigma(\theta)$ is positive definite in $\Theta^0$, therefore $\mu:\Theta^0\rightarrow  M = \mu\left(\Theta^0\right)$ is injective. By inserting the inverse function $\theta(\mu)$ into $\frac{\partial^2b(\theta)}{\partial\theta\partial\theta'}$, the variance function 
+The covariance matrix $\Sigma(\theta)$ is positive definite in $\Theta^0$, therefore $\mu:\Theta^0\rightarrow  M = \mu\left(\Theta^0\right)$ is injective. By substituting the inverse function $\theta(\mu)$ into $\frac{\partial^2b(\theta)}{\partial\theta\partial\theta'}$, the variance function 
 \begin{equation}
     v(\mu)=\frac{\partial^2b(\theta(\mu))}{\partial\theta\partial\theta'}
 \end{equation}
@@ -27,10 +162,74 @@ is given and the covariance can be written as
 \begin{equation}
     \hbox{Cov}_\theta(y) = \lambda v(\mu).
 \end{equation}
-Important exponential families are the normal, binomial, Poisson, gamma and inverse Gaussian distribution. \autocite[Cf.][]{fahrmeir2013multivariate} One property of exponential families is, that they have conjugate priors which is and important property in Bayesian statistics. HIERNOCHWASCONJUGATE PRIOR
-\section{Latent Gaussian Models}
-\section{Markov Chain Monte Carlo Methods}
-\section{Integrated Nested Laplace Approximation}
+Important members of the exponential family are the normal, binomial, Poisson, gamma and inverse Gaussian distributions. \autocite[Cf.][]{fahrmeir2013multivariate} One property of exponential families is that they have conjugate priors, which is an important property in Bayesian statistics. If the posterior distribution $p(\theta|x)$ and the prior distribution $p(\theta)$ belong to the same probability distribution family, the prior and posterior distributions are called conjugate distributions. Furthermore, the prior for the likelihood function $p(x|\theta)$ is called the \textit{conjugate prior}. The term was introduced by Raiffa and Schlaifer\autocite[Cf.][]{raiffaapplied}, and the property that all members of the exponential family have conjugate priorities was shown by Diaconis and Ylvisaker.\autocite[Cf.][]{diaconis1979conjugate}
+\section{Latent Gaussian Models and INLA}
+In recent years, a growing amount of georeferenced data has become available, leading to an increased need for appropriate statistical modelling to handle large and complex datasets. Bayesian hierarchical models have proven to be effective in capturing complex stochastic structures in spatial processes. A large proportion of these models are based on latent Gaussian models, a subclass of structured additive regression models. 
+\subsection{Applications for latent Gaussian models}
+\subsection{Notation and Basic Properties}
+\label{sec:notation}
+For structured additive regression models, the distribution of the response variable $y_i$ is assumed to be a member of the exponential family, with the mean $\mu_i$ linked to a structured additive predictor $\eta_i$ by a link function $g\left(\cdot\right)$ such that $g\left(\mu_i\right)=\eta_i$. The predictor $\eta_i$  takes into account the effect of multiple covariates in an additive way:
+\begin{equation}\label{eq:predictor}
+    \eta_i=\alpha+\sum_{j=1}^{n_f}f^{(j)}\left(u_{ji}\right)+\sum_{k=1}^{n_{\beta}}\beta_kz_{ki}+\epsilon_i
+\end{equation}
+The $\left\lbrace f^{(j)}\left(\cdot\right)\right\rbrace$s are unknown functions of the covariates $u$, while the $\left\lbrace\beta_k\right\rbrace$s represent the linear effect of the covariates $z$ and the $\epsilon_i$s are unstructured terms. Latent Gaussian models assign a Gaussian prior to $\alpha$, $\left\lbrace f^{(j)}\left(\cdot\right)\right\rbrace$ and $\left\lbrace\epsilon_i\right\rbrace$. In the following $x$ shall denote the vector of all latent Gaussian variables ($\left\lbrace\eta_i\right\rbrace$, $\alpha$, $\left\lbrace f^{(j)}\right\rbrace$ and $\left\lbrace\beta_k\right\rbrace$) and $\theta$ the vector of hyperparameters. \\
+The conditional density $\pi\left(x|\theta_1\right)$ is Gaussian with an assumed zero mean and precision matrix $Q\left(\theta_1\right)$. The Gaussian density $\mathcal{N}\left(\mu,\Sigma\right)$ with mean $\mu$ and covariance $\Sigma$ at configuration $x$ is denoted by $\mathcal{N}\left(x;\mu,\Sigma\right)$. For simplicity, $\left\lbrace\eta_i\right\rbrace$ has been included instead of $\left\lbrace\epsilon_i\right\rbrace$. \\
+The distribution for the $n_d$ observational variables $y=\left\lbrace y_i:i\in\mathcal{I}\right\rbrace$ is denoted by $\pi\left(y|x, \theta_2\right)$ and is assumed conditionally independent given $x$ and $\theta_2$. Let $\theta=\left(\theta_1^T,\theta_2^T\right)^T$ with $\dim\left(\theta\right)=m$. For non-singular $Q\left(\theta\right)$ the posterior is given by
+\begin{align}
+    \pi\left(x,\theta|y\right)&\propto\pi\left(\theta\right)\pi\left(x|\theta\right)\prod_{i\in I}\pi\left(y_i|x_i,\theta\right) \nonumber\\
+    &\propto \pi\left(\theta\right)\left|Q\left(\theta\right)\right|^{1/2}\exp\left[-\frac{1}{2}x^TQ\left(\theta\right)x+\sum_{i\in I}\log\left\lbrace\pi\left(y_i|x_i,\theta\right)\right\rbrace\right].
+\end{align}
+Most latent Gaussian models satisfy two basic properties:
+\begin{itemize}
+    \item[1.] The latent field $x$ is of large dimension, $n\approx10^2-10^5$. Therefor, the latent field is a Gaussian Markov random field with sparse precision matrix $Q\left(\theta\right)$.
+    \item[2.] The number of hyperparameters, $m$, is small, $m\leq6$.
+\end{itemize}
+In most cases, both properties are required to produce fast inference, and thus these will be assumed to be true for the remainder of this work. \autocite[Cf.][]{rue2009approximate}
+\subsection{The MCMC approach to inference}
+The usual approach to inference for latent Gaussian models involves the previously introduced Markov chain Monte Carlo methods. Due to several factors, these methods may perform poorly when applied to such models. One factor is the interdependence of the components of the latent field $x$ while another is that $\theta$ and $x$ are highly dependent on each other, especially for large $n$. The first of these problems can potentially be overcome by constructing a joint proposal based on a Gaussian approximation of the full conditional of $x$, while the second problem requires, at least in part, a joint update of $\theta$ and $x$. There are several proposals to solve these shortcomings, but MCMC sampling continues to show poor performance from the end user's point of view. \autocite[Cf.][]{rue2009approximate}
+\subsection{Integrated Nested Laplace Approximation}
+An alternative to MCMC methods that is both less computationally intensive and suitable for performing approximate Bayesian inference in latent Gaussian models is Integrated nested Laplace Approximation (INLA). The basis of INLA is the use of a combination of analytical approximations and numerical algorithms for sparse matrices to approximate the posterior distribution using closed-form expressions. This speeds up inference and circumvents problems of sample convergence and mixing, making it suitable for fitting large data sets or exploring other models.  \\
+INLA can be used for all models of the following form:
+\begin{align*}
+    y_i|x,\theta &\sim \pi\left(y_i|x_i,\theta\right), \hspace{20pt} i=1,...,n,\\
+    x|\theta &\sim \mathcal{N}\left(\mu\left(\theta\right), Q\left(\theta\right)^{-1}\right), \\
+    \theta &\sim \pi\left(\theta\right)
+\end{align*}
+As introduced in \autoref{sec:notation}, $y$ are the observed data, $x$ is a Gaussian field, $\theta$ represents the hyperparameters, while $\mu\left(\theta\right)$ and $Q\left(\theta\right)$ denote the mean and precision matrix respectively.To ensure fast inference, the dimension of the hyperparameter vector $\theta$ should be small, since the approximations are computed by numerical integration over the hyperparameter space. \\
+In most cases, the observations $y_i$ are assumed to belong to the exponential family with mean $\mu_i=g^{-1}\left(\eta_i\right)$. As shown in equation \eqref{eq:predictor}, $\eta_i$ accounts for the effects of several covariates in an additive way, which makes it suitable for a wide range of models, including spatial and spatio-temporal models, since $\left\lbrace f^{(j)}\right\rbrace$ can take very different forms. \\
+Let $x=\left(\alpha,\left\lbrace\beta_k\right\rbrace|\theta\sim\mathcal{N}\left(\mu\left(\theta\right), Q\left(\theta\right)^{-1}\right)\right)$ be the vector of latent Gaussian variables, and let $\theta$ be the vector of hyperparameters, which are not required to be Gaussian. INLA calculates accurate and fast approximations for the posterior marginals of the components of the latent Gaussian variables
+\begin{equation*}
+    \pi\left(x_i|y\right),\hspace{20pt}i=1,...,n,
+\end{equation*}
+as well as the posterior marginals for the hyperparameters of the latent Gaussian model
+\begin{equation*}
+    \pi\left(\theta_j|y\right),\hspace{20pt}j=1,...,\dim\left(\theta\right).
+\end{equation*}
+For each element $x_i$ of $x$ the posterior marginals are given by
+\begin{equation}
+    \pi\left(x_i|y\right)=\int\pi\left(x_i|\theta,y\right)\pi\left(\theta|y\right)d\theta,
+\end{equation}
+and the posterior marginal for the hyperparameters can be expressed by
+\begin{equation}
+    \pi\left(\theta_j|y\right)=\int\pi\left(\theta|y\right)d\theta_{-j}.
+\end{equation}
+$\pi\left(x_i|y\right)$ is approximated by combining analytical approximations to the full conditionals $\pi\left(x_i|\theta,y\right)$ and $\pi\left(\theta|y\right)$ and numerical integration routines to integrate out $\theta$. Similarly, $\pi\left(\theta_j|y\right)$ is approximated by approximating $\pi\left(\theta|y\right)$ and integrating out $\theta_{-j}$. In particular, the posterior density of $\theta$ is obtained through Gaussian approximation for the posterior of the latent field, $\widetilde{\pi}_G\left(x|\theta,y\right)$, evaluated at the posterior mode, $x^*\left(\theta\right)=\arg\max_x\pi_G\left(x|\theta,y\right)$,
+\begin{equation}
+    \widetilde{\pi}\left(\theta|y\right)\propto\frac{\pi\left(x,\theta,y\right)}{\widetilde{\pi}_G\left(x|\theta,y\right)}\bigg|_{x=x^*\left(\theta\right)}.
+\end{equation}
+Next, the following nested approximations are constructed:
+\begin{equation}
+    \widetilde{\pi}\left(x_i|y\right)=\int\widetilde{\pi}\left(x_i|\theta,y\right)\widetilde{\pi}\left(\theta|y\right)d\theta,\hspace{20pt}\widetilde{\pi}\left(\theta_j|y\right)=\int\widetilde{\pi}\left(\theta|y\right)d\theta_{-j}
+\end{equation}
+Finally, these approximations are numerically integrated with respect to $\theta$
+\begin{align}
+    \widetilde{\pi}\left(x_i|y\right)&=\sum_k\widetilde{\pi}\left(x_i|\theta_k,y\right)\widetilde{\pi}\left(\theta_k|y\right)\times\Delta_k,\\
+    \widetilde{\pi}\left(\theta_j|y\right)&=\sum_l\widetilde{\pi}\left(\theta_l^*|y\right)\times\Delta_l^*,
+\end{align}
+with $\Delta_k$ and $\Delta_l^*$ representing the area weights corresponding to $\theta_k$ and $\theta_l^*$. \\
+To obtain the approximations for the posterior marginals for the $x_i$'s conditioned on selected values of $\theta_k$ and $\widetilde{\pi}\left(x_i|\theta_k,y\right)$, a Gaussian, Laplace or simplified Laplace approximation can be used. Using a Gaussian approximation derived from $\widetilde{\pi}_G\left(x|\theta,y\right)$ is the simplest and fastest solution, but in some situations it produces errors in the location and is unable to capture skewness behaviour. Therefore, the Laplace approximation is favoured over the Gaussian approximation, although it is relatively expensive. The simplified Laplace approximation is associated with lower costs and addresses inaccuracies of the Gauss approximation in terms of location and skewness in a satisfactory manner. \autocite[Cf.][]{moraga2019geospatial}
+%https://arxiv.org/pdf/1708.02723.pdf \\
+%http://www.leg.ufpr.br/~elias/cursos/br2019/slides1.pdf
 \chapter{Data Collection}
 \chapter{Data Analysis}
 \chapter{Results}
