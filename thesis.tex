@@ -11,10 +11,9 @@
 \tableofcontents
 \chapter{Introduction}
 \chapter{Corona Virus}
-\chapter{The Modelling of Geospatial Health Data}
-\section{Introduction to Bayesian Inference}
+\chapter{Introduction to Bayesian Inference}
 Bayesian Inference is a method of statistical inference that uses Bayes' theorem to update the probability of a hypothesis as more data is observed or more information becomes available. It is an essential technique in mathematical statistics and the polar opposite of the frequentist approach, which makes predictions based solely on data from an experiment. In the Bayesian approach a \textit{prior} distribution $p\left(\theta, \sigma^2\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\theta$ and $\sigma^2$ prior to obtaining the data. Using the prior distribution, the likelihood function $p\left(x|\theta,\sigma^2\right)$, and the observed data $x$, it is possible to calculate the probability distribution $p\left(\theta,\sigma^2\right|x)$ of $\theta$ and $\sigma^2$ given the data $x$. This distribution is called the \textit{posterior} distribution of $\theta$ and $\sigma^2$ an is used to make inferences about the parameters. \autocite[Cf.][]{box2011bayesian}
-\subsection{Bayes' theorem}
+\section{Bayes' theorem}
 At the heart of Bayesian inference is Bayes' theorem, which describes the probability of an event given prior knowledge of factors that might influence the event. \\
 Let $x'=\left(x_1,...,x_n\right)$ be a vector of $n$ observations whose probability distribution $p\left(x|\theta\right)$ depends on the values of $k$ parameters $\theta'=\left(\theta_1,...,\theta_k\right)$. Let $p\left(\theta\right)$ be the probability distribution of $\theta$. Then 
 \begin{equation}
@@ -34,6 +33,99 @@ It is evident that the posterior distribution of $\theta$ given the data $x$ is 
     \hbox{posterior distribution} \propto  \hbox{likelihood}\times\hbox{prior distribution}.
 \end{equation*}
 The data $x$ modifies the prior knowledge of $\theta$ through the likelihood function, and thus can be be regarded as a representation of the information about  $\theta$ derived from the data.\autocite[Cf.][]{box2011bayesian}
+\section{The Exponential Family}
+In statistics and probability theory, the exponential family is a parametric set of probability distributions of a specific form. The distribution of a random variable $y$ belongs to the exponential family if the discrete or continuous density with respect to a $\sigma$-finite measure of $y$ has the form
+\begin{equation}
+    f(y|\theta, \lambda)=\exp\left(\frac{y'\theta - b(\theta)}{\lambda}+c(y,\lambda) \right),
+\end{equation}
+with $c(y,\lambda)\geq 0$ and measurable. $\theta\in\Theta\subset\mathbb{R}^q$ is the \textit{natural} or \textit{canonical} parameter of the exponential family, while $\lambda > 0$ is a \textit{dispersion} or \textit{nuisance} parameter. The natural parameter space $\Theta$ is the set of all $\theta$ satisfying $0<\int\exp\left(\frac{y'\theta - b(\theta)}{\lambda}+c(y,\lambda) \right)dy< \infty$. Moreover, $b(\theta)$ is a twice differentiable  function and all moments of $y$ exist. Specifically, 
+\begin{alignat}{3}
+    \mathbb{E}_\theta(y) &= \mu(\theta) =& \frac{\partial b(\theta)}{\partial\theta} \\
+    \hbox{Cov}_\theta(y) &= \Sigma(\theta) =& \lambda\frac{\partial^2b(\theta)}{\partial\theta\partial\theta'}.
+\end{alignat}
+The covariance matrix $\Sigma(\theta)$ is positive definite in $\Theta^0$, therefore $\mu:\Theta^0\rightarrow  M = \mu\left(\Theta^0\right)$ is injective. By substituting the inverse function $\theta(\mu)$ into $\frac{\partial^2b(\theta)}{\partial\theta\partial\theta'}$, the variance function 
+\begin{equation}
+    v(\mu)=\frac{\partial^2b(\theta(\mu))}{\partial\theta\partial\theta'}
+\end{equation}
+is given and the covariance can be written as
+\begin{equation}
+    \hbox{Cov}_\theta(y) = \lambda v(\mu).
+\end{equation}
+Important members of the exponential family are the normal, binomial, Poisson, gamma and inverse Gaussian distributions. \autocite[Cf.][]{fahrmeir2013multivariate} 
+\section{Conjugate Priors}
+One property of exponential families is that they have conjugate priors, which is an important property in Bayesian statistics. If the posterior distribution $p(\theta|x)$ and the prior distribution $p(\theta)$ belong to the same probability distribution family, the prior and posterior distributions are called conjugate distributions. Furthermore, the prior for the likelihood function $p(x|\theta)$ is called the \textit{conjugate prior}. The term was introduced by Raiffa and Schlaifer\autocite[Cf.][]{raiffaapplied}, and the property that all members of the exponential family have conjugate priorities was shown by Diaconis and Ylvisaker.\autocite[Cf.][]{diaconis1979conjugate}
+\subsection{Penalised Complexity Priors}
+One issue when selecting the prior distribution of a particular parameter is that it is not always intuitive when it comes to understanding and interpreting this distribution, something that is essential to ensure that it behaves as intended by the user. This problem can be addressed by using \textit{penalised complexity priors}, which is a methodology that penalises the complexity of model components in relation to deviation from simple base model formulations.\\
+PC priors provide a systematic and unified approach to calculating priority distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterised by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalising the deviation from the flexible model to the fixed base model, the PC prior is calculated.
+\subsubsection{The Principles behind PC priors}
+Four main principles should be followed to calculate priorities in a consistent way and to understand their properties. \vspace{6pt}\\
+\textbf{Support to Occam's razor} \vspace{6pt}\\
+Let $\pi\left(x|\xi\right)$ denote the density of a model component $x$ and $\xi$ the parameter to which a prior distribution is to be assigned. The base model is characterised by a density $\pi\left(x|\xi=\xi_0\right)$, where $\xi_0$ is a fixed value. The prior for $\xi$ should be such that proper shrinkage is given to $\xi_0$. The simplicity of the model is therefore prioritised over the complexity of the model, preventing overfitting.
+\vspace{6pt}\\
+\textbf{Penalisation of model complexity} \vspace{6pt}\\
+Let $f_1=\pi\left(x|\xi\right)$ and $f_0\left(x|\xi=\xi_0\right)$ denote the flexible model and the base model respectively. The complexity of $f_1$ compared to $f_0$ is characterised using the Kullback-Leibler divergence to calculate a measure of complexity between the two models,
+\begin{equation}
+    \hbox{KLD}\left(f_1||f_2\right) = \int f_1\left(x\right)\log\left(\frac{f_1\left(x\right)}{f_0\left(x\right)}\right)dx.
+\end{equation}
+This can be used to measure the information that is lost when $f_1$ is approximated by the simpler model $f_0$. For multinormal densities with zero mean, the calculation simplifies to
+\begin{equation}
+    \hbox{KLD}\left(f_1||f_0\right) = \frac{1}{2}\left(\hbox{tr}\left(\Sigma_0^{-1}\Sigma_1\right)-n-\ln\left(\frac{\left|\Sigma_1\right|}{\left|\Sigma_0\right|}\right)\right),
+\end{equation}
+where $f_i\sim\mathcal{N}\left(0,\Sigma_i\right), i=0,1$, while $n$ represents the dimension. For easier interpretation, the Kullback-Leibler divergence is transformed into a unidirectional distance measure
+\begin{equation}
+    d\left(\xi\right) = d\left(f_1||f_0\right)=\sqrt{2\hbox{KLD}\left(f_1||f_0\right)}
+\end{equation}
+which can be interpreted as a measure of distance from $f_1$ to $f_0$.
+\vspace{6pt}\\
+\textbf{Constant rate penalisation}\vspace{6pt}\\
+The derivation of the PC prior is based on a system of constant rate penalisation, given by
+\begin{equation}
+    \frac{\pi_d\left(d\left(\xi\right)+\delta\right)}{\pi_d\left(d\left(\xi\right)\right)}=r^{\delta}, \hspace{20pt} d\left(\xi\right),\delta\geq0.
+\end{equation}
+$r\in\left(0,1\right)$ represents the constant decay rate and thus implies that the relative change in the priority distribution for $d\left(\xi\right)$ is independent of the actual distance. Therefore, $d\left(\xi\right)$ is exponentially distributed with density $\pi\left(d\left(\xi\right)\right)=\lambda\exp\left(-\lambda d\left(\xi\right)\right)$ and rate $\lambda = -\ln\left(r\right)$. By a standard variable change transformation, the corresponding PC prior for $\xi$ is given.
+\vspace{6pt}\\
+\textbf{User-defined scaling}\vspace{6pt}\\
+Since $\lambda$ characterises the shrinkage properties of the prior, it is important that the rate can be chosen in an intuitive and interpretable way. One possibility is to determine $\lambda$ by including a probability statement of tail events, for example
+\begin{equation}
+    \mathbb{P}\left(Q\left(\xi\right) > U\right)=\alpha,
+\end{equation}
+where $U$ represents an assumed upper bound for an interpretable transformation $Q\left(\xi\right)$ and $\alpha$ denotes a small probability.
+\subsubsection{PC Priors for AR(1)}
+The first-order AR process is given by
+\begin{equation}
+    x_t=\phi x_{t-1}+\epsilon_t, \hspace{20pt}\epsilon\sim\mathcal{N}\left(0, \kappa^{-1}\right), \hspace{5pt} t=2,...,n,
+\end{equation}
+where $x_1$ is assumed to follow a normal distribution with mean $0$ and marginal precision $\tau=\kappa\left(1-\phi^2\right)$. The variables $\left\lbrace\epsilon_t\right\rbrace_{t=1}^n$ are independent and follow a $\mathcal{N}\left(0, \kappa\right)$ distribution. The AR(1) model represents an important special case of AR processes where the autocorrelation coefficient $\phi$ specifies the complete dependence structure.\vspace{6pt}\\
+\textbf{Base model: no dependency in time} \vspace{6pt}\\
+The correlation matrix of an AR(1) is generally defined as $\Sigma_1=\left(\phi^{\left|i-j\right]}\right)$. In the case of no autocorrelation, white noise results and the correlation matrix is equal to the identity matrix, $\Sigma_0=I$. The distance function is defined as $d\left(\phi\right)=\sqrt{\left(1-n\right)\log\left(1-\phi^2\right)}$. According to the constant rate penalty principle, $d\left(\phi\right)$ is assigned an exponential prior with rate $\theta/\sqrt{n-1}$. This leads to a prior distribution that is invariant to $n$, and the PC for the one-lag autocorrelation is given by
+\begin{equation}
+    \pi\left(\phi\right)=\frac{\theta}{2}\exp\left(-\theta\sqrt{-\ln\left(1-\phi^2\right)}\right)\frac{|\phi|}{\left(1-\phi^2\right)\sqrt{-\ln\left(1-\phi^2\right)}}, \hspace{20pt} |\phi|<1,\theta>0.
+\end{equation}
+The rate parameter $\theta$ influences at what rate the prior shrinks towards the white noise base model. To infer $\theta$, a tail event is used. In the case of $\phi = 0$ a tail event can be defined by the fact that large absolute correlations are less likely, i.e..,
+\begin{equation*}
+    \mathbb{P}\left(|\phi|>U\right) = \alpha.
+\end{equation*}
+This implies that $\theta=-\ln\left(\alpha\right)/\sqrt{-\ln\left(1-U^2\right)}$\vspace{6pt}\\
+\textbf{Base model: no change in time} \vspace{6pt}\\
+As an alternative to the base model for the AR(1) process, it can be assumed that the process remains constant in time ($\phi = 1$), thus representing a limiting random walk case, which is a non-stationary and singular process. To derive the PC prior for $\phi$, let $\Sigma_1=\left(\phi^{|i-j|}\right)$ and $\Sigma_0=\left(\phi_0^{|i-j|}\right)$, where $\phi_0$ is close to $1$ and $\phi<\phi_0$. The Kullback-Leibler divergence is
+\begin{align*}
+    &\hbox{KLD}\left(f_1\left(\phi\right)||f_0\right)=\\
+    &\frac{1}{2}\left(\frac{1}{1-\phi_0^2}\left(n-2\left(n-1\right)\phi_0\phi+\left(n-2\right)\phi_0^2\right)-n-\left(n-1\right)\ln\left(\frac{1-\phi^2}{1-\phi_0^2}\right)\right).
+\end{align*}
+Considering the limit as $\phi_0\rightarrow1$, the distance is
+\begin{align*}
+    d\left(\phi\right)&=\underset{\phi_0\rightarrow1}{\lim}\sqrt{2\hbox{KLD}\left(f_1\left(\phi\right)||f_0\right)} \\
+    &=\underset{\phi_0\rightarrow1}{\lim}\sqrt{\frac{2\left(n-1\right)\left(1-\phi\right)}{1-\phi_0^2}} = c\sqrt{1-\phi}, \hspace{20pt}|\phi|<1,
+\end{align*}
+constant for $c$, independent of $\phi$. Since $0\leq d\left(\phi\right)\leq c\sqrt{2}$, $d\left(\phi\right)$ is assigned a truncated exponential distribution with rate $\theta/c$, resulting in the following PC prior:
+\begin{equation}
+    \pi\left(\phi\right)=\frac{\theta\exp\left(-\theta\sqrt{1-\phi}\right)}{\left(1-\exp\left(-\sqrt{2}\theta\right)\right)2\sqrt{1-\phi}}, \hspace{20pt}|\phi|<1.
+\end{equation}
+To scale the prior in terms of $\theta$, $\left(U,\alpha\right)$ is determined in terms of $\mathbb{P}\left(\phi>U\right)=\alpha$. This equation is solved by
+\begin{equation*}
+    \frac{1-\exp\left(-\theta\sqrt{1-U}\right)}{1-\exp\left(-\sqrt{2}\theta\right)}=\alpha,
+\end{equation*}
+provided that $\alpha$ is larger than the lower limit $\sqrt{\left(1-U\right)/2}$. \autocite[Cf.][]{sorbye2017penalised}
 \section{Markov-Chain-Monte-Carlo-Methods}
 Markov chain Monte Carlo methods, also referred to as MCMC methods, are a set of algorithms that enable sampling from probability distributions based on the construction of Markov chains. After a sufficient number of iterations, the stationary distribution of a Markov chain can be taken as the desired distribution, with the quality of this distribution improving as the number of iterations increases. Most of the time, the construction of such a chain is relatively simple; the real challenge is to determine how many steps are needed before convergence towards the stationary distribution is achieved. MCMC methods are mostly used to compute numerical approximations of multidimensional integrals, for instance in Bayesian statistics or computational biology. The two main concepts used in MCMC methods are Monte Carlo integration and the aforementioned Markov chains, hence the name Markov Chain Monte Carlo.
 \subsection{Monte Carlo Integration}
@@ -53,7 +145,7 @@ For $m$ large,
 \begin{equation}
     \frac{\overline{h}_m-\mathbb{E}_f\left[h\left(X\right)\right]}{\sqrt{v_m}}
 \end{equation}
-is approximately distributed as a $N(0,1)$ variable. This can be used for constructing a convergence test and to calculate confidence bounds for the approximation of $\mathbb{E}_f\left[h\left(X\right)\right]$.\autocite[Cf.][]{robert2013monte}
+is approximately distributed as a $\mathcal{N}(0,1)$ variable. This can be used for constructing a convergence test and to calculate confidence bounds for the approximation of $\mathbb{E}_f\left[h\left(X\right)\right]$.\autocite[Cf.][]{robert2013monte}
 \subsection{Markov Chains}
 Markov chains are stochastic processes that aim to provide the probability of the occurrence of future events. A Markov chain is defined by the fact that even if only a limited history is known, predictions about future developments can be made just as reliably as if the entire history of a process were known. Thus, the probability of moving from the current state to any state depends only on the current state of the chain. These probabilities are defined by a \textit{transition kernel}, which is a function $K$ on $\mathcal{X} \times \mathcal{B}\left(\mathcal{X}\right)$, such that
 \begin{itemize}
@@ -73,7 +165,7 @@ Given a transition kernel $K$, a sequence $X_0,X_1,...,X_n$ of random variables 
     P\left(X_{k+1}\in A|x_0,x_1,x_2,...,x_k\right) &= P\left(X_{k+1}\in A|x_k\right) \nonumber\\
     &= \int_A K\left(x_k, dx\right). 
 \end{align}
-Markov chains can have certain properties that affect their long-term behavior and are of particular importance for MCMC algorithms. Next, some of them will be introduced.
+Markov chains can have certain properties that affect their long-term behaviour and are of particular importance for MCMC algorithms. Next, some of them will be introduced.
 \subsubsection{Irreducibility} 
 Irreducibility is critical to the construction of Markov chain Monte Carlo algorithms, as it ensures the convergence of such an algorithm. A Markov chain is \textit{irreducible} if all states communicate, that is, for all states $i$ and $j$ the probability of getting from $i$ to $j$ in finite time is true positive. \\
 Formally speaking, given a measure $\varphi$, a Markov chain $\left(X_n\right)$ with transition kernel $K\left(x,y\right)$ is $\varphi$-\textit{irreducible}, if, for every $A\in B\left(\mathcal{X}\right)$ with $\varphi\left(A\right)>0$, there exists $n$ such that $K^n\left(x,A\right) \forall x\in\mathcal{X}$. The chain is \textit{strongly} $\varphi$-\textit{irreducible} if $n=1\forall$ measurable $A$.
@@ -140,31 +232,50 @@ The algorithm always accepts values $y_t$ that lead to an increase in the ratio 
 If the Markov chain starts with a value $x^{(0)} > 0$, then $f\left(x^{(t)}\right) > 0 \forall t\in\mathbb{N}$ since the values of $y$ such that $f\left(y_t\right) = 0$ will all be rejected by the algorithm. As the number of iterations $t$ increases, the distribution of saved states $x_0,...,x_t$ will converge towards the target density $f(x)$.  \autocite[Cf.][]{robert2013monte}
 % hier könnten noch Diagnostics für MCMC methods / MH Algorithm sein, z.b. Traceplot. Außerdem sample mean für schätzung des posterior mean und sample variance für schätzung der varianz
 \subsection{The Gibbs Sampler}
+Gibbs-Sampling is a special case of the Metropolis-Hastings Algorithm, that is used to generate a sequence of samples of the joint probability distribution of two or more random variables. The aim of the method is to approximate this unknown joint probability distribution. Gibbs sampling is especially suitable when the joint distribution of a random vector is unknown, but the conditional distribution of each random variable is known. The underlying principle is to repeatedly select a variable and generate a value according to its conditional distribution, depending on the values of the other variables. During this iteration step, the values of the other variables remain unchanged. A Markov chain can be derived from the resulting sequence of sample vectors, and it can be shown that the stationary distribution of this Markov chain is precisely the sought joint distribution of the random vector.
+\subsubsection{The Two-Stage Gibbs Sampler}
+A general introduction to Gibbs sampling is the two-stage Gibbs sampler, which is applicable to a wide range of statistical models that do not demand the generality of the multi-stage Gibbs sampler. \\
+Implementing the algorithm is straightforward. If the random variables $X$ and $Y$ have a joint density $f\left(x,y\right)$, the two-stage Gibbs sampler generates a Markov chain $\left(X_t,Y_t\right)$ as following:
+\begin{algorithm}
+\caption{The Two-Stage Gibbs Sampler}
+\begin{algorithmic}[1]
+\Statex Take $X_0=x_0$
+\For{each iteration $t$}
+    \State Generate $Y_t\sim f_{Y|X}\left(\cdot|x_{t-1}\right)$
+    \State Generate $X_t\sim f_{X|Y}\left(\cdot|y_t\right)$
+    \EndFor
+\end{algorithmic}
+\end{algorithm} 
+$f_{Y|X}$ and $f_{X|Y}$ represent the conditional densities associated with $f$. It is worth noting that not only $\left(X_t,Y_t\right)$ is a Markov chain, but also the subsequences $\left(X_t\right)$ and $\left(Y_t\right)$ are. \newpage 
+$\newline$
+\textbf{Normal bivariate Gibbs Sampler} \vspace{6pt}\\
+In the case of the bivariate normal density
+\begin{equation*}
+    \left(X,Y\right)\sim \mathcal{N}_2\left(0,  \begin{pmatrix}
+    1 & p \\ p & 1
+    \end{pmatrix}\right)
+\end{equation*}
+the Gibbs sampler reads as follows:
+\begin{algorithm}
+\caption{The Two-Stage Gibbs Sampler for a normal distribution}
+\begin{algorithmic}[1]
+\Statex Given $y_t$
+\For{each iteration $t$}
+    \State Generate $X_{t+1}|y_t \sim \mathcal{N}\left(py_t, 1-p^2\right)$
+    \State Generate $Y_{t+1}|x_{t+1}\sim\mathcal{N}\left(px_{t+1},1-p^2\right)$
+    \EndFor
+\end{algorithmic}
+\end{algorithm} 
+\subsubsection{The Multi-Stage Gibbs Sampler}
 \subsection{Pros and Cons of MCMC methods}
 falls nichts besseres einfällt, dann bei lgminla intro
 %https://b-ok.cc/book/5023108/999c68
 %https://b-ok.cc/book/2298942/aa5289
-\section{Exponential Families and the Conjugate Prior}
-In statistics and probability theory, the exponential family is a parametric set of probability distributions of a specific form. The distribution of a random variable $y$ belongs to the exponential family if the discrete or continuous density with respect to a $\sigma$-finite measure of $y$ has the form
-\begin{equation}
-    f(y|\theta, \lambda)=\exp\left(\frac{y'\theta - b(\theta)}{\lambda}+c(y,\lambda) \right),
-\end{equation}
-with $c(y,\lambda)\geq 0$ and measurable. $\theta\in\Theta\subset\mathbb{R}^q$ is the \textit{natural} or \textit{canonical} parameter of the exponential family, while $\lambda > 0$ is a \textit{dispersion} or \textit{nuisance} parameter. The natural parameter space $\Theta$ is the set of all $\theta$ satisfying $0<\int\exp\left(\frac{y'\theta - b(\theta)}{\lambda}+c(y,\lambda) \right)dy< \infty$. Moreover, $b(\theta)$ is a twice differentiable  function and all moments of $y$ exist. Specifically, 
-\begin{alignat}{3}
-    \mathbb{E}_\theta(y) &= \mu(\theta) =& \frac{\partial b(\theta)}{\partial\theta} \\
-    \hbox{Cov}_\theta(y) &= \Sigma(\theta) =& \lambda\frac{\partial^2b(\theta)}{\partial\theta\partial\theta'}.
-\end{alignat}
-The covariance matrix $\Sigma(\theta)$ is positive definite in $\Theta^0$, therefore $\mu:\Theta^0\rightarrow  M = \mu\left(\Theta^0\right)$ is injective. By substituting the inverse function $\theta(\mu)$ into $\frac{\partial^2b(\theta)}{\partial\theta\partial\theta'}$, the variance function 
-\begin{equation}
-    v(\mu)=\frac{\partial^2b(\theta(\mu))}{\partial\theta\partial\theta'}
-\end{equation}
-is given and the covariance can be written as
-\begin{equation}
-    \hbox{Cov}_\theta(y) = \lambda v(\mu).
-\end{equation}
-Important members of the exponential family are the normal, binomial, Poisson, gamma and inverse Gaussian distributions. \autocite[Cf.][]{fahrmeir2013multivariate} One property of exponential families is that they have conjugate priors, which is an important property in Bayesian statistics. If the posterior distribution $p(\theta|x)$ and the prior distribution $p(\theta)$ belong to the same probability distribution family, the prior and posterior distributions are called conjugate distributions. Furthermore, the prior for the likelihood function $p(x|\theta)$ is called the \textit{conjugate prior}. The term was introduced by Raiffa and Schlaifer\autocite[Cf.][]{raiffaapplied}, and the property that all members of the exponential family have conjugate priorities was shown by Diaconis and Ylvisaker.\autocite[Cf.][]{diaconis1979conjugate}
+
+
 \section{Latent Gaussian Models and INLA}
 In recent years, a growing amount of georeferenced data has become available, leading to an increased need for appropriate statistical modelling to handle large and complex datasets. Bayesian hierarchical models have proven to be effective in capturing complex stochastic structures in spatial processes. A large proportion of these models are based on latent Gaussian models, a subclass of structured additive regression models. 
+\subsection{Gaussian Markov Random Fields}
 \subsection{Applications for latent Gaussian models}
 \subsection{Notation and Basic Properties}
 \label{sec:notation}
@@ -230,6 +341,7 @@ with $\Delta_k$ and $\Delta_l^*$ representing the area weights corresponding to 
 To obtain the approximations for the posterior marginals for the $x_i$'s conditioned on selected values of $\theta_k$ and $\widetilde{\pi}\left(x_i|\theta_k,y\right)$, a Gaussian, Laplace or simplified Laplace approximation can be used. Using a Gaussian approximation derived from $\widetilde{\pi}_G\left(x|\theta,y\right)$ is the simplest and fastest solution, but in some situations it produces errors in the location and is unable to capture skewness behaviour. Therefore, the Laplace approximation is favoured over the Gaussian approximation, although it is relatively expensive. The simplified Laplace approximation is associated with lower costs and addresses inaccuracies of the Gauss approximation in terms of location and skewness in a satisfactory manner. \autocite[Cf.][]{moraga2019geospatial}
 %https://arxiv.org/pdf/1708.02723.pdf \\
 %http://www.leg.ufpr.br/~elias/cursos/br2019/slides1.pdf
+\chapter{Analysis of Geospatial Health Data}
 \chapter{Data Collection}
 \chapter{Data Analysis}
 \chapter{Results}
