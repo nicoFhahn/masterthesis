@@ -1,3 +1,9 @@
+library(dplyr)
+library(sf)
+library(osmdata)
+library(rlist)
+library(stringr)
+library(leaflet)
 ############## DOWNLOAD KEY DATA  ##############
 download_key_data <- function(cities, key, value = NULL, df = TRUE,
                               cityname = NULL) {
@@ -30,7 +36,7 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
       } else {
         query <- try(osmdata::opq(x) %>%
           osmdata::add_osm_feature(key = key, value = value), silent = TRUE)
-        while (class(query) == "try-error") {
+        while (class(query)[1] == "try-error") {
           query <- try(osmdata::opq(x) %>%
             osmdata::add_osm_feature(key = key, value = value),
           silent = TRUE
@@ -41,7 +47,6 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
         }
       }
       httr::set_config(httr::config(http_version = 2))
-      cat(".")
       # give the server some time so you (hopefully) don't get blocked
       Sys.sleep(3)
       # see if data can be downloaded
@@ -65,51 +70,51 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
         is.null(points$osm_multipolygons)) {
         return(NULL)
       }
-      result1 <- points$osm_points
-      result2 <- points$osm_polygons
-      result3 <- points$osm_multipolygons
+      osm_points <- points$osm_points
+      osm_polygons <- points$osm_polygons
+      osm_multipolygons <- points$osm_multipolygons
       cat(".")
-      if (is.null(result1)) {
-        if (is.null(result2)) {
-          result3 <- st_centroid(result3)
-          result3$longitude <- st_coordinates(result3)[, 1]
-          result3$latitude <- st_coordinates(result3)[, 2]
-        } else if (is.null(result3)) {
-          result2 <- st_centroid(result2)
-          result2$longitude <- st_coordinates(result2)[, 1]
-          result2$latitude <- st_coordinates(result2)[, 2]
+      if (is.null(osm_points)) {
+        if (is.null(osm_polygons)) {
+          osm_multipolygons <- st_centroid(osm_multipolygons)
+          osm_multipolygons$longitude <- st_coordinates(osm_multipolygons)[, 1]
+          osm_multipolygons$latitude <- st_coordinates(osm_multipolygons)[, 2]
+        } else if (is.null(osm_multipolygons)) {
+          osm_polygons <- st_centroid(osm_polygons)
+          osm_polygons$longitude <- st_coordinates(osm_polygons)[, 1]
+          osm_polygons$latitude <- st_coordinates(osm_polygons)[, 2]
         } else {
-          result2 <- st_centroid(result2)
-          result2$longitude <- st_coordinates(result2)[, 1]
-          result2$latitude <- st_coordinates(result2)[, 2]
-          result3 <- st_centroid(result3)
-          result3$longitude <- st_coordinates(result3)[, 1]
-          result3$latitude <- st_coordinates(result3)[, 2]
+          osm_polygons <- st_centroid(osm_polygons)
+          osm_polygons$longitude <- st_coordinates(osm_polygons)[, 1]
+          osm_polygons$latitude <- st_coordinates(osm_polygons)[, 2]
+          osm_multipolygons <- st_centroid(osm_multipolygons)
+          osm_multipolygons$longitude <- st_coordinates(osm_multipolygons)[, 1]
+          osm_multipolygons$latitude <- st_coordinates(osm_multipolygons)[, 2]
         }
       } else {
-        if (!is.null(result2)) {
-          inter <- unlist(st_intersects(result2, result1))
+        if (!is.null(osm_polygons)) {
+          inter <- unlist(st_intersects(osm_polygons, osm_points))
           if (length(inter) > 0) {
-            result1 <- result1[-inter, ]
+            osm_points <- osm_points[-inter, ]
           }
-          result2 <- st_centroid(result2)
-          result2$longitude <- st_coordinates(result2)[, 1]
-          result2$latitude <- st_coordinates(result2)[, 2]
+          osm_polygons <- st_centroid(osm_polygons)
+          osm_polygons$longitude <- st_coordinates(osm_polygons)[, 1]
+          osm_polygons$latitude <- st_coordinates(osm_polygons)[, 2]
         }
-        if (!is.null(result3)) {
-          inter <- unlist(st_intersects(result3, result1))
+        if (!is.null(osm_multipolygons)) {
+          inter <- unlist(st_intersects(osm_multipolygons, osm_points))
           if (length(inter) > 0) {
-            result1 <- result1[-inter, ]
+            osm_points <- osm_points[-inter, ]
           }
-          result3 <- st_centroid(result3)
-          result3$longitude <- st_coordinates(result3)[, 1]
-          result3$latitude <- st_coordinates(result3)[, 2]
+          osm_multipolygons <- st_centroid(osm_multipolygons)
+          osm_multipolygons$longitude <- st_coordinates(osm_multipolygons)[, 1]
+          osm_multipolygons$latitude <- st_coordinates(osm_multipolygons)[, 2]
         }
-        result1$longitude <- st_coordinates(result1)[, 1]
-        result1$latitude <- st_coordinates(result1)[, 2]
+        osm_points$longitude <- st_coordinates(osm_points)[, 1]
+        osm_points$latitude <- st_coordinates(osm_points)[, 2]
       }
       cat(".")
-      all_results <- list(result1, result2, result3)
+      all_results <- list(osm_points, osm_polygons, osm_multipolygons)
       all_results <- list.remove(
         all_results,
         unlist(lapply(all_results, function(x, ...) {
@@ -134,6 +139,9 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
         )
       )
       # also save the city name as a variable
+      if (is.null(results)) {
+        return(NULL)
+      }
       if (nrow(results) > 0) {
         # if no bbox is given to the function add the city to the
         # data.frame
@@ -240,3 +248,22 @@ geo_code2 <- function(x) {
   )
   as.numeric(rev(unlist(coded)))
 }
+
+trondheim_borough <- download_key_data("Trondheim", "boundary", "borough")
+trondheim_suburb <- download_key_data("Trondheim", "boundary", "suburb")
+trondheim_quarter <- download_key_data("Trondheim", "boundary", "quarter")
+trondheim_boundary <- download_key_data("Trondheim", "boundary")
+
+x <- "Munich"
+key <- "boundary"
+value <- "administrative"
+query <- try(osmdata::opq(x) %>%
+               osmdata::add_osm_feature(key = key), silent = TRUE)
+while (class(query)[1] == "try-error") {
+  query <- try(osmdata::opq(x) %>%
+                 osmdata::add_osm_feature(key = key), silent = TRUE)
+}
+points <- try(osmdata::osmdata_sf(query), silent = TRUE)
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = points$osm_polygons)
