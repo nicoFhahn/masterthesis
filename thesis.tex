@@ -9,7 +9,8 @@
 \usepackage{float}
 \usepackage{tikz}
 \usepackage{tikzit}
-\usepackage[backend=biber,style=alphabetic,citestyle=authoryear,autocite=footnote,citereset=section, maxcitenames=2]{biblatex}
+%\usepackage[backend=biber,style=alphabetic,citestyle=authoryear,autocite=footnote,citereset=section, maxcitenames=2]{biblatex}
+\usepackage[backend=biber,style=alphabetic,citestyle=authoryear,autocite=footnote,citereset=chapter, maxcitenames=2]{biblatex}
 \bibliography{references.bib}
 \usepackage{tikzit}
 \input{tikz.tikzstyles}
@@ -37,13 +38,19 @@ Finally, '$\odot$' denotes the element-wise multiplication of two matrices of si
 \subsubsection*{Lattice and Torus}
 $\mathcal{I}_{\pmb{n}}$ denotes a (regular) \textbf{lattice} (or grid) of size $\pmb{n}=\left(n_1, n_2\right)$ (in the two-dimensional case). $\pmb{x}$ can take values on $\mathcal{I}_{\pmb{n}}$ and $x_{i,j}$ denotes the value of $\pmb{x}$ at location $ij$, for $i=1,...,n_1$ and $j=1,...,n_2$. For easier reading this will be shortened to $x_{ij}$. On an \textit{infinite lattice} $\mathcal{I}_{\pmb{\infty}}$, $ij$ are numbered as $i=0,\pm1,\pm2,...,$ and $j=0,\pm1,\pm2,...$. \\
 A lattice with cyclic or toroidal boundary conditions is referred to as \textit{torus} and is denoted by $\mathcal{I}_{\pmb{\infty}}$. The dimension is $\pmb{n}=\left(n_1,n_2\right)$ (in the two-dimensional case) and all indices are modulus $\pmb{n}$ and run from 0 to $n_1-1$ or $n_2-1$. If a GMRF $\pmb{x}$ is defined on $\mathcal{I}_{\pmb{n}}$, the toroidal boundary conditions imply that $x_{-2,n_2}$ is equal to $x_{n_1-2,0}$ since $-2\mod n_1$ is equal to $n_1-2$ and $n_2\mod n_2$ is equal to 0.\\
-An \textit{irregular lattice} refers to a spatial configuration of regions $i=1,...,n$ where the regions (mostly) have common boundaries.
+An \textit{irregular lattice} refers to a spatial configuration of regions $i=1,...,n$ where the regions (mostly) have common boundaries, for instance the states of a nation.
+\begin{figure}[H]
+   \centering
+       \includegraphics[page=1,width=.7\textwidth]{switzerland.pdf}
+ \caption{The cantons of Switzerland, an example of an irregular lattice.}
+ \label{fig:lattice}
+\end{figure}
 \subsubsection*{General Notation and Abbreviations}
 For $C\in\mathcal{I}=\left\lbrace1,...,n\right\rbrace$ let $\pmb{x}_C=\left\lbrace x_i:i\in C\right\rbrace$. $-C$ denotes the set $\mathcal{I-C}$ such that $\pmb{x}_{-C}=\left\lbrace x_i:i\in C\right\rbrace$. For two sets $A$ and $B$, $A\setminus B=\left\lbrace i:i\in A \hbox{ and } i \notin B\right\rbrace$. \\
 $\pi\left(\cdot\right)$ denotes the density of its arguments, for example $\pi\left(\pmb{x}\right)$ for the density of $\pmb{x}$ and $\pi\left(\pmb{x}_A|\pmb{x}_{-A}\right)$ for the conditional density of $\pmb{x}_A$, given $\pmb{x}_{-A}$. '$\sim$' is used when a variable is 'distributed' according to the law $\mathcal{L}$.  \\
 The expected value is denoted by $\mathbb{E}\left[\cdot\right]$, the variance by $\hbox{Var}\left(\cdot\right)$, the covariance by $\hbox{Cov}\left(\cdot\right)$, the precision by $\hbox{Prec}\left(\cdot\right)=\hbox{Cov}\left(\cdot\right)^{-1}$, the correlation by $\hbox{Corr}\left(\cdot,\cdot\right)$ and a probability by $\mathbb{P}\left(\cdot\right)$.
 \subsubsection*{Symmetric Positive Definite Matrices}
-An $n times n$ matrix $\pmb{A}$ is \textit{positive definite} exactly if
+An $n \times n$ matrix $\pmb{A}$ is \textit{positive definite} exactly if
 \begin{equation*}
     \pmb{x}^T\pmb{A}\pmb{x}>0,\hspace{20pt}\forall\pmb{x}\neq\pmb{0}.
 \end{equation*}
@@ -74,7 +81,7 @@ A sufficient, but not necessary condition for a (symmetrical) matrix to be SPD i
 \clearpage
 \section{Basic Concepts of Bayesian Theory}
 \subsection{Bayes' Theorem}
-At the heart of Bayesian inference is Bayes' theorem, which describes the probability of an event given prior knowledge of factors that might influence the event. \\
+At the heart of Bayesian inference is \textit{Bayes' theorem}, which describes the probability of an event given prior knowledge of factors that might influence the event. \\
 Let $\pmb{x}^T=\left(x_1,...,x_n\right)$ be a vector of $n$ observations whose probability distribution $p\left(\pmb{x}|\pmb{\theta}\right)$ depends on the values of $k$ parameters $\pmb{\theta}^T=\left(\theta_1,...,\theta_k\right)$. Let $p\left(\pmb{\theta}\right)$ be the probability distribution of $\pmb{\pmb{\theta}}$. Then 
 \begin{equation}
     p\left(\pmb{x}|\pmb{\theta}\right)p\left(\pmb{\theta}\right)=p\left(\pmb{x},\pmb{\theta}\right) = p\left(\pmb{\theta}|\pmb{x}\right)p\left(\pmb{x}\right).
@@ -83,7 +90,7 @@ Given the observed data $\pmb{x}$, the conditional distribution of $\pmb{\theta}
 \begin{equation}
     p\left(\pmb{\theta}|\pmb{x}\right)=\frac{\pmb{p}\left(\pmb{x}|\pmb{\theta}\right)p\left(\pmb{\theta}\right)}{p\left(\pmb{x}\right)}.
 \end{equation}
-This last statement is known as \textit{Bayes' theorem}. The \textit{prior} distribution $p\left(\pmb{\theta}\right)$ contains knowledge about $\pmb{\theta}$ without knowledge of the data. $p\left(\pmb{\theta}|\pmb{x}\right)$ contains what is known about $\pmb{\theta}$ given knowledge of the data and is the \textit{posterior} distribution of $\pmb{\theta}$ given $\pmb{x}$. \\
+This last statement is known as Bayes' theorem. The \textit{prior} distribution $p\left(\pmb{\theta}\right)$ contains knowledge about $\pmb{\theta}$ without knowledge of the data. $p\left(\pmb{\theta}|\pmb{x}\right)$ contains what is known about $\pmb{\theta}$ given knowledge of the data and is the \textit{posterior} distribution of $\pmb{\theta}$ given $\pmb{x}$. \\
 If $p\left(\pmb{x}|\pmb{\theta}\right)$ is considered as a function of $\pmb{\theta}$ instead of $\pmb{x}$, it is called the \textit{likelihood function} of $\pmb{\theta}$ given $\pmb{x}$ and can be written as $l\left(\pmb{\theta}|\pmb{x}\right)$. Thus Bayes' theorem can be written as
 \begin{equation}
     p\left(\pmb{\theta}|\pmb{x}\right)=l\left(\pmb{\theta}|\pmb{x}\right)p\left(\pmb{\theta}\right).
@@ -94,7 +101,7 @@ It is evident that the posterior distribution of $\pmb{\theta}$ given the data $
 \end{equation*}
 The data $\pmb{x}$ modifies the prior knowledge of $\pmb{\theta}$ through the likelihood function, and thus can be be regarded as a representation of the information about  $\pmb{\theta}$ derived from the data\autocite[Cf.][]{box2011bayesian}.
 \subsection{Conditional Independence}
-In probability theory, two random variables $x$ and $y$ are independent given a third variable $z$ if and only if the occurrence of $x$ and $y$ in their conditional probability distribution given $z$ are independent events. To calculate the conditional density of $\pmb{x}_A$, given $\pmb{x}_{-A}$, the following statement will repeatedly be used,
+In probability theory, two random variables $x$ and $y$ are \textit{independent} given a third variable $z$ if and only if the occurrence of $x$ and $y$ in their conditional probability distribution given $z$ are independent events. To calculate the conditional density of $\pmb{x}_A$, given $\pmb{x}_{-A}$, the following statement will repeatedly be used,
 \begin{equation}
     \pi\left(\pmb{x}_A|\pmb{x}_{-A}\right)=\frac{\pi\left(\pmb{x}_A,\pmb{x}_{-A}\right)}{\pi\left(\pmb{x}_{A}\right)}\propto \pi\left(\pmb{x}\right).
 \end{equation}
@@ -104,7 +111,7 @@ It follows that $x$ and $y$ are independent precisely when $\pi\left(x,y\right)=
 \end{equation}
 for some functions $f$ and $g$, and for all $z$ with $\pi\left(z\right) >0$\autocite[Cf.][]{rue2005gaussian}.
 \subsection{Undirected Graphs}
-Undirected graphs are used to represent the conditional independence structure in a Gaussian Markov random field. An undirected graph $\mathcal{G}$ is defined as a tuple $\mathcal{G}=\left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V}$ contains all nodes in the graph and $\mathcal{E}$ is the set of edges $\left\lbrace i,j\right\rbrace$, with $i,j\in\mathcal{V}$ and $i\neq j$. For $\left\lbrace i,j\right\rbrace \in\mathcal{E}$ there exists an undirected edge from node $i$ to node $j$ in the other case such an edge does not exist. If $\left\lbrace i,j\right\rbrace\in\mathcal{E}\forall i,j\in\mathcal{V}$ with $i\neq j$ a graph is \textit{fully connected}. Most often $\mathcal{V}=\left\lbrace1,2,...,n\right\rbrace$ will be assumed, which is referred to as \textit{labelled}. A simple example of an undirected graph is shown in \autoref{fig:und_graph}.
+Undirected graphs are used to represent the conditional independence structure in a Gaussian Markov random field. An \textit{undirected graph} $\mathcal{G}$ is defined as a tuple $\mathcal{G}=\left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V}$ contains all nodes in the graph and $\mathcal{E}$ is the set of edges $\left\lbrace i,j\right\rbrace$, with $i,j\in\mathcal{V}$ and $i\neq j$. For $\left\lbrace i,j\right\rbrace \in\mathcal{E}$ there exists an undirected edge from node $i$ to node $j$ in the other case such an edge does not exist. If $\left\lbrace i,j\right\rbrace\in\mathcal{E}\forall i,j\in\mathcal{V}$ with $i\neq j$ a graph is \textit{fully connected}. Most often $\mathcal{V}=\left\lbrace1,2,...,n\right\rbrace$ will be assumed, which is referred to as \textit{labelled}. A simple example of an undirected graph is shown in \autoref{fig:und_graph}.
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}[nodes={draw, circle}, -]
@@ -131,7 +138,7 @@ Let $A$ be a subset of $\mathcal{V}$. A \textit{subgraph} $\mathcal{G}^A$ is a g
 \end{equation*}
 Let $\mathcal{G}$ be the graph in \autoref{fig:und_graph} and $\mathcal{A}=\left\lbrace2,3\right\rbrace$, then $\mathcal{V}^A=\left\lbrace2,3\right\rbrace$ and $\mathcal{E}^A=\left\lbrace\left\lbrace 1,2\right\rbrace\right\rbrace$\autocite[Cf.][]{rue2005gaussian}.
 \subsection{The Exponential Family}
-In statistics and probability theory, the exponential family is a parametric set of probability distributions of a specific form. The distribution of a random variable $\pmb{y}$ belongs to the exponential family if the discrete or continuous density with respect to a $\sigma$-finite measure of $\pmb{y}$ has the form
+In statistics and probability theory, the \textit{exponential family} is a parametric set of probability distributions of a specific form. The distribution of a random variable $\pmb{y}$ belongs to the exponential family if the discrete or continuous density with respect to a $\sigma$-finite measure of $\pmb{y}$ has the form
 \begin{equation}
     f(\pmb{y}|\pmb{\theta}, \lambda)=\exp\left(\frac{\pmb{y}^T\pmb{\theta} - b(\pmb{\theta})}{\lambda}+c(\pmb{y},\lambda) \right),
 \end{equation}
@@ -171,7 +178,7 @@ Some basic properties of the multivariate normal distribution are the following.
     \item[4.] If $\pmb{x}\sim\mathcal{N}\left(\pmb{\mu}, \pmb{\Sigma}\right)$ and $\pmb{x}'\sim\mathcal{N}\left(\pmb{\mu'}, \pmb{\Sigma'}\right)$ are independent, then $\pmb{x}+\pmb{x'}\sim\mathcal{N}\left(\pmb{\mu}+ \pmb{\mu'}, \pmb{\Sigma}+ \pmb{\Sigma'}\right)$\autocite[Cf.][]{rue2005gaussian}.
 \end{itemize}
 \section{Conjugate Priors}
-One property of exponential families is that they have conjugate priors, which is an important property in Bayesian statistics. If the posterior distribution $p\left(\pmb{\theta}|\pmb{x}\right)$ and the prior distribution $p\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called conjugate distributions. Furthermore, the prior for the likelihood function $p\left(\pmb{x}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. The term was introduced by Raiffa and Schlaifer\autocite[Cf.][]{raiffaapplied}, and the property that all members of the exponential family have conjugate priorities was shown by Diaconis and Ylvisaker\autocite[Cf.][]{diaconis1979conjugate}.
+One property of exponential families is that they have conjugate priors, which is an important property in Bayesian statistics. If the posterior distribution $p\left(\pmb{\theta}|\pmb{x}\right)$ and the prior distribution $p\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $p\left(\pmb{x}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. The term was introduced by Raiffa and Schlaifer\autocite[Cf.][]{raiffaapplied}, and the property that all members of the exponential family have conjugate priorities was shown by Diaconis and Ylvisaker\autocite[Cf.][]{diaconis1979conjugate}.
 \subsection{Penalised Complexity Priors}
 One issue when selecting the prior distribution of a particular parameter is that it is not always intuitive when it comes to understanding and interpreting this distribution, something that is essential to ensure that it behaves as intended by the user. This problem can be addressed by using \textit{penalised complexity priors}, which is a methodology that penalises the complexity of model components in relation to deviation from simple base model formulations.\\
 PC priors provide a systematic and unified approach to calculating priority distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterised by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalising the deviation from the flexible model to the fixed base model, the PC prior is calculated.
@@ -245,7 +252,7 @@ provided that $\alpha$ is larger than the lower limit $\sqrt{\left(1-U\right)/2}
 \section{Markov-Chain-Monte-Carlo-Methods}
 Markov chain Monte Carlo methods, also referred to as MCMC methods, are a set of algorithms that enable sampling from probability distributions based on the construction of Markov chains. After a sufficient number of iterations, the stationary distribution of a Markov chain can be taken as the desired distribution, with the quality of this distribution improving as the number of iterations increases. Most of the time, the construction of such a chain is relatively simple; the real challenge is to determine how many steps are needed before convergence towards the stationary distribution is achieved. MCMC methods are mostly used to compute numerical approximations of multidimensional integrals, for instance in Bayesian statistics or computational biology. The two main concepts used in MCMC methods are Monte Carlo integration and the aforementioned Markov chains, hence the name Markov Chain Monte Carlo.
 \subsection{Monte Carlo Integration}
-Monte Carlo integration is a technique that uses the generation of random numbers for numerical computation of definite integrals and is especially useful for higher-dimensional integrals. The problem the method addresses is the computation of the integral
+\textit{Monte Carlo integration} is a technique that uses the generation of random numbers for numerical computation of definite integrals and is especially useful for higher-dimensional integrals. The problem the method addresses is the computation of the integral
 \begin{equation}
     \mathbb{E}_f\left[h\left(X\right)\right]=\int_\chi h(x)f(x)dx.
 \end{equation}
@@ -427,13 +434,64 @@ Bayesian generalised linear models correspond to the linear relationship $\eta_i
 \subsubsection*{Dynamic Models}
 Temporal dependence can be introduced by using $i$ in \eqref{eq:predictor} as temporal index $t$ and defining $f\left(\cdot\right)$ and $\pmb{u}$ such that $f\left(u_t\right)=f_t$. Both a discrete-time and a continuous-time autoregressive model can be modeled by $\left\lbrace f_t\right\rbrace$. Furthermore, a seasonal effect or the latent process of a structured time series model can be modeled. Alternatively, a smooth temporal function in the same sense as for regression models can be represented by $\left\lbrace f_t\right\rbrace$.
 \subsubsection*{Spatial and Spatio-Temporal Models}
-Similar to the previous type of model, spatial dependence can be modeled by a spatial covariate $\pmb{u}$ such that $f\left(u_s\right)=f_s$, where $s$ denotes the spatial location or region $s$. The stochastic model for $f_s$ is constructed to promote spacial smooth realisations of some sort. Popular models of this type include the Besag-York-Mollié model with extensions for regional data, continuous indexed Gaussian models and texture models. The dependence between spatial and temporal covariates can be achieved either by using a spatio-temporal covariate $(s,t)$ or a corresponding spatio-temporal Gaussian field.\\
+Similar to the previous type of model, spatial dependence can be modeled by a spatial covariate $\pmb{u}$ such that $f\left(u_s\right)=f_s$, where $s$ denotes the spatial location or region $s$. The stochastic model for $f_s$ is constructed to promote spacial smooth realisations of some sort. Popular models of this type include the Besag-York-Mollié\autocite[Cf.][]{besag1991bayesian} model with extensions for regional data, continuous indexed Gaussian models and texture models. The dependence between spatial and temporal covariates can be achieved either by using a spatio-temporal covariate $(s,t)$ or a corresponding spatio-temporal Gaussian field.\\
 Often the final model consists of a sum of several components, e.g. a spatial component, random effects and both linear and smooth effects of some covariates. In order to separate the effects of the different components in \eqref{eq:predictor}, sometimes linear or sum-to-zero constraints can be imposed\autocite[Cf.][]{rue2009approximate}.
 \subsection{The MCMC Approach to Inference}
 The usual approach to inference for latent Gaussian models involves the previously introduced Markov chain Monte Carlo methods. Due to several factors, these methods may perform poorly when applied to such models. One factor is the interdependence of the components of the latent field $\pmb{x}$ while another is that $\pmb{\theta}$ and $\pmb{x}$ are highly dependent on each other, especially for large $n$. The first of these problems can potentially be overcome by constructing a joint proposal based on a Gaussian approximation of the full conditional of $\pmb{x}$, while the second problem requires, at least in part, a joint update of $\pmb{\theta}$ and $\pmb{x}$. There are several proposals to solve these shortcomings, but MCMC sampling continues to show poor performance from the end user's point of view\autocite[Cf.][]{rue2009approximate}.
+\subsection{Gaussian Random Fields}
+Let $\pmb{s} = \left(s_1,...,s_n\right)^T$ be a vector of locations. A \textit{Gaussian random field} (GRF)
+\begin{equation}
+    \left\lbrace Z(s):s\in D\subset\mathbb{R}^2\right\rbrace
+\end{equation}
+is a set of random variables where the observations occur in a continuous domain and where each finite set of random variables follows a multivariate normal distribution. A random process $Z\left(\cdot\right)$ is strictly stationary if it is invariant to shifts, i.e., if for each set of locations and each $h\in\mathbb{R}^2$ the distribution of $\pmb{Z(s)}=\left(Z\left(s_1\right),... ,Z\left(s_n\right)\right)$ is equal to that of $\pmb{Z(s+h)}=\left(Z\left(s_1+h\right),...,Z\left(s_n+h\right)\right)$. A less constraining requirement is given by second-order stationarity. Under this condition, the process has a constant mean value
+\begin{equation}
+    \mathbb{E}\left[\pmb{Z(s)}\right] = \mu, \hspace{20pt}\forall s\in D,
+\end{equation}
+and the covariances depend only on the differences between locations
+\begin{equation}
+    \hbox{Cov}\left(\pmb{Z(s)}, \pmb{Z(s+h)}\right)=C\left(\pmb{h}\right), \hspace{20pt}\forall \pmb{s}\in D,\,\forall \pmb{h}\in\mathbb{R}^2.
+\end{equation}
+Furthermore, if the covariances depend only on the distances between the locations and not on the directions, the process is called isotropic. Else, the process is anisotropic. An intrinsically stationary process has a constant mean value and satisfies
+\begin{equation}
+    \hbox{Var}\left(Z\left(s_i\right)-Z\left(s_j\right)\right)=2\gamma\left(s_i-s_j\right),\hspace{20pt}\forall s_i,s_j.
+\end{equation}
+$2\gamma\left(\cdot\right)$ is the variogram and $\gamma\left(\cdot\right)$ is called the semivariogram. Under the assumption of intrinsic stationarity, the constant-mean assumption implies
+\begin{equation*}
+    2\gamma\left(\pmb{h}\right)=\hbox{Var}\left(\pmb{Z(s+h)}-\pmb{Z(s)}\right)=\mathbb{E}\left[\left(\pmb{Z(s+h)}-\pmb{Z(s)}\right)^2\right],
+\end{equation*}
+and the estimation of the semivariogram can be obtained using the empirical semivariogram as follows:
+\begin{equation}
+    2\widehat{\gamma}\left(\pmb{h}\right)=\frac{1}{\left|N\left(\pmb{h}\right)\right|}\sum_{N\left(\pmb{h}\right)}\left(Z\left(s_i\right)-Z\left(s_j\right)\right)^2,
+\end{equation}
+where $N\left(\pmb{h}\right)=\left\lbrace\left(s_1,s_j\right):s_i-s_j=\pmb{h}, i,j=1,...,n\right\rbrace$ denotes the number of pairs and $\left|N\left(\pmb{h}\right)\right|$ the number of distinct pairs. For isotropic processes, the semivariogram is a function of distance $h=\left|\left|\pmb{h}\right|\right|$.   \\
+Plotting the empirical semivariogram against the separation distance conveys essential information regarding the continuity and spatial variability of the process. Given relatively short distances, the semivariogram tends to be small but increases with distance, indicating the similarity of observations in close proximity. The semivariogram levels off to a nearly constant value, also called the sill, as the separation distance increases, indicating a decrease in spatial dependence with distance within the range and no spatial correlation outside the range, which is reflected in a nearly constant variance. If there is a discontinuity or a vertical jump at the origin, the process has a nugget effect, which is often due to a measurement error, but may also be indicative of a spatially discontinuous process.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{typicalsemivariogram-1.png}
+    \caption{A typical semivariogram}
+    \label{fig:my_label}
+\end{figure}
+The empirical semivariogram is an exploratory tool useful for assessing whether data exhibit spatial correlation. Furthermore, it can be compared to a Monte Carlo envelope of empirical semivariograms calculated from random permutations of the data while keeping the locations fixed. If the empirical semivariogram lies outside the Monte Carlo envelope with increasing distance, this is an indication of spatial correlation.\\
+The dependence structure of a GRF is given by the covariance matrix, which is constructed from a covariance function. Matérn models and exponential functions are conventionally used for this purpose. For the locations $s_i, s_j\in\mathbb{R}^2$ the exponential covariance function is given by
+\begin{equation}
+\hbox{Cov}\left(Z\left(s_i\right), Z\left(s_j\right)\right)=\sigma^2\exp\left(-\kappa\left|\left|s_i-s_j\right|\right|\right),
+\end{equation}
+where the distance between the locations $s_i$ and $s_j$ is denoted by $\left|\left|s_i-s_j\right|\right|$, the variance of the spatial field is given by $\sigma^2$, while $\kappa>0$ controls the rate at which the correlation decays as the distance increases. \\
+The Matérn family represents a flexible class of covariance functions that arises naturally in a variety of scientific fields. The Matérn covariance function is written as
+\begin{equation}
+    \hbox{Cov}\left(Z\left(s_i\right),Z\left(s_j\right)\right)=\frac{\sigma^2}{2^{\nu-1}\Gamma\left(\nu\right)}\left(\kappa\left|\left|s_i-s_j\right|\right|\right)^{\nu}K_\nu\left(\kappa\left|\left|s_i-s_j\right|\right|\right).
+\end{equation}
+$\sigma^2$ denotes the marginal variance of the spatial field, $K_\nu\left(\cdot\right)$ represents the modified Bessel function of second kind and order $\nu>0$, where $\nu$ is an integer. The mean square differentiability of the process is determined by $\nu$ and is usually fixed since it is difficult to identify in applications. For $\nu=0.5$, this covariance function is the equivalent of the exponential covariance function. $\kappa > 0$ is related to the range $\rho$, which is defined as the distance at which there is approximately no correlation between two given points, $\rho=\sqrt{8\nu}/\kappa$ to be exact. Examples of these two covariance functions are shown below\autocite[Cf.][]{moraga2019geospatial}. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{covariancefunctions-1.png}
+    \includegraphics[width=0.8\textwidth]{covariancefunctions-2.png}
+    \caption{Covariance functions corresponding to exponential and Matérn models.}
+    \label{fig:covariance}
+\end{figure}
 \subsection{Gaussian Markov Random Fields}
 \subsubsection{Definition of GMRFs}
-Let $\pmb{x}=\left(x_1,...,x_n\right)^T$ be normally distributed with mean $\pmb{\mu}$ and covariance matrix $\pmb{\Sigma}$. Let $\mathcal{G}=\left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V}=\left\lbrace 1,...,\right\rbrace$ and $\mathcal{E}$ be such that there is no edge between nodes $i$ and $j$ exactly when $x_i\perp x_j|\pmb{x}_{ij}$. Then $\pmb{x}$ is a GMRF with respect to $\mathcal{G}$. \\
+Let $\pmb{x}=\left(x_1,...,x_n\right)^T$ be normally distributed with mean $\pmb{\mu}$ and covariance matrix $\pmb{\Sigma}$. Let $\mathcal{G}=\left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V}=\left\lbrace 1,...,\right\rbrace$ and $\mathcal{E}$ be such that there is no edge between nodes $i$ and $j$ exactly when $x_i\perp x_j|\pmb{x}_{ij}$. Then $\pmb{x}$ is a \textit{Gaussian Markov random field} (GMRF) with respect to $\mathcal{G}$. \\
 Since $\pmb{\mu}$ does not affect the pairwise conditional independence properties of $\pmb{x}$, this information is 'hidden' in $\pmb{\Sigma}$. Hence,
 \begin{equation*}
     x_i\perp x_j|x_{ij}\Longleftrightarrow Q_{ij}=0.
@@ -461,19 +519,19 @@ The \textit{global Markov property}:
     \pmb{x}_{A}\perp \pmb{x}_{B}|\pmb{x}_{C}
 \end{equation*}
 for all disjoint sets $A$, $B$ and $C$ where $A$ and $B$ are non-empty and separated by $C$. 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \ctikzfig{ind_fig1}
     \caption{The pairwise Markov property; the black nodes are conditionally independent given the light gray nodes.}
     \label{fig:pairwise}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \ctikzfig{ind_fig2}
     \caption{The local Markov property; the black nodes and white nodes are conditionally independent given the dark gray nodes.}
     \label{fig:local}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \ctikzfig{ind_fig3}
     \caption{The global Markov property; the dark gray and light gray nodes are globally independent given the black nodes.}
@@ -536,7 +594,7 @@ and $\pmb{Q}$ must be symmetrical, i.e.,
 \end{equation*}
 then $\pmb{x}$ is a GMRF with respect to a labelled graph $\mathcal{G}=\left(\mathcal{V}, \mathcal{E}\right)$ with mean $\pmb{\mu}$ and precision matrix $\pmb{Q}=\left(Q_{ij}\right)$.
 \subsubsection{Multivariate GMRFs}
-A multivariate GMRF (MGMRF) is a multivariate extension of a GMRF that has proven useful in applications. Let $\pmb{x}$ be a GMRF with respect to $\mathcal{G}$, then the Markov property implies that
+A \textit{multivariate GMRF} (MGMRF) is a multivariate extension of a GMRF that has proven useful in applications. Let $\pmb{x}$ be a GMRF with respect to $\mathcal{G}$, then the Markov property implies that
 \begin{equation*}
     \pi\left(x_i|\pmb{x}_{-i}\right)=\pi\left(x_i|\left\lbrace x_j:j\sim i\right\rbrace\right).
 \end{equation*}
@@ -578,7 +636,7 @@ In some applications, the full conditionals are used to define the $\hbox{MGMRF}
 \end{equation*}
 therefore $\widetilde{\pmb{Q}}>0\Longleftrightarrow\left(\pmb{I}+\left(\pmb{\beta}_{ij}\right)\right) > 0$\autocite[Cf.][]{rue2005gaussian}.
 \subsection{Integrated Nested Laplace Approximation}
-An alternative to MCMC methods that is both less computationally intensive and suitable for performing approximate Bayesian inference in latent Gaussian models is Integrated nested Laplace Approximation (INLA). The basis of INLA is the use of a combination of analytical approximations and numerical algorithms for sparse matrices to approximate the posterior distribution using closed-form expressions. This speeds up inference and circumvents problems of sample convergence and mixing, making it suitable for fitting large data sets or exploring other models.  \\
+An alternative to MCMC methods that is both less computationally intensive and suitable for performing approximate Bayesian inference in latent Gaussian models is \textit{Integrated nested Laplace Approximation} (INLA). The basis of INLA is the use of a combination of analytical approximations and numerical algorithms for sparse matrices to approximate the posterior distribution using closed-form expressions. This speeds up inference and circumvents problems of sample convergence and mixing, making it suitable for fitting large data sets or exploring other models.  \\
 INLA can be used for all models of the following form,
 \begin{align*}
     y_i|\pmb{x},\pmb{\theta} &\sim \pi\left(y_i|x_i,\pmb{\theta}\right), \hspace{20pt} i=1,...,n,\\
@@ -626,14 +684,29 @@ In spatial statistics, two fundamental types of geographic data exist, namely \t
 Determining which data type to use depends on the domain of the application. Vector data dominates in the social sciences because human settlements typically have discrete boundaries, while raster data are commonly used in many environmental sciences because they are based on remote sensing data. Naturally, there is also some overlap and both types can be used together or one form can be converted into the other.
 \subsection{Vector Data}
 The geographic vector data model is based on points located within a \textit{coordinate reference system} (CRS), in which points either represent self-standing features or form more complex geometric shapes, i.e. lines and polygons. Using this system, Trondheim can be represented by the coordinates $\left(10.4, 63.4\right)$, meaning $10.4$ degrees east of the prime meridian and $63.4$ degrees north of the equator. It could also be written as $\left(1157722.70, 9199010.75\right)$, which is the position of Trondheim using the Web Mercator projection, the de facto standard for web mapping applications. More will be said about CRS later, but for now it is sufficient to know that it is possible to display coordinates in various ways.
-HIER GRAFIK MIT TRONDHIIIEM EINFÜGEN
+\begin{figure}[H]
+   \centering
+       \includegraphics[page=1,width=.7\textwidth]{globe.pdf}
+ \caption{A geographic CRS with an origin at 0° longitude an latitude. The red X denotes the location of Trondheim.}
+ \label{fig:globe}
+\end{figure}
 \subsubsection*{Different Types of Vector Data}
 As mentioned earlier, there are different types of vector data. There are 17 different geometry types in the standard \textit{simple features}, but there are seven core types that can be used in most analysis software. These types are visualised in the following graphic.
-HIER GRAFIK MIT SIMPLE FEATURES EINFÜGEN
+\begin{figure}[H]
+   \centering
+       \includegraphics[width=.7\textwidth]{sf-classes.png}
+ \caption{The most commonly used simple feature types.}
+ \label{fig:sf}
+\end{figure} $\newline$
 Simple Features was developed by the Open Geospatial Consortium and is an open, standardised, hierarchical data model that represents a wide range of geometry types. The use of this data model ensures that scientific work can be transferred to other institutions, e.g. when importing from and exporting to spatial databases. 
 \subsection{Raster Data}
 The geographic raster data model consists in most cases of a raster header and a matrix representing uniformly distributed cells/pixels. The raster header defines the CRS, the origin (starting point) and the extent. Since the number of columns and rows and the resolution of the cell size are stored in the extent, starting from the origin, it is easy to access and change each cell by its ID or by specifying the row and column number. In this type of representation, the coordinates of the four vertices of each cell are not explicitly stored, instead only the origin is stored. This speeds up data processing and makes it more efficient, but each raster layer can only contain a single value, which can be either numeric or categorical. Typically, raster maps are used to depict continuous features such as elevation or temperature, but categorical variables, for example soil or land cover.
-HIER GRAFIK MIT RASTER EINFÜGEN
+\begin{figure}[H]
+   \centering
+       \includegraphics[page=1,width=\textwidth]{raster.pdf}
+ \caption{An example of continuous and categorical raster data}
+ \label{fig:raster}
+\end{figure}
 \subsection*{Coordinate Reference Systems}
 A common denominator of vector and raster data are that both use the coordinate reference system (CRS), which defines how spatial elements relate to the surface of the Earth. The CRS can be either geographic or projected.
 \subsubsection*{Geographic Coordinate Systems}
@@ -646,23 +719,96 @@ This transition always entails some distortion, skewing some of the properties o
 Again, subgroups exist in projection coordinate systems, \textit{conic}, \textit{cylindrical} and \textit{planar} projections. In a conic projection, the earth's surface is projected onto a cone along one or two tangent lines. Along these lines the distortions are minimised and increase with the distance to the lines. The projection is therefore best suited for maps of mid-latitude areas. Cylindrical projections map the surface onto a cylinder. These types of projections can be created by touching the surface of the earth along one or two tangent lines. They are often used to map the entire Earth. A planar projection projects data onto a flat surface that touches the globe at a point or along a tangent line, and is typically used in mapping polar projections\autocite[Cf.][]{lovelace2019geocomputation}.
 \clearpage
 \section{Spatial Point Processes}
+A stochastic process that describes the location of particular events/points that occur in a region is known as a point process. The number of points as well as the location of the points are random. An example of a point process would be the number of earthquakes and their locations.
+\subsection{Fundamentals of Point Processes}
+Let $Z$ be a random, at most countable set of points in a space $\mathbb{X}$, for example $\mathbb{R}^d$. Ignoring measurability issues, $Z$ can be thought of as a mapping $\omega\mapsto Z\left(\omega\right)$ from $\Omega$ into the set of countable subsets of $\mathbb{X}$, where $\left(\Omega, \mathcal{F}, \mathbb{P}\right)$ defines an underlying probability space. $Z$ can then be identified with the family of mappings
+\begin{equation}
+    \omega\mapsto\eta\left(\omega, B\right):=\hbox{card}\left(z(\omega)\cap B\right), \hspace{20pt}B\subset\mathbb{X},
+\end{equation}
+which counts the number of points from $Z$ in $B$. For any fixed $\omega\in\Omega$, $\eta\left(\omega,\cdot\right)$ is the counting measure supported by $Z\left(\omega\right)$. \\
+For a general definition of a point process, let $\left(\mathbb{X}, \mathcal{X}\right)$ be a measurable space and let $N_{<\infty}\left(\mathbb{X}\right)\equiv N_{<\infty}$ be the space of all measures $\mu$ on $\mathbb{X}$ such that $\mu(B)\in\mathbb{N}_0: =\mathbb{N}\cup\lbrace0\rbrace\,\forall B\in\mathcal{X}$. Let $N\left(\mathbb{X}\right)\equiv N$ be the space of all measures describable as a countable sum of measures from $N_{<\infty}$, for example the \textit{zero measure} 0 which is equal to $0$ on $\mathcal{X}$. In general, any sequence $\left(x_n\right)_{n=1}^k$ of elements of $\mathbb{X}$, where $k\in\overline{\mathbb{N}}:=\mathbb{N}\cup\lbrace\infty\rbrace$ denotes the number of terms in the sequence, can be used to define a measure
+\begin{align}
+    \mu&=\sum_{n=1}^k\delta_{x_n}. \label{eq:measure} \\
+    \Rightarrow\mu\left(B\right)&=\sum_{n=1}^k\pmb{1}_B\left(x_n\right),\hspace{20pt} B\in\mathcal{X}. \nonumber
+\end{align}
+More generally, for any measurable $f:\mathbb{X}\rightarrow\left[0,\infty\right]$,
+\begin{equation}
+    \int fd\mu=\sum_{n=1}^kf\left(x_n\right)
+\end{equation}
+For $k=0$ in \eqref{eq:measure}, $\mu$ is equal to the zero measure. The point set $\pmb{x}=\left(x_1,...,x_n\right)^T$ is said to be not pairwise different and if $x_i=x_j$ with $i\neq j$, $\mu$ is said to have multiplicities. The multiplicity of $x_i$ is equal to the number
+\begin{equation*}
+    \hbox{card}\left\lbrace j\leq k:x_j=x_i\right\rbrace.
+\end{equation*}
+Any $\mu$ of the form \eqref{eq:measure} is interpreted as a counting measure with possible multiplicities, but in general it cannot be guaranteed that every $\mu\ in N$ can be written in this particular form. \\
+A point process $\eta$ on $\mathbb{X}$ is called \textit{proper point process} if random elements $X_1,X_2,...\ exist in \mathbb{X}$ and a $\overline{\mathbb{N}}_0$-valued random variable $\kappa$ such that almost surely
+\begin{equation}
+    \eta=\sum_{n=1}^{\kappa}\delta_{X_n}.
+\end{equation}
+For $\kappa=0$ this is the zero measure on $\mathbb{X}$. \\
+This terminology is motivated by the intuition that a point process is a (random) set of points, rather than an integer measure. A proper point process fits this intuition better, since it can be interpreted as a countable set of points in $\mathbb{X}$.
+\subsection{Poisson Processes}
+Poisson processes are defined by the fact that the number of points in a given set follows a Poisson distribution. Furthermore, the numbers of points in disjoint sets are stochastically independent. \\
+In application, Poisson processes are used in a wide range of fields, including biology, economics and image processing. \\
+Let $\lambda$ be an $s$-finite measure on $\mathbb{X}$. Let an \textit{Poisson process} with intensity measure $\lambda$ be defined as a point process $\eta$ on $\mathbb{X}$ with the following two properties:
+\begin{itemize}
+    \item[1.] $\forall B\in\mathcal{X}: \eta\left(B\right)\sim\hbox{Po}\left(\lambda(B);k\right)\forall k\in\mathbb{N}_0 \Longleftrightarrow \mathbb{P}\left(\eta\left(B\right)=k\right)$
+    \item[2.] 
+    $\forall m\in\mathbb{N}$ and all pairwise disjoint sets $B_1,...,B_m\in\mathcal{X}:$ the random variables $\eta\left(B_1\right),...,\eta\left(B_m\right)$ are independent.
+\end{itemize}
+A point process satisfying the second of these conditions is called \textit{completely independent}. If $\eta$ is a Poisson process with intensity measure $\lambda$, then
+\begin{equation}
+    \mathbb{E}\left[\eta\left(B\right)\right]=\lambda(B).
+\end{equation}
+For $\lambda=0$, the zero measure,
+\begin{equation*}
+    \mathbb{P}\left(\eta(\mathbb{X})=0\right)=1.
+\end{equation*}
+
+\subsection{Random Measures and Cox Processes}
+A Poisson process with a random intensity measure, and thus the result of a \textit{doubly stochastic} process, is called a \textit{Cox process}. A random measure is a natural and important generalisation of a point process and it is the determining factor of the distribution of a Cox process. \\
+Since a Cox process $\eta$ can be interpreted as the result of a doubly stochastic process, a random measure $\xi$ is generated first, followed by a Poisson process with intensity measure $\xi$. \\
+These processes are often used to simulate spike trains or in financial mathematics for modeling the prices of financial instruments where credit risk is a major factor.
+\subsubsection{Random Measures}
+Let $\left(\mathbb{X}, \mathcal{X}\right)$ be a measurable space and let $M\left(\mathbb{X}\right)\equiv M$ denote the set of all $s$-finite measures $\mu$ on $\mathbb{X}$. Let $\mathcal{M}\left(\mathbb{X}\right)\equiv \mathcal{M}$ be the $\sigma$ field generated by all sets of the form
+\begin{equation*}
+    \left\lbrace\mu\in M:\mu(B)\leq t\right\rbrace, \hspace{20pt}B\in\mathcal{X}, t\in\mathbb{R}_{+}.
+\end{equation*}
+This is equal to the smallest $\sigma$-field of subsets of $M$ such that $\mu\mapsto\mu(B)$ is a measurable mapping for all $B\in\mathbb{X}$. \\
+A random measure on $\mathbb{X}$ is defined as a random element $\xi$ of the space $\left(M,\mathcal{M}\right)$, i.e. a measurable mapping $\xi:\Omega\mapsto M$. \\
+If $\xi$ is a random measure and $B\in\mathcal{X}$, then $\xi(B)$ denotes the random variable $\omega\mapsto\xi\left(\omega,B\right):=\xi\left(\omega\right)(B)$. This mapping represents a kernel from $\Omega$ to $\mathbb{X}$ with the additional property that the measure $\xi\left(\omega,\cdot\right)$ is $s$-finite for each $\omega\in\Omega$. \\
+A random measure $\xi$ on $\mathbb{X}$ follows the distribution of the probability measure $\mathbb{P}_{\xi}$ on $\left(M,\mathcal{M}\right)$ given by $A\mapsto\mathbb{P}\left(\xi\in A\right)$. This distribution is again determined by the family of random vectors $\left(\xi\left(B_1\right),...,\xi\left(B_m\right)\right)$ for pairwise disjoint $B_1,...,B_m\in\mathcal{X}$ and $m\in\mathbb{N}$.
+\subsubsection{Cox Processes}
+Let $\Pi_{\lambda}$ denote the distribution of a Poisson process with intensity measure $\lambda\ in M\left(\mathbb{X}\right)$ and let $\xi$ be a random measure on $\mathbb{X}$. A point process $\eta$ on $\mathbb{X}$ is called a Cox process directed by $\xi$ if
+\begin{equation}
+    \mathbb{P}\left(\eta\in A|\xi\right)=\Pi_{\xi}(A),\hspace{20pt}\mathbb{P}\hbox{-almost surely.}, A\in\mathcal{N}.
+\end{equation}
+$\mathcal{N}\left(\mathbb{X}\right)\equiv\mathcal{N}$ denotes the $\sigma$ field formed by the set of all subsets of $N$ of the form
+\begin{equation*}
+    \left\lbrace\mu\in N:\mu(B)=k\right\rbrace, \hspace{20pt}B\in\mathcal{X},k\in\mathbb{N}_0.
+\end{equation*}
+Thus $\mathcal{N}$ denotes the smallest $\sigma$ field on $N$ such that $\mu\mapsto\mu(B)$ is measurable for all $B\in\mathcal{X}$.\autocite[Cf.][]{last2017lectures}.
 \clearpage
 \section{Modeling and Visualising Health Data}
 \subsection{Areal Data}
 Areal or lattice data are the result of segmenting a fixed domain into a finite number of sub-regions where results are aggregated, e.g. the number of infections with a specific disease in districts or the number of overweight people in provinces. Often the aim of disease risk models is to assess the risk within the same areas for which data are available. This can be done with a simple measure such as the \textit{standardised incidence ratio} (SIR) or by using a Bayesian hierarchical model, which allows information to be drawn from neighbouring areas and incorporates covariates, thereby smoothing and reducing extreme values. \\
 A widely used model is the \textit{Besag-York-Mollié} (BYM), which takes spatial correlation and the potential for observations in neighbouring areas to be more similar than those in distant regions into account. It includes a spatial random effect that smoothes the data according to a neighbourhood structure, and an unstructured exchangeable component that models uncorrelated noise. In settings where disease numbers are monitored over time, spatio-temporal models account for temporal correlations in addition to spatial correlation, while also accounting for spatio-temporal interactions.
 \subsubsection{Spatial Neighbourhood Matrices}
-Spatial or proximity matrices are useful for exploratory analysis of area data. Let $w_{ij}$ denote the $\left(i,j\right)$ element of a spatial neighbourhood matrix $\pmb{W}$. $w_{ij}$ connects the two areas in some spatial way. The neighbourhood structure over the complete study region is defined by $\pmb{W}$, and the elements of the matrix can be considered as weights. The closer $j$ is to $i$, the more weight is associated with it. The simplest neighbourhood definition is given by the binary matrix
+Spatial or proximity matrices are useful for exploratory analysis of area data. Let $w_{ij}$ denote the $\left(i,j\right)$ element of a \textit{spatial neighbourhood matrix} $\pmb{W}$. $w_{ij}$ connects the two areas in some spatial way. The neighbourhood structure over the complete study region is defined by $\pmb{W}$, and the elements of the matrix can be considered as weights. The closer $j$ is to $i$, the more weight is associated with it. The simplest neighbourhood definition is given by the binary matrix
 \begin{equation}
     w_{ij}=\begin{cases}
     1 & \hbox{ if regions } i $\hbox{ and }$ j \hbox{ share a border} \\
     0 & \hbox{ else }
     \end{cases}
 \end{equation}
-Since a region cannot share a boundary with itself, $w_{ii}=0$.  Below, the .... are mapped.
-HIER GRAFIK VON IRGEND EINER NEIGHBOURHOOD MATRIX.
+Since a region cannot share a boundary with itself, $w_{ii}=0$.  Below, the number of shared borders of each canton in Switzerland are mapped.
+\begin{figure}[H]
+   \centering
+       \includegraphics[page=1,width=\textwidth]{neighbours.pdf}
+ \caption{The number of shared borders of cantons in Switzerland}
+ \label{fig:neighbour}
+\end{figure}
 \subsubsection{Standardised Incidence Ratio}
-A basic measure of disease risk is the standardised incidence ratio, which yields an estimate in each of the areas that form a partition of the study region. It is defined as the ratio of observed counts to expected counts
+A basic measure of disease risk is the \textit{standardised incidence ratio}, which yields an estimate in each of the areas that form a partition of the study region. It is defined as the ratio of observed counts to expected counts
 \begin{equation}
     \hbox{SIR}_i = \frac{Y_i}{E_i}.
 \end{equation}
@@ -675,7 +821,6 @@ with $r_j^{(s)}$ the rate in stratum $j$ in the standard population and $n_j^{(i
     E_i = r^{(s)}n^{(i)},
 \end{equation*}
 where $r^{(s)}$ denotes the rate in the standard population and $n^{(i)}$ is the population of area $i$. If the standardised incidence rate is greater than 1, area $i$ has a higher risk than expected from the standard population, while for $\hbox{SIR}_i = 1$ the risk is the same and for $\hbox{SIR}_i < 1$ it is lower than expected. The ratio is also called the standardised mortality ratio when applied to mortality data.
-HIER EIN EXAMPLE ODER SO MIT BESCHREIBUNG
 \subsubsection{Spatial Small Area Disease Risk Estimation}
 While SIRs may prove useful in some situations, in areas with low population sizes or rare diseases, expected counts may be low, making SIRs insufficiently reliable for reporting. It is therefore preferable to assess disease risk using models that allow information to be borrowed from neighbouring areas and incorporate information from covariates, thus smoothing or shrinking extreme values due to small sample sizes. \\
 The observed counts $Y_i$ in area $i$ are typically modeled with a Poisson distribution with mean $E_i\theta_i$, where $E_i$ is the expected counts and $\theta_i$ denotes the relative risk in area $i$. To account for extra Poisson reliability, the logarithm of the relative risk is expressed as the total of the intercept and the random effects. $\theta_i$ quantifies whether area $i$ has a higher $\left(\theta_i >1\right)$ or lower $\left(\theta_i <1\right)$ risk than the average risk in the standard population. If the risk of an area $i$ is half the average risk, then $\theta_i = 0.5$. The general model for spatial data is formulated as follows:
@@ -688,7 +833,7 @@ The overall risk in the region of study is represented by $\alpha$, $u_i$ is a r
     \log\left(\theta_i\right)=\pmb{d}_i\pmb{\beta}+u_i+v_i,
 \end{equation*}
 with $\pmb{d}_i = \left(1,d_{i1},...,d_{ip}\right)$ a vector of the intercept and $p$ covariates corresponding to the area $i$ and $\pmb{\beta}=\left(\beta_0,...,\beta_p\right)^T$ the vector of coefficients. An increase in $\pmb{d}_j\,\left(j = 1,...,p\right)$ by one unit, leads to an increase in the relative risk by a factor of $\exp\left(\beta_j\right)$, provided that all other covariates remain constant. \\
-In the Besag-York-Mollié (BYM) model, this spatial random effect $u_i$ is assigned a conditional autoregressive (CAR) distribution that smoothes the data according to a given neighbourhood structure that defines two areas as neighbours if they share a common boundary, specifically,
+In the Besag-York-Mollié (BYM\autocite[Cf.][]{besag1991bayesian}) model, this spatial random effect $u_i$ is assigned a conditional autoregressive (CAR) distribution that smoothes the data according to a given neighbourhood structure that defines two areas as neighbours if they share a common boundary, specifically,
 \begin{equation}
     u_i|\pmb{u}_{-i}\sim\mathcal{N}\left(\overline{u}_{\delta_i}, \frac{\sigma_u^2}{n_{\delta_i}}\right),
 \end{equation}
@@ -708,12 +853,12 @@ When disease counts are monitored over time, spatio-temporal models are useful a
     Y_{ij}\sim\hbox{Po}\left(E_{ij}, \theta_{ij}\right), \hspace{20pt} i=1,...,I,\,j=1,...,J.
 \end{equation}
 $\log\left(\theta_{ij}\right)$ is written as the sum of several components, including spatial and temporal structures, to consider that neighbouring areas and successive times may have similar risk. Spatio-temporal interactions can be included to account for the fact that temporal trends may differ from area to area but may be more alike in neighbouring areas. \\
-Bernardinelli et al. (1995), for example, propose a spatio-temporal model with parametric time trends that expresses the logarithm of relative risks as
+Bernardinelli et al.\autocite[Cf.][]{bernardinelli1995bayesian}, for example, propose a spatio-temporal model with parametric time trends that expresses the logarithm of relative risks as
 \begin{equation}
     \log\left(\theta_{ij}\right)=\alpha+u_i+v_i+ \left(\beta+\delta_i\right)\times t_j.
 \end{equation}
 The intercept is denoted by $\alpha$, $u_i+v_i$ is a random area effect, $\beta$ represents a global linear trend effect and $\delta_i$ is an interaction between space and time which is the difference between $\beta$ and the area-specific trend. For modeling $u_i$ and $\delta_i$, a CAR distribution is used and $v_i$ is i.i.d.. This specification allows each of the areas to have its individual time trend, where the spatial intercept is given by $\alpha+u_i+v_i$ and the slope by $\beta+\delta_i$. $\delta_i$ is referred to as the differential trend of the $i$-th area and represents the amount by which the time trend of area $i$ deviates from the overall time trend $\beta$. If $\delta_i\neq is 0$, then area $i$ has a time trend with a slope that is either steeper or less steep than the overall time trend $\beta$. \\
-For models that do not demand linearity of the time trend, non-parametric models such as the one proposed by Knorr-Held (2000) can be used. This specific model incorporates spatial effects, temporal random effects and an interaction between space and time as follows:
+For models that do not demand linearity of the time trend, non-parametric models such as the one proposed by Knorr-Held\autocite[Cf.][]{knorr2000bayesian} can be used. This specific model incorporates spatial effects, temporal random effects and an interaction between space and time as follows:
 \begin{equation}
     \log\left(\theta_{ij}\right)=\alpha+u_i+v_i+\gamma_j+\phi_j+\delta_{ij}.
 \end{equation}
@@ -732,8 +877,35 @@ The analysis of spatially aggregated data is subject to the "misaligned data pro
 The Modifiable Area Unit Problem (MAUP) describes a problem where the inference may differ when the same underlying data are grouped at a new spatial level of aggregation. It consists of two interrelated effects, the first of which is the scale/aggregation effect. It relates to the different conclusions obtained when the same data are grouped into larger and larger areas. The other effect is the grouping/zoning effect, which accounts for the variability in results due to alternative formations of the areas, resulting in differences in area shape given the same or similar scales. \\
 Ecological studies are defined by their reliance on aggregated data and the inherent potential for ecological fallacies. This phenomenon occurs when estimated associations obtained from the analysis of variables measured at the aggregate level lead to conclusions that differ from analyses based on the same variables measured at the individual level. This can be considered a special case of MAUP and the resulting so-called ecological bias is composed of two effects similar to the aggregation and zoning effects in MAUP. Namely, the aggregation bias caused by the aggregation of individuals and the specification bias due to the different distribution of confounding variables that results from the aggregation\autocite[Cf.][]{moraga2019geospatial}.
 \subsection{Geostatistical Data}
+Geostatistical data are measurements of one or more spatially continuous features collected at specific locations. They can be a disease risk measured by a survey in different villages, the level of a pollutant recorded at several monitoring stations, or the density of mosquitoes responsible for disease transmission measured by traps set at different locations. Let $Z\left(s_1\right), ..., Z\left(s_n\right)$ be the observations of a spatial variable $Z$ at locations $s_1,...,s_n$. Geostatistical data are often assumed to be partial realisations of a random process
+\begin{equation}
+    \left\lbrace Z\left( s\right):s\in D\subset\mathbb{R}^2\right\rbrace,
+\end{equation}
+where $D$ denotes a fixed subset of $\mathbb{R}^2$ and the spatial index $\pmb{s}$ varies continuously over $D$. For practical reasons, it is only possible to observe $Z\left(\cdot\right)$ at a finite set of locations. The inference of the characteristics, e.g. mean and variability of the process, of the spatial process is based on this partial realisation. Using these characteristics, it is possible to predict the process at unobserved locations and construct a spatially continuous surface of the variable of interest.
+\subsubsection{Stochastic Partial Differential Equation Approach}
+With geostatistical data, an underlying spatially continuous variable can often be assumed and modelled using a Gaussian random field. A spatial model can be fitted using the stochastic partial differential equation (SPDE) approach and the variable of interest can be predicted at new locations. A GRF with a Matérn covariance matrix can be written as a solution to the following continuous domain SPDE:
+\begin{equation}
+    \left(\kappa^2-\Delta\right)^{\alpha/2}\left(\tau x\left(\pmb{s}\right)\right) = \mathcal{W}\left(\pmb{s}\right).
+\end{equation}
+The GRF is represented by $x\left(\pmb{s}\right)$, where smoothness is controlled by $\alpha$, while $\mathcal{W}\left(s\right)$ denotes a Gaussian spatial white noise process. $\kappa>0$ is a scale parameter and $\Delta$ denotes the Laplacian given by $\sum_{i=1}^d\frac{\partial^2}{\partial x_i^2}$, where $d$ is the dimension of the spatial domain D. \\
+The smoothness parameter $\nu$ of the Matérn covariance function is linked to the SPDE by
+\begin{equation*}
+    \nu=\alpha-\frac{d}{2}
+\end{equation*}
+while the marginal variance $\sigma^2$ is related to the SPDE by
+\begin{equation*}
+    \sigma^2=\frac{\Gamma\left(\nu\right)}{\Gamma\left(\alpha\right)\left(4\pi\right)^{d/2}\kappa^{2\nu}\tau^2}.
+\end{equation*}
+For $d=2$ and $\nu=0.5$ this corresponds to the exponential function. \\
+The SPDE can be solved approximately using the \textit{finite element} method, which partitions the spatial domain $D$ into a set of non-intersecting triangles, resulting in a triangulated mesh with $n$ vertices and $n$ basis functions $\psi_k\left(\cdot\right)$. These functions are piecewise linear functions on each triangle, equal to 1 at vertex $k$ and 0 otherwise. The continuously indexed Gaussian field $x$ is thus represented as a discretely indexed Gaussian Markov random field by the finite basis functions defined on the triangulated mesh
+\begin{equation}
+    x\left(\pmb{s}\right)=\sum_{k=1}^n\psi_k\left(\pmb{s}\right)x_k,
+\end{equation}
+with $n$ the number of vertices of the triangulate, $\psi_k\left(\cdot\right)$ the piecewise linear basis functions and $\left\lbrace x_k\right\rbrace$ zero-mean Gaussian distributed weights. \\
+The joint distribution of the weight vector follows a Gaussian distribution, $\pmb{x}=\left(x_1,... ,x_n\right)\sim\mathcal{N}\left(0, \pmb{Q}^{-1}\left(\tau, \kappa\right)\right)$, which approximates the solution $x\left(\pmb{s}\right)$ of the SPDE in the mesh nodes, and the basis functions transform $x\left(\pmb{s}\right)$ from the mesh nodes to the other spatial locations of interest\autocite[Cf.][]{moraga2019geospatial}.
 \chapter{Data Collection}
 \chapter{Data Analysis}
 \chapter{Results}
 \chapter{Final Thoughts}
+\printbibliography
 \end{document}
