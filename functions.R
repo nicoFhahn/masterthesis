@@ -4,9 +4,11 @@ library(osmdata)
 library(rlist)
 library(stringr)
 library(leaflet)
+library(readr)
 ############## DOWNLOAD KEY DATA  ##############
 download_key_data <- function(cities, key, value = NULL, df = TRUE,
                               cityname = NULL) {
+  Sys.sleep(1)
   # add some initial values
   data_osm <- NULL
   # if a bbox is given to the function, turn it into a list so that
@@ -73,7 +75,6 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
       osm_points <- points$osm_points
       osm_polygons <- points$osm_polygons
       osm_multipolygons <- points$osm_multipolygons
-      cat(".")
       if (is.null(osm_points)) {
         if (is.null(osm_polygons)) {
           osm_multipolygons <- st_centroid(osm_multipolygons)
@@ -93,7 +94,7 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
         }
       } else {
         if (!is.null(osm_polygons)) {
-          inter <- unlist(st_intersects(osm_polygons, osm_points))
+          inter <- unlist(suppressWarnings(st_intersects(osm_polygons, osm_points)))
           if (length(inter) > 0) {
             osm_points <- osm_points[-inter, ]
           }
@@ -102,7 +103,7 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
           osm_polygons$latitude <- st_coordinates(osm_polygons)[, 2]
         }
         if (!is.null(osm_multipolygons)) {
-          inter <- unlist(st_intersects(osm_multipolygons, osm_points))
+          inter <- unlist(suppressWarnings(st_intersects(osm_multipolygons, osm_points)))
           if (length(inter) > 0) {
             osm_points <- osm_points[-inter, ]
           }
@@ -113,7 +114,6 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
         osm_points$longitude <- st_coordinates(osm_points)[, 1]
         osm_points$latitude <- st_coordinates(osm_points)[, 2]
       }
-      cat(".")
       all_results <- list(osm_points, osm_polygons, osm_multipolygons)
       all_results <- list.remove(
         all_results,
@@ -169,7 +169,6 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
     # remove null values from list
     current_download[unlist(lapply(current_download, is.null))] <- NULL
   }
-  cat(".")
   data_osm_2 <- as.list(c(data_osm, current_download))
   data_osm <- data_osm_2
   # return as list or data.frame
@@ -194,7 +193,6 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
     )
     # bind the entire list while ensuring that the order of the cols is
     # correct
-    cat(".")
     data_osm_df <- do.call(
       rbind,
       lapply(
@@ -202,7 +200,6 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
         function(x) x[match(all_cols, names(x))]
       )
     )
-    cat(".")
     if (!is.null(data_osm_df$name)) {
       Encoding(data_osm_df$name) <- "UTF-8"
       data_osm_df$name <- tolower(data_osm_df$name)
@@ -248,22 +245,3 @@ geo_code2 <- function(x) {
   )
   as.numeric(rev(unlist(coded)))
 }
-
-trondheim_borough <- download_key_data("Trondheim", "boundary", "borough")
-trondheim_suburb <- download_key_data("Trondheim", "boundary", "suburb")
-trondheim_quarter <- download_key_data("Trondheim", "boundary", "quarter")
-trondheim_boundary <- download_key_data("Trondheim", "boundary")
-
-x <- "Munich"
-key <- "boundary"
-value <- "administrative"
-query <- try(osmdata::opq(x) %>%
-               osmdata::add_osm_feature(key = key), silent = TRUE)
-while (class(query)[1] == "try-error") {
-  query <- try(osmdata::opq(x) %>%
-                 osmdata::add_osm_feature(key = key), silent = TRUE)
-}
-points <- try(osmdata::osmdata_sf(query), silent = TRUE)
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data = points$osm_polygons)
