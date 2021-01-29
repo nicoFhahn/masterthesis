@@ -37,3 +37,13 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# shapefiles
+germany_complete.dbf
+germany_complete.prj
+germany_complete.shp
+germany_complete.shx
+norge_complete.dbf
+norge_complete.prj
+norge_complete.shp
+norge_complete.shx
