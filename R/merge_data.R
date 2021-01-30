@@ -22,7 +22,7 @@ norway_mobility_ungrouped <- dcast(
   value.var = "mob_change"
 )
 norway_mobility_ungrouped$fylke_no <- as.character(norway_mobility_ungrouped$fylke_no)
-norway_mobility_ungrouped[norway_mobility_ungrouped$fylke_no == "3"]$fylke_no <- "03"
+norway_mobility_ungrouped[norway_mobility_ungrouped$fylke_no == "3", ]$fylke_no <- "03"
 norway_municipality_confirmed_long$date <- as.Date(as.character(norway_municipality_confirmed_long$date))
 norway_municipality_confirmed_mobility <- merge(
   norway_municipality_confirmed_long,
@@ -31,8 +31,17 @@ norway_municipality_confirmed_mobility <- merge(
   all = FALSE
 )
 norge_shape <- read_sf("shapefiles/kommuner_komprimert-polygon.shp")
-norge_demo <- read_delim("norge/Personer1(1).csv", ";")
+kommune_4602 <- norge_shape[norge_shape$kommunenum == 4602, ][1, ]
+kommune_4602$geometry <- st_union(norge_shape[norge_shape$kommunenum == 4602, ])
+norge_shape <- norge_shape[norge_shape$kommunenum != 4602, ]
+norge_shape <- rbind(norge_shape, kommune_4602)
+norge_demo <- read_delim("norge_data/Personer1.csv", ";")
 norge_demo$kommune_no <- str_extract(norge_demo$region, "[0-9]{4}")
+norge_no_shape <- merge(
+  norway_municipality_confirmed_mobility,
+  norge_demo,
+  by = "kommune_no"
+)
 load("osmdata/norge_hospital.Rda")
 load("osmdata/norge_place_of_worship.Rda")
 load("osmdata/norge_retail.Rda")
@@ -311,17 +320,12 @@ norge_shape$schools <- unlist(
 setDT(norge_shape)
 colnames(norge_shape)[1] <- "kommune_no"
 norge_complete <- merge(
-  norge_demo,
-  norway_municipality_confirmed_mobility,
-  by = "kommune_no",
-  all = FALSE
-)
-norge_complete <- merge(
-  norge_complete,
+ norge_no_shape,
   norge_shape,
   by = "kommune_no",
   all = FALSE
 )
+
 write_sf(st_as_sf(norge_complete), "wrangled_data/norge_complete.shp")
 ###############################################
 library(covid19germany)
