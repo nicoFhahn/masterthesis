@@ -1,5 +1,6 @@
 library(readr)
 library(data.table)
+library(dplyr)
 library(reshape2)
 library(sf)
 library(stringr)
@@ -36,6 +37,51 @@ kommune_4602$geometry <- st_union(norge_shape[norge_shape$kommunenum == 4602, ])
 norge_shape <- norge_shape[norge_shape$kommunenum != 4602, ]
 norge_shape <- rbind(norge_shape, kommune_4602)
 norge_demo <- read_delim("norge_data/Personer1.csv", ";")
+norge_demo$age <- as.numeric(str_extract(norge_demo$age, "[0-9]{1,}"))
+norge_demo$total_age <- norge_demo$age * norge_demo$`Persons 2020`
+norge_demo_region <- split(norge_demo, norge_demo$region)
+norge_demo_region_sex <- lapply(norge_demo_region, function(x) split(x, x$sex))
+norge_demo <- lapply(
+  norge_demo_region_sex,
+  function(x) {
+    frames <- lapply(
+      x,
+      function(y) {
+        mean_age <- sum(y$total_age) / sum(y$`Persons 2020`)
+        median_age <- median(rep(y$age, y$`Persons 2020`))
+        as_tibble(
+          data.frame(
+            region = y$region[1],
+            sex = y$sex[1],
+            population = sum(y$`Persons 2020`),
+            mean_age_sex = mean_age,
+            median_age_sex = median_age
+          )
+        )
+      }
+    )
+    frame <- do.call(rbind, frames)
+    frame_both <- do.call(rbind, x)
+    frame$median_age <- median(rep(frame_both$age, frame_both$`Persons 2020`))
+    frame$mean_age <- sum(frame_both$total_age) / sum(frame_both$`Persons 2020`)
+    frame_final <- as_tibble(
+      data.frame(
+        region = frame$region[1],
+        population_total = sum(frame$population),
+        population_male = frame$population[1],
+        population_female = frame$population[2],
+        mean_age_male = frame$mean_age_sex[1],
+        mean_age_female = frame$mean_age_sex[2],
+        median_age_male = frame$median_age_sex[1],
+        median_age_female = frame$median_age_sex[2],
+        mean_age = frame$mean_age[1],
+        median_age = frame$median_age[1]
+      )
+    )
+    frame_final
+  }
+)
+norge_demo <- do.call(rbind, norge_demo)
 norge_demo$kommune_no <- str_extract(norge_demo$region, "[0-9]{4}")
 norge_no_shape <- merge(
   norway_municipality_confirmed_mobility,
@@ -325,8 +371,29 @@ norge_complete <- merge(
   by = "kommune_no",
   all = FALSE
 )
-
-write_sf(st_as_sf(norge_complete), "wrangled_data/norge_complete.shp")
+norge_complete$objtype <- NULL
+norge_complete$lokalid <- NULL
+norge_complete$oppdaterin <- NULL
+norge_complete$datauttaks <- NULL
+norge_complete$versjonid <- NULL
+norge_complete$opphav <- NULL
+norge_complete$samiskforv <- NULL
+norge_complete$datafangst <- NULL
+norge_complete$navnerom <- NULL
+norge_complete$navn <- NULL
+colnames(norge_complete)[9:14] <- c(
+  "groc_pha",
+  "parks",
+  "resident",
+  "ret_recr",
+  "transit",
+  "workplace"
+)
+no_geometry <- norge_complete
+no_geometry$geometry <- NULL
+# calculate the SIR
+write_csv(no_geometry, "wrangled_data/norge_features.csv")
+write_sf(st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1], "wrangled_data/shapes_norge.shp")
 ###############################################
 library(covid19germany)
 rki <- get_RKI_timeseries()
