@@ -100,6 +100,45 @@ norge_place_of_worship <- pblapply(
   value = "place_of_worship"
 )
 save(norge_place_of_worship, file = "osmdata/norge_place_of_worship.Rda")
+norge_bakeries <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "shop",
+  value = "bakery"
+)
+save(norge_bakeries, file = "osmdata/norge_bakery.Rda")
+norge_gas <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "amenity",
+  value = "fuel"
+)
+save(norge_gas, file = "osmdata/norge_gas.Rda")
+norge_banks <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "shop",
+  value = "bank"
+)
+save(norge_banks, file = "osmdata/norge_banks.Rda")
+norge_atms <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "shop",
+  value = "atm"
+)
+save(norge_atms, file = "osmdata/norge_atms.Rda")
+norge_residential <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "building",
+  value = c(
+    "apartments", "bungalow", "cabin", "detached", "dormitory", "farm", "ger",
+    "hotel", "house", "houseboat", "residential", "semidetached_house",
+    "static caravan", "terrace"
+  )
+)
+save(norge_residential, file = "osmdata/norge_residential.Rda")
 
 germany <- read_sf("shapefiles/Kreisgrenzen_2017_mit_Einwohnerzahl.shp")
 germany <- st_transform(germany, 4326)
