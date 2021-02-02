@@ -315,10 +315,10 @@ leaflet(results_frame) %>%
   )
 marg <- res_3$marginals.fitted.values[[1]]
 1 - inla.pmarginal(q = 0.1, marginal = marg)
-# now the same again with a pc prior
+# now the same again with mobility data
 formula_4 <- value ~ 
   # add the mobility vars and pop density
-  pop_dens + groc_pha + parks + resident + ret_recr + transit + workplace +
+  pop_dens + sex + median_age + groc_pha + parks + resident + ret_recr + transit + workplace +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besag", graph = g, scale.model = TRUE, hyper = prior_prec_1) +
   # random effects term
@@ -328,7 +328,7 @@ res_4 <- inla(
   formula_4,
   family = "nbinomial",
   data = newest_numbers,
-  E = expected,
+  E = expected_count,
   control.predictor = list(
     compute = TRUE
   ),

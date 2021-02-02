@@ -242,3 +242,42 @@ germany_place_of_worship <- pblapply(
   value = "place_of_worship"
 )
 save(germany_place_of_worship, file = "osmdata/germany_place_of_worship.Rda")
+germany_bakeries <- pblapply(
+  germany_bbox,
+  download_key_data,
+  key = "shop",
+  value = "bakery"
+)
+save(germany_bakeries, file = "osmdata/germany_bakery.Rda")
+germany_gas <- pblapply(
+  germany_bbox,
+  download_key_data,
+  key = "amenity",
+  value = "fuel"
+)
+save(germany_gas, file = "osmdata/germany_gas.Rda")
+germany_banks <- pblapply(
+  germany_bbox,
+  download_key_data,
+  key = "shop",
+  value = "bank"
+)
+save(germany_banks, file = "osmdata/germany_banks.Rda")
+germany_atms <- pblapply(
+  germany_bbox,
+  download_key_data,
+  key = "shop",
+  value = "atm"
+)
+save(germany_atms, file = "osmdata/germany_atms.Rda")
+germany_residential <- pblapply(
+  germany_bbox,
+  download_key_data,
+  key = "building",
+  value = c(
+    "apartments", "bungalow", "cabin", "detached", "dormitory", "farm", "ger",
+    "hotel", "house", "houseboat", "residential", "semidetached_house",
+    "static caravan", "terrace"
+  )
+)
+save(germany_residential, file = "osmdata/germany_residential.Rda")
