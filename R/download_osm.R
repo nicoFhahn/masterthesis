@@ -272,12 +272,17 @@ germany_atms <- pblapply(
 save(germany_atms, file = "osmdata/germany_atms.Rda")
 germany_residential <- pblapply(
   germany_bbox,
-  download_key_data,
-  key = "building",
-  value = c(
-    "apartments", "bungalow", "cabin", "detached", "dormitory", "farm", "ger",
-    "hotel", "house", "houseboat", "residential", "semidetached_house",
-    "static caravan", "terrace"
-  )
+  function(x) {
+    Sys.sleep(3)
+    download_key_data(
+      x,
+      key = "building",
+      value = c(
+        "apartments", "bungalow", "cabin", "detached", "dormitory", "farm", "ger",
+        "hotel", "house", "houseboat", "residential", "semidetached_house",
+        "static caravan", "terrace"
+      )
+    )
+  }
 )
 save(germany_residential, file = "osmdata/germany_residential.Rda")
