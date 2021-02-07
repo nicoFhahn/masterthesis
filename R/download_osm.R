@@ -37,13 +37,13 @@ norge_platform <- pblapply(
   value = "platform"
 )
 save(norge_platform, file = "osmdata/norge_platform.Rda")
-norge_supermarket <- pblapply(
+norge_shops <- pblapply(
   norge_bbox,
   download_key_data,
   key = "shop",
-  value = "supermarket"
+  value = c("supermarket", "convenience", "chemist")
 )
-save(norge_supermarket, file = "osmdata/norge_supermarket.Rda")
+save(norge_shops, file = "osmdata/norge_shops.Rda")
 norge_office <- pblapply(
   norge_bbox,
   download_key_data,
@@ -117,17 +117,59 @@ save(norge_gas, file = "osmdata/norge_gas.Rda")
 norge_banks <- pblapply(
   norge_bbox,
   download_key_data,
-  key = "shop",
+  key = "amenity",
   value = "bank"
 )
 save(norge_banks, file = "osmdata/norge_banks.Rda")
 norge_atms <- pblapply(
   norge_bbox,
   download_key_data,
-  key = "shop",
+  key = "amenity",
   value = "atm"
 )
 save(norge_atms, file = "osmdata/norge_atms.Rda")
+norge_hairdresser <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "shop",
+  value = "hairdresser"
+)
+save(norge_hairdresser, file = "osmdata/norge_hairdresser.Rda")
+norge_toilets <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "amenity",
+  value = "toilet"
+)
+save(norge_toilets, file = "osmdata/norge_toilets.Rda")
+norge_clinic <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "amenity",
+  value = c("clinic", "dentist", "doctors")
+)
+save(norge_clinic, file = "osmdata/norge_clinic.Rda")
+norge_sport <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "leisure",
+  value = c("fitness_centre", "sports_centre")
+)
+save(norge_sport, file = "osmdata/norge_sport.Rda")
+norge_entertainment <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "amenity",
+  value = c("cinema", "theatre", "nightclub")
+)
+save(norge_entertainment, file = "osmdata/norge_entertainment.Rda")
+norge_marketplace <- pblapply(
+  norge_bbox,
+  download_key_data,
+  key = "amenity",
+  value = "marketplace"
+)
+save(norge_marketplace, file = "osmdata/norge_marketplace.Rda")
 norge_residential <- pblapply(
   norge_bbox,
   download_key_data,
@@ -138,10 +180,18 @@ norge_residential <- pblapply(
     "static caravan", "terrace"
   )
 )
+norge_residential <- lapply(
+  norge_residential,
+  function(x) {
+    if (nrow(x) > 0) x[, "osm_id"]
+    else x
+  }
+)
 save(norge_residential, file = "osmdata/norge_residential.Rda")
 
 germany <- read_sf("shapefiles/Kreisgrenzen_2017_mit_Einwohnerzahl.shp")
 germany <- st_transform(germany, 4326)
+
 germany_bbox <- lapply(germany$geometry, st_bbox)
 
 germany_schools <- pblapply(
@@ -259,21 +309,20 @@ save(germany_gas, file = "osmdata/germany_gas.Rda")
 germany_banks <- pblapply(
   germany_bbox,
   download_key_data,
-  key = "shop",
+  key = "amenity",
   value = "bank"
 )
 save(germany_banks, file = "osmdata/germany_banks.Rda")
 germany_atms <- pblapply(
   germany_bbox,
   download_key_data,
-  key = "shop",
+  key = "amenity",
   value = "atm"
 )
 save(germany_atms, file = "osmdata/germany_atms.Rda")
 germany_residential <- pblapply(
   germany_bbox,
   function(x) {
-    Sys.sleep(3)
     download_key_data(
       x,
       key = "building",
@@ -285,4 +334,17 @@ germany_residential <- pblapply(
     )
   }
 )
+germany_residential <- lapply(
+  germany_residential,
+  function(x) {
+    if (nrow(x) > 0) x[, "osm_id"]
+    else x
+  }
+)
+a <- germany_residential
+germany_residential <- lapply(
+  germany_residential,
+  function(x) x[!duplicated(x$osm_id), ]
+)
+
 save(germany_residential, file = "osmdata/germany_residential.Rda")

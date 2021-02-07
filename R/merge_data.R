@@ -96,25 +96,156 @@ load("osmdata/norge_restaurant.Rda")
 load("osmdata/norge_terminal.Rda")
 load("osmdata/norge_aerodrome.Rda")
 load("osmdata/norge_office.Rda")
-load("osmdata/norge_supermarket.Rda")
+load("osmdata/norge_shops.Rda")
 load("osmdata/norge_platform.Rda")
 load("osmdata/norge_university.Rda")
 load("osmdata/norge_college.Rda")
 load("osmdata/norge_kindergarten.Rda")
 load("osmdata/norge_schools.Rda")
+load("osmdata/norge_bakery.Rda")
+load("osmdata/norge_gas.Rda")
+load("osmdata/norge_banks.Rda")
+load("osmdata/norge_atms.Rda")
+load("osmdata/norge_residential.Rda")
+load("osmdata/norge_hairdresser.Rda")
+load("osmdata/norge_toilets.Rda")
+load("osmdata/norge_clinic.Rda")
+load("osmdata/norge_sport.Rda")
+load("osmdata/norge_entertainment.Rda")
+load("osmdata/norge_marketplace.Rda")
 
-norge_shape$supermarket <- unlist(
+norge_shape$marketplace <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_marketplace[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_marketplace[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+norge_shape$entertainment <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_entertainment[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_entertainment[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+norge_shape$sport <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_sport[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_sport[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+norge_shape$clinic <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_clinic[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_clinic[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+norge_shape$toilet <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_toilets[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_toilets[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+norge_shape$hairdresser <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_hairdresser[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_hairdresser[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+norge_shape$shops <- unlist(
   lapply(
     seq_len(
       nrow(norge_shape)
       ),
     function(x, ...)
       ifelse(
-        nrow(norge_supermarket[[x]]) > 0,
+        nrow(norge_shops[[x]]) > 0,
         length(
           unlist(
             st_intersects(
-              norge_shape[x, ], norge_supermarket[[x]]
+              norge_shape[x, ], norge_shops[[x]]
             )
           )
         ),
@@ -363,6 +494,109 @@ norge_shape$schools <- unlist(
   )
 )
 
+norge_shape$bakeries <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_bakeries[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_bakeries[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+norge_shape$gas <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_gas[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_gas[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+norge_shape$banks <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_banks[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_banks[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+
+norge_shape$atm <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_atms[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_atms[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+
+norge_shape$residential <- unlist(
+  lapply(
+    seq_len(
+      nrow(norge_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(norge_residential[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              norge_shape[x, ], norge_residential[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+
 setDT(norge_shape)
 colnames(norge_shape)[1] <- "kommune_no"
 norge_complete <- merge(
@@ -391,6 +625,7 @@ colnames(norge_complete)[9:14] <- c(
 )
 no_geometry <- norge_complete
 no_geometry$geometry <- NULL
+no_geometry$higher_educ <- no_geometry$college + no_geometry$university
 # calculate the SIR
 write_csv(no_geometry, "wrangled_data/norge_features.csv")
 write_sf(st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1], "wrangled_data/shapes_norge.shp")
@@ -422,6 +657,11 @@ load("osmdata/germany_university.Rda")
 load("osmdata/germany_college.Rda")
 load("osmdata/germany_kindergarten.Rda")
 load("osmdata/germany_schools.Rda")
+load("osmdata/germany_bakery.Rda")
+load("osmdata/germany_gas.Rda")
+load("osmdata/germany_banks.Rda")
+load("osmdata/germany_atms.Rda")
+load("osmdata/germany_residential.Rda")
 
 germany_shape$supermarket <- unlist(
   lapply(
@@ -682,6 +922,110 @@ germany_shape$schools <- unlist(
       )
   )
 )
+
+germany_shape$bakeries <- unlist(
+  lapply(
+    seq_len(
+      nrow(germany_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(germany_bakeries[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ], germany_bakeries[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+germany_shape$gas <- unlist(
+  lapply(
+    seq_len(
+      nrow(germany_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(germany_gas[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ], germany_gas[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+germany_shape$banks <- unlist(
+  lapply(
+    seq_len(
+      nrow(germany_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(germany_banks[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ], germany_banks[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+
+germany_shape$atm <- unlist(
+  lapply(
+    seq_len(
+      nrow(germany_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(germany_atms[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ], germany_atms[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+
+germany_shape$residential <- unlist(
+  lapply(
+    seq_len(
+      nrow(germany_shape)
+    ),
+    function(x, ...)
+      ifelse(
+        nrow(germany_residential[[x]]) > 0,
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ], germany_residential[[x]]
+            )
+          )
+        ),
+        0
+      )
+  )
+)
+
+
 library(stringr)
 germany_confirmed[str_detect(germany_confirmed$Landkreis, "Berlin"), ]$Landkreis <- "SK Berlin"
 germany_confirmed[str_detect(germany_confirmed$Landkreis, "Berlin"), ]$IdLandkreis <- 11000
@@ -714,3 +1058,9 @@ germany_complete <- merge(
   all = FALSE
 )
 write_sf(st_as_sf(germany_complete), "wrangled_data/germany_complete.shp")
+
+no_geometry <- germany_complete
+no_geometry$geometry <- NULL
+# calculate the SIR
+write_csv(no_geometry, "wrangled_data/germany_features.csv")
+write_sf(st_as_sf(germany_complete)[!duplicated(germany_complete$Kennziffer), ][, 1], "wrangled_data/shapes_germany.shp")
