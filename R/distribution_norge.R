@@ -1,0 +1,17 @@
+library(fitdistrplus)
+source("R/preprocess_norge.R")
+# create the cullen and frey graph
+descdist(newest_numbers$value, discrete = TRUE)
+# try poission, negative binomial and normal distribution
+fit_poisson <- fitdist(newest_numbers$value, "pois")
+fit_nbinomial <- fitdist(newest_numbers$value, "nbinom")
+fit_normal <- fitdist(newest_numbers$value, "norm")
+# plot the fits
+plot(fit_poisson)
+plot(fit_nbinomial)
+plot(fit_normal)
+# compare aic
+fit_poisson$aic
+fit_nbinomial$aic
+fit_normal$aic
+# https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best
