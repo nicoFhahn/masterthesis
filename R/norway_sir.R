@@ -50,7 +50,7 @@ plot_1 <- ggplot(data = newest_numbers) +
     midpoint = 1
   ) +
   theme_minimal()
-newest_numbers_south <- newest_numbers[unlist(lapply(lapply(newest_numbers$geometry, st_bbox), function(x) x[4] <= 64)),]
+newest_numbers_south <- newest_numbers[unlist(lapply(lapply(newest_numbers$geometry, st_bbox), function(x) x[4] <= 64)), ]
 plot_2 <- ggplot(data = newest_numbers_south) +
   geom_sf(aes(fill = sir)) +
   scale_fill_gradient2(
@@ -97,7 +97,7 @@ rc2 <- colorRampPalette(
     "#ff0a54"
   ),
   space = "Lab"
-)(50)
+)(51)
 pal <- colorNumeric(
   c(rc1, rc2),
   domain = newest_numbers$sir
@@ -106,10 +106,10 @@ leaflet() %>%
   addMapboxGL(
     style = "mapbox://styles/mapbox/streets-v9",
     accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-    ) %>%
+  ) %>%
   addPolygons(
     data = newest_numbers,
-    fillColor = ~pal(sir),
+    fillColor = ~ pal(sir),
     fillOpacity = 0.7,
     color = "black",
     weight = 1,

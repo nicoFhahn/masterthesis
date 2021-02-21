@@ -61,7 +61,8 @@ ggplot(data.frame(inla.smarginal(alpha)), aes(x, y)) +
   geom_line() +
   geom_area(
     data = subset(data.frame(inla.smarginal(alpha)), x < quant),
-    fill = "black") +
+    fill = "black"
+  ) +
   theme_bw()
 # plot the posterior distribution of alpha at 3.2
 ggplot(data.frame(inla.smarginal(alpha)), aes(x, y)) +
@@ -69,7 +70,7 @@ ggplot(data.frame(inla.smarginal(alpha)), aes(x, y)) +
   geom_vline(xintercept = 3.2, linetype = "dashed") +
   theme_bw()
 marg.variance <- inla.tmarginal(
-  function(x) 1/x,
+  function(x) 1 / x,
   res_1$marginals.hyperpar$`Precision for idarea_1`
 )
 # plot the posterior distribution of the variance of the random effect
@@ -83,11 +84,10 @@ marginals <- data.frame(do.call(rbind, list_marginals))
 marginals$kommune <- rep(
   names(list_marginals),
   times = sapply(list_marginals, nrow)
-  )
+)
 ggplot(marginals[1:150, ], aes(x = x, y = y)) +
   geom_line() +
-  facet_wrap(~ kommune) +
+  facet_wrap(~kommune) +
   labs(x = "", y = "Density") +
   theme_bw()
-rm(list=setdiff(ls(), "newest_numbers"))
-
+rm(list = setdiff(ls(), "newest_numbers"))

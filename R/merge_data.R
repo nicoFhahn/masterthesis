@@ -1,3 +1,5 @@
+##### GERMANY RESIDENTIAL NEW
+
 library(readr)
 library(data.table)
 library(dplyr)
@@ -36,7 +38,7 @@ kommune_4602 <- norge_shape[norge_shape$kommunenum == 4602, ][1, ]
 kommune_4602$geometry <- st_union(norge_shape[norge_shape$kommunenum == 4602, ])
 norge_shape <- norge_shape[norge_shape$kommunenum != 4602, ]
 norge_shape <- rbind(norge_shape, kommune_4602)
-norge_demo <- read_delim("norge_data/Personer1.csv", ";")
+norge_demo <- read_delim("norge_data/norge_age.csv", ";")
 norge_demo$age <- as.numeric(str_extract(norge_demo$age, "[0-9]{1,}"))
 norge_demo$total_age <- norge_demo$age * norge_demo$`Persons 2020`
 norge_demo_region <- split(norge_demo, norge_demo$region)
@@ -88,6 +90,101 @@ norge_no_shape <- merge(
   norge_demo,
   by = "kommune_no"
 )
+norge_unemploy <- read_delim("norge_data/norge_unemployment.csv", delim = ";")
+colnames(norge_unemploy)[3] <- "unemployed_perc"
+norge_unemploy_s <- split(norge_unemploy, norge_unemploy$region)
+norge_unemploy_s <- lapply(
+  norge_unemploy_s,
+  function(x) {
+    data.table(
+      region = x$region[1],
+      unemp_tot = x$unemployed_perc[1],
+      unemp_immg = x$unemployed_perc[2]
+    )
+  }
+)
+norge_unemploy <- do.call(rbind, norge_unemploy_s)
+norge_unemploy$kommune_no <- str_extract(
+  norge_unemploy$region,
+  "[0-9]{4}"
+)
+norge_no_shape <- merge(
+  norge_no_shape,
+  norge_unemploy,
+  by = "kommune_no"
+)
+norge_workers <- read_delim("norge_data/norge_workers.csv", delim = ";")
+norge_workers_s <- split(norge_workers, norge_workers$region)
+norge_workers_s <- lapply(
+  norge_workers_s,
+  function(x) {
+    data.table(
+      region = x$region[1],
+      workers_ft_res = x$`Employees by place of residence 2019`[8],
+      workers_pt_res = x$`Employees by place of residence 2019`[7],
+      mining_ft_res = x$`Employees by place of residence 2019`[10],
+      mining_pt_res = x$`Employees by place of residence 2019`[9],
+      construction_ft_res = x$`Employees by place of residence 2019`[12],
+      construction_pt_res = x$`Employees by place of residence 2019`[11],
+      workers_ft_work = x$`Employees by place of work 2019`[8],
+      workers_pt_work = x$`Employees by place of work 2019`[7],
+      mining_ft_work = x$`Employees by place of work 2019`[10],
+      mining_pt_work = x$`Employees by place of work 2019`[9],
+      construction_ft_work = x$`Employees by place of work 2019`[12],
+      construction_pt_work = x$`Employees by place of work 2019`[11],
+      workers_ft_com = x$`Employees by place of work 2019`[8] -
+        x$`Employees by place of residence 2019`[8],
+      workers_pt_com = x$`Employees by place of work 2019`[7] -
+        x$`Employees by place of residence 2019`[7],
+      mining_ft_com = x$`Employees by place of work 2019`[10] -
+        x$`Employees by place of residence 2019`[10],
+      mining_pt_com = x$`Employees by place of work 2019`[9] -
+        x$`Employees by place of residence 2019`[9],
+      construction_ft_com = x$`Employees by place of work 2019`[12] -
+        x$`Employees by place of residence 2019`[12],
+      construction_pt_com = x$`Employees by place of work 2019`[11] -
+        x$`Employees by place of residence 2019`[11]
+    )
+  }
+)
+norge_workers <- do.call(rbind, norge_workers_s)
+norge_workers$kommune_no <- str_extract(
+  norge_workers$region,
+  "[0-9]{4}"
+)
+norge_no_shape <- merge(
+  norge_no_shape,
+  norge_workers,
+  by = "kommune_no"
+)
+norge_immigration <- read_delim("norge_data/norge_immigration.csv", delim = ";")
+norge_immigration_s <- split(norge_immigration, norge_immigration$region)
+norge_immigration_s <- lapply(
+  norge_immigration_s,
+  function(x) {
+    data.table(
+      region = x$region[1],
+      immigrants_total = x$`Per cent of population 2020`[1],
+      immigrants_norge = x$`Per cent of population 2020`[2],
+      immigrants_pure = x$`Per cent of population 2020`[1] -
+        x$`Per cent of population 2020`[2]
+    )
+  }
+)
+norge_immigration <- do.call(rbind, norge_immigration_s)
+norge_immigration$kommune_no <- str_extract(
+  norge_immigration$region,
+  "[0-9]{4}"
+)
+norge_no_shape <- merge(
+  norge_no_shape,
+  norge_immigration,
+  by = "kommune_no"
+)
+norge_no_shape$region.y <- NULL
+norge_no_shape$region.x <- NULL
+norge_no_shape$region.x <- NULL
+colnames(norge_no_shape)[44] <- "region"
 load("osmdata/norge_hospital.Rda")
 load("osmdata/norge_place_of_worship.Rda")
 load("osmdata/norge_retail.Rda")
@@ -114,12 +211,13 @@ load("osmdata/norge_sport.Rda")
 load("osmdata/norge_entertainment.Rda")
 load("osmdata/norge_marketplace.Rda")
 
+
 norge_shape$marketplace <- unlist(
   lapply(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_marketplace[[x]]) > 0,
         length(
@@ -131,6 +229,7 @@ norge_shape$marketplace <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -139,7 +238,7 @@ norge_shape$entertainment <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_entertainment[[x]]) > 0,
         length(
@@ -151,6 +250,7 @@ norge_shape$entertainment <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -159,7 +259,7 @@ norge_shape$sport <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_sport[[x]]) > 0,
         length(
@@ -171,6 +271,7 @@ norge_shape$sport <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -179,7 +280,7 @@ norge_shape$clinic <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_clinic[[x]]) > 0,
         length(
@@ -191,6 +292,7 @@ norge_shape$clinic <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -199,7 +301,7 @@ norge_shape$toilet <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_toilets[[x]]) > 0,
         length(
@@ -211,6 +313,7 @@ norge_shape$toilet <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -219,7 +322,7 @@ norge_shape$hairdresser <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_hairdresser[[x]]) > 0,
         length(
@@ -231,6 +334,7 @@ norge_shape$hairdresser <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -238,8 +342,8 @@ norge_shape$shops <- unlist(
   lapply(
     seq_len(
       nrow(norge_shape)
-      ),
-    function(x, ...)
+    ),
+    function(x, ...) {
       ifelse(
         nrow(norge_shops[[x]]) > 0,
         length(
@@ -251,6 +355,7 @@ norge_shape$shops <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -259,7 +364,7 @@ norge_shape$place_of_worship <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_place_of_worship[[x]]) > 0,
         length(
@@ -271,6 +376,7 @@ norge_shape$place_of_worship <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -279,7 +385,7 @@ norge_shape$retail <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_retail[[x]]) > 0,
         length(
@@ -291,6 +397,7 @@ norge_shape$retail <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -299,7 +406,7 @@ norge_shape$nursing_home <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_nursing_home[[x]]) > 0,
         length(
@@ -311,6 +418,7 @@ norge_shape$nursing_home <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -319,7 +427,7 @@ norge_shape$restaurant <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_restaurant[[x]]) > 0,
         length(
@@ -331,6 +439,7 @@ norge_shape$restaurant <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -339,7 +448,7 @@ norge_shape$terminal <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_terminal[[x]]) > 0,
         length(
@@ -351,6 +460,7 @@ norge_shape$terminal <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -359,7 +469,7 @@ norge_shape$aerodrome <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_aerodrome[[x]]) > 0,
         length(
@@ -371,6 +481,7 @@ norge_shape$aerodrome <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -379,7 +490,7 @@ norge_shape$office <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_office[[x]]) > 0,
         length(
@@ -391,6 +502,7 @@ norge_shape$office <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -399,7 +511,7 @@ norge_shape$platform <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_platform[[x]]) > 0,
         length(
@@ -411,6 +523,7 @@ norge_shape$platform <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -419,7 +532,7 @@ norge_shape$university <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_university[[x]]) > 0,
         length(
@@ -431,6 +544,7 @@ norge_shape$university <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -439,7 +553,7 @@ norge_shape$college <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_college[[x]]) > 0,
         length(
@@ -451,6 +565,7 @@ norge_shape$college <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -459,7 +574,7 @@ norge_shape$kindergarten <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_kindergarten[[x]]) > 0,
         length(
@@ -471,6 +586,7 @@ norge_shape$kindergarten <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -479,7 +595,7 @@ norge_shape$schools <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_schools[[x]]) > 0,
         length(
@@ -491,6 +607,7 @@ norge_shape$schools <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -499,7 +616,7 @@ norge_shape$bakeries <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_bakeries[[x]]) > 0,
         length(
@@ -511,6 +628,7 @@ norge_shape$bakeries <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -519,7 +637,7 @@ norge_shape$gas <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_gas[[x]]) > 0,
         length(
@@ -531,6 +649,7 @@ norge_shape$gas <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -539,7 +658,7 @@ norge_shape$banks <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_banks[[x]]) > 0,
         length(
@@ -551,6 +670,7 @@ norge_shape$banks <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -560,7 +680,7 @@ norge_shape$atm <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_atms[[x]]) > 0,
         length(
@@ -572,6 +692,7 @@ norge_shape$atm <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -581,7 +702,7 @@ norge_shape$residential <- unlist(
     seq_len(
       nrow(norge_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(norge_residential[[x]]) > 0,
         length(
@@ -593,6 +714,7 @@ norge_shape$residential <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -600,7 +722,7 @@ norge_shape$residential <- unlist(
 setDT(norge_shape)
 colnames(norge_shape)[1] <- "kommune_no"
 norge_complete <- merge(
- norge_no_shape,
+  norge_no_shape,
   norge_shape,
   by = "kommune_no",
   all = FALSE
@@ -643,6 +765,70 @@ germany_confirmed_population <- merge(
 )
 germany_shape <- read_sf("shapefiles/Kreisgrenzen_2017_mit_Einwohnerzahl.shp")
 germany_shape <- st_transform(germany_shape, 4326)
+germany_politics <- read_delim("germany_data/europawahl_2019.csv", delim = ";")[1:538, ]
+germany_politics[str_detect(germany_politics$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
+germany_politics[str_detect(germany_politics$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+germany_politics <- germany_politics[germany_politics$Kreis %in% germany_shape$Kennziffer, ]
+germany_unemployed <- read_delim("germany_data/arbeitslose_2019.csv", delim = ";")#[1:538, ]
+germany_unemployed[str_detect(germany_unemployed$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
+germany_unemployed[str_detect(germany_unemployed$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+germany_unemployed <- germany_unemployed[germany_unemployed$Kreis %in% germany_shape$Kennziffer, ]
+germany_protect <- read_delim("germany_data/schutzsuchende_2018.csv", delim = ";")#[1:538, ]
+germany_protect[str_detect(germany_protect$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
+germany_protect[str_detect(germany_protect$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+germany_protect <- germany_protect[germany_protect$Kreis %in% germany_shape$Kennziffer, ]
+germany_social <- read_delim("germany_data/sozialhilfe_2019.csv", delim = ";")#[1:538, ]
+germany_social[str_detect(germany_social$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
+germany_social[str_detect(germany_social$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+germany_social <- germany_social[germany_social$Kreis %in% germany_shape$Kennziffer, ]
+germany_company_tax <- read_delim("germany_data/gewerbesteuer_2015.csv", delim = ";")
+germany_company_tax <- germany_company_tax[!is.na(germany_company_tax$Kreis), ]
+germany_company_tax <- germany_company_tax[germany_company_tax$X1 == 2015, ]
+germany_company_tax[str_detect(germany_company_tax$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
+germany_company_tax[str_detect(germany_company_tax$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+germany_company_tax <- germany_company_tax[germany_company_tax$Kreis %in% germany_shape$Kennziffer, ]
+germany_income_tax <- read_delim("germany_data/einkommen_lohn_steuer_2016.csv", delim = ";")#[1:538, ]
+germany_income_tax[str_detect(germany_income_tax$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
+germany_income_tax[str_detect(germany_income_tax$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+germany_income_tax <- germany_income_tax[germany_income_tax$Kreis %in% germany_shape$Kennziffer, ]
+germany_asyl <- read_delim("germany_data/asylbewerberleistungen_2019.csv", delim = ";")#[1:538, ]
+germany_asyl[str_detect(germany_asyl$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
+germany_asyl[str_detect(germany_asyl$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+germany_asyl <- germany_asyl[germany_asyl$Kreis %in% germany_shape$Kennziffer, ]
+germany <- merge(
+  germany_asyl,
+  germany_company_tax,
+  by = "Kreis"
+)
+germany <- merge(
+  germany,
+  germany_income_tax,
+  by = "Kreis"
+)
+germany <- merge(
+  germany,
+  germany_politics,
+  by = "Kreis"
+)
+germany <- merge(
+  germany,
+  germany_protect,
+  by = "Kreis"
+)
+germany <- merge(
+  germany,
+  germany_social,
+  by = "Kreis"
+)
+germany <- merge(
+  germany,
+  germany_unemployed,
+  by = "Kreis"
+)
+germany <- germany[, !str_detect(colnames(germany), "X1")]
+colnames(germany)[2] <- "Stadt"
+germany <- germany[, c(1:5, 9, 11, 12, 15, 17:23, 25, 27:31, 33:39)]
+
 load("osmdata/germany_hospital.Rda")
 load("osmdata/germany_place_of_worship.Rda")
 load("osmdata/germany_retail.Rda")
@@ -651,7 +837,7 @@ load("osmdata/germany_restaurant.Rda")
 load("osmdata/germany_terminal.Rda")
 load("osmdata/germany_aerodrome.Rda")
 load("osmdata/germany_office.Rda")
-load("osmdata/germany_supermarket.Rda")
+load("osmdata/germany_shops.Rda")
 load("osmdata/germany_platform.Rda")
 load("osmdata/germany_university.Rda")
 load("osmdata/germany_college.Rda")
@@ -662,13 +848,19 @@ load("osmdata/germany_gas.Rda")
 load("osmdata/germany_banks.Rda")
 load("osmdata/germany_atms.Rda")
 load("osmdata/germany_residential.Rda")
+load("osmdata/germany_hairdresser.Rda")
+load("osmdata/germany_toilets.Rda")
+load("osmdata/germany_clinic.Rda")
+load("osmdata/germany_sport.Rda")
+load("osmdata/germany_entertainment.Rda")
+load("osmdata/germany_marketplace.Rda")
 
 germany_shape$supermarket <- unlist(
   lapply(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_supermarket[[x]]) > 0,
         length(
@@ -680,6 +872,7 @@ germany_shape$supermarket <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -688,7 +881,7 @@ germany_shape$place_of_worship <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_place_of_worship[[x]]) > 0,
         length(
@@ -700,6 +893,7 @@ germany_shape$place_of_worship <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -708,7 +902,7 @@ germany_shape$retail <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_retail[[x]]) > 0,
         length(
@@ -720,6 +914,7 @@ germany_shape$retail <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -728,7 +923,7 @@ germany_shape$nursing_home <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_nursing_home[[x]]) > 0,
         length(
@@ -740,6 +935,7 @@ germany_shape$nursing_home <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -748,7 +944,7 @@ germany_shape$restaurant <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_restaurant[[x]]) > 0,
         length(
@@ -760,6 +956,7 @@ germany_shape$restaurant <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -768,7 +965,7 @@ germany_shape$terminal <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_terminal[[x]]) > 0,
         length(
@@ -780,6 +977,7 @@ germany_shape$terminal <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -788,7 +986,7 @@ germany_shape$aerodrome <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_aerodrome[[x]]) > 0,
         length(
@@ -800,6 +998,7 @@ germany_shape$aerodrome <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -808,7 +1007,7 @@ germany_shape$office <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_office[[x]]) > 0,
         length(
@@ -820,6 +1019,7 @@ germany_shape$office <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -828,7 +1028,7 @@ germany_shape$platform <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_platform[[x]]) > 0,
         length(
@@ -840,6 +1040,7 @@ germany_shape$platform <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -848,7 +1049,7 @@ germany_shape$university <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_university[[x]]) > 0,
         length(
@@ -860,6 +1061,7 @@ germany_shape$university <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -868,7 +1070,7 @@ germany_shape$college <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_college[[x]]) > 0,
         length(
@@ -880,6 +1082,7 @@ germany_shape$college <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -888,7 +1091,7 @@ germany_shape$kindergarten <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_kindergarten[[x]]) > 0,
         length(
@@ -900,6 +1103,7 @@ germany_shape$kindergarten <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -908,7 +1112,7 @@ germany_shape$schools <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_schools[[x]]) > 0,
         length(
@@ -920,6 +1124,7 @@ germany_shape$schools <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -928,7 +1133,7 @@ germany_shape$bakeries <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_bakeries[[x]]) > 0,
         length(
@@ -940,6 +1145,7 @@ germany_shape$bakeries <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -948,7 +1154,7 @@ germany_shape$gas <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_gas[[x]]) > 0,
         length(
@@ -960,6 +1166,7 @@ germany_shape$gas <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -968,7 +1175,7 @@ germany_shape$banks <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_banks[[x]]) > 0,
         length(
@@ -980,6 +1187,7 @@ germany_shape$banks <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -989,7 +1197,7 @@ germany_shape$atm <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_atms[[x]]) > 0,
         length(
@@ -1001,6 +1209,7 @@ germany_shape$atm <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -1010,7 +1219,7 @@ germany_shape$residential <- unlist(
     seq_len(
       nrow(germany_shape)
     ),
-    function(x, ...)
+    function(x, ...) {
       ifelse(
         nrow(germany_residential[[x]]) > 0,
         length(
@@ -1022,6 +1231,7 @@ germany_shape$residential <- unlist(
         ),
         0
       )
+    }
   )
 )
 
@@ -1031,16 +1241,18 @@ germany_confirmed[str_detect(germany_confirmed$Landkreis, "Berlin"), ]$Landkreis
 germany_confirmed[str_detect(germany_confirmed$Landkreis, "Berlin"), ]$IdLandkreis <- 11000
 berlin <- germany_confirmed[germany_confirmed$Landkreis == "SK Berlin", ]
 berlin_grouped <- berlin[,
-       .(
-       Landkreis = "SK Berlin",
-       NumberNewTestedIll = sum(NumberNewTestedIll),
-       NumberNewDead = sum(NumberNewDead),
-       NumberNewRecovered = sum(NumberNewRecovered),
-       CumNumberTestedIll = sum(CumNumberTestedIll),
-       CumNumberDead = sum(CumNumberDead),
-       CumNumberRecovered = sum(CumNumberRecovered),
-       IdLandkreis = 11000),
-       by=list(Date)]
+  .(
+    Landkreis = "SK Berlin",
+    NumberNewTestedIll = sum(NumberNewTestedIll),
+    NumberNewDead = sum(NumberNewDead),
+    NumberNewRecovered = sum(NumberNewRecovered),
+    CumNumberTestedIll = sum(CumNumberTestedIll),
+    CumNumberDead = sum(CumNumberDead),
+    CumNumberRecovered = sum(CumNumberRecovered),
+    IdLandkreis = 11000
+  ),
+  by = list(Date)
+]
 berlin_grouped <- berlin_grouped[order(berlin_grouped$Date)]
 for (i in 2:nrow(berlin_grouped)) {
   berlin_grouped[i, ]$CumNumberTestedIll <- berlin_grouped[i - 1, ]$CumNumberTestedIll + berlin_grouped[i, ]$NumberNewTestedIll
@@ -1048,7 +1260,7 @@ for (i in 2:nrow(berlin_grouped)) {
   berlin_grouped[i, ]$CumNumberRecovered <- berlin_grouped[i - 1, ]$CumNumberRecovered + berlin_grouped[i, ]$NumberNewRecovered
 }
 berlin_grouped
-germany_confirmed <- germany_confirmed[germany_confirmed$Landkreis != "SK Berlin",]
+germany_confirmed <- germany_confirmed[germany_confirmed$Landkreis != "SK Berlin", ]
 germany_confirmed <- rbind(germany_confirmed, berlin_grouped)
 colnames(germany_confirmed)[9] <- "Kennziffer"
 germany_complete <- merge(

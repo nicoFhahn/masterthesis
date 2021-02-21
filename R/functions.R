@@ -134,8 +134,9 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
         rbind,
         lapply(
           all_results,
-          function(x)
+          function(x) {
             x[match(all_cols, names(x))]
+          }
         )
       )
       # also save the city name as a variable

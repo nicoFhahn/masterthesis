@@ -1,0 +1,539 @@
+;Kreis;Stadt;schutzsuchende
+31.12.2018;DG;Deutschland;1781750
+31.12.2018;1;  Schleswig-Holstein;67730
+31.12.2018;1001;      Flensburg, Kreisfreie Stadt;3170
+31.12.2018;1002;      Kiel, Landeshauptstadt, Kreisfreie Stadt;7990
+31.12.2018;1003;      Lübeck, Hansestadt, Kreisfreie Stadt;5450
+31.12.2018;1004;      Neumünster, Kreisfreie Stadt;2635
+31.12.2018;1051;      Dithmarschen, Landkreis;2700
+31.12.2018;1053;      Herzogtum Lauenburg, Landkreis;4150
+31.12.2018;1054;      Nordfriesland, Landkreis;3350
+31.12.2018;1055;      Ostholstein, Landkreis;3370
+31.12.2018;1056;      Pinneberg, Landkreis;7920
+31.12.2018;1057;      Plön, Landkreis;2485
+31.12.2018;1058;      Rendsburg-Eckernförde, Landkreis;5690
+31.12.2018;1059;      Schleswig-Flensburg, Landkreis;3480
+31.12.2018;1060;      Segeberg, Landkreis;6960
+31.12.2018;1061;      Steinburg, Landkreis;3180
+31.12.2018;1062;      Stormarn, Landkreis;5200
+31.12.2018;2;  Hamburg;52730
+31.12.2018;3;  Niedersachsen;190020
+31.12.2018;31;    Braunschweig, Stat. Region;35260
+31.12.2018;3101;      Braunschweig, Kreisfreie Stadt;4320
+31.12.2018;3102;      Salzgitter, Kreisfreie Stadt;5085
+31.12.2018;3103;      Wolfsburg, Kreisfreie Stadt;3455
+31.12.2018;3151;      Gifhorn, Landkreis;2820
+31.12.2018;3152;      Göttingen, Landkreis;-
+31.12.2018;3153;      Goslar, Landkreis;3165
+31.12.2018;3154;      Helmstedt, Landkreis;1680
+31.12.2018;3155;      Northeim, Landkreis;2880
+31.12.2018;3156;      Osterode am Harz, Landkreis;-
+31.12.2018;3157;      Peine, Landkreis;3110
+31.12.2018;3158;      Wolfenbüttel, Landkreis;2265
+31.12.2018;3159;      Göttingen, Landkreis;6480
+31.12.2018;32;    Hannover, Stat. Region;64040
+31.12.2018;3241;      Region Hannover, Landkreis;38535
+31.12.2018;3241001;      Hannover, Landeshauptstadt;.
+31.12.2018;3251;      Diepholz, Landkreis;5205
+31.12.2018;3252;      Hameln-Pyrmont, Landkreis;4660
+31.12.2018;3254;      Hildesheim, Landkreis;6615
+31.12.2018;3255;      Holzminden, Landkreis;1390
+31.12.2018;3256;      Nienburg (Weser), Landkreis;3450
+31.12.2018;3257;      Schaumburg, Landkreis;4175
+31.12.2018;33;    Lüneburg, Stat. Region;34265
+31.12.2018;3351;      Celle, Landkreis;4860
+31.12.2018;3352;      Cuxhaven, Landkreis;3620
+31.12.2018;3353;      Harburg, Landkreis;3850
+31.12.2018;3354;      Lüchow-Dannenberg, Landkreis;625
+31.12.2018;3355;      Lüneburg, Landkreis;4195
+31.12.2018;3356;      Osterholz, Landkreis;2110
+31.12.2018;3357;      Rotenburg (Wümme), Landkreis;2850
+31.12.2018;3358;      Heidekreis, Landkreis;2615
+31.12.2018;3359;      Stade, Landkreis;4670
+31.12.2018;3360;      Uelzen, Landkreis;1510
+31.12.2018;3361;      Verden, Landkreis;3355
+31.12.2018;34;    Weser-Ems, Stat. Region;56460
+31.12.2018;3401;      Delmenhorst, Kreisfreie Stadt;3240
+31.12.2018;3402;      Emden, Kreisfreie Stadt;1405
+31.12.2018;3403;      Oldenburg (Oldenburg), Kreisfreie Stadt;5740
+31.12.2018;3404;      Osnabrück, Kreisfreie Stadt;5150
+31.12.2018;3405;      Wilhelmshaven, Kreisfreie Stadt;3055
+31.12.2018;3451;      Ammerland, Landkreis;2605
+31.12.2018;3452;      Aurich, Landkreis;3585
+31.12.2018;3453;      Cloppenburg, Landkreis;3490
+31.12.2018;3454;      Emsland, Landkreis;6285
+31.12.2018;3455;      Friesland, Landkreis;2000
+31.12.2018;3456;      Grafschaft Bentheim, Landkreis;2530
+31.12.2018;3457;      Leer, Landkreis;3370
+31.12.2018;3458;      Oldenburg, Landkreis;2870
+31.12.2018;3459;      Osnabrück, Landkreis;4805
+31.12.2018;3460;      Vechta, Landkreis;3940
+31.12.2018;3461;      Wesermarsch, Landkreis;1580
+31.12.2018;3462;      Wittmund, Landkreis;815
+31.12.2018;4;  Bremen;27220
+31.12.2018;4011;      Bremen, Kreisfreie Stadt;22210
+31.12.2018;4012;      Bremerhaven, Kreisfreie Stadt;5010
+31.12.2018;5;  Nordrhein-Westfalen;472835
+31.12.2018;51;    Düsseldorf, Regierungsbezirk;147895
+31.12.2018;5111;      Düsseldorf, Kreisfreie Stadt;20540
+31.12.2018;5112;      Duisburg, Kreisfreie Stadt;15195
+31.12.2018;5113;      Essen, Kreisfreie Stadt;25075
+31.12.2018;5114;      Krefeld, Kreisfreie Stadt;6310
+31.12.2018;5116;      Mönchengladbach, Kreisfreie Stadt;8535
+31.12.2018;5117;      Mülheim an der Ruhr, Kreisfreie Stadt;6335
+31.12.2018;5119;      Oberhausen, Kreisfreie Stadt;6020
+31.12.2018;5120;      Remscheid, Kreisfreie Stadt;2735
+31.12.2018;5122;      Solingen, Kreisfreie Stadt;3525
+31.12.2018;5124;      Wuppertal, Kreisfreie Stadt;14695
+31.12.2018;5154;      Kleve, Kreis;5365
+31.12.2018;5158;      Mettmann, Kreis;9735
+31.12.2018;5162;      Rhein-Kreis Neuss;9345
+31.12.2018;5166;      Viersen, Kreis;4865
+31.12.2018;5170;      Wesel, Kreis;9615
+31.12.2018;53;    Köln, Regierungsbezirk;109545
+31.12.2018;5314;      Bonn, Kreisfreie Stadt;10075
+31.12.2018;5315;      Köln, Kreisfreie Stadt;34330
+31.12.2018;5316;      Leverkusen, Kreisfreie Stadt;4590
+31.12.2018;5334;      Städteregion Aachen (einschl. Stadt Aachen);14295
+31.12.2018;5334002;      Aachen, krfr. Stadt;.
+31.12.2018;5354;      Aachen, Kreis;-
+31.12.2018;5358;      Düren, Kreis;5655
+31.12.2018;5362;      Rhein-Erft-Kreis;9300
+31.12.2018;5366;      Euskirchen, Kreis;3565
+31.12.2018;5370;      Heinsberg, Kreis;4365
+31.12.2018;5374;      Oberbergischer Kreis;5375
+31.12.2018;5378;      Rheinisch-Bergischer Kreis;5965
+31.12.2018;5382;      Rhein-Sieg-Kreis;12025
+31.12.2018;55;    Münster, Regierungsbezirk;63270
+31.12.2018;5512;      Bottrop, Kreisfreie Stadt;2885
+31.12.2018;5513;      Gelsenkirchen, Kreisfreie Stadt;7830
+31.12.2018;5515;      Münster, Kreisfreie Stadt;7615
+31.12.2018;5554;      Borken, Kreis;7210
+31.12.2018;5558;      Coesfeld, Kreis;4595
+31.12.2018;5562;      Recklinghausen, Kreis;16320
+31.12.2018;5566;      Steinfurt, Kreis;10780
+31.12.2018;5570;      Warendorf, Kreis;6035
+31.12.2018;57;    Detmold, Regierungsbezirk;55630
+31.12.2018;5711;      Bielefeld, Kreisfreie Stadt;14395
+31.12.2018;5754;      Gütersloh, Kreis;8735
+31.12.2018;5758;      Herford, Kreis;5490
+31.12.2018;5762;      Höxter, Kreis;2405
+31.12.2018;5766;      Lippe, Kreis;8445
+31.12.2018;5770;      Minden-Lübbecke, Kreis;8750
+31.12.2018;5774;      Paderborn, Kreis;7405
+31.12.2018;59;    Arnsberg, Regierungsbezirk;96495
+31.12.2018;5911;      Bochum, Kreisfreie Stadt;11805
+31.12.2018;5913;      Dortmund, Kreisfreie Stadt;19305
+31.12.2018;5914;      Hagen, Kreisfreie Stadt;5790
+31.12.2018;5915;      Hamm, Kreisfreie Stadt;3875
+31.12.2018;5916;      Herne, Kreisfreie Stadt;5360
+31.12.2018;5954;      Ennepe-Ruhr-Kreis;8340
+31.12.2018;5958;      Hochsauerlandkreis;5640
+31.12.2018;5962;      Märkischer Kreis;8830
+31.12.2018;5966;      Olpe, Kreis;2755
+31.12.2018;5970;      Siegen-Wittgenstein, Kreis;6735
+31.12.2018;5974;      Soest, Kreis;5905
+31.12.2018;5978;      Unna, Kreis;12165
+31.12.2018;6;  Hessen;152295
+31.12.2018;64;    Darmstadt, Regierungsbezirk;94350
+31.12.2018;6411;      Darmstadt, Kreisfreie Stadt;4325
+31.12.2018;6412;      Frankfurt am Main, Kreisfreie Stadt;16955
+31.12.2018;6413;      Offenbach am Main, Kreisfreie Stadt;2125
+31.12.2018;6414;      Wiesbaden, Landeshauptstadt, Kreisfreie Stadt;8685
+31.12.2018;6431;      Bergstraße, Landkreis;7170
+31.12.2018;6432;      Darmstadt-Dieburg, Landkreis;6270
+31.12.2018;6433;      Groß-Gerau, Landkreis;6770
+31.12.2018;6434;      Hochtaunuskreis;5330
+31.12.2018;6435;      Main-Kinzig-Kreis;10265
+31.12.2018;6436;      Main-Taunus-Kreis;5375
+31.12.2018;6437;      Odenwaldkreis;935
+31.12.2018;6438;      Offenbach, Landkreis;8575
+31.12.2018;6439;      Rheingau-Taunus-Kreis;4480
+31.12.2018;6440;      Wetteraukreis;7095
+31.12.2018;65;    Gießen, Regierungsbezirk;28535
+31.12.2018;6531;      Gießen, Landkreis;9750
+31.12.2018;6532;      Lahn-Dill-Kreis;6390
+31.12.2018;6533;      Limburg-Weilburg, Landkreis;4410
+31.12.2018;6534;      Marburg-Biedenkopf, Landkreis;5785
+31.12.2018;6535;      Vogelsbergkreis;2195
+31.12.2018;66;    Kassel, Regierungsbezirk;29415
+31.12.2018;6611;      Kassel, Kreisfreie Stadt;12080
+31.12.2018;6631;      Fulda, Landkreis;5095
+31.12.2018;6632;      Hersfeld-Rotenburg, Landkreis;2355
+31.12.2018;6633;      Kassel, Landkreis;.
+31.12.2018;6634;      Schwalm-Eder-Kreis;3605
+31.12.2018;6635;      Waldeck-Frankenberg, Landkreis;3955
+31.12.2018;6636;      Werra-Meißner-Kreis;2325
+31.12.2018;7;  Rheinland-Pfalz;81185
+31.12.2018;71;    Koblenz, Stat. Region;30270
+31.12.2018;7111;      Koblenz, Kreisfreie Stadt;4100
+31.12.2018;7131;      Ahrweiler, Landkreis;3025
+31.12.2018;7132;      Altenkirchen (Westerwald), Landkreis;2185
+31.12.2018;7133;      Bad Kreuznach, Landkreis;3405
+31.12.2018;7134;      Birkenfeld, Landkreis;1485
+31.12.2018;7135;      Cochem-Zell, Landkreis;970
+31.12.2018;7137;      Mayen-Koblenz, Landkreis;4590
+31.12.2018;7138;      Neuwied, Landkreis;3910
+31.12.2018;7140;      Rhein-Hunsrück-Kreis;1550
+31.12.2018;7141;      Rhein-Lahn-Kreis;2290
+31.12.2018;7143;      Westerwaldkreis;2760
+31.12.2018;72;    Trier, Stat. Region;9730
+31.12.2018;7211;      Trier, Kreisfreie Stadt;4075
+31.12.2018;7231;      Bernkastel-Wittlich, Landkreis;1710
+31.12.2018;7232;      Eifelkreis Bitburg-Prüm;1145
+31.12.2018;7233;      Vulkaneifel, Landkreis;745
+31.12.2018;7235;      Trier-Saarburg, Landkreis;2055
+31.12.2018;73;    Rheinhessen-Pfalz, Stat. Region;41185
+31.12.2018;7311;      Frankenthal (Pfalz), Kreisfreie Stadt;970
+31.12.2018;7312;      Kaiserslautern, Kreisfreie Stadt;3030
+31.12.2018;7313;      Landau in der Pfalz, Kreisfreie Stadt;1170
+31.12.2018;7314;      Ludwigshafen am Rhein, Kreisfreie Stadt;5140
+31.12.2018;7315;      Mainz, Kreisfreie Stadt;5410
+31.12.2018;7316;      Neustadt an der Weinstraße, Kreisfreie Stadt;1050
+31.12.2018;7317;      Pirmasens, Kreisfreie Stadt;1405
+31.12.2018;7318;      Speyer, Kreisfreie Stadt;1220
+31.12.2018;7319;      Worms, Kreisfreie Stadt;2105
+31.12.2018;7320;      Zweibrücken, Kreisfreie Stadt;865
+31.12.2018;7331;      Alzey-Worms, Landkreis;2120
+31.12.2018;7332;      Bad Dürkheim, Landkreis;2120
+31.12.2018;7333;      Donnersbergkreis;1180
+31.12.2018;7334;      Germersheim, Landkreis;2015
+31.12.2018;7335;      Kaiserslautern, Landkreis;1555
+31.12.2018;7336;      Kusel, Landkreis;1205
+31.12.2018;7337;      Südliche Weinstraße, Landkreis;1320
+31.12.2018;7338;      Rhein-Pfalz-Kreis;2555
+31.12.2018;7339;      Mainz-Bingen, Landkreis;3830
+31.12.2018;7340;      Südwestpfalz, Landkreis;915
+31.12.2018;8;  Baden-Württemberg, Land;202725
+31.12.2018;81;    Stuttgart, Regierungsbezirk;78700
+31.12.2018;8111;      Stuttgart, Landeshauptstadt, Stadtkreis;15585
+31.12.2018;8115;      Böblingen, Landkreis;7320
+31.12.2018;8116;      Esslingen, Landkreis;10380
+31.12.2018;8117;      Göppingen, Landkreis;5035
+31.12.2018;8118;      Ludwigsburg, Landkreis;10030
+31.12.2018;8119;      Rems-Murr-Kreis, Landkreis;8060
+31.12.2018;8121;      Heilbronn, , Universitätsstadt, Stadtkreis;3735
+31.12.2018;8125;      Heilbronn, Landkreis;5515
+31.12.2018;8126;      Hohenlohekreis, Landkreis;1540
+31.12.2018;8127;      Schwäbisch Hall, Landkreis;3095
+31.12.2018;8128;      Main-Tauber-Kreis, Landkreis;2075
+31.12.2018;8135;      Heidenheim, Landkreis;2570
+31.12.2018;8136;      Ostalbkreis, Landkreis;3750
+31.12.2018;82;    Karlsruhe, Regierungsbezirk;48415
+31.12.2018;8211;      Baden-Baden, Stadtkreis;1770
+31.12.2018;8212;      Karlsruhe, Stadtkreis;5210
+31.12.2018;8215;      Karlsruhe, Landkreis;6740
+31.12.2018;8216;      Rastatt, Landkreis;4315
+31.12.2018;8221;      Heidelberg, Stadtkreis;2570
+31.12.2018;8222;      Mannheim, Stadtkreis;3360
+31.12.2018;8225;      Neckar-Odenwald-Kreis, Landkreis;2030
+31.12.2018;8226;      Rhein-Neckar-Kreis, Landkreis;9925
+31.12.2018;8231;      Pforzheim, Stadtkreis;5015
+31.12.2018;8235;      Calw, Landkreis;2560
+31.12.2018;8236;      Enzkreis, Landkreis;2925
+31.12.2018;8237;      Freudenstadt, Landkreis;2000
+31.12.2018;83;    Freiburg, Regierungsbezirk;42725
+31.12.2018;8311;      Freiburg im Breisgau, Stadtkreis;5815
+31.12.2018;8315;      Breisgau-Hochschwarzwald, Landkreis;4965
+31.12.2018;8316;      Emmendingen, Landkreis;3260
+31.12.2018;8317;      Ortenaukreis, Landkreis;8065
+31.12.2018;8325;      Rottweil, Landkreis;2655
+31.12.2018;8326;      Schwarzwald-Baar-Kreis, Landkreis;2880
+31.12.2018;8327;      Tuttlingen, Landkreis;2520
+31.12.2018;8335;      Konstanz, Landkreis;5675
+31.12.2018;8336;      Lörrach, Landkreis;4135
+31.12.2018;8337;      Waldshut, Landkreis;2760
+31.12.2018;84;    Tübingen, Regierungsbezirk;32885
+31.12.2018;8415;      Reutlingen, Landkreis;5610
+31.12.2018;8416;      Tübingen, Landkreis;4360
+31.12.2018;8417;      Zollernalbkreis, Landkreis;1385
+31.12.2018;8421;      Ulm, Stadtkreis;3480
+31.12.2018;8425;      Alb-Donau-Kreis, Landkreis;3185
+31.12.2018;8426;      Biberach, Landkreis;3475
+31.12.2018;8435;      Bodenseekreis, Landkreis;3970
+31.12.2018;8436;      Ravensburg, Landkreis;5030
+31.12.2018;8437;      Sigmaringen, Landkreis;2390
+31.12.2018;9;  Bayern;212015
+31.12.2018;91;    Oberbayern, Regierungsbezirk;77470
+31.12.2018;9161;      Ingolstadt;3540
+31.12.2018;9162;      München, Landeshauptstadt;35105
+31.12.2018;9163;      Rosenheim;1275
+31.12.2018;9171;      Altötting, Landkreis;1870
+31.12.2018;9172;      Berchtesgadener Land, Landkreis;1370
+31.12.2018;9173;      Bad Tölz-Wolfratshausen, Landkreis;2035
+31.12.2018;9174;      Dachau, Landkreis;1715
+31.12.2018;9175;      Ebersberg, Landkreis;1395
+31.12.2018;9176;      Eichstätt, Landkreis;1855
+31.12.2018;9177;      Erding, Landkreis;1425
+31.12.2018;9178;      Freising, Landkreis;2200
+31.12.2018;9179;      Fürstenfeldbruck, Landkreis;3250
+31.12.2018;9180;      Garmisch-Partenkirchen, Landkreis;1230
+31.12.2018;9181;      Landsberg am Lech, Landkreis;1570
+31.12.2018;9182;      Miesbach, Landkreis;845
+31.12.2018;9183;      Mühldorf a.Inn, Landkreis;1520
+31.12.2018;9184;      München, Landkreis;4260
+31.12.2018;9185;      Neuburg-Schrobenhausen, Landkreis;1265
+31.12.2018;9186;      Pfaffenhofen a.d.Ilm, Landkreis;1170
+31.12.2018;9187;      Rosenheim, Landkreis;2730
+31.12.2018;9188;      Starnberg, Landkreis;1835
+31.12.2018;9189;      Traunstein, Landkreis;2275
+31.12.2018;9190;      Weilheim-Schongau, Landkreis;1735
+31.12.2018;92;    Niederbayern, Regierungsbezirk;16505
+31.12.2018;9261;      Landshut;1335
+31.12.2018;9262;      Passau;1395
+31.12.2018;9263;      Straubing;1110
+31.12.2018;9271;      Deggendorf, Landkreis;2990
+31.12.2018;9272;      Freyung-Grafenau, Landkreis;555
+31.12.2018;9273;      Kelheim, Landkreis;1225
+31.12.2018;9274;      Landshut, Landkreis;1410
+31.12.2018;9275;      Passau, Landkreis;2370
+31.12.2018;9276;      Regen, Landkreis;995
+31.12.2018;9277;      Rottal-Inn, Landkreis;1280
+31.12.2018;9278;      Straubing-Bogen, Landkreis;895
+31.12.2018;9279;      Dingolfing-Landau, Landkreis;940
+31.12.2018;93;    Oberpfalz, Regierungsbezirk;15515
+31.12.2018;9361;      Amberg;1060
+31.12.2018;9362;      Regensburg;5115
+31.12.2018;9363;      Weiden i.d.OPf.;1240
+31.12.2018;9371;      Amberg-Sulzbach, Landkreis;920
+31.12.2018;9372;      Cham, Landkreis;1330
+31.12.2018;9373;      Neumarkt i.d.OPf., Landkreis;1155
+31.12.2018;9374;      Neustadt a.d.Waldnaab, Landkreis;700
+31.12.2018;9375;      Regensburg, Landkreis;1670
+31.12.2018;9376;      Schwandorf, Landkreis;1625
+31.12.2018;9377;      Tirschenreuth, Landkreis;695
+31.12.2018;94;    Oberfranken, Regierungsbezirk;17445
+31.12.2018;9461;      Bamberg;3000
+31.12.2018;9462;      Bayreuth;4390
+31.12.2018;9463;      Coburg;845
+31.12.2018;9464;      Hof;2245
+31.12.2018;9471;      Bamberg, Landkreis;1000
+31.12.2018;9472;      Bayreuth, Landkreis;460
+31.12.2018;9473;      Coburg, Landkreis;645
+31.12.2018;9474;      Forchheim, Landkreis;1150
+31.12.2018;9475;      Hof, Landkreis;695
+31.12.2018;9476;      Kronach, Landkreis;500
+31.12.2018;9477;      Kulmbach, Landkreis;685
+31.12.2018;9478;      Lichtenfels, Landkreis;615
+31.12.2018;9479;      Wunsiedel i.Fichtelgebirge, Landkreis;1215
+31.12.2018;95;    Mittelfranken, Regierungsbezirk;34895
+31.12.2018;9561;      Ansbach;1560
+31.12.2018;9562;      Erlangen;2220
+31.12.2018;9563;      Fürth;2430
+31.12.2018;9564;      Nürnberg;17885
+31.12.2018;9565;      Schwabach;685
+31.12.2018;9571;      Ansbach, Landkreis;1800
+31.12.2018;9572;      Erlangen-Höchstadt, Landkreis;1305
+31.12.2018;9573;      Fürth, Landkreis;1235
+31.12.2018;9574;      Nürnberger Land, Landkreis;2135
+31.12.2018;9575;      Neustadt a.d.Aisch-Bad Windsheim, Landkreis;1200
+31.12.2018;9576;      Roth, Landkreis;1215
+31.12.2018;9577;      Weißenburg-Gunzenhausen, Landkreis;1220
+31.12.2018;96;    Unterfranken, Regierungsbezirk;21495
+31.12.2018;9661;      Aschaffenburg;1975
+31.12.2018;9662;      Schweinfurt;6100
+31.12.2018;9663;      Würzburg;3255
+31.12.2018;9671;      Aschaffenburg, Landkreis;1895
+31.12.2018;9672;      Bad Kissingen, Landkreis;1075
+31.12.2018;9673;      Rhön-Grabfeld, Landkreis;720
+31.12.2018;9674;      Haßberge, Landkreis;765
+31.12.2018;9675;      Kitzingen, Landkreis;940
+31.12.2018;9676;      Miltenberg, Landkreis;1340
+31.12.2018;9677;      Main-Spessart, Landkreis;910
+31.12.2018;9678;      Schweinfurt, Landkreis;1090
+31.12.2018;9679;      Würzburg, Landkreis;1435
+31.12.2018;97;    Schwaben, Regierungsbezirk;28690
+31.12.2018;9761;      Augsburg;9715
+31.12.2018;9762;      Kaufbeuren;785
+31.12.2018;9763;      Kempten (Allgäu);1115
+31.12.2018;9764;      Memmingen;840
+31.12.2018;9771;      Aichach-Friedberg, Landkreis;1340
+31.12.2018;9772;      Augsburg, Landkreis;2855
+31.12.2018;9773;      Dillingen a.d.Donau, Landkreis;1720
+31.12.2018;9774;      Günzburg, Landkreis;1465
+31.12.2018;9775;      Neu-Ulm, Landkreis;1955
+31.12.2018;9776;      Lindau (Bodensee), Landkreis;980
+31.12.2018;9777;      Ostallgäu, Landkreis;1480
+31.12.2018;9778;      Unterallgäu, Landkreis;1320
+31.12.2018;9779;      Donau-Ries, Landkreis;1725
+31.12.2018;9780;      Oberallgäu, Landkreis;1395
+31.12.2018;10;  Saarland;27645
+31.12.2018;10041;      Saarbrücken, Regionalverband;.
+31.12.2018;10041100;      Saarbrücken, Landeshauptstadt;.
+31.12.2018;10042;      Merzig-Wadern, Landkreis;.
+31.12.2018;10043;      Neunkirchen, Landkreis;.
+31.12.2018;10044;      Saarlouis, Landkreis;.
+31.12.2018;10045;      Saarpfalz-Kreis;.
+31.12.2018;10046;      St. Wendel, Landkreis;.
+31.12.2018;11;  Berlin;98270
+31.12.2018;11001001;      Berlin-Mitte;.
+31.12.2018;11002002;      Berlin-Friedrichshain-Kreuzberg;.
+31.12.2018;11003003;      Berlin-Pankow;.
+31.12.2018;11004004;      Berlin-Charlottenburg-Wilmersdorf;.
+31.12.2018;11005005;      Berlin-Spandau;.
+31.12.2018;11006006;      Berlin-Steglitz-Zehlendorf;.
+31.12.2018;11007007;      Berlin-Tempelhof-Schöneberg;.
+31.12.2018;11008008;      Berlin-Neukölln;.
+31.12.2018;11009009;      Berlin-Treptow-Köpenick;.
+31.12.2018;11010010;      Berlin-Marzahn-Hellersdorf;.
+31.12.2018;11011011;      Berlin-Lichtenberg;.
+31.12.2018;11012012;      Berlin-Reinickendorf;.
+31.12.2018;12;  Brandenburg;39480
+31.12.2018;12051;      Brandenburg an der Havel, Kreisfreie Stadt;1585
+31.12.2018;12052;      Cottbus, Kreisfreie Stadt;4935
+31.12.2018;12053;      Frankfurt (Oder), Kreisfreie Stadt;1535
+31.12.2018;12054;      Potsdam, Kreisfreie Stadt;4485
+31.12.2018;12060;      Barnim, Landkreis;2180
+31.12.2018;12061;      Dahme-Spreewald, Landkreis;1880
+31.12.2018;12062;      Elbe-Elster, Landkreis;1180
+31.12.2018;12063;      Havelland, Landkreis;2060
+31.12.2018;12064;      Märkisch-Oderland, Landkreis;1905
+31.12.2018;12065;      Oberhavel, Landkreis;2855
+31.12.2018;12066;      Oberspreewald-Lausitz, Landkreis;1105
+31.12.2018;12067;      Oder-Spree, Landkreis;5225
+31.12.2018;12068;      Ostprignitz-Ruppin, Landkreis;1470
+31.12.2018;12069;      Potsdam-Mittelmark, Landkreis;1985
+31.12.2018;12070;      Prignitz, Landkreis;1355
+31.12.2018;12071;      Spree-Neiße, Landkreis;.
+31.12.2018;12072;      Teltow-Fläming, Landkreis;2135
+31.12.2018;12073;      Uckermark, Landkreis;1615
+31.12.2018;13;  Mecklenburg-Vorpommern;24375
+31.12.2018;13001;      Kreisfreie Stadt Greifswald, Hansestadt;-
+31.12.2018;13002;      Kreisfreie Stadt Neubrandenburg, Stadt;-
+31.12.2018;13003;      Kreisfreie Stadt Rostock, Hansestadt;4220
+31.12.2018;13004;      Kreisfreie Stadt Schwerin, Landeshauptstadt;4355
+31.12.2018;13005;      Kreisfreie Stadt Stralsund, Hansestadt;-
+31.12.2018;13006;      Kreisfreie Stadt Wismar, Hansestadt;-
+31.12.2018;13051;      Landkreis Bad Doberan;-
+31.12.2018;13052;      Landkreis Demmin;-
+31.12.2018;13053;      Landkreis Güstrow;-
+31.12.2018;13054;      Landkreis Ludwigslust;-
+31.12.2018;13055;      Landkreis Mecklenburg-Strelitz;-
+31.12.2018;13056;      Landkreis Müritz;-
+31.12.2018;13057;      Landkreis Nordvorpommern;-
+31.12.2018;13058;      Landkreis Nordwestmecklenburg;-
+31.12.2018;13059;      Landkreis Ostvorpommern;-
+31.12.2018;13060;      Landkreis Parchim;-
+31.12.2018;13061;      Landkreis Rügen;-
+31.12.2018;13062;      Landkreis Uecker-Randow;-
+31.12.2018;13071;      Landkreis Mecklenburgische Seenplatte;3640
+31.12.2018;13072;      Landkreis Rostock;2370
+31.12.2018;13073;      Landkreis Vorpommern-Rügen;2975
+31.12.2018;13074;      Landkreis Nordwestmecklenburg;1685
+31.12.2018;13075;      Landkreis Vorpommern-Greifswald;2660
+31.12.2018;13076;      Landkreis Ludwigslust-Parchim;2475
+31.12.2018;14;  Sachsen;60775
+31.12.2018;141;    Chemnitz, Regierungsbezirk;-
+31.12.2018;14161;      Chemnitz, Kreisfreie Stadt;-
+31.12.2018;14166;      Plauen, Kreisfreie Stadt;-
+31.12.2018;14167;      Zwickau, Kreisfreie Stadt;-
+31.12.2018;14171;      Annaberg, Landkreis;-
+31.12.2018;14173;      Chemnitzer Land, Landkreis;-
+31.12.2018;14177;      Freiberg, Landkreis;-
+31.12.2018;14178;      Vogtlandkreis;-
+31.12.2018;14181;      Mittlerer Erzgebirgskreis;-
+31.12.2018;14182;      Mittweida, Landkreis;-
+31.12.2018;14188;      Stollberg, Landkreis;-
+31.12.2018;14191;      Aue-Schwarzenberg, Landkreis;-
+31.12.2018;14193;      Zwickauer Land, Landkreis;-
+31.12.2018;142;    Dresden, Regierungsbezirk;-
+31.12.2018;14262;      Dresden, Kreisfreie Stadt;-
+31.12.2018;14263;      Görlitz, Kreisfreie Stadt;-
+31.12.2018;14264;      Hoyerswerda, Kreisfreie Stadt;-
+31.12.2018;14272;      Bautzen, Landkreis;-
+31.12.2018;14280;      Meißen, Landkreis;-
+31.12.2018;14284;      Niederschlesischer Oberlausitzkreis;-
+31.12.2018;14285;      Riesa-Großenhain, Landkreis;-
+31.12.2018;14286;      Löbau-Zittau, Landkreis;-
+31.12.2018;14287;      Sächsische Schweiz, Landkreis;-
+31.12.2018;14290;      Weißeritzkreis;-
+31.12.2018;14292;      Kamenz, Landkreis;-
+31.12.2018;143;    Leipzig, Regierungsbezirk;-
+31.12.2018;14365;      Leipzig, Kreisfreie Stadt;-
+31.12.2018;14374;      Delitzsch, Landkreis;-
+31.12.2018;14375;      Döbeln, Landkreis;-
+31.12.2018;14379;      Leipziger Land, Landkreis;-
+31.12.2018;14383;      Muldentalkreis;-
+31.12.2018;14389;      Torgau-Oschatz, Landkreis;-
+31.12.2018;145;    Chemnitz, Stat. Region;20005
+31.12.2018;14511;      Chemnitz, Stadt;8025
+31.12.2018;14521;      Erzgebirgskreis;2770
+31.12.2018;14522;      Mittelsachsen, Landkreis;2715
+31.12.2018;14523;      Vogtlandkreis;2835
+31.12.2018;14524;      Zwickau, Landkreis;3665
+31.12.2018;146;    Dresden, Stat. Region;20635
+31.12.2018;14612;      Dresden, Stadt;11415
+31.12.2018;14625;      Bautzen, Landkreis;2365
+31.12.2018;14626;      Görlitz, Landkreis;2415
+31.12.2018;14627;      Meißen, Landkreis;2435
+31.12.2018;14628;      Sächsische Schweiz-Osterzgebirge, Landkreis;2000
+31.12.2018;147;    Leipzig, Stat. Region;20130
+31.12.2018;14713;      Leipzig, Stadt;15475
+31.12.2018;14729;      Leipzig, Landkreis;2470
+31.12.2018;14730;      Nordsachsen, Landkreis;2185
+31.12.2018;15;  Sachsen-Anhalt;39435
+31.12.2018;15001;      Dessau-Roßlau, Kreisfreie Stadt;2080
+31.12.2018;15002;      Halle (Saale), Kreisfreie Stadt;9015
+31.12.2018;15003;      Magdeburg, Kreisfreie Stadt;8020
+31.12.2018;15081;      Altmarkkreis Salzwedel;1010
+31.12.2018;15082;      Anhalt-Bitterfeld, Landkreis;1615
+31.12.2018;15083;      Börde, Landkreis;2025
+31.12.2018;15084;      Burgenlandkreis;2320
+31.12.2018;15085;      Harz, Landkreis;2290
+31.12.2018;15086;      Jerichower Land, Landkreis;1075
+31.12.2018;15087;      Mansfeld-Südharz, Landkreis;1690
+31.12.2018;15088;      Saalekreis;2735
+31.12.2018;15089;      Salzlandkreis;2385
+31.12.2018;15090;      Stendal, Landkreis;1570
+31.12.2018;15091;      Wittenberg, Landkreis;1600
+31.12.2018;151;    Dessau, Stat. Region;-
+31.12.2018;15101;      Dessau, Kreisfreie Stadt;-
+31.12.2018;15151;      Anhalt-Zerbst, Kreis;-
+31.12.2018;15153;      Bernburg, Kreis;-
+31.12.2018;15154;      Bitterfeld, Kreis;-
+31.12.2018;15159;      Köthen, Kreis;-
+31.12.2018;15171;      Wittenberg, Kreis;-
+31.12.2018;152;    Halle, Stat. Region;-
+31.12.2018;15202;      Halle (Saale), Kreisfreie Stadt;-
+31.12.2018;15256;      Burgenlandkreis;-
+31.12.2018;15260;      Mansfelder Land, Kreis;-
+31.12.2018;15261;      Merseburg-Querfurt, Kreis;-
+31.12.2018;15265;      Saalkreis;-
+31.12.2018;15266;      Sangerhausen, Kreis;-
+31.12.2018;15268;      Weißenfels, Kreis;-
+31.12.2018;153;    Magdeburg, Stat. Region;-
+31.12.2018;15303;      Magdeburg, Kreisfreie Stadt;-
+31.12.2018;15352;      Aschersleben-Staßfurt, Kreis;-
+31.12.2018;15355;      Bördekreis;-
+31.12.2018;15357;      Halberstadt, Kreis;-
+31.12.2018;15358;      Jerichower Land, Kreis;-
+31.12.2018;15362;      Ohrekreis;-
+31.12.2018;15363;      Stendal, Kreis;-
+31.12.2018;15364;      Quedlinburg, Kreis;-
+31.12.2018;15367;      Schönebeck, Kreis;-
+31.12.2018;15369;      Wernigerode, Kreis;-
+31.12.2018;15370;      Altmarkkreis Salzwedel, Kreis;-
+31.12.2018;16;  Thüringen;33010
+31.12.2018;16051;      Erfurt, krsfr. Stadt;5935
+31.12.2018;16052;      Gera, krsfr. Stadt;3300
+31.12.2018;16053;      Jena, krsfr. Stadt;2800
+31.12.2018;16054;      Suhl, krsfr. Stadt;680
+31.12.2018;16055;      Weimar, krsfr. Stadt;1340
+31.12.2018;16056;      Eisenach, krsfr. Stadt;1325
+31.12.2018;16061;      Eichsfeld, Kreis;1290
+31.12.2018;16062;      Nordhausen, Kreis;1240
+31.12.2018;16063;      Wartburgkreis;1090
+31.12.2018;16064;      Unstrut-Hainich-Kreis;1585
+31.12.2018;16065;      Kyffhäuserkreis;890
+31.12.2018;16066;      Schmalkalden-Meiningen, Kreis;1235
+31.12.2018;16067;      Gotha, Kreis;1710
+31.12.2018;16068;      Sömmerda, Kreis;430
+31.12.2018;16069;      Hildburghausen, Kreis;720
+31.12.2018;16070;      Ilm-Kreis;1465
+31.12.2018;16071;      Weimarer Land, Kreis;900
+31.12.2018;16072;      Sonneberg, Kreis;950
+31.12.2018;16073;      Saalfeld-Rudolstadt, Kreis;1165
+31.12.2018;16074;      Saale-Holzland-Kreis;175
+31.12.2018;16075;      Saale-Orla-Kreis;940
+31.12.2018;16076;      Greiz, Kreis;670
+31.12.2018;16077;      Altenburger Land, Kreis;1195

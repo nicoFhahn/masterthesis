@@ -84,10 +84,12 @@ nb <- poly2nb(newest_numbers_grouped)
 prior <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(0.5 / 0.31, 0.01)),
+    param = c(0.5 / 0.31, 0.01)
+  ),
   phi = list(
     prior = "pc",
-    param = c(0.5, 2 / 3))
+    param = c(0.5, 2 / 3)
+  )
 )
 nb2INLA("map.adj", nb)
 g <- inla.read.graph(filename = "map.adj")
@@ -101,12 +103,13 @@ res <- inla(
 summary(res)
 
 formula_bym <- inf_rate ~
-  f(idarea_1, model = "besag", graph = g, scale.model = TRUE, hyper = prior) +
+f(idarea_1, model = "besag", graph = g, scale.model = TRUE, hyper = prior) +
   f(idarea_2, model = "iid")
 prior <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(0.5 / 0.31, 0.01))
+    param = c(0.5 / 0.31, 0.01)
+  )
 )
 res <- inla(
   formula_bym,
