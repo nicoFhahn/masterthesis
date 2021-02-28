@@ -341,22 +341,6 @@ germany_toilets <- pblapply(
   key = "amenity",
   value = "toilet"
 )
-load("osmdata/germany_toilets.Rda")
-table(
-  unlist(
-    lapply(
-      germany_toilets2,
-      nrow
-    )
-  )
-)
-germany_toilets2 <- pblapply(
-  germany_bbox[unlist(lapply(germany_toilets, nrow)) == 0],
-  download_key_data,
-  key = "amenity",
-  value = "toilets"
-)
-germany_toilets[unlist(lapply(germany_toilets, nrow)) == 0] <- germany_toilets2
 save(germany_toilets, file = "osmdata/germany_toilets.Rda")
 germany_clinic <- pblapply(
   germany_bbox,
@@ -364,6 +348,22 @@ germany_clinic <- pblapply(
   key = "amenity",
   value = c("clinic", "dentist", "doctors")
 )
+load("osmdata/germany_clinic.Rda")
+table(
+  unlist(
+    lapply(
+      germany_clinic,
+      nrow
+    )
+  )
+)
+germany_clinic2 <- pblapply(
+  germany_bbox[unlist(lapply(germany_clinic, nrow)) == 0],
+  download_key_data,
+  key = "amenity",
+  value = c("clinic", "dentist", "doctors")
+)
+germany_clinic[unlist(lapply(germany_clinic, nrow)) == 0] <- germany_clinic2
 save(germany_clinic, file = "osmdata/germany_clinic.Rda")
 germany_sport <- pblapply(
   germany_bbox,
