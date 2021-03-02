@@ -16,25 +16,6 @@ norway_municipality_confirmed_long <- melt(
   id.vars = colnames(norway_municipality_confirmed)[1:6],
   variable.name = "date"
 )
-norway_mobility <- read_csv(
-  "https://raw.githubusercontent.com/thohan88/covid19-nor-data/master/data/20_mobility/google/mobility.csv"
-)
-norway_mobility[norway_mobility$fylke_name == "Troms og Finnmark fylke", ]$fylke_name <- "Troms og Finnmark"
-norway_mobility <- setDT(norway_mobility)
-norway_mobility_ungrouped <- dcast(
-  norway_mobility,
-  fylke_no + fylke_name + date ~ category,
-  value.var = "mob_change"
-)
-norway_mobility_ungrouped$fylke_no <- as.character(norway_mobility_ungrouped$fylke_no)
-norway_mobility_ungrouped[norway_mobility_ungrouped$fylke_no == "3", ]$fylke_no <- "03"
-norway_municipality_confirmed_long$date <- as.Date(as.character(norway_municipality_confirmed_long$date))
-norway_municipality_confirmed_mobility <- merge(
-  norway_municipality_confirmed_long,
-  norway_mobility_ungrouped,
-  by = c("fylke_no", "fylke_name", "date"),
-  all = FALSE
-)
 norge_shape <- read_sf("shapefiles/kommuner_komprimert-polygon.shp")
 kommune_4602 <- norge_shape[norge_shape$kommunenum == 4602, ][1, ]
 kommune_4602$geometry <- st_union(norge_shape[norge_shape$kommunenum == 4602, ])
@@ -88,7 +69,7 @@ norge_demo <- lapply(
 norge_demo <- do.call(rbind, norge_demo)
 norge_demo$kommune_no <- str_extract(norge_demo$region, "[0-9]{4}")
 norge_no_shape <- merge(
-  norway_municipality_confirmed_mobility,
+  norway_municipality_confirmed_long,
   norge_demo,
   by = "kommune_no"
 )
@@ -186,7 +167,7 @@ norge_no_shape <- merge(
 norge_no_shape$region.y <- NULL
 norge_no_shape$region.x <- NULL
 norge_no_shape$region.x <- NULL
-colnames(norge_no_shape)[44] <- "region"
+colnames(norge_no_shape)[38] <- "region"
 load("osmdata/norge_hospital.Rda")
 load("osmdata/norge_place_of_worship.Rda")
 load("osmdata/norge_retail.Rda")
@@ -201,7 +182,7 @@ load("osmdata/norge_university.Rda")
 load("osmdata/norge_college.Rda")
 load("osmdata/norge_kindergarten.Rda")
 load("osmdata/norge_schools.Rda")
-load("osmdata/norge_bakery.Rda")
+load("osmdata/norge_bakeries.Rda")
 load("osmdata/norge_gas.Rda")
 load("osmdata/norge_banks.Rda")
 load("osmdata/norge_atms.Rda")
@@ -739,14 +720,6 @@ norge_complete$samiskforv <- NULL
 norge_complete$datafangst <- NULL
 norge_complete$navnerom <- NULL
 norge_complete$navn <- NULL
-colnames(norge_complete)[9:14] <- c(
-  "groc_pha",
-  "parks",
-  "resident",
-  "ret_recr",
-  "transit",
-  "workplace"
-)
 no_geometry <- norge_complete
 no_geometry$geometry <- NULL
 no_geometry$higher_educ <- no_geometry$college + no_geometry$university
@@ -754,8 +727,8 @@ no_geometry$higher_educ <- no_geometry$college + no_geometry$university
 write_csv(no_geometry, "wrangled_data/norge_features.csv")
 write_sf(st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1], "wrangled_data/shapes_norge.shp")
 norge_features <- read_csv("wrangled_data/norge_features.csv")
-norge_features[, 26:43] <- 1000 * norge_features[, 26:43] / norge_features$population
-norge_features[, 48:71] <- 1000 * norge_features[, 48:71] / norge_features$population
+norge_features[, 18:37] <- 1000 * norge_features[, 18:37] / norge_features$population
+norge_features[, 39:66] <- 1000 * norge_features[, 39:66] / norge_features$population
 norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
 norge <- merge(
   norge_features,
