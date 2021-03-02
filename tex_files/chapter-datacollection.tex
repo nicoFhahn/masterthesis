@@ -1,0 +1,278 @@
+% !TEX root = ../my-thesis.tex
+%
+\chapter{Dataset Collection}
+As is often the case with statisticians, the construction of the dataset used to analyse a research question is an essential task and frequently involves the merging of multiple data sources to create a dataset. This was the case in this thesis and in the following chapter a brief overview of the data sources used, their pre-processing and how they were combined is given.
+\label{sec:datacollection}
+\section{Covid-19 Data}
+\subsection*{Covid-19 Data for Norway}
+The Covid-19 data for Norway comes from a dataset made available to the public via the website \href{https://www.github.com}{Github.com}. The repository contains a daily updated dataset that is the result of combining several data sources, which include the Institute of Public Health and the Norwegian Directorate of Health. According to the author of the repository, the project is "an open-source effort to make data about the Covid-19 situation in Norway available to the public in a timely and coherent manner" \cite{thohan88}. \\
+A few sample data points from this dataset are displayed in Table~\ref{datasetNorge}.\\
+\begin{table}[H] 
+\caption{An excerpt from the Covid-19 data for Norway. Does not contain all variables.\label{datasetNorge}}
+\begin{tabular}{l l r r r}
+\toprule
+\textbf{kommune\_no}	& \textbf{kommune\_name}	& \textbf{population}	& \textbf{2020-03-26}	& \textbf{2020-03-27}\\
+\midrule
+1103 & Stavanger & 143574 & 87 & 88 \\
+1507 & Ålesund & 66258 & 20 & 20 \\
+4601 & Bergen & 283929 & 231 & 248 \\
+5001 & Trondheim & 205163 & 113 & 136 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\subsection*{Covid-19 Data for Germany}
+In Germany, the Robert Koch Institute publishes daily situation reports in which the number of new cases is published at NUTS 3 level. These reports are available as pdf files via the Institute's website. They can be downloaded and grouped via the R package \texttt{covid19germany}\cite{covid19germany}, as was done for this work.\\
+A few sample data points from this dataset are displayed in Table~\ref{datasetGermany}.\\
+\begin{table}[H] 
+\caption{An excerpt from the Covid-19 data for Germany. Does not contain all variables.\label{datasetGermany}}
+\begin{tabular}{l l r r r}
+\toprule
+\textbf{Landkreis}	& \textbf{Date}	& \textbf{CumNumberTestedIll} & \textbf{population}\\
+\midrule
+SK München & 2020-01-29 & 1 & 1471508\\
+SK München & 2020-02-03 & 2 & 1471508\\
+SK München & 2020-02-11 & 3 & 1471508\\
+LK Rosenheim & 2020-02-29 & 1 & 260983\\
+LK Rosenheim & 2020-03-08 & 2 & 260983 \\
+LK Rosenheim & 2020-03-10 & 6 & 260983 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\section{Demographic Data}
+As demographics tend to differ between different geographic units, the decision was made to include demographic variables in the analysis of the research question to see if the risk for infection may be higher when a certain characteristic is present in the population.
+\subsection*{Demographic Data for Norway}
+The demographic data collected for Norway comes from Statistisk Sentralbyrå and is made available to the public through their online database, StatBank\cite{ssb}. \\
+The first characteristic collected was the age of the population in a given municipality, as shown in Table~\ref{ageNorge}.
+\begin{table}[H] 
+\caption{An excerpt from the age data for Norway.\label{ageNorge}}
+\begin{tabular}{l l l r r}
+\toprule
+\textbf{region}	& \textbf{sex}	& \textbf{age}	& \textbf{Persons 2020}\\
+\midrule
+K-1103 Stavanger & Males & 0 years & 842 \\
+K-1103 Stavanger & Females & 0 years & 760 \\
+K-1103 Stavanger & Males & 1 year & 816 \\
+K-1103 Stavanger & Females & 1 year & 807 \\
+\bottomrule
+\end{tabular}
+\end{table}
+Next, unemployment data were collected for a given municipality, as shown in Table~\ref{unemploymentNorge}.
+\begin{table}[H] 
+\caption{An excerpt from the unemployment data for Norway.\label{unemploymentNorge}}
+\begin{tabular}{l l r r r}
+\toprule
+\textbf{region}	& \textbf{country background}	& \textbf{unemployment\_perc}\\
+\midrule
+1103 Stavanger & Total & 3.1  \\
+1103 Stavanger & Immigrants & 6.0  \\
+1507 Ålesund & Total & 2.3  \\
+1507 Ålesund & Immigrants & 5.2  \\
+\bottomrule
+\end{tabular}
+\end{table}
+Other data collected include data related to the number of workers in a particular industry and immigration data, as shown in Table~\ref{industryNorge} and Table~\ref{immigrationNorge}, respectively.
+\begin{table}[H] 
+\caption{An excerpt from the worker industry data for Norway. Does not contain all variables. In the actual dataset, a distinction is made between employees by place of residence and employees by place of work. Here, the number of employees by place of residence are displayed.\label{industryNorge}}
+\begin{tabular}{l l l l r r}
+\toprule
+\textbf{region}	& \textbf{age}	& \textbf{industry} & \textbf{working hours} & \textbf{employees}\\
+\midrule
+1103 Stavanger & 15-74 years & 00-99 All industries & Part-time & 17960\\
+1103 Stavanger & 20-66 years & 00-99 All industries & Full-time & 51231\\
+1103 Stavanger & 15-74 years & 41-43 Construction  & Part-time & 352\\
+1103 Stavanger & 20-66 years & 41-43 Construction  & Full-time & 2772\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H] 
+\caption{An excerpt from the immigration data for Norway.\label{immigrationNorge}}
+\begin{tabular}{l l l r r}
+\toprule
+\textbf{region}	& \textbf{category} & \textbf{background}	& \textbf{Persons 2020} & \textbf{\%population}\\
+\midrule
+1103 Stavanger & Immigrants & All  & 27075 & 18.9\\
+1103 Stavanger & Norwegian with & All  & 5972 & 4.16\\
+& immigrant parents \\
+1507 Ålesund & Immigrants & All  & 9066 & 13.7\\
+1507 Ålesund & Norwegian with & All &  1434 & 2.16\\
+& immigrant parents \\
+\bottomrule
+\end{tabular}
+\end{table}
+\subsection*{Demographic Data for Germany}
+The demographic data collected for Germany comes from the federal and state statistical offices and is made available to the public through their online database, Regionaldatenbank Deutschland \cite{rdb}. \\
+The first characteristic collected was unemployment data at the NUTS 3 level, as shown in Table~\ref{unemploymentGermany}.
+\begin{table}[H] 
+\caption{An excerpt from the unemployment data for Germany. Does not contain all variables.\label{unemploymentGermany}}
+\begin{tabular}{l l r r r}
+\toprule
+\textbf{District}	& \textbf{City}	& \textbf{unemployed\_total}& \textbf{unemployed\_foreigners}\\
+\midrule
+2000 & Hamburg, City & 64774 & 21994  \\
+8221 & Heidelberg, City & 3055 & 964  \\
+9162 & München, City &  30557 & 13487  \\
+9187 & Rosenheim, District & 3155 & 679  \\
+\bottomrule
+\end{tabular}
+\end{table}
+Next, the 2019 European election data were collected, as shown in Table\ref{electionGermany}.
+\begin{table}[H] 
+\caption{An excerpt from the 2019 European election data for Germany. Does not contain all variables.\label{electionGermany}}
+\begin{tabular}{l l r r r r}
+\toprule
+\textbf{District}	& \textbf{City}	& \textbf{voter turnout}& \textbf{Union} & \textbf{SPD} & \textbf{AfD}\\
+\midrule
+2000 & Hamburg, City & 61.9 &  140966 & 157840 & 51649\\
+8221 & Heidelberg, City & 70.1 &  13007 & 10378 & 4303\\
+9162 & München, City &  65.4 &   163350 & 69403 & 36282\\
+9187 & Rosenheim, District & 63.1 & 53763 & 8768 & 10275 \\
+\bottomrule
+\end{tabular}
+\end{table}
+Data were also gathered in relation to protection-seekers, as shown in Table~\ref{protectionGermany}, social welfare, as seen in Table~\ref{welfareGermany}, and in relation to asylum-seeker benefits, as shown in Table~\ref{asylumGermany}.
+\begin{table}[H] 
+\caption{An excerpt from the protection-seekers data for Germany.\label{protectionGermany}}
+\begin{tabular}{l l r r r r}
+\toprule
+\textbf{District}	& \textbf{City}	& \textbf{protection-seekers}\\
+\midrule
+2000 & Hamburg, City & 52730\\
+8221 & Heidelberg, City & 2570\\
+9162 & München, City &  35105\\
+9187 & Rosenheim, District & 2730\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H] 
+\caption{An excerpt from the social welfare data for Germany. Does not contain all variables.\label{welfareGermany}}
+\begin{tabular}{l l r r r r}
+\toprule
+\textbf{District}	& \textbf{City}	& \textbf{welfare recipients}\\
+\midrule
+2000 & Hamburg, City & 10076\\
+8221 & Heidelberg, City & 292\\
+9162 & München, City &  5230\\
+9187 & Rosenheim, District & 1338\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H] 
+\caption{An excerpt from the asylum-seeker benefits data for Germany. Does not contain all variables.\label{asylumGermany}}
+\begin{tabular}{l l r r r r}
+\toprule
+\textbf{District}	& \textbf{City}	& \textbf{asylum-seeker benefites}\\
+\midrule
+2000 & Hamburg, City & 9665\\
+8221 & Heidelberg, City & 1326\\
+9162 & München, City &  4887\\
+9187 & Rosenheim, District & 1132\\
+\bottomrule
+\end{tabular}
+\end{table}
+Finally, trade tax, income tax, and payroll tax data were collected, as shown in Table~\ref{taxGermany}.
+\begin{table}[H] 
+\caption{An excerpt from the tax data for Germany. Does not contain all variables. Income total is the sum of the income tax and the payroll tax for a given city/district.\label{taxGermany}}
+\begin{tabular}{l l r r r r}
+\toprule
+\textbf{District}	& \textbf{City}	& \textbf{trade tax}& \textbf{income total}\\
+\midrule
+2000 & Hamburg, City & 472,517,476 & 42,524,847\\
+8221 & Heidelberg, City & 23,285,772 & 3,465,746\\
+9162 & München, City &  489,476,177 & 45,844,191 \\
+9187 & Rosenheim, District & 33,758,111 & 5,891,415 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\section{Shapefiles}
+In addition to numeric variables, the dataset also contains a geographic variable containing the geographic boundaries of a given municipality or city/district.
+\subsection*{Shapefiles for Norway}
+The data for the Norwegian shapefiles comes from Geonorge \cite{geonorge} and is downloaded from a Github repository, as the data there was in a cleaner state \cite{shapeGithub}. In addition to the geographic shape, the dataset also includes a variable that contains the ID of each municipality.
+\subsection*{Shapefiles for Germany}
+The data for the German shapefiles comes from Esri Germany \cite{esri}.
+\section{OpenStreetMap Data}
+OpenStreetMap (OSM) is a free project that collects, structures and stores freely usable geodata in a database for use by anyone (Open Data). This data is available under a free license, the Open Database License. The core of the project is therefore an openly accessible database of all contributed geoinformation \cite{OpenStreetMap}. \\
+In R, the OpenStreetMap API can be queried using the R package \texttt{osmdata} \cite{osmdata}. To download all locations of a given type in a given region, a shape or bounding box must be specified along with a key and optionally a value. These key-value pairs are used to specify the type of location, for example, the "amenity" key is used for all facilities used by visitors and residents. If you use the "biergarten" value together with the "amenity" key, the locations of all beer gardens in a given geographic region will be downloaded. \\
+OpenStreetMap users have the option to map a location as either \texttt{POINT}, \texttt{POLYGON}, \texttt{MULTIPOLYGON}, \texttt{LINESTRING}, or \texttt{MULTILINESTRING}. Conventionally, the first three are used. Therefore, only sites mapped as one of these were used for this work. If a location was mapped as either \texttt{POLYGON} or \texttt{MULTIPOLYGON}, the centroid of the location was calculated. \\
+A complete list of all key-value pairs used for this work can be found in the Appendix. 
+\section{Data Wrangling}
+The final step before analyzing the research question at hand is to combine all of these data sources into one dataset. This section will show how this was achieved.
+\subsection*{Data Wrangling for Norway}
+The initial step in creating the final dataset was to convert the data from a wide format, as seen in table~\ref{datasetNorge}, to a long format. This was done using the function \texttt{melt()} from the R package \texttt{reshape2} \cite{reshape2}. The long version of the dataset is shown in table~\ref{norwayLong}.
+\begin{table}[H] 
+\caption{An excerpt from the long version of the Norwegian Covid-19 data. Does not contain all variables.\label{norwayLong}}
+\begin{tabular}{l l r r r}
+\toprule
+\textbf{kommune\_no}	& \textbf{kommune\_name}	& \textbf{population} & \textbf{date} & \textbf{value}\\
+\midrule
+1507 & Ålesund & 66258 & 2020-03-26 & 20\\
+5001 & Trondheim  & 205163  & 2020-03-26 & 113\\
+1507 & Ålesund & 66258 & 2020-03-27 & 20\\
+5001 & Trondheim  & 205163  & 2020-03-27 & 136\\
+\bottomrule
+\end{tabular}
+\end{table}
+Next, the demographic data for Norway was loaded and processed. Since the age data, seen in Table~\ref{ageNorge}, contains the number of people of a certain age, the median age was calculated for each region based on how many people of each age group live in each region. This was done for men, women, and both groups combined, as seen in Table~\ref{medianNorway}.
+\begin{table}[H] 
+\caption{An excerpt from the median age data for Norway. Does not contain all variables.\label{medianNorway}}
+\begin{tabular}{l r r r}
+\toprule
+\textbf{region}	& \textbf{median\_age\_f} & \textbf{median\_age\_m} & \textbf{median\_age}\\
+\midrule
+K-1103 Stavanger & 37 & 38 & 37\\
+K-1507 Ålesund & 38 & 40 & 39\\
+K-4601 Bergen  & 36  & 38 & 37\\
+K-5001 Trondheim  & 35  & 37 & 36\\
+\bottomrule
+\end{tabular}
+\end{table}
+The other demographic variables are left unchanged. To combine the demographic data with the Covid-19 data, the municipality IDs were extracted using the \texttt{str\_extract()} function from the \texttt{stringr} \cite{stringr} R package using the regular expression \texttt{[0-9]\{4\}}. Next, all demographic datasets and the Covid-19 dataset were merged using the \texttt{merge()} function. A small extract is shown in Table~\ref{mergeNorway1}.
+\begin{table}[H] 
+\caption{An excerpt from the merged data. Does not contain all variables.\label{mergeNorway1}}
+\begin{tabular}{l l r r r r}
+\toprule
+\textbf{kommune\_no} & \textbf{kommune\_name} & \textbf{median\_age} & \textbf{unemp\_immg} & \textbf{immg\_total}\\
+\midrule
+1103 & Stavanger & 37 & 6.0 & 18.86\\
+1507 & Ålesund & 39 & 5.2 & 13.68\\
+4601 & Bergen  & 37  & 7.5 & 15.18\\
+5001 & Trondheim  & 36  & 4.8 & 13.64\\
+\bottomrule
+\end{tabular}
+\end{table}
+Using the \texttt{st\_intersects()} function from the \texttt{sf} \cite{sf} R package, the number of points of interest downloaded via OpenStreetMap was calculated for each municipality. Since the shapefiles contain the ID for each municipality, this data was then merged with the data shown in Table~\ref{mergeNorway1} and can be seen in Table~\ref{mergeNorway2}.
+\begin{table}[H] 
+\caption{An excerpt from the merged data. Does not contain all variables.\label{mergeNorway2}}
+\begin{tabular}{l l r r r r}
+\toprule
+\textbf{kommune\_no} & \textbf{kommune\_name} & \textbf{median\_age} & \textbf{schools} & \textbf{restaurants}\\
+\midrule
+1103 & Stavanger & 37 & 85 & 78 \\
+1507 & Ålesund & 39 & 0 & 0\\
+4601 & Bergen  & 37  & 152 & 225\\
+5001 & Trondheim  & 36  & 104 & 153\\
+\bottomrule
+\end{tabular}
+\end{table}
+For each variable representing an absolute number, e.g. the number of schools or the number of employees, this number was calculated per 1000 inhabitants of the respective area. \\
+Finally, four new variables were created:
+\begin{itemize}
+    \item[1.] higher\_educ, which counts the number of universities and colleges in a given area.
+    \item[2.] sex, which gives the proportion of females living in a given area.
+    \item[3.] pop\_dens, i.e. the number of people per square kilometer in a given area.
+    \item[3.] urb\_dens, i.e. the number of residential buildings per square kilometer in a given area.
+\end{itemize}
+\subsection*{Data Wrangling for Germany}
+The data processing procedure for Germany is identical to that for Norway. First, all demographic variables were loaded and left unchanged before being merged with the Covid-19 data prior to calculating the spatial intersections between the points of interest and the NUTS-3 areas. After merging all the data, the numbers per 1000 inhabitants were calculated for the variables containing absolute numbers. Finally, the same four new variables were created. An example of this final dataset is shown in Table~\ref{finalGermany}.
+\begin{table}[H] 
+\caption{An excerpt from the merged data. Does not contain all variables.\label{finalGermany}}
+\begin{tabular}{l l r r r r}
+\toprule
+\textbf{District}	& \textbf{City}	& \textbf{trade tax}& \textbf{AfD}\\
+\midrule
+2000 & Hamburg, City & 472,517,476 & 51649 & 593\\
+8221 & Heidelberg, City & 23,285,772 & 4303 & 53\\
+9162 & München, City &  489,476,177 &  36282 & 475\\
+9187 & Rosenheim, District & 33,758,111 & 10275 & 33\\
+\bottomrule
+\end{tabular}
+\end{table}
