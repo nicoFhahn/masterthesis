@@ -51,7 +51,7 @@ res_1 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_2 <- inla(
@@ -62,7 +62,7 @@ res_2 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 results_frame <- newest_numbers
@@ -181,7 +181,7 @@ res_3 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_4 <- inla(
@@ -192,7 +192,7 @@ res_4 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 results_frame <- newest_numbers
 dics <- c(res_3$dic$dic, res_4$dic$dic)
@@ -318,7 +318,7 @@ res_5 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_6 <- inla(
@@ -329,7 +329,7 @@ res_6 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 results_frame <- newest_numbers
 dics <- c(res_5$dic$dic, res_6$dic$dic)
@@ -456,7 +456,7 @@ res_7 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_8 <- inla(
@@ -467,7 +467,7 @@ res_8 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 results_frame <- newest_numbers
 dics <- c(res_7$dic$dic, res_8$dic$dic)
@@ -603,7 +603,7 @@ res_9 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_10 <- inla(
@@ -614,7 +614,7 @@ res_10 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 results_frame <- newest_numbers
 dics <- c(res_9$dic$dic, res_10$dic$dic)
@@ -758,7 +758,7 @@ res_11 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_12 <- inla(
@@ -769,7 +769,7 @@ res_12 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_13 <- inla(
@@ -780,7 +780,7 @@ res_13 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_14 <- inla(
@@ -791,7 +791,7 @@ res_14 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_15 <- inla(
@@ -802,7 +802,7 @@ res_15 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_16 <- inla(
@@ -813,7 +813,7 @@ res_16 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 results_frame <- newest_numbers
@@ -1019,7 +1019,7 @@ res_17 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 
@@ -1031,7 +1031,7 @@ res_18 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 
@@ -1043,7 +1043,7 @@ res_19 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 
@@ -1055,7 +1055,7 @@ res_20 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 
@@ -1067,7 +1067,7 @@ res_21 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 
@@ -1079,7 +1079,7 @@ res_22 <- inla(
   control.predictor = list(
     compute = TRUE
   ),
-  control.compute = list(dic = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 results_frame <- newest_numbers
 dics <- c(res_17$dic$dic, res_18$dic$dic)

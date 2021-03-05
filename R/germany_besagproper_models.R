@@ -35,23 +35,23 @@ formula_1 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_2 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_3 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
   f(idarea_2, model = "iid")
 formula_4 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) +
   f(idarea_2, model = "iid")
 
 
@@ -186,7 +186,7 @@ map <- leaflet(results_frame) %>%
 saveWidget(
   map,
   paste(
-    "html_plots/germany_bym2_model_",
+    "html_plots/germany_besagproper_model_",
     which(dics %in% min(dics)),
     ".html",
     sep = ""
@@ -200,26 +200,26 @@ formula_5 <- CumNumberTestedIll ~
   pop_dens + urb_dens + sex + empfaenger_asylbewerber + schutzsuchende +
   sozialhilfe_empfaenger + arbeitslose_insgesamt +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_6 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + empfaenger_asylbewerber + schutzsuchende +
   sozialhilfe_empfaenger + arbeitslose_insgesamt +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_7 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + empfaenger_asylbewerber + schutzsuchende +
   sozialhilfe_empfaenger + arbeitslose_insgesamt +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
   f(idarea_2, model = "iid")
 formula_8 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + empfaenger_asylbewerber + schutzsuchende +
   sozialhilfe_empfaenger + arbeitslose_insgesamt +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) +
   f(idarea_2, model = "iid")
 
 
@@ -358,7 +358,7 @@ map <- leaflet(results_frame) %>%
 saveWidget(
   map,
   paste(
-    "html_plots/germany_bym2_model_",
+    "html_plots/germany_besagproper_model_",
     which(dics %in% min(dics)) + 4,
     ".html",
     sep = ""
@@ -370,24 +370,24 @@ formula_9 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + Gewerbesteuer + einkuenfte_gesamt +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_10 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + Gewerbesteuer + einkuenfte_gesamt +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 # now models with the infrastructure variables
 formula_11 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + Gewerbesteuer + einkuenfte_gesamt +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
   f(idarea_2, model = "iid")
 formula_12 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + Gewerbesteuer + einkuenfte_gesamt +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) +
   f(idarea_2, model = "iid")
 
 res_9 <- inla(
@@ -523,7 +523,7 @@ map <- leaflet(results_frame) %>%
 saveWidget(
   map,
   paste(
-    "html_plots/germany_bym2_model_",
+    "html_plots/germany_besagproper_model_",
     which(dics %in% min(dics)) + 8,
     ".html",
     sep = ""
@@ -536,26 +536,26 @@ formula_13 <- CumNumberTestedIll ~
   pop_dens + urb_dens + sex + Wahlbeteiligung + Union + SPD + Gruene + FDP +
   die_linke + afd + sonstige +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_14 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + Wahlbeteiligung + Union + SPD + Gruene + FDP +
   die_linke + afd + sonstige +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_15 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + Wahlbeteiligung + Union + SPD + Gruene + FDP +
   die_linke + afd + sonstige +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) + 
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) + 
   f(idarea_2, model = "iid")
 formula_16 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + Wahlbeteiligung + Union + SPD + Gruene + FDP +
   die_linke + afd + sonstige +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) + 
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) + 
   f(idarea_2, model = "iid")
 res_13 <- inla(
   formula_13,
@@ -696,7 +696,7 @@ map <- leaflet(results_frame) %>%
 saveWidget(
   map,
   paste(
-    "html_plots/germany_bym2_model_",
+    "html_plots/germany_besagproper_model_",
     which(dics %in% min(dics)) + 12,
     ".html",
     sep = ""
@@ -712,7 +712,7 @@ formula_17 <- CumNumberTestedIll ~
   die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
   arbeitslose_insgesamt + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_18 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + empfaenger_asylbewerber + Gewerbesteuer +
@@ -720,7 +720,7 @@ formula_18 <- CumNumberTestedIll ~
   die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
   arbeitslose_insgesamt + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_19 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + empfaenger_asylbewerber + Gewerbesteuer +
@@ -728,7 +728,7 @@ formula_19 <- CumNumberTestedIll ~
   die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
   arbeitslose_insgesamt + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
   f(idarea_2, model = "iid")
 formula_20 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
@@ -737,7 +737,7 @@ formula_20 <- CumNumberTestedIll ~
   die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
   arbeitslose_insgesamt + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) +
   f(idarea_2, model = "iid")
 
 res_17 <- inla(
@@ -871,7 +871,7 @@ map <- leaflet(results_frame) %>%
 saveWidget(
   map,
   paste(
-    "html_plots/germany_bym2_model_",
+    "html_plots/germany_besagproper_model_",
     which(dics %in% min(dics)) + 16,
     ".html",
     sep = ""
@@ -885,7 +885,7 @@ formula_21 <- CumNumberTestedIll ~
   university + platform + schools + college + banks + kindergarten + bakeries +
   gas + atm +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) 
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) 
 formula_22 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
@@ -893,14 +893,14 @@ formula_22 <- CumNumberTestedIll ~
   university + platform + schools + college + banks + kindergarten + bakeries +
   gas + atm +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) 
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) 
 formula_23 <- CumNumberTestedIll ~
   marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
   place_of_worship + retail + nursing_home + restaurant + aerodrome + office + 
   university + platform + schools + college + banks + kindergarten + bakeries +
   gas + atm +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
   f(idarea_2, model = "iid")
 formula_24 <- CumNumberTestedIll ~
   marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
@@ -908,7 +908,7 @@ formula_24 <- CumNumberTestedIll ~
   university + platform + schools + college + banks + kindergarten + bakeries +
   gas + atm +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) +
   f(idarea_2, model = "iid")
 
 res_21 <- inla(
@@ -1052,7 +1052,7 @@ map <- leaflet(results_frame) %>%
 saveWidget(
   map,
   paste(
-    "html_plots/germany_bym2_model_",
+    "html_plots/germany_besagproper_model_",
     which(dics %in% min(dics)) + 20,
     ".html",
     sep = ""
@@ -1070,7 +1070,7 @@ formula_25 <- CumNumberTestedIll ~
   die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
   arbeitslose_insgesamt + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) 
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) 
 formula_26 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
   marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
@@ -1081,7 +1081,7 @@ formula_26 <- CumNumberTestedIll ~
   die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
   arbeitslose_insgesamt + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) 
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) 
 formula_27 <- CumNumberTestedIll ~
   marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
   place_of_worship + retail + nursing_home + restaurant + aerodrome + office + 
@@ -1091,7 +1091,7 @@ formula_27 <- CumNumberTestedIll ~
   die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
   arbeitslose_insgesamt + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
   f(idarea_2, model = "iid")
 formula_28 <- CumNumberTestedIll ~
   marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
@@ -1102,7 +1102,7 @@ formula_28 <- CumNumberTestedIll ~
   die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
   arbeitslose_insgesamt + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) +
   f(idarea_2, model = "iid")
 
 res_25 <- inla(
@@ -1246,7 +1246,7 @@ map <- leaflet(results_frame) %>%
 saveWidget(
   map,
   paste(
-    "html_plots/germany_bym2_model_",
+    "html_plots/germany_besagproper_model_",
     which(dics %in% min(dics)) + 24,
     ".html",
     sep = ""
@@ -1260,26 +1260,26 @@ formula_29 <- CumNumberTestedIll ~
   sozialhilfe_empfaenger + arbeitslose_insgesamt + restaurant + banks +
   urb_dens + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_30 <- CumNumberTestedIll ~
   Gewerbesteuer + einkuenfte_gesamt + SPD + die_linke + afd + schutzsuchende +
   sozialhilfe_empfaenger + arbeitslose_insgesamt + restaurant + banks +
   urb_dens +  
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) 
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) 
 formula_31 <- CumNumberTestedIll ~
   Gewerbesteuer + einkuenfte_gesamt + SPD + die_linke + afd + schutzsuchende +
   sozialhilfe_empfaenger + arbeitslose_insgesamt + restaurant + banks +
   urb_dens + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
   f(idarea_2, model = "iid")
 formula_32 <- CumNumberTestedIll ~
   Gewerbesteuer + einkuenfte_gesamt + SPD + die_linke + afd + schutzsuchende +
   sozialhilfe_empfaenger + arbeitslose_insgesamt + restaurant + banks +
   urb_dens + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) +
   f(idarea_2, model = "iid")
 
 res_29 <- inla(
@@ -1423,7 +1423,7 @@ map <- leaflet(results_frame) %>%
 saveWidget(
   map,
   paste(
-    "html_plots/germany_bym2_model_",
+    "html_plots/germany_besagproper_model_",
     which(dics %in% min(dics)) + 28,
     ".html",
     sep = ""
@@ -1436,26 +1436,26 @@ formula_33 <- CumNumberTestedIll ~
   afd + schutzsuchende + sozialhilfe_empfaenger + arbeitslose_insgesamt +
   arbeitslose_auslaender + restaurant + urb_dens +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_34 <- CumNumberTestedIll ~
   empfaenger_asylbewerber + Gewerbesteuer + einkuenfte_gesamt + SPD + FDP +
   afd + schutzsuchende + sozialhilfe_empfaenger + arbeitslose_insgesamt +
   arbeitslose_auslaender + restaurant + urb_dens +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) 
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) 
 formula_35 <- CumNumberTestedIll ~
   empfaenger_asylbewerber + Gewerbesteuer + einkuenfte_gesamt + SPD + FDP +
   afd + schutzsuchende + sozialhilfe_empfaenger + arbeitslose_insgesamt +
   arbeitslose_auslaender + restaurant + urb_dens +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
   f(idarea_2, model = "iid")
 formula_36 <- CumNumberTestedIll ~
   empfaenger_asylbewerber + Gewerbesteuer + einkuenfte_gesamt + SPD + FDP +
   afd + schutzsuchende + sozialhilfe_empfaenger + arbeitslose_insgesamt +
   arbeitslose_auslaender + restaurant + urb_dens + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) +
   f(idarea_2, model = "iid")
 
 res_33 <- inla(
@@ -1599,11 +1599,11 @@ map <- leaflet(results_frame) %>%
 saveWidget(
   map,
   paste(
-    "html_plots/germany_bym2_model_",
+    "html_plots/germany_besagproper_model_",
     which(dics %in% min(dics)) + 32,
     ".html",
     sep = ""
   )
 )
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models")))
-save(models, file = "models/bym2_germany.Rda")
+save(models, file = "models/besagproper_germany.Rda")
