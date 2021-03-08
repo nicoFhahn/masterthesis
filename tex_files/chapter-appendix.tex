@@ -1,40 +1,12 @@
 % !TEX root = ../my-thesis.tex
 %
-\chapter{Example Appendix}
+\chapter{Appendix}
 \label{sec:appendix}
 
-\Blindtext[1][1]
-
-\section{Appendix Section 1}
-\label{sec:appendix:sec1}
-
-\Blindtext[1][1]
-
-\begin{table}[h]
-	\begin{tabularx}{\textwidth}{X | X | X}
-		%\hline
-		Alpha		& Beta			& Gamma			\\ \hline
-		0			& 1				& 2				\\ \hline
-		3			& 4				& 5				\\ %\hline
-	\end{tabularx}
-	\label{tab:table1}
-	\caption{This is a caption text.}
-\end{table}
-
-\section{Appendix Section 2}
-\label{sec:appendix:sec2}
-
-\Blindtext[1][1]
-
-\begin{table}[h]
-	\begin{tabularx}{\textwidth}{X | X | X}
-		%\hline
-		Alpha		& Beta			& Gamma			\\ \hline
-		0			& 1				& 2				\\ \hline
-		3			& 4				& 5				\\ %\hline
-	\end{tabularx}
-	\label{tab:table2}
-	\caption{This is a caption text.}
-\end{table}
-
-\Blindtext[1][2]
+\section{The Negative Binomial Distribution}
+The negative binomial distribution is a univariate probability distribution that belongs to the discrete probability distributions. It models the number of trials required to achieve a given number of successes in a Bernoulli process. \\
+The density is given by
+\begin{equation}
+    f\left(k,r,p\right)=\mathcal{P}\left(X=k\right)=\begin{pmatrix} k+r-1\\r-1\end{pmatrix}\left(1-p\right)^kp^r,
+\end{equation}
+with $r$ the number of successes, $k$ the number of failures, and $p$ the probability of success \cite{haldane1941fitting}.

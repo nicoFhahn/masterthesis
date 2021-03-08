@@ -3,6 +3,7 @@
 \chapter{Dataset Collection}
 As is often the case with statisticians, the construction of the dataset used to analyse a research question is an essential task and frequently involves the merging of multiple data sources to create a dataset. This was the case in this thesis and in the following chapter a brief overview of the data sources used, their pre-processing and how they were combined is given.
 \label{sec:datacollection}
+\clearpage
 \section{Covid-19 Data}
 \subsection*{Covid-19 Data for Norway}
 The Covid-19 data for Norway comes from a dataset made available to the public via the website \href{https://www.github.com}{Github.com}. The repository contains a daily updated dataset that is the result of combining several data sources, which include the Institute of Public Health and the Norwegian Directorate of Health. According to the author of the repository, the project is "an open-source effort to make data about the Covid-19 situation in Norway available to the public in a timely and coherent manner" \cite{thohan88}. \\
@@ -38,6 +39,7 @@ LK Rosenheim & 2020-03-10 & 6 & 260983 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\clearpage
 \section{Demographic Data}
 As demographics tend to differ between different geographic units, the decision was made to include demographic variables in the analysis of the research question to see if the risk for infection may be higher when a certain characteristic is present in the population.
 \subsection*{Demographic Data for Norway}
@@ -174,7 +176,7 @@ Finally, trade tax, income tax, and payroll tax data were collected, as shown in
 \caption{An excerpt from the tax data for Germany. Does not contain all variables. Income total is the sum of the income tax and the payroll tax for a given city/district.\label{taxGermany}}
 \begin{tabular}{l l r r r r}
 \toprule
-\textbf{District}	& \textbf{City}	& \textbf{trade tax}& \textbf{income total}\\
+\textbf{District}	& \textbf{City}	& \textbf{trade\_tax}& \textbf{income\_total}\\
 \midrule
 2000 & Hamburg, City & 472,517,476 & 42,524,847\\
 8221 & Heidelberg, City & 23,285,772 & 3,465,746\\
@@ -183,17 +185,20 @@ Finally, trade tax, income tax, and payroll tax data were collected, as shown in
 \bottomrule
 \end{tabular}
 \end{table}
+\clearpage
 \section{Shapefiles}
 In addition to numeric variables, the dataset also contains a geographic variable containing the geographic boundaries of a given municipality or city/district.
 \subsection*{Shapefiles for Norway}
 The data for the Norwegian shapefiles comes from Geonorge \cite{geonorge} and is downloaded from a Github repository, as the data there was in a cleaner state \cite{shapeGithub}. In addition to the geographic shape, the dataset also includes a variable that contains the ID of each municipality.
 \subsection*{Shapefiles for Germany}
 The data for the German shapefiles comes from Esri Germany \cite{esri}.
+\clearpage
 \section{OpenStreetMap Data}
 OpenStreetMap (OSM) is a free project that collects, structures and stores freely usable geodata in a database for use by anyone (Open Data). This data is available under a free license, the Open Database License. The core of the project is therefore an openly accessible database of all contributed geoinformation \cite{OpenStreetMap}. \\
 In R, the OpenStreetMap API can be queried using the R package \texttt{osmdata} \cite{osmdata}. To download all locations of a given type in a given region, a shape or bounding box must be specified along with a key and optionally a value. These key-value pairs are used to specify the type of location, for example, the "amenity" key is used for all facilities used by visitors and residents. If you use the "biergarten" value together with the "amenity" key, the locations of all beer gardens in a given geographic region will be downloaded. \\
 OpenStreetMap users have the option to map a location as either \texttt{POINT}, \texttt{POLYGON}, \texttt{MULTIPOLYGON}, \texttt{LINESTRING}, or \texttt{MULTILINESTRING}. Conventionally, the first three are used. Therefore, only sites mapped as one of these were used for this work. If a location was mapped as either \texttt{POLYGON} or \texttt{MULTIPOLYGON}, the centroid of the location was calculated. \\
 A complete list of all key-value pairs used for this work can be found in the Appendix. 
+\clearpage
 \section{Data Wrangling}
 The final step before analyzing the research question at hand is to combine all of these data sources into one dataset. This section will show how this was achieved.
 \subsection*{Data Wrangling for Norway}
@@ -267,7 +272,7 @@ The data processing procedure for Germany is identical to that for Norway. First
 \caption{An excerpt from the merged data. Does not contain all variables.\label{finalGermany}}
 \begin{tabular}{l l r r r r}
 \toprule
-\textbf{District}	& \textbf{City}	& \textbf{trade tax}& \textbf{AfD}\\
+\textbf{District}	& \textbf{City}	& \textbf{trade\_tax}& \textbf{AfD}\\
 \midrule
 2000 & Hamburg, City & 472,517,476 & 51649 & 593\\
 8221 & Heidelberg, City & 23,285,772 & 4303 & 53\\

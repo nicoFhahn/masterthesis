@@ -4,6 +4,7 @@
 \label{sec:bayes}
 %\cleanchapterquote{A picture is worth a thousand words. An interface is worth a thousand pictures.}{Ben Shneiderman}{(Professor for Computer Science)} \\
 Bayesian Inference is a method of statistical inference that uses Bayes' theorem to update the probability of a hypothesis as more data are observed or more information becomes available. It is an essential technique in mathematical statistics and the polar opposite of the frequentist approach, which makes predictions based solely on data from an experiment. In the Bayesian approach a \textit{prior} distribution $\pi\left(\pmb{\theta}, \sigma^2\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\pmb{\theta}$ and $\sigma^2$ prior to obtaining the data. Using the prior distribution, the likelihood function $\pi\left(\pmb{x}|\pmb{\theta},\sigma^2\right)$, and the observed data $x$, it is possible to calculate the probability distribution $\pi\left(\pmb{\theta},\sigma^2\right|\pmb{x})$ of $\pmb{\theta}$ and $\sigma^2$ given the data $\pmb{x}$. This distribution is called the \textit{posterior} distribution of $\pmb{\theta}$ and $\sigma^2$ an is used to make inferences about the parameters \autocite[][6]{box2011bayesian}.
+\clearpage
 \section{Preliminaries}
 This work follows strict notation rules to easily represent different elements such as matrices or graphs and contains frequently used abbreviations. These and some other basic concepts used in this work are introduced below. The notation follows the one used by Rue and Held \autocite[][14--19]{rue2005gaussian}.
 \subsubsection*{Matrices and Vectors}
@@ -162,7 +163,7 @@ Some basic properties of the multivariate normal distribution are the following.
     \item[4.] If $\pmb{x}\sim\mathcal{N}\left(\pmb{\mu}, \pmb{\Sigma}\right)$ and $\pmb{x}'\sim\mathcal{N}\left(\pmb{\mu'}, \pmb{\Sigma'}\right)$ are independent, 
     \item[]then $\pmb{x}+\pmb{x'}\sim\mathcal{N}\left(\pmb{\mu}+ \pmb{\mu'}, \pmb{\Sigma}+ \pmb{\Sigma'}\right)$ \autocite[][19--20]{rue2005gaussian}.
 \end{itemize}
-
+\clearpage
 \section{Prior Selection}
 \subsection{Conjugate Priors}
 One property of exponential families is that they have conjugate priors \autocite[][]{diaconis1979conjugate}, which is an important property in Bayesian statistics. If the posterior distribution $\pi\left(\pmb{\theta}|\pmb{x}\right)$ and the prior distribution $\pi\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $\pi\left(\pmb{x}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. These priors were first discussed and formalised by Raifa and Schlaifer in 1961 \autocite[][]{raiffaapplied}. \\
