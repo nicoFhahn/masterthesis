@@ -9,9 +9,10 @@ library(mlr)
 library(randomForestSRC)
 library(spdep)
 source("R/preprocess_norge.R")
+parallelMap::parallelStartSocket(6)
 sel <- INLAModelSel(
   "value",
-  colnames(newest_numbers)[c(9:15, 23, 24:43, 45:62, 65:70, 72, 80:82)],
+  colnames(newest_numbers)[c(17:37, 39:56, 58:64, 66, 74:76)],
   "idarea_1",
   "iid",
   "nbinomial",

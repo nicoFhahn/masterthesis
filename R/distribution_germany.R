@@ -1,5 +1,5 @@
 library(fitdistrplus)
-source("R/preprocess_norge.R")
+source("R/preprocess_germany.R")
 # create the cullen and frey graph
 descdist(newest_numbers$CumNumberTestedIll, discrete = TRUE)
 # try poission, negative binomial and normal distribution
