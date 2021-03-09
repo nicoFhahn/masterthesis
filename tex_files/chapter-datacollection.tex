@@ -259,6 +259,7 @@ Using the \texttt{st\_intersects()} function from the \texttt{sf} \cite{sf} R pa
 \end{tabular}
 \end{table}
 For each variable representing an absolute number, e.g. the number of schools or the number of employees, this number was calculated per 1000 inhabitants of the respective area. \\
+If there were missing values in the covariates, these values were imputed using the median of the respective variable. \\
 Finally, four new variables were created:
 \begin{itemize}
     \item[1.] higher\_educ, which counts the number of universities and colleges in a given area.
@@ -267,17 +268,18 @@ Finally, four new variables were created:
     \item[3.] urb\_dens, i.e. the number of residential buildings per square kilometer in a given area.
 \end{itemize}
 \subsection*{Data Wrangling for Germany}
-The data processing procedure for Germany is identical to that for Norway. First, all demographic variables were loaded and left unchanged before being merged with the Covid-19 data prior to calculating the spatial intersections between the points of interest and the NUTS-3 areas. After merging all the data, the numbers per 1000 inhabitants were calculated for the variables containing absolute numbers. Finally, the same four new variables were created. An example of this final dataset is shown in Table~\ref{finalGermany}.
+The data processing procedure for Germany is identical to that for Norway. First, all demographic variables were loaded and left unchanged before being merged with the Covid-19 data prior to calculating the spatial intersections between the points of interest and the NUTS-3 areas. After merging all the data, the numbers per 1000 inhabitants were calculated for the variables containing absolute numbers. For the variables containing the number of people who voted for a particular political party, the relative percentage of votes the party received was calculated. Again, missing values were imputed using the median.
+Finally, the same four new variables were created. An example of this final dataset is shown in Table~\ref{finalGermany}.
 \begin{table}[H] 
 \caption{An excerpt from the merged data. Does not contain all variables.\label{finalGermany}}
 \begin{tabular}{l l r r r r}
 \toprule
-\textbf{District}	& \textbf{City}	& \textbf{trade\_tax}& \textbf{AfD}\\
+\textbf{District}	& \textbf{City}	& \textbf{trade\_tax}& \textbf{AfD} & \textbf{shops}\\
 \midrule
-2000 & Hamburg, City & 472,517,476 & 51649 & 593\\
-8221 & Heidelberg, City & 23,285,772 & 4303 & 53\\
-9162 & München, City &  489,476,177 &  36282 & 475\\
-9187 & Rosenheim, District & 33,758,111 & 10275 & 33\\
+2000 & Hamburg, City & 256638.5  & 0.0648 & 0.544\\
+8221 & Heidelberg, City & 145213.9  & 0.0616 & 0.599\\
+9162 & München, City &  332635.8  &  0.0598 & 0.582\\
+9187 & Rosenheim, District & 129349.8 & 0.0834 & 0.682\\
 \bottomrule
 \end{tabular}
 \end{table}

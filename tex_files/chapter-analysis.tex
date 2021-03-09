@@ -40,7 +40,6 @@ After looking at the standardised incidence rates for the countries of interest,
     \item[1.] The Besarg-Yollie-Mollie Model
     \item[2.] Besags Proper Spatial Model
     \item[3.] The Leroux-Model
-    \item[4.] A hierarchical model using the negative binomial distribution
 \end{itemize}
 Three measures are used to compare the models, the DIC, the WAIC and the CPO. \\
 Before the models are computed, however, the distribution that fits the number of cases must first be found. For this, the function \texttt{descdist()} from the \texttt{fitdistrplus} R package is used. With this function, descriptive parameters of an empirical distribution can be calculated and a skewness-kurtosis plot is provided. The plots for Germany and Norway can be seen in Figure~\ref{cf_germany} and Figure~\ref{cf_norge}.
@@ -119,10 +118,9 @@ For all countries, the models were computed with
         \item[3.2] With variable selection
     \end{itemize}
 \end{itemize}
-For each model type, different values for the penalised prior component were tried. As this resulted in a large number of models, only the model with the best performance for each model class is examined in more detail. To decide which models perform best, the DIC, WAIC and CPO are used.
+For each model type, different values for the penalised prior component were tried. As this resulted in a large number of models, only the model with the best performance for each model class is examined in more detail. To decide which models perform best, the DIC, WAIC and CPO are used. A list of all calculated models along with their performance measures is provided in the appendix.
 \subsection{Spatial Models for Germany}
-First, a look is taken at the spatial models calculated for Germany. All models are run with the INLA \cite{rinla} R package.
-\subsubsection{BYM2-Models}
+First, a look is taken at the spatial models calculated for Germany. All models are run with the INLA \cite{rinla} R package.\\
 To specify a BYM2-2 model in R, the following code can be used:
 \begin{lstlisting}[language=R]
 # Specify a prior distribution
@@ -161,53 +159,158 @@ res_1 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 \end{lstlisting}
-In the example above, a random effect is added to the model. As this random effect can sometimes cover the true effects, models with and without such an effect were computed. \\
-\textbf{Models Based on the Demographic Variables} \\
-The best performing model based on demographic variables used the following formula and achieved the following performance:
+In the example above, a random effect is added to the model. As this random effect can sometimes cover the true effects however, all models were computed without such an effect.
+% SCHREIB WIE DU DAS MIT DEN RANKS GEMACHT HAST DU IDIOT
+\subsubsection{Demographic Models}
+The best performing model based on demographic variables was a Leroux model that was computing using the following formula:
 \begin{lstlisting}[language=R]
-prior_2 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(0.5 / 0.31, 0.01)
-  )
-)
-formula_10 <- CumNumberTestedIll ~
+formula_7_leroux <- CumNumberTestedIll ~
   pop_dens + urb_dens + sex + trade_tax + income_total +
   f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_2
+    idarea_1, model = "generic1", Cmatrix = C,
+    hyper = prior_1
   )
 \end{lstlisting}
+The performance measure of this model and the best performing BYM2 and Besag proper model are shown in Table~\ref{demoGermany}. In total, 45 models were computed. The Leroux model was the best in terms of DIC and it also performed well in terms of the CPO. In fact, the 15 best models in terms of the CPO were all Leroux models. The best BYM2 model showed good performance in terms of the DIC and WAIC whereas Besags proper spatial model only showed good performance in terms of the WAIC.
 \begin{table}[H] 
-\caption{The performance measures for model 10 \label{model10}}
-\begin{tabular}{l l r}
+\caption{The performance measures for the best performing demographic model of each type. The rank in terms of each performance measure is denoted in the brackets. \label{demoGermany}}
+\begin{tabular}{l l l l}
 \toprule
-\textbf{Model}	& \textbf{Performance Measure}	& \textbf{Value} \\
+\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} \\
 \midrule
-Model 10 & DIC & 5627 \\
-Model 10 & WAIC & 5557 \\
-Model 10 & CPO & -3366 \\
+Leroux & 5598 (1) & 5665 (20) & -3818 (7) \\
+BYM2 & 5630 (5) & 5576 (3) & -3343 (30)\\
+Besags Proper  & 5680 (17) & 5604 (7) & -3334 (34) \\
 \bottomrule
 \end{tabular}
 \end{table}
-The fixed effects summaries are presented in Table~\ref{fixed10}. It can be seen that higher population density, higher urban density and more trade tax revenue, as well as more income in general, result in a population having a higher risk of contracting Covid-19. The risk of becoming infected decreases when the proportion of women in a population increases.
+The fixed effects summaries are presented in Table~\ref{fixedDemoGermany}. By exponentiating the coefficients, they can more easily be interpreted. To get these values, the following code can be used:
+\begin{lstlisting}[language=R]
+# get the exponentiated value
+inla.emarginal(exp, model_7_leroux$marginals.fixed$pop_dens)
+# calculate the increase in risk if the 
+# population ensity increases by 100
+inla.emarginal(
+  exp,
+  model_7_leroux$marginals.fixed$pop_dens
+  ) ^ 100
+\end{lstlisting}
 \begin{table}[H] 
-\caption{The fixed effects for model 10. Values are rounded. \label{fixed10}}
+\caption{The fixed effects for model 9. Values are rounded. \label{fixedDemoGermany}}
+\begin{tabular}{l r r r r}
+\toprule
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean)} \\
+\midrule
+(Intercept) & 2.77 & 42.6\\
+pop\_dens & 0.00012 & 1.000125\\
+urb\_dens &  -0.00091 & 0.999\\
+sex & -5.25 & 0.252\\
+trade\_tax & 0.00000053& 1.000001 \\
+income\_total & -0.000015 & 0.999\\
+\bottomrule
+\end{tabular}
+\end{table}
+From this summary it can be seen that if the population density or the income by trade tax increases the relative risk of getting increases as well. An increase of 100 in terms of the population density leads to around a 1.01\% higher risk of getting infected and an increase of 20000€ / 1000 inhabitants leads to a 1.01\% increase in the risk of getting infected. \\
+However having a higher income overall decreases the risk of infection, therefore people living in economically poorer regions of Germany have a greater risk of contracting the virus. An increase in total income by 1000€ / 1000 inhabitants decreases the infection risk by around 1.6\%. A higher urban density too slightly decreases the risk of contracting Covid-19, for instance an increase by 10 in urban density leads to a decrease in the relative risk by 1\%. Lastly, regions with a higher proportion of females living there are at a lower risk of infection, as an increase in the female proportion by 0.01 leads to a risk decrease of 1.4\%. \\
+A plot of the relative risk is shown in Figur~\ref{relriskDemoGermany}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = 0.8\textwidth]{demo_germany.svg}
+%     \caption{The relative risk for contracting Covid-19 based on demographic variables}
+%     \label{relriskDemoGermany}
+% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{tex_files/demo_germany.png}
+    \caption{The relative risk for contracting Covid-19 based on demographic variables}
+    \label{relriskDemoGermany}
+\end{figure}
+\textbf{Models Based on the Infrastructure Variables} \\
+The best performing model based on the infrastructural variables used the following formula and achieved the following performance:
+\begin{lstlisting}[language=R]
+formula_11 <- CumNumberTestedIll ~
+  marketplace + entertainment + sport + clinic + toilet +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + university + platform +
+  schools + college + banks + kindergarten + bakeries +
+  gas + atm +
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  )
+\end{lstlisting}
+\begin{table}[H] 
+\caption{The performance measures for model 1 and 11\label{model11}}
+\begin{tabular}{l r r r}
+\toprule
+\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} \\
+\midrule
+Model 1 & 5637 & 5581 & -3358 \\
+Model 11 & 5687 & 5653 & -3367 \\
+\bottomrule
+\end{tabular}
+\end{table}
+This model performed worse in terms of both the DIC and WAIC, but better than the first model in terms of the CPO. \\
+The fixed effects summaries are shown in Table~\ref{fixed11}. The intercept for this model is lower due to the addition of more variables to the model. The four main driving factors for higher risk of contracting Covid-19 are marketplaces; entertainment venues, defined as cinemas, theatres and nightclubs; airports; and shops. Since both marketplaces and entertainment venues tend to attract large audiences, it is perhaps not surprising that a greater number of these establishments leads to a higher risk of contracting a viral disease. The same is true for shops which are defined as supermarkets, convenience stores and drugstores, also resulting in a higher risk of becoming infected, although it is lower than for marketplaces and places of entertainment. Aerodromes too result in a higher risk of infection, as many people congregate here as well, and potentially people coming from risk areas. Gas stations and banks, on the other hand, reduce the risk the most. However, this does not necessarily mean that these types of buildings make an area safer.
+\begin{table}[H] 
+\caption{The fixed effects for model 11. Values are rounded. Not all variables are included\label{fixed11}}
 \begin{tabular}{l r r r r}
 \toprule
 \textbf{Variable}	& \textbf{Mean}	& \textbf{SD} \\
 \midrule
-(Intercept) & 1.61 & 1.07 \\
-pop\_dens & 0.000051 & 0.000026 \\
-urb\_dens & 0.053 & 0.058 \\
-sex & -3.43 & 2.12 \\
-trade\_tax & 0.00000000023 & 0.00000000042 \\
-income\_total &  0.0000000012 & 0.0000000042 \\
+(Intercept) & 0.081 & 0.10 \\
+marketplace & 1.11 & 0.71 \\
+aerodrome & 0.43 & 0.68 \\
+entertainment & 0.42 & 0.37 \\
+shops & 0.25 & 0.17 \\
+banks & -0.27 & 0.17 \\
+gas & -0.31 & 0.15 \\
 \bottomrule
 \end{tabular}
 \end{table}
-\textbf{Models Based on the Infrastructure Variables} \\
 \textbf{Models Based on All Variables} \\
+The best performing model based on all variables used the following formula and achieved the following performance:
+\begin{lstlisting}[language=R]
+formula_11 <- CumNumberTestedIll ~
+  marketplace + entertainment + sport + clinic + toilet +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + university + platform +
+  schools + college + banks + kindergarten + bakeries +
+  gas + atm +
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  )
+\end{lstlisting}
+\begin{table}[H] 
+\caption{The performance measures for model 1 and 11\label{model11}}
+\begin{tabular}{l r r r}
+\toprule
+\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} \\
+\midrule
+Model 1 & 5637 & 5581 & -3358 \\
+Model 11 & 5687 & 5653 & -3367 \\
+\bottomrule
+\end{tabular}
+\end{table}
+This model performed worse in terms of both the DIC and WAIC, but better than the first model in terms of the CPO. \\
+The fixed effects summaries are shown in Table~\ref{fixed11}. The intercept for this model is lower due to the addition of more variables to the model. The four main driving factors for higher risk of contracting Covid-19 are marketplaces; entertainment venues, defined as cinemas, theatres and nightclubs; airports; and shops. Since both marketplaces and entertainment venues tend to attract large audiences, it is perhaps not surprising that a greater number of these establishments leads to a higher risk of contracting a viral disease. The same is true for shops which are defined as supermarkets, convenience stores and drugstores, also resulting in a higher risk of becoming infected, although it is lower than for marketplaces and places of entertainment. Aerodromes too result in a higher risk of infection, as many people congregate here as well, and potentially people coming from risk areas. Gas stations and banks, on the other hand, reduce the risk the most. However, this does not necessarily mean that these types of buildings make an area safer.
+\begin{table}[H] 
+\caption{The fixed effects for model 11. Values are rounded. Not all variables are included\label{fixed11}}
+\begin{tabular}{l r r r r}
+\toprule
+\textbf{Variable}	& \textbf{Mean}	& \textbf{SD} \\
+\midrule
+(Intercept) & 0.081 & 0.10 \\
+marketplace & 1.11 & 0.71 \\
+aerodrome & 0.43 & 0.68 \\
+entertainment & 0.42 & 0.37 \\
+shops & 0.25 & 0.17 \\
+banks & -0.27 & 0.17 \\
+gas & -0.31 & 0.15 \\
+\bottomrule
+\end{tabular}
+\end{table}
 \textbf{Models Based on Variable Selection} 
 \subsubsection{Besag-Proper-Models}
 \subsubsection{Leroux-Models}
