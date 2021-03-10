@@ -12,11 +12,14 @@ start <- Sys.time()
 source("R/preprocess_germany.R")
 start <- Sys.time()
 parallelMap::parallelStartSocket(7)
+set.seed(420)
 sel <- INLAModelSel(
   "CumNumberTestedIll",
-  colnames(newest_numbers)[c(2, 5, 6, 8:17, 22, 23, 42:56, 59:64, 73:76)],
-  Family = "nbinomial",
-  Data = newest_numbers
+  colnames(newest_numbers)[c(2:5, 8:18, 26:40, 43:48, 56:58, 60)],
+  "idarea_1",
+  "iid",
+  "nbinomial",
+  newest_numbers
 )
 parallelMap::parallelStop()
 Sys.time() - start

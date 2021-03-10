@@ -12,8 +12,8 @@ library(SpatialEpi)
 library(stringr)
 # load the data
 source("R/preprocess_germany.R")
-color_low <- "#84dcc6"
-color_high <- "#ef233c"
+color_low <- "#002FA7"
+color_high <- "#F50039"
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = sir)) +
   ggtitle(
@@ -27,31 +27,30 @@ plot_1 <- ggplot(data = newest_numbers) +
     midpoint = 1
   ) +
   theme_minimal()
-newest_numbers_south <- newest_numbers[unlist(lapply(lapply(newest_numbers$geometry, st_bbox), function(x) x[4] <= 64)), ]
+plot_1
 rc1 <- colorRampPalette(
   c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
+    "#002FA7",
+    "#0040E0",
+    "#0A50FF",
+    "#336DFF",
+    "#5C8Aff",
+    "#85A7FF",
+    "#ADC5FF",
+    "#D6E2FF",
+    "#FFFFFF"
   ),
   space = "Lab"
-)(12)
+)(10)
 rc2 <- colorRampPalette(
   c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
+    "#FFEBEF",
+    "#FFC2D0",
+    "#FF99B1",
+    "#FF7092",
+    "#FF4772",
+    "#FF1F53",
+    "#F50039"
   ),
   space = "Lab"
 )(round(10 * range(newest_numbers$sir)[2] - 10))

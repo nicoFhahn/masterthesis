@@ -12,7 +12,7 @@ source("R/preprocess_norge.R")
 parallelMap::parallelStartSocket(6)
 sel <- INLAModelSel(
   "value",
-  colnames(newest_numbers)[c(17:37, 39:56, 59:64, 66, 74:76)],
+  colnames(newest_numbers)[c(17:37, 39:56, 58:64, 66, 74:76)],
   "idarea_1",
   "iid",
   "nbinomial",

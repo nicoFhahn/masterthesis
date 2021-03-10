@@ -3,7 +3,8 @@
 \chapter{Introduction to Bayesian Inference}
 \label{sec:bayes}
 %\cleanchapterquote{A picture is worth a thousand words. An interface is worth a thousand pictures.}{Ben Shneiderman}{(Professor for Computer Science)} \\
-Bayesian Inference is a method of statistical inference that uses Bayes' theorem to update the probability of a hypothesis as more data are observed or more information becomes available. It is an essential technique in mathematical statistics and the polar opposite of the frequentist approach, which makes predictions based solely on data from an experiment. In the Bayesian approach a \textit{prior} distribution $p\left(\pmb{\theta}, \sigma^2\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\pmb{\theta}$ and $\sigma^2$ prior to obtaining the data. Using the prior distribution, the likelihood function $p\left(\pmb{x}|\pmb{\theta},\sigma^2\right)$, and the observed data $x$, it is possible to calculate the probability distribution $p\left(\pmb{\theta},\sigma^2\right|\pmb{x})$ of $\pmb{\theta}$ and $\sigma^2$ given the data $\pmb{x}$. This distribution is called the \textit{posterior} distribution of $\pmb{\theta}$ and $\sigma^2$ an is used to make inferences about the parameters \autocite[][6]{box2011bayesian}.
+Bayesian Inference is a method of statistical inference that uses Bayes' theorem to update the probability of a hypothesis as more data are observed or more information becomes available. It is an essential technique in mathematical statistics and the polar opposite of the frequentist approach, which makes predictions based solely on data from an experiment. In the Bayesian approach a \textit{prior} distribution $\pi\left(\pmb{\theta}, \sigma^2\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\pmb{\theta}$ and $\sigma^2$ prior to obtaining the data. Using the prior distribution, the likelihood function $\pi\left(\pmb{x}|\pmb{\theta},\sigma^2\right)$, and the observed data $x$, it is possible to calculate the probability distribution $\pi\left(\pmb{\theta},\sigma^2\right|\pmb{x})$ of $\pmb{\theta}$ and $\sigma^2$ given the data $\pmb{x}$. This distribution is called the \textit{posterior} distribution of $\pmb{\theta}$ and $\sigma^2$ an is used to make inferences about the parameters \autocite[][6]{box2011bayesian}.
+\clearpage
 \section{Preliminaries}
 This work follows strict notation rules to easily represent different elements such as matrices or graphs and contains frequently used abbreviations. These and some other basic concepts used in this work are introduced below. The notation follows the one used by Rue and Held \autocite[][14--19]{rue2005gaussian}.
 \subsubsection*{Matrices and Vectors}
@@ -66,18 +67,18 @@ A sufficient, but not necessary condition for a (symmetrical) matrix to be SPD i
 \section{Basic Concepts of Bayesian Theory}
 \subsection{Bayes' Theorem}
 At the heart of Bayesian inference is \textit{Bayes' theorem}, which describes the probability of an event given prior knowledge of factors that might influence the event. \\
-Let $\pmb{x}^T=\left(x_1,...,x_n\right)$ be a vector of $n$ observations whose probability distribution $p\left(\pmb{x}|\pmb{\theta}\right)$ depends on the values of $k$ parameters $\pmb{\theta}^T=\left(\theta_1,...,\theta_k\right)$. Let $p\left(\pmb{\theta}\right)$ be the probability distribution of $\pmb{\pmb{\theta}}$. Then 
+Let $\pmb{x}^T=\left(x_1,...,x_n\right)$ be a vector of $n$ observations whose probability distribution $\pi\left(\pmb{x}|\pmb{\theta}\right)$ depends on the values of $k$ parameters $\pmb{\theta}^T=\left(\theta_1,...,\theta_k\right)$. Let $\pi\left(\pmb{\theta}\right)$ be the probability distribution of $\pmb{\pmb{\theta}}$. Then 
 \begin{equation}
-    p\left(\pmb{x}|\pmb{\theta}\right)p\left(\pmb{\theta}\right)=p\left(\pmb{x},\pmb{\theta}\right) = p\left(\pmb{\theta}|\pmb{x}\right)p\left(\pmb{x}\right).
+    \pi\left(\pmb{x}|\pmb{\theta}\right)\pi\left(\pmb{\theta}\right)=\pi\left(\pmb{x},\pmb{\theta}\right) = \pi\left(\pmb{\theta}|\pmb{x}\right)\pi\left(\pmb{x}\right).
 \end{equation}
 Given the observed data $\pmb{x}$, the conditional distribution of $\pmb{\theta}$ is
 \begin{equation}
-    p\left(\pmb{\theta}|\pmb{x}\right)=\frac{\pmb{p}\left(\pmb{x}|\pmb{\theta}\right)p\left(\pmb{\theta}\right)}{p\left(\pmb{x}\right)}.
+    \pi\left(\pmb{\theta}|\pmb{x}\right)=\frac{\pmb{p}\left(\pmb{x}|\pmb{\theta}\right)\pi\left(\pmb{\theta}\right)}{\pi\left(\pmb{x}\right)}.
 \end{equation}
-This last statement is known as Bayes' theorem \autocite[][]{bayes1763lii}. The \textit{prior} distribution $p\left(\pmb{\theta}\right)$ contains knowledge about $\pmb{\theta}$ without knowledge of the data. $p\left(\pmb{\theta}|\pmb{x}\right)$ contains what is known about $\pmb{\theta}$ given knowledge of the data and is the \textit{posterior} distribution of $\pmb{\theta}$ given $\pmb{x}$. \\
-If $p\left(\pmb{x}|\pmb{\theta}\right)$ is considered as a function of $\pmb{\theta}$ instead of $\pmb{x}$, it is called the \textit{likelihood function} of $\pmb{\theta}$ given $\pmb{x}$ and can be written as $l\left(\pmb{\theta}|\pmb{x}\right)$. Thus Bayes' theorem can be written as
+This last statement is known as Bayes' theorem \autocite[][]{bayes1763lii}. The \textit{prior} distribution $\pi\left(\pmb{\theta}\right)$ contains knowledge about $\pmb{\theta}$ without knowledge of the data. $\pi\left(\pmb{\theta}|\pmb{x}\right)$ contains what is known about $\pmb{\theta}$ given knowledge of the data and is the \textit{posterior} distribution of $\pmb{\theta}$ given $\pmb{x}$. \\
+If $\pi\left(\pmb{x}|\pmb{\theta}\right)$ is considered as a function of $\pmb{\theta}$ instead of $\pmb{x}$, it is called the \textit{likelihood function} of $\pmb{\theta}$ given $\pmb{x}$ and can be written as $l\left(\pmb{\theta}|\pmb{x}\right)$. Thus Bayes' theorem can be written as
 \begin{equation}
-    p\left(\pmb{\theta}|\pmb{x}\right)=l\left(\pmb{\theta}|\pmb{x}\right)p\left(\pmb{\theta}\right).
+    \pi\left(\pmb{\theta}|\pmb{x}\right)=l\left(\pmb{\theta}|\pmb{x}\right)\pi\left(\pmb{\theta}\right).
 \end{equation}
 It is evident that the posterior distribution of $\pmb{\theta}$ given the data $\pmb{x}$ is proportional to the product of the distribution of $\pmb{\theta}$ prior to observing the data and the likelihood function of $\pmb{\theta}$ given $\pmb{x}$. Therefore,
 \begin{equation*}
@@ -143,7 +144,7 @@ Important members of the exponential family are the normal, binomial, Poisson, g
 \subsection{The Multivariate Normal Distribution}
 The density of a normally distributed random variable $\pmb{x}=\left(x_1,...,x_n\right)^T, n<\infty$ with mean vector $\pmb{\mu}$ ($n\times1$) and SPD covariance matrix $\Sigma$ ($n\times n$) is
 \begin{equation}
-    \pi\left(\pmb{x}\right)=\left(2\pi\right)^{-n/2}|\pmb{\Sigma}|^{-1/2}\exp\left(-\frac{1}{2}\left(\pmb{x}-\pmb{\mu}\right)^T\pmb{\Sigma}^{-1}\left(\pmb{x}-\pmb{\mu}\right)\right),\hspace{5pt}\pmb{x}\in\mathbb{R}^n
+    \pi\left(\pmb{x}\right)=\left(2\pi\right)^{-n/2}|\pmb{\Sigma}|^{-1/2}\exp\pi\left(-\frac{1}{2}\left(\pmb{x}-\pmb{\mu}\right)^T\pmb{\Sigma}^{-1}\left(\pmb{x}-\pmb{\mu}\right)\right),\hspace{5pt}\pmb{x}\in\mathbb{R}^n
 \end{equation}
 Here, $\mu_i=\mathbb{E}\left[x_i\right]$, $ \Sigma_{ij}=\hbox{Cov}\left(x_i,x_j\right)$, $ \Sigma_{ii}=\hbox{Var}\left(x_i\right) > 0$ and $\hbox{Corr}\left(x_i,x_j\right)=\Sigma_{ij}/\left(\Sigma_{ii}\Sigma_{jj}\right)^{1/2}$. This is written as $\pmb{x}\sim\mathcal{N}\left(\pmb{\mu},\pmb{\Sigma}\right)$. For $n=1$, $\mu=0$ and $\Sigma_{11}=1$ the standard normal distribution is obtained. \\
 $\pmb{x}$ is now split up into $\pmb{x}=\left(\pmb{x}_{\pmb{A}}^T,\pmb{x}_{\pmb{B}}^T\right)$ and $\pmb{\mu}$ and $\pmb{\Sigma}$ are divided accordingly:
@@ -162,12 +163,32 @@ Some basic properties of the multivariate normal distribution are the following.
     \item[4.] If $\pmb{x}\sim\mathcal{N}\left(\pmb{\mu}, \pmb{\Sigma}\right)$ and $\pmb{x}'\sim\mathcal{N}\left(\pmb{\mu'}, \pmb{\Sigma'}\right)$ are independent, 
     \item[]then $\pmb{x}+\pmb{x'}\sim\mathcal{N}\left(\pmb{\mu}+ \pmb{\mu'}, \pmb{\Sigma}+ \pmb{\Sigma'}\right)$ \autocite[][19--20]{rue2005gaussian}.
 \end{itemize}
-\section{Conjugate Priors}
-One property of exponential families is that they have conjugate priors, which is an important property in Bayesian statistics. If the posterior distribution $p\left(\pmb{\theta}|\pmb{x}\right)$ and the prior distribution $p\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $p\left(\pmb{x}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. The term was introduced by Raiffa and Schlaifer \autocite[][]{raiffaapplied}, and the property that all members of the exponential family have conjugate priorities was shown by Diaconis and Ylvisaker \autocite[][]{diaconis1979conjugate}.
-\section{Penalised Complexity Priors}
+\clearpage
+\section{Prior Selection}
+\subsection{Conjugate Priors}
+One property of exponential families is that they have conjugate priors \autocite[][]{diaconis1979conjugate}, which is an important property in Bayesian statistics. If the posterior distribution $\pi\left(\pmb{\theta}|\pmb{x}\right)$ and the prior distribution $\pi\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $\pi\left(\pmb{x}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. These priors were first discussed and formalised by Raifa and Schlaifer in 1961 \autocite[][]{raiffaapplied}. \\
+The construction of a conjugate prior is done by factorising the likelihood function into two parts. One part must be independent of the parameter(s) of interest but can be dependent on the data, while the other factor is a function that depends on the parameter(s) of interest and is dependent on the data only through the sufficient statistics. The family of conjugate priors is by definition proportional to the second factor. The posterior distribution resulting from the conjugate prior is itself a member of the same family as the conjugate prior \autocite[][]{raiffaapplied}. In cases where the prior and posterior distributions are part of the same family, the prior is said to be closed under sampling. Furthermore, since the data are only incorporated into the posterior distribution through the sufficient statistics, there exist relatively simple formulas for updating the prior into the posterior \autocite[][]{fink1997compendium}. An example of the construction of a conjugated prior is provided in the appendix. \\
+A drawback of conjugated priors is that the a priori known information about $\mu$ may be insufficient for determining both parameters or may be inconsistent with the structure imposed by conjugacy \autocite[][]{robert2010bayesian}. Moreover, these priorities can be too restrictive and not every belief about the priori can be described \autocite[][]{irwin2005prior}. \\
+Thus, although conjugate priors are easy to handle both mathematically and computationally \autocite[][]{irwin2005prior}, they are not often used in practice because of these drawbacks.
+\subsection{Jeffreys' Prior}
+As conjugate priors depend on information from the data, they are so-called \textit{informative priors}. \textit{Jeffreys' prior} \autocite[][]{jeffreys1946invariant} is characterised in comparison to other a priori distributions by the fact that it is invariant to a reparametrisation of the model parameters. Due to this invariance, the Jeffreys' a priori distribution is also called \textit{non-informative}. \\
+Let $\phi=\phi\left({\theta}\right)$ be a one-to-one transformation of ${\theta}$ and $I\left(\cdot\right)$ be the Fisher information, then
+\begin{equation}
+    I_{\phi}\left(\phi\right)=I_{\theta}\left({\theta}\right)\left(\frac{\partial{\theta}}{\partial\phi}\right)^2.
+\end{equation}
+If some principle of choice led to $\pi\left(\theta\right)$ as a non-informative prior for $\theta$, the same principle should lead to
+\begin{equation}
+    \pi_{\phi}\left(\phi\right)=\pi_{\theta}\left(\theta\right)\left|\frac{\partial\theta}{\partial\phi}\right|
+\end{equation}
+as a non-informative prior for $\phi$. The desired "invariance" is then given by
+\begin{equation}
+    \pi_{\phi}\left(\phi\right)\propto \sqrt{I_{\phi}\left(\phi\right)}=\sqrt{I_{\theta}\left(\theta\right)}\left|\frac{\partial\theta}{\partial\phi}\right|\propto \pi_{\theta}\left(\theta\right)\left|\frac{\partial\theta}{\partial\phi}\right|
+\end{equation}
+\autocite[][42--43]{box2011bayesian}. While Jeffreys' priors work well for single parameter models, they struggle when it comes to models with multidimensional parameters as these priors can have poor convergence properties \autocite[][]{jordan2010}.
+\subsection{Penalised Complexity Priors}
 One issue when selecting the prior distribution of a particular parameter is that it is not always intuitive when it comes to understanding and interpreting this distribution, something that is essential to ensure that it behaves as intended by the user. This problem can be addressed by using \textit{penalised complexity priors}, which is a methodology that penalises the complexity of model components in relation to deviation from simple base model formulations.\\
 PC priors provide a systematic and unified approach to calculating priority distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterised by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalising the deviation from the flexible model to the fixed base model, the PC prior is calculated.
-\subsection*{The Principles Behind PC Priors}
+\subsubsection*{The Principles Behind PC Priors}
 Four main principles should be followed to calculate priorities in a consistent way and to understand their properties.
 \subsubsection*{Support to Occam's Razor} 
 Let $\pi\left(x|\xi\right)$ denote the density of a model component $x$ and $\xi$ the parameter to which a prior distribution is to be assigned. The base model is characterised by a density $\pi\left(x|\xi=\xi_0\right)$, where $\xi_0$ is a fixed value. The prior for $\xi$ should be such that proper shrinkage is given to $\xi_0$. The simplicity of the model is therefore prioritised over the complexity of the model, preventing overfitting \autocite[][]{simpson2017penalising}.
