@@ -18,3 +18,4 @@ sel <- INLAModelSel(
   "nbinomial",
   newest_numbers
 )
+

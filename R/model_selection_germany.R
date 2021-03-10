@@ -8,8 +8,10 @@ library(leaflet.mapboxgl)
 library(mlr)
 library(randomForestSRC)
 library(spdep)
+start <- Sys.time()
 source("R/preprocess_germany.R")
-parallelMap::parallelStartSocket(6)
+start <- Sys.time()
+parallelMap::parallelStartSocket(7)
 set.seed(420)
 sel <- INLAModelSel(
   "CumNumberTestedIll",
@@ -19,3 +21,8 @@ sel <- INLAModelSel(
   "nbinomial",
   newest_numbers
 )
+parallelMap::parallelStop()
+Sys.time() - start
+sel$AllModels <- NULL
+sel$FormulaList <- NULL
+save(sel, file = "sel_germany.Rda")
