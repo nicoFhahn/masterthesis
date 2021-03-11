@@ -67,7 +67,7 @@ result_demo <- INLAstep(
   inter = 1,
   thresh = 2
 )
-result_infra <- INLAstep(
+  result_infra <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_infra,
@@ -83,7 +83,7 @@ result_infra <- INLAstep(
 set.seed(420)
 sel_all <- INLAModelSel(
   "value",
-  colnames(newest_numbers)[c(7:51, 53, 61:63)],
+  colnames(newest_numbers)[c(7:51, 53, 60:62)],
   "idarea_1",
   "iid",
   "nbinomial",
@@ -91,7 +91,7 @@ sel_all <- INLAModelSel(
 )
 sel_demo <- INLAModelSel(
   "value",
-  colnames(newest_numbers)[c(7:30, 61:63)],
+  colnames(newest_numbers)[c(7:30, 60:62)],
   "idarea_1",
   "iid",
   "nbinomial",
@@ -99,7 +99,7 @@ sel_demo <- INLAModelSel(
 )
 sel_infra <- INLAModelSel(
   "value",
-  colnames(newest_numbers)[c(37:51, 53, 61, 62)],
+  colnames(newest_numbers)[c(37:51, 53, 60, 61)],
   "idarea_1",
   "iid",
   "nbinomial",
