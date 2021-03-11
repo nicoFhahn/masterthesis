@@ -597,20 +597,19 @@ results <- c(results, list(res_7 = perf))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 
 # now models with all the variables
-# now models with all the variables
 formula_25 <- CumNumberTestedIll ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+  urb_dens + marketplace + entertainment + sport + clinic +
   toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  banks + kindergarten + bakeries + gas + atm +
+  restaurant + aerodrome + office + platform + higher_education +
+  bakeries + atm +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) 
 formula_26 <- CumNumberTestedIll ~
   # add the demographic vars and pop density
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+  urb_dens + marketplace + entertainment + sport + clinic +
   toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  banks + kindergarten + bakeries + gas + atm +
+  restaurant + aerodrome + office + platform + higher_education +
+  bakeries + atm +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) 
 
@@ -677,28 +676,7 @@ formula_28 <- CumNumberTestedIll ~
   die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
   arbeitslose_insgesamt + 
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) 
-formula_29 <- CumNumberTestedIll ~
-  marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
-  place_of_worship + retail + nursing_home + restaurant + aerodrome + office + 
-  platform + schools + higher_education + banks + kindergarten + bakeries +
-  gas + atm + empfaenger_asylbewerber + Gewerbesteuer +
-  einkuenfte_gesamt + Union + SPD + Gruene + FDP +
-  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
-  arbeitslose_insgesamt + 
-  # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) 
-formula_30 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
-  place_of_worship + retail + nursing_home + restaurant + aerodrome + office + 
-  platform + schools + higher_education + banks + kindergarten + bakeries +
-  gas + atm + empfaenger_asylbewerber + Gewerbesteuer +
-  einkuenfte_gesamt + Union + SPD + Gruene + FDP +
-  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
-  arbeitslose_insgesamt + 
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) 
 
 res_27 <- inla(
   formula_27,
@@ -722,98 +700,23 @@ res_28 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-res_29 <- inla(
-  formula_29,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE
-  ),
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-res_30 <- inla(
-  formula_30,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE
-  ),
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-models <- c(models, list(res_27, res_28, res_29, res_30))
+models <- c(models, list(res_27, res_28))
 
 perf <- list(
   dic = c(
-    res_27$dic$dic, res_28$dic$dic,
-    res_29$dic$dic, res_30$dic$dic
+    res_27$dic$dic, res_28$dic$dic
   ),
   waic = c(
-    res_27$waic$waic, res_28$waic$waic,
-    res_29$waic$waic, res_30$waic$waic
+    res_27$waic$waic, res_28$waic$waic
   ),
   cpo = c(
-    sum(log(res_27$cpo$cpo)), sum(log(res_28$cpo$cpo)),
-    sum(log(res_29$cpo$cpo)), sum(log(res_30$cpo$cpo))
+    sum(log(res_27$cpo$cpo)), sum(log(res_28$cpo$cpo))
   )
 )
 results <- c(results, list(res_9 = perf))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 # now models with all the variables
-formula_31 <- CumNumberTestedIll ~
-  empfaenger_asylbewerber + Gewerbesteuer + einkuenfte_gesamt + SPD + FDP +
-  afd + schutzsuchende + sozialhilfe_empfaenger + arbeitslose_insgesamt +
-  arbeitslose_auslaender + restaurant + urb_dens +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
-formula_32 <- CumNumberTestedIll ~
-  empfaenger_asylbewerber + Gewerbesteuer + einkuenfte_gesamt + SPD + FDP +
-  afd + schutzsuchende + sozialhilfe_empfaenger + arbeitslose_insgesamt +
-  arbeitslose_auslaender + restaurant + urb_dens +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2) 
-
-res_31 <- inla(
-  formula_31,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE
-  ),
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-res_32 <- inla(
-  formula_32,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE
-  ),
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-models <- c(models, list(res_31, res_32))
-
-perf <- list(
-  dic = c(
-    res_31$dic$dic, res_32$dic$dic
-  ),
-  waic = c(
-    res_31$waic$waic, res_32$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_31$cpo$cpo)), sum(log(res_32$cpo$cpo))
-  )
-)
-results <- c(results, list(res_10 = perf))
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 models_final <- list(models, results)
 save(models_final, file = "models/besagproper_germany.Rda")
 

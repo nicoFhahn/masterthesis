@@ -15,7 +15,7 @@ models_bym2 <- models_final_bym2[[1]]
 results_leroux <- models_final_leroux[[2]]
 results_besag <- models_final_besag[[2]]
 results_bym2 <- models_final_bym2[[2]]
-demo_results <- c(results_leroux[1:5], results_besag[1:5], results_bym2[1:5])
+demo_results <- c(results_leroux[1:6], results_besag[1:6], results_bym2[1:6])
 demo_dic <- unlist(lapply(demo_results, function(x) x$dic))
 demo_waic <- unlist(lapply(demo_results, function(x) x$waic))
 demo_cpo <- unlist(lapply(demo_results, function(x) x$cpo))
@@ -28,19 +28,20 @@ demo_ranks <- tibble(
   cpo = demo_cpo_rank
 )
 demo_ranks$total <- rowSums(demo_ranks)
-demo_ranks[1:18, ]
-demo_ranks[19:36, ]
-demo_ranks[37:54, ]
-demo_dic[which(demo_ranks[1:18, ]$total %in% min(demo_ranks[1:18, ]$total))]
-demo_dic[which(demo_ranks[19:36, ]$total %in% min(demo_ranks[19:36, ]$total)) + 18]
-demo_dic[which(demo_ranks[37:54, ]$total %in% min(demo_ranks[37:54, ]$total)) + 36]
-demo_waic[which(demo_ranks[1:18, ]$total %in% min(demo_ranks[1:18, ]$total))]
-demo_waic[which(demo_ranks[19:36, ]$total %in% min(demo_ranks[19:36, ]$total)) + 18]
-demo_waic[which(demo_ranks[37:54, ]$total %in% min(demo_ranks[37:54, ]$total)) + 36]
-demo_cpo[which(demo_ranks[1:18, ]$total %in% min(demo_ranks[1:18, ]$total))]
-demo_cpo[which(demo_ranks[19:36, ]$total %in% min(demo_ranks[19:36, ]$total)) + 18]
-demo_cpo[which(demo_ranks[37:54, ]$total %in% min(demo_ranks[37:54, ]$total)) + 36]
-infra_results <- c(results_leroux[6], results_besag[6], results_bym2[6])
+demo_ranks[1:20, ]
+demo_ranks[21:40, ]
+demo_ranks[41:60, ]
+demo_dic[which(demo_ranks[1:20, ]$total %in% min(demo_ranks[1:20, ]$total))]
+demo_dic[which(demo_ranks[21:40, ]$total %in% min(demo_ranks[21:40, ]$total)) + 20]
+demo_dic[which(demo_ranks[41:60, ]$total %in% min(demo_ranks[41:60, ]$total)) + 40]
+demo_waic[which(demo_ranks[1:20, ]$total %in% min(demo_ranks[1:20, ]$total))]
+demo_waic[which(demo_ranks[21:40, ]$total %in% min(demo_ranks[21:40, ]$total)) + 20]
+demo_waic[which(demo_ranks[41:60, ]$total %in% min(demo_ranks[41:60, ]$total)) + 40]
+demo_cpo[which(demo_ranks[1:20, ]$total %in% min(demo_ranks[1:20, ]$total))]
+demo_cpo[which(demo_ranks[21:40, ]$total %in% min(demo_ranks[21:40, ]$total)) + 20]
+demo_cpo[which(demo_ranks[41:60, ]$total %in% min(demo_ranks[41:60, ]$total)) + 40]
+models_bym2[[10]]$summary.fixed
+infra_results <- c(results_leroux[7:8], results_besag[7:8], results_bym2[7:8])
 infra_dic <- unlist(lapply(infra_results, function(x) x$dic))
 infra_waic <- unlist(lapply(infra_results, function(x) x$waic))
 infra_cpo <- unlist(lapply(infra_results, function(x) x$cpo))
@@ -53,27 +54,19 @@ infra_ranks <- tibble(
   cpo = infra_cpo_rank
 )
 infra_ranks$total <- rowSums(infra_ranks)
-infra_ranks[1:4, ]
-infra_ranks[5:8, ]
-infra_ranks[9:12, ]
-infra_dic[which(infra_ranks[1:4, ]$total %in% min(infra_ranks[1:4, ]$total))]
-infra_dic[which(infra_ranks[5:8, ]$total %in% min(infra_ranks[5:8, ]$total)) + 4]
-infra_dic[which(infra_ranks[9:12, ]$total %in% min(infra_ranks[9:12, ]$total)) + 8]
-infra_waic[which(infra_ranks[1:4, ]$total %in% min(infra_ranks[1:4, ]$total))]
-infra_waic[which(infra_ranks[5:8, ]$total %in% min(infra_ranks[5:8, ]$total)) + 4]
-infra_waic[which(infra_ranks[9:12, ]$total %in% min(infra_ranks[9:12, ]$total)) + 8]
-infra_cpo[which(infra_ranks[1:4, ]$total %in% min(infra_ranks[1:4, ]$total))]
-infra_cpo[which(infra_ranks[5:8, ]$total %in% min(infra_ranks[5:8, ]$total)) + 4]
-infra_cpo[which(infra_ranks[9:12, ]$total %in% min(infra_ranks[9:12, ]$total)) + 8]
-inla.emarginal(exp, models_leroux[[16]]$marginals.fixed$`(Intercept)`)
-inla.emarginal(exp, models_leroux[[7]]$marginals.fixed$pop_dens)
-inla.emarginal(exp, models_leroux[[7]]$marginals.fixed$urb_dens)
-inla.emarginal(exp, models_leroux[[7]]$marginals.fixed$sex)
-inla.emarginal(exp, models_leroux[[7]]$marginals.fixed$Gewerbesteuer)
-inla.emarginal(exp, models_leroux[[7]]$marginals.fixed$einkuenfte_gesamt)
-newest_numbers$rr <- models_leroux[[7]]$summary.fitted.values$mean
-color_low <- "#002FA7"
-color_high <- "#F50039"
+infra_ranks[1:6, ]
+infra_ranks[7:12, ]
+infra_ranks[13:18, ]
+infra_dic[which(infra_ranks[1:6, ]$total %in% min(infra_ranks[1:6, ]$total))]
+infra_dic[which(infra_ranks[7:12, ]$total %in% min(infra_ranks[7:12, ]$total)) + 6]
+infra_dic[which(infra_ranks[13:18, ]$total %in% min(infra_ranks[13:18, ]$total)) + 12]
+infra_waic[which(infra_ranks[1:6, ]$total %in% min(infra_ranks[1:6, ]$total))]
+infra_waic[which(infra_ranks[7:12, ]$total %in% min(infra_ranks[7:12, ]$total)) + 6]
+infra_waic[which(infra_ranks[13:18, ]$total %in% min(infra_ranks[13:18, ]$total)) + 12]
+infra_cpo[which(infra_ranks[1:6, ]$total %in% min(infra_ranks[1:6, ]$total))]
+infra_cpo[which(infra_ranks[7:12, ]$total %in% min(infra_ranks[7:12, ]$total)) + 6]
+infra_cpo[which(infra_ranks[13:18, ]$total %in% min(infra_ranks[13:18, ]$total)) + 12]
+
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = rr)) +
   ggtitle(
@@ -91,7 +84,7 @@ plot_1
 
 
 models[[9]]
-models[11:12][unlist(results_sum[6]) == min(unlist(results_sum[6]))][[1]]$call
+models[11:18][unlist(results_sum[6]) == min(unlist(results_sum[6]))][[1]]$call
 results[6]
 models[[11]]
 models[13:14][unlist(results_sum[7]) == min(unlist(results_sum[7]))][[1]]$call
