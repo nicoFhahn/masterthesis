@@ -52,7 +52,8 @@ result_all <- INLAstep(
   y2 = "value",
   powerl = 1,
   inter = 1,
-  thresh = 2
+  thresh = 2,
+  num.threads = 7
 )
 result_demo <- INLAstep(
   fam1 = "nbinomial",
@@ -67,7 +68,7 @@ result_demo <- INLAstep(
   inter = 1,
   thresh = 2
 )
-  result_infra <- INLAstep(
+result_infra <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_infra,
