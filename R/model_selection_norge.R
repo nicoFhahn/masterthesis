@@ -105,4 +105,3 @@ sel_infra <- INLAModelSel(
   "nbinomial",
   newest_numbers
 )
-
