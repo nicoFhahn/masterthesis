@@ -197,8 +197,8 @@ if (date_1 != date_2) {
   load("osmdata/norge_sport.Rda")
   load("osmdata/norge_entertainment.Rda")
   load("osmdata/norge_marketplace.Rda")
-  
-  
+
+
   norge_shape$marketplace <- unlist(
     lapply(
       seq_len(
@@ -219,7 +219,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$entertainment <- unlist(
     lapply(
       seq_len(
@@ -240,7 +240,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$sport <- unlist(
     lapply(
       seq_len(
@@ -261,7 +261,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$clinic <- unlist(
     lapply(
       seq_len(
@@ -282,7 +282,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$toilet <- unlist(
     lapply(
       seq_len(
@@ -303,7 +303,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$hairdresser <- unlist(
     lapply(
       seq_len(
@@ -324,7 +324,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$shops <- unlist(
     lapply(
       seq_len(
@@ -345,7 +345,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$place_of_worship <- unlist(
     lapply(
       seq_len(
@@ -366,7 +366,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$retail <- unlist(
     lapply(
       seq_len(
@@ -387,7 +387,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$nursing_home <- unlist(
     lapply(
       seq_len(
@@ -408,7 +408,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$restaurant <- unlist(
     lapply(
       seq_len(
@@ -429,7 +429,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$terminal <- unlist(
     lapply(
       seq_len(
@@ -450,7 +450,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$aerodrome <- unlist(
     lapply(
       seq_len(
@@ -471,7 +471,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$office <- unlist(
     lapply(
       seq_len(
@@ -492,7 +492,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$platform <- unlist(
     lapply(
       seq_len(
@@ -513,7 +513,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$university <- unlist(
     lapply(
       seq_len(
@@ -534,7 +534,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$college <- unlist(
     lapply(
       seq_len(
@@ -555,7 +555,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$kindergarten <- unlist(
     lapply(
       seq_len(
@@ -576,7 +576,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$schools <- unlist(
     lapply(
       seq_len(
@@ -597,7 +597,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$bakeries <- unlist(
     lapply(
       seq_len(
@@ -618,7 +618,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$gas <- unlist(
     lapply(
       seq_len(
@@ -639,7 +639,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   norge_shape$banks <- unlist(
     lapply(
       seq_len(
@@ -660,8 +660,8 @@ if (date_1 != date_2) {
       }
     )
   )
-  
-  
+
+
   norge_shape$atm <- unlist(
     lapply(
       seq_len(
@@ -682,8 +682,8 @@ if (date_1 != date_2) {
       }
     )
   )
-  
-  
+
+
   norge_shape$residential <- unlist(
     lapply(
       seq_len(
@@ -704,8 +704,8 @@ if (date_1 != date_2) {
       }
     )
   )
-  
-  
+
+
   setDT(norge_shape)
   colnames(norge_shape)[1] <- "kommune_no"
   norge_complete <- merge(
@@ -729,7 +729,7 @@ if (date_1 != date_2) {
   no_geometry$higher_education <- no_geometry$college + no_geometry$university
   # calculate the SIR
   write_csv(no_geometry, "wrangled_data/norge_features.csv")
-  write_sf(st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1], "wrangled_data/shapes_norge.shp") 
+  write_sf(st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1], "wrangled_data/shapes_norge.shp")
   norge_features <- read_csv("wrangled_data/norge_features.csv")
 }
 norge_features[, c(18:37, 39:64, 66)] <- 1000 * norge_features[, c(18:37, 39:64, 66)] / norge_features$population
@@ -738,14 +738,6 @@ norge <- merge(
   norge_features,
   norge_sf,
   by = "kommune_no"
-)
-norway_municipality_confirmed <- read_csv(
-  "https://raw.githubusercontent.com/thohan88/covid19-nor-data/master/data/01_infected/msis/municipality_wide.csv"
-)
-norway_municipality_confirmed_long <- melt(
-  setDT(norway_municipality_confirmed),
-  id.vars = colnames(norway_municipality_confirmed)[1:6],
-  variable.name = "date"
 )
 norway_municipality_confirmed_long$date <- as.Date(as.character(norway_municipality_confirmed_long$date))
 newest_numbers <- norway_municipality_confirmed_long[norway_municipality_confirmed_long$date == max(norway_municipality_confirmed_long$date), ]
@@ -815,5 +807,5 @@ newest_numbers$sex <- newest_numbers$population_female / newest_numbers$populati
 # newest_numbers_21$pop_dens <- newest_numbers_21$population / newest_numbers_21$area
 # newest_numbers_21$urb_dens <- newest_numbers_21$residential / newest_numbers_21$area
 # newest_numbers_21$sex <- newest_numbers_21$population_female / newest_numbers_21$population_total
-newest_numbers <- newest_numbers[, c(1, 3, 6:9, 17:37, 39:54, 56:60, 62:76)]
+newest_numbers <- newest_numbers[, c(1, 3, 6:9, 17:19, 32:37, 39:54, 56:60, 62:76)]
 rm(list = setdiff(ls(), c("newest_numbers")))
