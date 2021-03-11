@@ -12,6 +12,76 @@ start <- Sys.time()
 source("R/preprocess_germany.R")
 start <- Sys.time()                                 
 parallelMap::parallelStartSocket(7)
+newest_numbers$geometry <- NULL
+stack_all <- inla.stack(
+  data = list(CumNumberTestedIll = newest_numbers$CumNumberTestedIll),
+  A = list(1),
+  effects = list(
+    data.frame(
+      Intercept = 1,
+      newest_numbers[, c(2:5, 8:18, 26:40, 43:48, 56:59)]
+    )
+  )
+)
+stack_demo <- inla.stack(
+  data = list(CumNumberTestedIll = newest_numbers$CumNumberTestedIll),
+  A = list(1),
+  effects = list(
+    data.frame(
+      Intercept = 1,
+      newest_numbers[, c(2:5, 8:18, 56:58)]
+    )
+  )
+)
+stack_infra <- inla.stack(
+  data = list(CumNumberTestedIll = newest_numbers$CumNumberTestedIll),
+  A = list(1),
+  effects = list(
+    data.frame(
+      Intercept = 1,
+      newest_numbers[, c(26:40, 43:48, 56:57, 59)]
+    )
+  )
+)
+result_all <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_all,
+  invariant = "0 + Intercept",
+  direction = "backwards",
+  include = c(2:5, 8:18, 26:40, 43:48, 56:58, 60),
+  y = "CumNumberTestedIll",
+  y2 = "CumNumberTestedIll",
+  powerl = 1,
+  inter = 1,
+  thresh = 2
+)
+result_demo <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_demo,
+  invariant = "0 + Intercept",
+  direction = "backwards",
+  include = c(2:5, 8:18, 56:58),
+  y = "CumNumberTestedIll",
+  y2 = "CumNumberTestedIll",
+  powerl = 1,
+  inter = 1,
+  thresh = 2
+)
+result_infra <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_infra,
+  invariant = "0 + Intercept",
+  direction = "backwards",
+  include = c(26:40, 43:48, 56:57, 60),
+  y = "CumNumberTestedIll",
+  y2 = "CumNumberTestedIll",
+  powerl = 1,
+  inter = 1,
+  thresh = 2
+)
 set.seed(420)
 sel_all <- INLAModelSel(
   "CumNumberTestedIll",
