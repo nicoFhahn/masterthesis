@@ -19,7 +19,7 @@ norway_municipality_confirmed_long <- melt(
 norge_shape <- read_sf("shapefiles/kommuner_komprimert-polygon.shp")
 norge_features <- read_csv("wrangled_data/norge_features.csv")
 date_1 <- max(as.Date(as.character(norway_municipality_confirmed_long$date)))
-date_2 <- max(norge_features$date)
+date_2 <- max(as.Date(norge_features$date))
 if (date_1 != date_2) {
   kommune_4602 <- norge_shape[norge_shape$kommunenum == 4602, ][1, ]
   kommune_4602$geometry <- st_union(norge_shape[norge_shape$kommunenum == 4602, ])
@@ -815,5 +815,19 @@ newest_numbers$sex <- newest_numbers$population_female / newest_numbers$populati
 # newest_numbers_21$pop_dens <- newest_numbers_21$population / newest_numbers_21$area
 # newest_numbers_21$urb_dens <- newest_numbers_21$residential / newest_numbers_21$area
 # newest_numbers_21$sex <- newest_numbers_21$population_female / newest_numbers_21$population_total
+
 newest_numbers <- newest_numbers[, c(1, 3, 6:9, 17:37, 39:54, 56:60, 62:76)]
+
+cols_imputed <- lapply(
+  c(7:55, 57:63),
+  function(x, ...) {
+    vals <-newest_numbers[, x]
+    vals$geometry <- NULL
+    vals[is.na(vals)] <- median(vals[, 1], na.rm = TRUE)
+    vals
+  }
+)
+newest_numbers_imputed <- Reduce(cbind, cols_imputed)
+newest_numbers_imputed <- cbind(newest_numbers[, 1:6], newest_numbers_imputed)
+newest_numbers <- st_as_sf(newest_numbers_imputed)
 rm(list = setdiff(ls(), c("newest_numbers")))
