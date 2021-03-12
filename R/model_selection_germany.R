@@ -10,7 +10,7 @@ library(randomForestSRC)
 library(spdep)
 start <- Sys.time()
 source("R/preprocess_germany.R")
-start <- Sys.time()                                 
+start <- Sys.time()
 parallelMap::parallelStartSocket(7)
 newest_numbers$geometry <- NULL
 stack_all <- inla.stack(

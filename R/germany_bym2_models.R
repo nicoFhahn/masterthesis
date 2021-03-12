@@ -22,7 +22,7 @@ prior_2 <- list(
     prior = "pc.prec",
     param = c(0.5 / 0.31, 0.01)
   )
-)#
+) #
 models <- list()
 results <- list()
 #
@@ -34,13 +34,13 @@ g <- inla.read.graph(filename = "maps/map_2.adj")
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + 
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_2 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + 
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -82,28 +82,28 @@ results <- c(results, list(res_1 = perf))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 # now models with the mobility variables
 formula_3 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + empfaenger_asylbewerber + schutzsuchende +
-  sozialhilfe_empfaenger + arbeitslose_insgesamt +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + empfaenger_asylbewerber + schutzsuchende +
+  sozialhilfe_empfaenger + arbeitslose_insgesamt + arbeitslose_auslaender +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_4 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + empfaenger_asylbewerber + schutzsuchende +
-  sozialhilfe_empfaenger + arbeitslose_insgesamt +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + empfaenger_asylbewerber + schutzsuchende +
+  sozialhilfe_empfaenger + arbeitslose_insgesamt + arbeitslose_auslaender +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 # now models with the mobility variables
 formula_5 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  empfaenger_asylbewerber + schutzsuchende +
-  sozialhilfe_empfaenger + arbeitslose_insgesamt +
+# add the demographic vars and pop density
+empfaenger_asylbewerber + schutzsuchende +
+  sozialhilfe_empfaenger + arbeitslose_insgesamt + arbeitslose_auslaender +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_6 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  empfaenger_asylbewerber + schutzsuchende +
-  sozialhilfe_empfaenger + arbeitslose_insgesamt +
+# add the demographic vars and pop density
+empfaenger_asylbewerber + schutzsuchende +
+  sozialhilfe_empfaenger + arbeitslose_insgesamt + arbeitslose_auslaender +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -174,23 +174,23 @@ results <- c(results, list(res_2 = perf))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 # now models with the infrastructure variables
 formula_7 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Gewerbesteuer + einkuenfte_gesamt +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Gewerbesteuer + einkuenfte_gesamt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_8 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Gewerbesteuer + einkuenfte_gesamt +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Gewerbesteuer + einkuenfte_gesamt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_9 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  Gewerbesteuer + einkuenfte_gesamt +
+# add the demographic vars and pop density
+Gewerbesteuer + einkuenfte_gesamt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_10 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  Gewerbesteuer + einkuenfte_gesamt +
+# add the demographic vars and pop density
+Gewerbesteuer + einkuenfte_gesamt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -260,26 +260,26 @@ results <- c(results, list(res_3 = perf))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 # now models with all the variables
 formula_11 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
   die_linke + afd + sonstige +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_12 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
   die_linke + afd + sonstige +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_13 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
   die_linke + afd + sonstige +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_14 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
   die_linke + afd + sonstige +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
@@ -347,35 +347,35 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 ########################################################
 # Now with variable selection
 formula_15 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + empfaenger_asylbewerber + Gewerbesteuer +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + empfaenger_asylbewerber + Gewerbesteuer +
   einkuenfte_gesamt + Union + SPD + Gruene + FDP +
-  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
-  arbeitslose_insgesamt + 
+  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger +
+  arbeitslose_insgesamt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_16 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + empfaenger_asylbewerber + Gewerbesteuer +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + empfaenger_asylbewerber + Gewerbesteuer +
   einkuenfte_gesamt + Union + SPD + Gruene + FDP +
-  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
-  arbeitslose_insgesamt + 
+  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger +
+  arbeitslose_insgesamt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_17 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  empfaenger_asylbewerber + Gewerbesteuer +
+# add the demographic vars and pop density
+empfaenger_asylbewerber + Gewerbesteuer +
   einkuenfte_gesamt + Union + SPD + Gruene + FDP +
-  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
-  arbeitslose_insgesamt + 
+  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger +
+  arbeitslose_insgesamt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_18 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  empfaenger_asylbewerber + Gewerbesteuer +
+# add the demographic vars and pop density
+empfaenger_asylbewerber + Gewerbesteuer +
   einkuenfte_gesamt + Union + SPD + Gruene + FDP +
-  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
-  arbeitslose_insgesamt + 
+  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger +
+  arbeitslose_insgesamt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -443,18 +443,19 @@ results <- c(results, list(res_5 = perf))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 # now models with all the variables
 formula_19 <- CumNumberTestedIll ~
-  lohn_einkommenssteuer + SPD + Gruene + FDP + afd + sonstige +
+empfaenger_asylbewerber + Gewerbesteuer + einkuenfte_gesamt +
+  lohn_einkommenssteuer + SPD + afd + sonstige + schutzsuchende +
   sozialhilfe_empfaenger + arbeitslose_insgesamt + arbeitslose_auslaender +
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) 
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_20 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  lohn_einkommenssteuer + SPD + Gruene + FDP + afd + sonstige +
+empfaenger_asylbewerber + Gewerbesteuer + einkuenfte_gesamt +
+  lohn_einkommenssteuer + SPD + afd + sonstige + schutzsuchende +
   sozialhilfe_empfaenger + arbeitslose_insgesamt + arbeitslose_auslaender +
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) 
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
 
 res_19 <- inla(
@@ -499,35 +500,35 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 
 # now models with all the variables
 formula_21 <- CumNumberTestedIll ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   banks + kindergarten + bakeries + gas + atm +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) 
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_22 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   banks + kindergarten + bakeries + gas + atm +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) 
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_23 <- CumNumberTestedIll ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   banks + kindergarten + bakeries + gas + atm +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) 
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_24 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+marketplace + entertainment + sport + clinic +
   toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools+ higher_education +
+  restaurant + aerodrome + office + platform + schools + higher_education +
   banks + kindergarten + bakeries + gas + atm +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) 
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
 
 res_21 <- inla(
@@ -599,20 +600,20 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 # now models with all the variables
 # now models with all the variables
 formula_25 <- CumNumberTestedIll ~
-  urb_dens + marketplace + entertainment + sport + clinic +
-  toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + higher_education +
-  bakeries + atm +
+marketplace + entertainment + clinic + toilet + hairdresser +
+  place_of_worship + retail + nursing_home + restaurant + terminal +
+  platform + kindergarten + schools + bakeries + gas + banks + atm + pop_dens +
+  higher_education +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) 
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_26 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  urb_dens + marketplace + entertainment + sport + clinic +
-  toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + higher_education +
-  bakeries + atm +
+# add the demographic vars and pop density
+marketplace + entertainment + clinic + toilet + hairdresser +
+  place_of_worship + retail + nursing_home + restaurant + terminal +
+  platform + kindergarten + schools + bakeries + gas + banks + atm + pop_dens +
+  higher_education +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) 
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
 res_25 <- inla(
   formula_25,
@@ -654,30 +655,25 @@ results <- c(results, list(res_8 = perf))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 formula_27 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + 
-  marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
-  place_of_worship + retail + nursing_home + restaurant + aerodrome + office + 
-  platform + schools + higher_education + banks + kindergarten + bakeries +
-  gas + atm + empfaenger_asylbewerber + Gewerbesteuer +
-  einkuenfte_gesamt + Union + SPD + Gruene + FDP +
-  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
-  arbeitslose_insgesamt + 
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) 
+empfaenger_asylbewerber + Gewerbesteuer + einkuenfte_gesamt +
+  lohn_einkommenssteuer + Union + SPD + FDP + die_linke + afd + sonstige +
+  schutzsuchende + sozialhilfe_empfaenger + arbeitslose_insgesamt +
+  arbeitslose_auslaender + entertainment + sport + clinic + toilet +
+  hairdresser + shops + place_of_worship + nursing_home + aerodrome + platform +
+  kindergarten + schools + bakeries + gas + banks + pop_dens +
+  urb_dens + sex
+# specify the model with neighborhood matrix
+f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_28 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + 
-  # add the demographic vars and pop density
-  marketplace + entertainment + sport + clinic + toilet + hairdresser + shops +
-  place_of_worship + retail + nursing_home + restaurant + aerodrome + office + 
-  platform + schools + higher_education + banks + kindergarten + bakeries +
-  gas + atm + empfaenger_asylbewerber + Gewerbesteuer +
-  einkuenfte_gesamt + Union + SPD + Gruene + FDP +
-  die_linke + afd + sonstige + schutzsuchende + sozialhilfe_empfaenger + 
-  arbeitslose_insgesamt + 
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) 
+empfaenger_asylbewerber + Gewerbesteuer + einkuenfte_gesamt +
+  lohn_einkommenssteuer + Union + SPD + FDP + die_linke + afd + sonstige +
+  schutzsuchende + sozialhilfe_empfaenger + arbeitslose_insgesamt +
+  arbeitslose_auslaender + entertainment + sport + clinic + toilet +
+  hairdresser + shops + place_of_worship + nursing_home + aerodrome + platform +
+  kindergarten + schools + bakeries + gas + banks + pop_dens +
+  urb_dens + sex
+# specify the model with neighborhood matrix
+f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
 res_27 <- inla(
   formula_27,
