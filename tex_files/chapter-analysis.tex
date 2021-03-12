@@ -35,13 +35,13 @@ Looking at the standardised incidence rate for Norway, a standardised incidence 
 \end{figure}
 \clearpage
 \section{Spatial Models}
-After looking at the standardised incidence rates for the countries of interest, the next step is to take a closer look at the current figures for the respective countries. Spatial models are used to try to extract the factors that cause some populations to be at higher risk than other populations. Four different types of models are used for each country:
+After looking at the standardised incidence rates for the countries of interest, the next step is to take a closer look at the current figures for the respective countries. Spatial models are used to try to extract the factors that cause some populations to be at higher risk than other populations. Three different types of models are used for each country:
 \begin{itemize}
     \item[1.] The Besarg-Yollie-Mollie Model
     \item[2.] Besags Proper Spatial Model
     \item[3.] The Leroux-Model
 \end{itemize}
-Three measures are used to compare the models, the DIC, the WAIC and the CPO. \\
+All of these models were computed using the INLA \cite{rinla} R package. \\
 Before the models are computed, however, the distribution that fits the number of cases must first be found. For this, the function \texttt{descdist()} from the \texttt{fitdistrplus} R package is used. With this function, descriptive parameters of an empirical distribution can be calculated and a skewness-kurtosis plot is provided. The plots for Germany and Norway can be seen in Figure~\ref{cf_germany} and Figure~\ref{cf_norge}.
 % \begin{figure}[H]
 %     \centering
@@ -107,7 +107,9 @@ Norway & Poisson & 314100 \\
 Norway & Negative Binomial & 4018 \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table} 
+To specify each type of model, the following code shown in listing~\ref{codeModels} can be used. \\
+Three measures are used to compare the models, the DIC, the WAIC and the CPO. \\
 For all countries, the models were computed with
 \begin{itemize}
     \item[1.] only the demographic variables as covariates
@@ -118,119 +120,134 @@ For all countries, the models were computed with
         \item[3.2] With variable selection
     \end{itemize}
 \end{itemize}
-For each model type, different values for the penalised prior component were tried. As this resulted in a large number of models, only the model with the best performance for each model class is examined in more detail. To decide which models perform best, the DIC, WAIC and CPO are used. A list of all calculated models along with their performance measures is provided in the appendix.
+For each model type, different values for the penalised prior component were tried. As this resulted in a large number of models, only the model with the best performance for each model class is examined in more detail. To decide which models perform best, the DIC, WAIC and CPO are used. To select the best model, all calculated models were first ranked according to their DIC, their WAIC and their CPO before the model with the lowest average rank was selected as the best model. \\
+Finally, due to the amount of covariates, forwards and backwards stepwise variable selection was performed with the intention of obtaining a model that fits the data well and at the same time is relatively easy to interpret. This can be done with the R package \texttt{INLAutils} \cite{inlautils}, as shown in listing~\ref{codeSelection}. \\
+A list of all calculated models along with their performance measures is provided in the appendix.
 \subsection{Spatial Models for Germany}
-First, a look is taken at the spatial models calculated for Germany. All models are run with the INLA \cite{rinla} R package.\\
-To specify a BYM2-2 model in R, the following code can be used:
-\begin{lstlisting}[language=R]
-# Specify a prior distribution
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
-# Create a neighbourhood list
-nb <- poly2nb(newest_numbers_germany)
-# save the neighbourhood
-nb2INLA("maps/map_2.adj", nb)
-# load it
-g <- inla.read.graph(filename = "maps/map_2.adj")
-# specify the model formula
-formula_1 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + 
-  # specify the model with neighbourhood matrix
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  ) +
-  # add a random effect to the model
-  f(idarea_2, model = "iid")
-# compute the model
-res_1 <- inla(
-  formula_1,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE
-  ),
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-\end{lstlisting}
-In the example above, a random effect is added to the model. As this random effect can sometimes cover the true effects however, all models were computed without such an effect.
-% SCHREIB WIE DU DAS MIT DEN RANKS GEMACHT HAST DU IDIOT
+First, a look is taken at the spatial models calculated for Germany. 
 \subsubsection{Demographic Models}
 The model with the best performance based on the demographic variables was a Leroux model calculated with the following formula:
 \begin{lstlisting}[language=R]
-formula_7_leroux <- CumNumberTestedIll ~
-  pop_dens + urb_dens + sex + trade_tax + income_total +
+formula_9_leroux <- CumNumberTestedIll ~
+  trade_tax + income_total +
   f(
-    idarea_1, model = "generic1", Cmatrix = C,
-    hyper = prior_1
+    idarea_1, model = "generic1",
+    Cmatrix = C, hyper = prior_1
   )
 \end{lstlisting}
-The performance measures of this model and the best-performing BYM2 and Besag proper models are shown in Table~\ref{demoGermany}. A total of 45 models were calculated. The Leroux model performed the best in terms of DIC and it also ranked well in terms of CPO. In fact, the 15 best models in terms of CPO were all Leroux models. The best BYM2 model showed good performance in terms of DIC and WAIC, while Besags' proper spatial model showed good performance only in terms of WAIC.
+The performance measures of this model and the best-performing BYM2 and Besag proper models are shown in Table~\ref{demoGermany}. A total of 66 models were calculated. The Leroux model had the best DIC and the fourth best CPO. Of all calculated models, the 20 best models in terms of the CPO were all Leroux models. The BYM2 model showed good performance in terms of the DIC and WAIC while Besags proper spatial model only showed good performance in terms of the WAIC.
 \begin{table}[H] 
 \caption{The performance measures for the best performing demographic model of each type. The rank in relation to each performance measure is shown in the brackets. \label{demoGermany}}
 \begin{tabular}{l l l l}
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} \\
 \midrule
-Leroux & 5598 (1) & 5665 (20) & -3818 (7) \\
-BYM2 & 5630 (5) & 5576 (3) & -3343 (30)\\
-Besags Proper  & 5680 (17) & 5604 (7) & -3334 (34) \\
+Besags Proper  & 5696 (15) & 5603 (2) & -3358 (33) \\
+BYM2 & 5639 (4) & 5578 (1) & -3375 (28)\\
+Leroux & 5611 (1) & 5682 (18) & -3872 (2) \\
 \bottomrule
 \end{tabular}
 \end{table}
-The summary of the fixed effects is shown in table~\ref{fixedDemoGermany}. By exponentiating the coefficients, they can be interpreted more easily. To obtain these values, the following code can be used:
+The summary of the fixed effects is shown in table~\ref{fixedDemoGermany}. To compute the posterior mean of the coefficients, the following code can be used:
 \begin{lstlisting}[language=R]
-# get the exponentiated value
-inla.emarginal(exp, model_7_leroux$marginals.fixed$pop_dens)
+inla.emarginal(exp, model_9_leroux$marginals.fixed$trade_tax)
 # calculate the increase in risk if the 
-# population ensity increases by 100
+# trade tax increase by 25000
 inla.emarginal(
   exp,
-  model_7_leroux$marginals.fixed$pop_dens
-  ) ^ 100
+  model_9_leroux$marginals.fixed$trade_tax
+  ) ^ 25000
+\end{lstlisting}
+To obtain a credibility interval of the estimates, the following code can be used:
+\begin{lstlisting}[language=R]
+inla.qmarginal(
+  c(0.025,0.975),
+  inla.tmarginal(
+    exp,
+    model_9_leroux$marginals.fixed$trade_tax
+  )
+)
 \end{lstlisting}
 \begin{table}[H] 
-\caption{The fixed effects for model 9. Values are rounded. \label{fixedDemoGermany}}
+\caption{The fixed effects for model 10. Values are rounded. \label{fixedDemoGermany}}
 \begin{tabular}{l r r r r}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
-(Intercept) & 2.77 & 42.6\\
-pop\_dens & 0.00012 & 1.000125\\
-urb\_dens &  -0.00091 & 0.999\\
-sex & -5.25 & 0.252\\
-trade\_tax & 0.00000053& 1.000001 \\
-income\_total & -0.000015 & 0.999\\
+(Intercept) & 0.1483 & 1.1658 & 0.9604 & 1.4012\\
+trade\_tax & 0.0000007026 & 1.000001  & 1.000000  & 1.000001 \\
+income\_total & -0.00001633 & 0.9999837 & 0.9999729 & 0.9999944\\
 \bottomrule
 \end{tabular}
 \end{table}
-From this summary it can be seen that when population density or business tax revenue increases, the relative risk of becoming infected also increases. An increase in population density by 100 leads to an approximately 1.01\% higher risk of becoming infected and an increase in business tax revenue by 20000€ / 1000 inhabitants leads to an increase in the risk of becoming infected by 1.01\%. \\
-However, a higher total income lowers the risk of infection, thus people living in economically poorer regions of Germany have a higher risk of contracting the virus. An increase in total income by 1000€ / 1000 inhabitants lowers the risk of infection by about 1.6\%. A higher urban density also slightly reduces the risk of becoming infected with Covid-19, e.g. an increase in urban density by 10 leads to a decrease in relative risk by 1\%. Finally, regions where a higher proportion of women live have a lower risk of infection, as a 0.01 increase in the proportion of women leads to a 1.4\% reduction in risk. \\
-A plot of the relative risk is shown in Figure~\ref{relriskDemoGermany}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = 0.8\textwidth]{demo_germany.svg}
-%     \caption{The relative risk for contracting Covid-19 based on demographic variables}
-%     \label{relriskDemoGermany}
-% \end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.8\textwidth]{tex_files/demo_germany.png}
-    \caption{The relative risk for contracting Covid-19 based on demographic variables}
-    \label{relriskDemoGermany}
-\end{figure}
-\subsubsection{}{Models Based on the Infrastructure Variables}
-\subsubsection{Models Based on Variable Selection} 
-\subsubsection{Besag-Proper-Models}
-\subsubsection{Leroux-Models}
-\subsubsection{Hierarchical Models}
+The posterior mean of the exponentiated intercept implies a 16.58\% risk rate across Germany with a credibility interval ranging from -3.96\% to 40.12\%.  \\
+From this summary, it may seem difficult to interpret the impact of the trade tax and total income on the risk of contracting Covid-19, but it must be borne in mind that the difference in these variables is usually far greater than 1. \\
+The range of the trade tax per 1000 inhabitants is from around 45000€ to 775000€. An increase in the trade tax by 25000€ per 1000 inhabitants leads to an increase in the risk of contracting Covid-19 by 1.77\%, given that the total income remains the same. \\
+The range of total income, defined as the sum of income tax and payroll tax, per 1000 inhabitants ranges from 12500€ to about 36000€. An increase of 1000€ per 1000 inhabitants, with no change in trade tax, reduces the risk of contagion by about 1.62\%. \\
+Since trade tax must be paid by all companies operating in Germany, this tax is highest in cities, as many companies have their headquarters there. This could therefore be an indication that the risk of infection is higher in cities. \\
+On the other hand, the risk of infection decreases in regions where there is a higher total income based on payroll and income tax, i.e. where people earn a higher salary. Traditionally, people in western Germany have a higher income compared to eastern Germany, which could explain why eastern Germany, especially Saxony, is more affected by Covid-19 than some of the western parts of Germany.
+\subsubsection{Infrastructure Models}
+When it comes to the models based on the infrastructural variables, a BYM2 model performed the best. It was computed using the following formula: 
+\begin{lstlisting}[language=R]
+formula_26_bym2 <- CumNumberTestedIll ~
+  marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools + 
+  higher_education + kindergarten + bakeries + 
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_2
+  )
+\end{lstlisting}
+The performance measures of the computed models are shown in Table~\ref{infraGermany}. In total, 24 models were calculated.
+\begin{table}[H] 
+\caption{The performance measures for the best performing demographic model of each type. The rank in relation to each performance measure is shown in the brackets. \label{infraGermany}}
+\begin{tabular}{l l l l}
+\toprule
+\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} \\
+\midrule
+Besags Proper & 5737 (12) & 5653 (3) & -3387 (13)\\
+BYM2 & 5680 (1) & 5647 (2) & -3365 (20)\\
+Leroux & 5699 (7) & 5681 (10) & -3568 (8) \\
+\bottomrule
+\end{tabular}
+\end{table}
+Again, the models with the best CPO were all Leroux models. \\
+The effect of the covariates are shown in table~\ref{fixedInfraGermany}.
+\begin{table}[H] 
+\caption{The fixed effects for the BYM2 model. Values are rounded. \label{fixedInfraGermany}}
+\begin{tabular}{l r r r r}
+\toprule
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
+\midrule
+(Intercept) & 0.09038 & 1.100 & 0.9023 & 1.327\\
+marketplace & 0.9468 & 3.293  & 0.6496  & 10.09 \\
+entertainment & 0.3053 & 1.454 & 0.6566 & 2.798\\
+hairdresser & 0.1362 & 1.154 & 0.9034 & 1.453\\
+shops & 0.04251 & 1.058 & 0.7512 & 1.448\\
+bakeries & 0.01805 & 1.031 & 0.7482 & 1.385\\
+place\_of\_worship & -0.007848 & 0.9925 & 0.9445 & 1.042\\
+platform & -0.01340 & 0.9867 & 0.9768 & 0.9966\\
+nursing\_home & -0.02752 & 1.057 & 0.4365 & 2.160\\
+schools & -0.02930 & 0.9764 & 0.7926 & 1.190\\
+kindergarten & -0.03017 & 0.9772 & 0.7689 & 1.224\\
+aerodrome & -0.03255 & 1.2162 & 0.2559 & 3.615\\
+retail & -0.03583 & 0.9661 & 0.8700 & 1.070\\
+restaurant & -0.04270 & 0.9587 & 0.8968 & 1.024\\
+higher\_education & -0.07287 & 0.9363 & 0.7372 & 1.172\\
+office & -0.08885  & 0.9172 & 0.7993 & 1.047\\
+clinic & -0.09167 & 0.9135 & 0.8288 & 1.004\\
+sport & -0.1211  & 0.8883 & 0.7693 & 1.020\\
+\bottomrule
+\end{tabular}
+\end{table}
+Some findings from these results are that the average risk ratio in Germany is 10\%. Marketplaces increase the risk by over 200\%, however, there is a maximum of only 0.1265 marketplaces per 1000 inhabitants, resulting in such a high value. If the number of marketplaces increases by 0.01 per 1000 inhabitants, the risk of infection increases by 1.20\%. More common sites that increase the risk of infection include bakeries (between 0.1169 and 0.9643 per 1000 inhabitants), hairdressers (between 0.09655 and 1.191 per 1000 inhabitants) and shops (between 0.3710 and 1.129 per 1000 inhabitants). An increase of 0.1 per 1000 for each of these types of establishments results in a risk increase of 0.3\%, 1.4\% and 0.6\%, respectively. It should not be surprising, in particular, that shops increase the risk of infection, as people tend to congregate there and people living in areas where a supermarket is nearby may prefer to go shopping more often in favour of fresh produce, rather than just once a week when a supermarket is further away. \\
+There are also effects that have a posterior mean of less than 1, suggesting that they reduce the risk of infection. However, this is not necessarily the case, as it is probably safer for a person to stay at home rather than go to a restaurant, for example.
+\subsubsection{Combined Models}
 \subsection{Spatial Models for Norway}
+\subsubsection{Demographic Models}
+\subsubsection{Infrastructure Models}
+\subsubsection{Combined Models}
 \clearpage
 \section{Spatio-Temporal Models}
 \subsection{Spatio-Temporal Models for Germany}

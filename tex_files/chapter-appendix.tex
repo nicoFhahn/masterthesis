@@ -10,3 +10,172 @@ The density is given by
     f\left(k,r,p\right)=\mathcal{P}\left(X=k\right)=\begin{pmatrix} k+r-1\\r-1\end{pmatrix}\left(1-p\right)^kp^r,
 \end{equation}
 with $r$ the number of successes, $k$ the number of failures, and $p$ the probability of success \cite{haldane1941fitting}.
+
+\section{Code examples}
+\subsubsection{Specifying the Different Types of Models}
+\begin{lstlisting}[caption={Specifying different models in INLA.}, label={codeModels}, language=R]
+# Specify a penalized prior
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
+  )
+)
+# Create a neighbourhood list
+nb <- poly2nb(newest_numbers_germany)
+# save the neighbourhood
+nb2INLA("maps/map_2.adj", nb)
+# load it
+g <- inla.read.graph(filename = "maps/map_2.adj")
+# specify the model formula for the bym2 model
+formula_bym2 <- CumNumberTestedIll ~
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + sex + 
+  # specify the model with neighbourhood matrix
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  )
+# compute the model
+res_bym2 <- inla(
+  formula_bym2,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+# specify the model formula for besags proper spatial model
+formula_bp <- CumNumberTestedIll ~
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + sex + 
+  # specify the model with neighbourhood matrix
+  f(
+    idarea_1, model = "besagproper",
+    graph = g, hyper = prior_1
+  )
+# compute the model
+res_bp <- inla(
+  formula_bp,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+# compute the Q matrix
+Q <- Diagonal(x = sapply(nb, length))
+for(i in 2:nrow(newest_numbers)) {
+  Q[i - 1, i] <- -1
+  Q[i, i - 1] <- -1
+}
+# compute the C matrix
+C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
+# specify the model formula for the leroux model
+formula_leroux <- CumNumberTestedIll ~
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + sex + 
+  # specify the model with neighbourhood matrix
+  f(
+    idarea_1, model = "generic1",
+    Cmatrix = C, hyper = prior_1
+  )
+# compute the model
+res_leroux <- inla(
+  formula_leroux,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+\end{lstlisting}
+\subsubsection{Variable Selection using INLA}
+\begin{lstlisting}[caption={The code for variable selection in INLA.}, label={codeSelection}, language=R]
+# define the stack
+stack_all <- inla.stack(
+  data = list(
+  CumNumberTestedIll = newest_numbers$CumNumberTestedIll
+    ),
+  A = list(1),
+  effects = list(
+    data.frame(
+      Intercept = 1,
+      newest_numbers[, c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59)]
+    )
+  )
+)
+# run the selection
+result_backwards <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_all,
+  invariant = "Intercept",
+  direction = "backwards",
+  include = c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59),
+  y = "CumNumberTestedIll",
+  y2 = "CumNumberTestedIll",
+  powerl = 1,
+  inter = 1,
+  thresh = 2
+)
+# run the selection
+result_forwards <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_all,
+  invariant = "Intercept",
+  direction = "forwards",
+  include = c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59),
+  y = "CumNumberTestedIll",
+  y2 = "CumNumberTestedIll",
+  powerl = 1,
+  inter = 1,
+  thresh = 2
+)
+\end{lstlisting}
+\subsubsection{Infrastructure Models for Germany}
+\begin{lstlisting}[caption={The code for the demographic models.}, label={infraGermanyCode}, language=R]
+prior_2 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(0.5 / 0.31, 0.01)
+  )
+)
+formula_22_bym2 <- CumNumberTestedIll ~
+  pop_dens + urb_dens + marketplace + entertainment + sport +
+  clinic + toilet + hairdresser + shops + place_of_worship +
+  retail + nursing_home + restaurant + aerodrome + office +
+  platform + schools + higher_education + banks + kindergarten +
+  bakeries + gas + atm +
+  f(
+    idarea_1, model = "bym2",
+    graph = g, scale.model = TRUE,
+    hyper = prior_2
+  ) 
+formula_23_bym2 <- CumNumberTestedIll ~
+  marketplace + entertainment + sport + clinic +
+  toilet + hairdresser + shops + place_of_worship + retail +
+  nursing_home + restaurant + aerodrome + office + platform +
+  schools + higher_education + banks + kindergarten + bakeries +
+  gas + atm +
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  ) 
+formula_26_leroux <- CumNumberTestedIll ~
+  marketplace + entertainment + clinic + toilet + hairdresser +
+  place_of_worship + retail + nursing_home + restaurant +
+  terminal + platform + kindergarten + schools + bakeries +
+  gas + banks + atm + pop_dens + higher_education +
+  f(
+    idarea_1, model = "generic1",
+    Cmatrix = C, hyper = prior_2
+  )
+\end{lstlisting}

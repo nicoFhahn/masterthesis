@@ -16,7 +16,9 @@
     chapterprefix=false,    % do not display a prefix for chapters
     appendixprefix=false,    % but display a prefix for appendix chapter
     draft=false,            % value for draft version
-    configurebiblatex=true
+    configurebiblatex=true,
+    resetnumbers=true,
+    defernumbers=true
 ]{scrreprt}%
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -91,7 +93,7 @@
 \input{chapter-geodata}
 \input{chapter-datacollection}
 \input{chapter-analysis}
-%\input{chapter-appendix}
+\input{chapter-appendix}
 %\input{chapter-discussion}
 
 
