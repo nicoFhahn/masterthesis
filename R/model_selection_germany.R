@@ -19,7 +19,7 @@ stack_all <- inla.stack(
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(2:5, 8:18, 26:40, 43:48, 56:59)]
+      newest_numbers[, c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59)]
     )
   )
 )
@@ -39,7 +39,7 @@ stack_infra <- inla.stack(
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(26:40, 43:48, 56:57, 59)]
+      newest_numbers[, c(26:36, 38:40, 43:48, 56:57, 59)]
     )
   )
 )
@@ -49,7 +49,7 @@ result_all <- INLAstep(
   in_stack = stack_all,
   invariant = "0 + Intercept",
   direction = "backwards",
-  include = c(2:5, 8:18, 26:40, 43:48, 56:58, 60),
+  include = c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59),
   y = "CumNumberTestedIll",
   y2 = "CumNumberTestedIll",
   powerl = 1,
@@ -75,7 +75,7 @@ result_infra <- INLAstep(
   in_stack = stack_infra,
   invariant = "0 + Intercept",
   direction = "backwards",
-  include = c(26:40, 43:48, 56:57, 60),
+  include = c(26:36, 38:40, 43:48, 56:57, 59),
   y = "CumNumberTestedIll",
   y2 = "CumNumberTestedIll",
   powerl = 1,
@@ -85,7 +85,7 @@ result_infra <- INLAstep(
 set.seed(420)
 sel_all <- INLAModelSel(
   "CumNumberTestedIll",
-  colnames(newest_numbers)[c(2:5, 8:18, 26:40, 43:48, 56:58, 60)],
+  colnames(newest_numbers)[c(2:5, 8:18, 26:36, 38:40, 43:48, 56:58, 60)],
   "idarea_1",
   "iid",
   "nbinomial",
@@ -101,7 +101,7 @@ sel_demo <- INLAModelSel(
 )
 sel_infra <- INLAModelSel(
   "CumNumberTestedIll",
-  colnames(newest_numbers)[c(26:40, 43:48, 56:57, 60)],
+  colnames(newest_numbers)[c(26:36, 38:40, 43:48, 56:57, 60)],
   "idarea_1",
   "iid",
   "nbinomial",
