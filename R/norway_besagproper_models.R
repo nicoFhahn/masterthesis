@@ -32,13 +32,13 @@ g <- inla.read.graph(filename = "maps/map_1.adj")
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + median_age +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + median_age +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
 formula_2 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + median_age +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + median_age +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
 
@@ -160,15 +160,15 @@ saveWidget(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
 # now models with the mobility variables
 formula_3 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + median_age + groc_pha + parks + resident +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + median_age + groc_pha + parks + resident +
   ret_recr + transit + workplace +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
 
 formula_4 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + median_age + groc_pha + parks + resident +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + median_age + groc_pha + parks + resident +
   ret_recr + transit + workplace +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
@@ -294,16 +294,16 @@ saveWidget(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
 # now models with the infrastructure variables
 formula_5 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + office + platform +
   higher_educ + kindergarten + schools + bakeries + gas + banks + atm +
   marketplace + entertainment + sport + clinic + toilet + hairdresser +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
 formula_6 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + office + platform +
   higher_educ + kindergarten + schools + bakeries + gas + banks + atm +
   marketplace + entertainment + sport + clinic + toilet + hairdresser +
@@ -431,8 +431,8 @@ saveWidget(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
 # now models with all the variables
 formula_7 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + office + platform +
   higher_educ + kindergarten + schools + bakeries + gas + banks + atm +
   marketplace + entertainment + sport + clinic + toilet + hairdresser +
@@ -440,8 +440,8 @@ formula_7 <- value ~
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
 formula_8 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + office + platform +
   higher_educ + kindergarten + schools + bakeries + gas + banks + atm +
   marketplace + entertainment + sport + clinic + toilet + hairdresser +
@@ -570,8 +570,8 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
 ########################################################
 # now models with all the variables
 formula_9 <- value ~
-  # add the demographic vars and pop density
-  groc_pha + parks + resident + ret_recr + transit + workplace + median_age +
+# add the demographic vars and pop density
+groc_pha + parks + resident + ret_recr + transit + workplace + median_age +
   marketplace + sport + clinic + toilet + retail + nursing_home + restaurant +
   aerodrome + office + platform + kindergarten + schools + bakeries +
   gas + banks + atm + pop_dens + urb_dens + sex +
@@ -585,11 +585,11 @@ formula_9 <- value ~
 # train model 2 weeks ago, predict on today
 # social index east vs west oslo
 # gini koeffizient
-# 
+#
 
 formula_10 <- value ~
-  # add the demographic vars and pop density
-  groc_pha + parks + resident + ret_recr + transit + workplace + median_age +
+# add the demographic vars and pop density
+groc_pha + parks + resident + ret_recr + transit + workplace + median_age +
   marketplace + sport + clinic + toilet + retail + nursing_home + restaurant +
   aerodrome + office + platform + kindergarten + schools + bakeries +
   gas + banks + atm + pop_dens + urb_dens + sex +
@@ -717,36 +717,36 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
 
 # now models with all the variables
 formula_11 <- value ~
-  # add the demographic vars and pop density
-  shops + retail + clinic + schools + banks + pop_dens + office + atm +
+# add the demographic vars and pop density
+shops + retail + clinic + schools + banks + pop_dens + office + atm +
   place_of_worship + restaurant + sport + hairdresser + gas +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
 formula_12 <- value ~
-  # add the demographic vars and pop density
-  shops + retail + clinic + schools + banks + pop_dens + office + atm +
+# add the demographic vars and pop density
+shops + retail + clinic + schools + banks + pop_dens + office + atm +
   place_of_worship + restaurant + sport + hairdresser + gas +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
 formula_13 <- value ~
-  # add the demographic vars and pop density
-  shops + retail + clinic + schools + banks + pop_dens + office + atm +
+# add the demographic vars and pop density
+shops + retail + clinic + schools + banks + pop_dens + office + atm +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
 
 formula_14 <- value ~
-  # add the demographic vars and pop density
-  shops + retail + clinic + schools + banks + pop_dens + office + atm +
+# add the demographic vars and pop density
+shops + retail + clinic + schools + banks + pop_dens + office + atm +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
 formula_15 <- value ~
-  # add the demographic vars and pop density
-  shops + retail + clinic + schools + banks +
+# add the demographic vars and pop density
+shops + retail + clinic + schools + banks +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
 formula_16 <- value ~
-  # add the demographic vars and pop density
-  shops + retail + clinic + schools + banks +
+# add the demographic vars and pop density
+shops + retail + clinic + schools + banks +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
 
@@ -931,7 +931,8 @@ covariates <- covariates[, !str_detect(colnames(covariates), "_work")]
 covariates <- covariates[, !str_detect(colnames(covariates), "_com")]
 covariates$geometry <- NULL
 task <- makeRegrTask(
-  "regr_task", data = covariates, target = "value"
+  "regr_task",
+  data = covariates, target = "value"
 )
 
 

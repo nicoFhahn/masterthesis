@@ -52,34 +52,34 @@ if (date_1 != date_2) {
   germany_politics <- read_delim("germany_data/europawahl_2019.csv", delim = ";")[1:538, ]
   germany_politics$Wahlbeteiligung <- str_replace_all(germany_politics$Wahlbeteiligung, "\\,", ".")
   germany_politics$Wahlbeteiligung <- as.numeric(germany_politics$Wahlbeteiligung)
-  germany_politics[str_detect(germany_politics$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
-  germany_politics[str_detect(germany_politics$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+  germany_politics[str_detect(germany_politics$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
+  germany_politics[str_detect(germany_politics$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
   germany_politics <- germany_politics[germany_politics$Kreis %in% germany_shape$Kennziffer, ]
-  germany_unemployed <- read_delim("germany_data/arbeitslose_2019.csv", delim = ";")#[1:538, ]
-  germany_unemployed[str_detect(germany_unemployed$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
-  germany_unemployed[str_detect(germany_unemployed$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+  germany_unemployed <- read_delim("germany_data/arbeitslose_2019.csv", delim = ";") # [1:538, ]
+  germany_unemployed[str_detect(germany_unemployed$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
+  germany_unemployed[str_detect(germany_unemployed$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
   germany_unemployed <- germany_unemployed[germany_unemployed$Kreis %in% germany_shape$Kennziffer, ]
-  germany_protect <- read_delim("germany_data/schutzsuchende_2018.csv", delim = ";")#[1:538, ]
-  germany_protect[str_detect(germany_protect$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
-  germany_protect[str_detect(germany_protect$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+  germany_protect <- read_delim("germany_data/schutzsuchende_2018.csv", delim = ";") # [1:538, ]
+  germany_protect[str_detect(germany_protect$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
+  germany_protect[str_detect(germany_protect$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
   germany_protect <- germany_protect[germany_protect$Kreis %in% germany_shape$Kennziffer, ]
-  germany_social <- read_delim("germany_data/sozialhilfe_2019.csv", delim = ";")#[1:538, ]
-  germany_social[str_detect(germany_social$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
-  germany_social[str_detect(germany_social$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+  germany_social <- read_delim("germany_data/sozialhilfe_2019.csv", delim = ";") # [1:538, ]
+  germany_social[str_detect(germany_social$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
+  germany_social[str_detect(germany_social$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
   germany_social <- germany_social[germany_social$Kreis %in% germany_shape$Kennziffer, ]
   germany_company_tax <- read_delim("germany_data/gewerbesteuer_2015.csv", delim = ";")
   germany_company_tax <- germany_company_tax[!is.na(germany_company_tax$Kreis), ]
   germany_company_tax <- germany_company_tax[germany_company_tax$X1 == 2015, ]
-  germany_company_tax[str_detect(germany_company_tax$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
-  germany_company_tax[str_detect(germany_company_tax$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+  germany_company_tax[str_detect(germany_company_tax$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
+  germany_company_tax[str_detect(germany_company_tax$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
   germany_company_tax <- germany_company_tax[germany_company_tax$Kreis %in% germany_shape$Kennziffer, ]
-  germany_income_tax <- read_delim("germany_data/einkommen_lohn_steuer_2016.csv", delim = ";")#[1:538, ]
-  germany_income_tax[str_detect(germany_income_tax$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
-  germany_income_tax[str_detect(germany_income_tax$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+  germany_income_tax <- read_delim("germany_data/einkommen_lohn_steuer_2016.csv", delim = ";") # [1:538, ]
+  germany_income_tax[str_detect(germany_income_tax$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
+  germany_income_tax[str_detect(germany_income_tax$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
   germany_income_tax <- germany_income_tax[germany_income_tax$Kreis %in% germany_shape$Kennziffer, ]
-  germany_asyl <- read_delim("germany_data/asylbewerberleistungen_2019.csv", delim = ";")#[1:538, ]
-  germany_asyl[str_detect(germany_asyl$Stadt, "Hamburg"),]$Kreis[1] <- "2000"
-  germany_asyl[str_detect(germany_asyl$Stadt, "Berlin"),]$Kreis[1] <- "11000"
+  germany_asyl <- read_delim("germany_data/asylbewerberleistungen_2019.csv", delim = ";") # [1:538, ]
+  germany_asyl[str_detect(germany_asyl$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
+  germany_asyl[str_detect(germany_asyl$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
   germany_asyl <- germany_asyl[germany_asyl$Kreis %in% germany_shape$Kennziffer, ]
   germany <- merge(
     germany_asyl,
@@ -147,7 +147,7 @@ if (date_1 != date_2) {
   load("osmdata/germany_sport.Rda")
   load("osmdata/germany_entertainment.Rda")
   load("osmdata/germany_marketplace.Rda")
-  
+
   germany_shape$marketplace <- unlist(
     lapply(
       seq_len(
@@ -168,7 +168,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$entertainment <- unlist(
     lapply(
       seq_len(
@@ -189,7 +189,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$sport <- unlist(
     lapply(
       seq_len(
@@ -210,7 +210,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$clinic <- unlist(
     lapply(
       seq_len(
@@ -231,7 +231,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$toilet <- unlist(
     lapply(
       seq_len(
@@ -252,7 +252,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$hairdresser <- unlist(
     lapply(
       seq_len(
@@ -273,7 +273,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$shops <- unlist(
     lapply(
       seq_len(
@@ -294,7 +294,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$place_of_worship <- unlist(
     lapply(
       seq_len(
@@ -315,7 +315,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$retail <- unlist(
     lapply(
       seq_len(
@@ -336,7 +336,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$nursing_home <- unlist(
     lapply(
       seq_len(
@@ -357,7 +357,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$restaurant <- unlist(
     lapply(
       seq_len(
@@ -378,7 +378,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$terminal <- unlist(
     lapply(
       seq_len(
@@ -399,7 +399,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$aerodrome <- unlist(
     lapply(
       seq_len(
@@ -420,7 +420,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$office <- unlist(
     lapply(
       seq_len(
@@ -441,7 +441,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$platform <- unlist(
     lapply(
       seq_len(
@@ -462,7 +462,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$university <- unlist(
     lapply(
       seq_len(
@@ -483,7 +483,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$college <- unlist(
     lapply(
       seq_len(
@@ -504,7 +504,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$kindergarten <- unlist(
     lapply(
       seq_len(
@@ -525,7 +525,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$schools <- unlist(
     lapply(
       seq_len(
@@ -546,7 +546,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$bakeries <- unlist(
     lapply(
       seq_len(
@@ -567,7 +567,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$gas <- unlist(
     lapply(
       seq_len(
@@ -588,7 +588,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$banks <- unlist(
     lapply(
       seq_len(
@@ -609,8 +609,8 @@ if (date_1 != date_2) {
       }
     )
   )
-  
-  
+
+
   germany_shape$atm <- unlist(
     lapply(
       seq_len(
@@ -631,8 +631,8 @@ if (date_1 != date_2) {
       }
     )
   )
-  
-  
+
+
   germany_shape$residential <- unlist(
     lapply(
       seq_len(
@@ -653,9 +653,9 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   rm(list = setdiff(ls(), c("germany_shape", "germany_confirmed_population", "germany", "germany_confirmed")))
-  
+
   germany_complete <- merge(
     germany_shape,
     germany_confirmed_population,
@@ -672,12 +672,12 @@ if (date_1 != date_2) {
   no_geometry$Stadt <- NULL
   no_geometry[, c(3, 4, 19:22, 25:29, 32:34, 36:40, 44, 70:84)] <- NULL
   colnames(no_geometry)[7] <- "stimmen"
-  
+
   # calculate the SIR
   write_csv(no_geometry, "wrangled_data/germany_features.csv")
   rm(list = ls())
   # prepare the data
-  germany_features <- read_csv("wrangled_data/germany_features.csv") 
+  germany_features <- read_csv("wrangled_data/germany_features.csv")
 }
 germany_features$Gewerbesteuer <- as.numeric(trimws(germany_features$Gewerbesteuer))
 germany_features$schutzsuchende <- as.numeric(trimws(germany_features$schutzsuchende))
@@ -715,7 +715,7 @@ newest_numbers$sex <- newest_numbers$PopulationFemale / newest_numbers$Populatio
 cols_imputed <- lapply(
   c(1:51, 53:59),
   function(x, ...) {
-    vals <-newest_numbers[, x]
+    vals <- newest_numbers[, x]
     vals$geometry <- NULL
     vals[is.na(vals)] <- median(vals[, 1], na.rm = TRUE)
     vals
@@ -760,4 +760,3 @@ newest_numbers <- st_as_sf(newest_numbers_imputed)
 # newest_numbers_21$sex <- newest_numbers_21$population_female / newest_numbers_21$population_total
 newest_numbers$higher_education <- newest_numbers$college + newest_numbers$university
 rm(list = setdiff(ls(), c("newest_numbers")))
-
