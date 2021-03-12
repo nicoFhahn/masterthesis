@@ -17,7 +17,7 @@ stack_all <- inla.stack(
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(7:51, 53, 60:62)]
+      newest_numbers[, c(7:32, 35:39, 41, 48:50)]
     )
   )
 )
@@ -27,7 +27,7 @@ stack_demo <- inla.stack(
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(7:30, 60:62)]
+      newest_numbers[, c(7:18, 48:50)]
     )
   )
 )
@@ -37,7 +37,7 @@ stack_infra <- inla.stack(
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(37:51, 53, 60, 61)]
+      newest_numbers[, c(19:32, 35:39, 48, 49)]
     )
   )
 )
@@ -47,7 +47,7 @@ result_all <- INLAstep(
   in_stack = stack_all,
   invariant = "0 + Intercept",
   direction = "backwards",
-  include = c(7:51, 53, 60:62),
+  include = c(7:32, 35:39, 41, 48:50),
   y = "value",
   y2 = "value",
   powerl = 1,
@@ -61,7 +61,7 @@ result_demo <- INLAstep(
   in_stack = stack_demo,
   invariant = "0 + Intercept",
   direction = "backwards",
-  include = c(7:30, 60:62),
+  include = c(7:18, 48:50),
   y = "value",
   y2 = "value",
   powerl = 1,
@@ -74,7 +74,7 @@ result_infra <- INLAstep(
   in_stack = stack_infra,
   invariant = "0 + Intercept",
   direction = "backwards",
-  include = c(37:51, 53, 60, 61),
+  include = c(19:32, 35:39, 48, 49),
   y = "value",
   y2 = "value",
   powerl = 1,
@@ -84,7 +84,7 @@ result_infra <- INLAstep(
 set.seed(420)
 sel_all <- INLAModelSel(
   "value",
-  colnames(newest_numbers)[c(7:51, 53, 60:62)],
+  colnames(newest_numbers)[c(7:32, 35:39, 41, 48:50)],
   "idarea_1",
   "iid",
   "nbinomial",
@@ -92,7 +92,7 @@ sel_all <- INLAModelSel(
 )
 sel_demo <- INLAModelSel(
   "value",
-  colnames(newest_numbers)[c(7:30, 60:62)],
+  colnames(newest_numbers)[c(7:18, 48:50)],
   "idarea_1",
   "iid",
   "nbinomial",
@@ -100,10 +100,9 @@ sel_demo <- INLAModelSel(
 )
 sel_infra <- INLAModelSel(
   "value",
-  colnames(newest_numbers)[c(37:51, 53, 60, 61)],
+  colnames(newest_numbers)[c(19:32, 35:39, 48, 49)],
   "idarea_1",
   "iid",
   "nbinomial",
   newest_numbers
 )
-
