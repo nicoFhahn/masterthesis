@@ -441,24 +441,29 @@ results <- c(results, list(res_5 = perf))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 # now models with all the variables
 formula_19 <- value ~
-  pop_dens + urb_dens + sex +
-  # add the demographic vars and pop density
-  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
-  construction_ft_com + construction_pt_com +
-  median_age + unemp_tot + unemp_immg + immigrants_total + immigrants_norge +
-  immigrants_pure +
+  median_age + unemp_tot + unemp_immg + workers_ft_com + 
+  workers_pt_com + mining_ft_com + construction_pt_com + immigrants_total + 
+  immigrants_norge + immigrants_pure + pop_dens + urb_dens + 
+  sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_20 <- value ~
-  pop_dens + urb_dens + sex +
-  # add the demographic vars and pop density
-  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
-  construction_ft_com + construction_pt_com +
-  median_age + unemp_tot + unemp_immg + immigrants_total + immigrants_norge +
-  immigrants_pure +
+  median_age + unemp_tot + unemp_immg + workers_ft_com + 
+  workers_pt_com + mining_ft_com + construction_pt_com + immigrants_total + 
+  immigrants_norge + immigrants_pure + pop_dens + urb_dens + 
+  sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
-
+formula_21 <- value ~
+  pop_dens + immigrants_pure + median_age + 
+  sex +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+formula_22 <- value ~
+  pop_dens + immigrants_pure + median_age + 
+  sex +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
 res_19 <- inla(
   formula_19,
@@ -482,57 +487,6 @@ res_20 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-
-models <- c(models, list(res_19, res_20))
-
-perf <- list(
-  dic = c(
-    res_19$dic$dic, res_20$dic$dic
-  ),
-  waic = c(
-    res_19$waic$waic, res_20$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_19$cpo$cpo)), sum(log(res_20$cpo$cpo))
-  )
-)
-results <- c(results, list(res_6 = perf))
-
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
-
-# now models with all the variables
-formula_21 <- value ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
-  toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  banks + kindergarten + bakeries + gas + atm +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
-formula_22 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
-  toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  banks + kindergarten + bakeries + gas + atm +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
-formula_23 <- value ~
-  marketplace + entertainment + sport + clinic +
-  toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  banks + kindergarten + bakeries + gas + atm +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
-formula_24 <- value ~
-  # add the demographic vars and pop density
-  marketplace + entertainment + sport + clinic +
-  toilet + hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  banks + kindergarten + bakeries + gas + atm +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
-
-
 res_21 <- inla(
   formula_21,
   family = "nbinomial",
@@ -555,6 +509,60 @@ res_22 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
+
+models <- c(models, list(res_19, res_20, res_21, res_22))
+
+perf <- list(
+  dic = c(
+    res_19$dic$dic, res_20$dic$dic,
+    res_21$dic$dic, res_22$dic$dic
+  ),
+  waic = c(
+    res_19$waic$waic, res_20$waic$waic,
+    res_21$waic$waic, res_22$waic$waic
+  ),
+  cpo = c(
+    sum(log(res_19$cpo$cpo)), sum(log(res_20$cpo$cpo)),
+    sum(log(res_21$cpo$cpo)), sum(log(res_22$cpo$cpo))
+  )
+)
+results <- c(results, list(res_6 = perf))
+
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
+
+# now models with all the variables
+formula_23 <- value ~
+  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools + higher_education +
+  kindergarten + bakeries + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+formula_24 <- value ~
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools + higher_education +
+  kindergarten + bakeries + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+formula_25 <- value ~
+  marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools + higher_education +
+  kindergarten + bakeries + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+formula_26 <- value ~
+  # add the demographic vars and pop density
+  marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools + higher_education +
+  kindergarten + bakeries + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+
+
 res_23 <- inla(
   formula_23,
   family = "nbinomial",
@@ -565,7 +573,6 @@ res_23 <- inla(
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 
 res_24 <- inla(
   formula_24,
@@ -578,45 +585,6 @@ res_24 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-
-models <- c(models, list(res_21, res_22, res_23, res_24))
-
-perf <- list(
-  dic = c(
-    res_21$dic$dic, res_22$dic$dic,
-    res_23$dic$dic, res_24$dic$dic
-  ),
-  waic = c(
-    res_21$waic$waic, res_22$waic$waic,
-    res_23$waic$waic, res_24$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_21$cpo$cpo)), sum(log(res_22$cpo$cpo)),
-    sum(log(res_23$cpo$cpo)), sum(log(res_24$cpo$cpo))
-  )
-)
-results <- c(results, list(res_7 = perf))
-
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
-
-# now models with all the variables
-# now models with all the variables
-formula_25 <- value ~
-  marketplace + entertainment + clinic + toilet + hairdresser +
-  place_of_worship + retail + nursing_home + restaurant + terminal +
-  platform + kindergarten + schools + bakeries + gas + banks + atm + pop_dens +
-  higher_education +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
-formula_26 <- value ~
-  # add the demographic vars and pop density
-  marketplace + entertainment + clinic + toilet + hairdresser +
-  place_of_worship + retail + nursing_home + restaurant + terminal +
-  platform + kindergarten + schools + bakeries + gas + banks + atm + pop_dens +
-  higher_education +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
-
 res_25 <- inla(
   formula_25,
   family = "nbinomial",
@@ -627,6 +595,7 @@ res_25 <- inla(
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+
 
 res_26 <- inla(
   formula_26,
@@ -640,44 +609,51 @@ res_26 <- inla(
 )
 
 
-models <- c(models, list(res_25, res_26))
+models <- c(models, list(res_23, res_24, res_25, res_26))
 
 perf <- list(
   dic = c(
+    res_23$dic$dic, res_24$dic$dic,
     res_25$dic$dic, res_26$dic$dic
   ),
   waic = c(
+    res_23$waic$waic, res_24$waic$waic,
     res_25$waic$waic, res_26$waic$waic
   ),
   cpo = c(
+    sum(log(res_23$cpo$cpo)), sum(log(res_24$cpo$cpo)),
     sum(log(res_25$cpo$cpo)), sum(log(res_26$cpo$cpo))
   )
 )
-results <- c(results, list(res_8 = perf))
+results <- c(results, list(res_7 = perf))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
+
+# now models with all the variables
 formula_27 <- value ~
-  pop_dens + urb_dens + sex + median_age +
-  # add the demographic vars and pop density
-  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
-  construction_ft_com + construction_pt_com +
-  median_age + unemp_tot + unemp_immg + immigrants_total + immigrants_norge +
-  immigrants_pure + entertainment + sport + clinic + toilet +
-  hairdresser + shops + place_of_worship + nursing_home + aerodrome + platform +
-  kindergarten + schools + bakeries + gas + banks + 
+  entertainment + clinic + shops + place_of_worship + 
+  retail + nursing_home + restaurant + aerodrome + platform + 
+  kindergarten + schools + higher_education + pop_dens + 
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_28 <- value ~
-  pop_dens + urb_dens + sex + median_age +
+  entertainment + clinic + shops + place_of_worship + 
+  retail + nursing_home + restaurant + aerodrome + platform + 
+  kindergarten + schools + higher_education + pop_dens + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+# now models with all the variables
+formula_29 <- value ~
+  pop_dens + shops + retail + place_of_worship + 
+  schools + nursing_home + kindergarten +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+formula_30 <- value ~
   # add the demographic vars and pop density
-  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
-  construction_ft_com + construction_pt_com +
-  median_age + unemp_tot + unemp_immg + immigrants_total + immigrants_norge +
-  immigrants_pure + entertainment + sport + clinic + toilet +
-  hairdresser + shops + place_of_worship + nursing_home + aerodrome + platform +
-  kindergarten + schools + bakeries + gas + banks + 
-# specify the model with neighborhood matrix
-f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  pop_dens + shops + retail + place_of_worship + 
+  schools + nursing_home + kindergarten +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
 res_27 <- inla(
   formula_27,
@@ -701,23 +677,147 @@ res_28 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
+res_29 <- inla(
+  formula_29,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
 
-models <- c(models, list(res_27, res_28))
+
+res_30 <- inla(
+  formula_30,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+
+
+models <- c(models, list(res_27, res_28, res_29, res_30))
 
 perf <- list(
   dic = c(
-    res_27$dic$dic, res_28$dic$dic
+    res_27$dic$dic, res_28$dic$dic,
+    res_29$dic$dic, res_30$dic$dic
   ),
   waic = c(
-    res_27$waic$waic, res_28$waic$waic
+    res_27$waic$waic, res_28$waic$waic,
+    res_29$waic$waic, res_30$waic$waic
   ),
   cpo = c(
-    sum(log(res_27$cpo$cpo)), sum(log(res_28$cpo$cpo))
+    sum(log(res_27$cpo$cpo)), sum(log(res_28$cpo$cpo)),
+    sum(log(res_29$cpo$cpo)), sum(log(res_30$cpo$cpo))
+  )
+)
+results <- c(results, list(res_8 = perf))
+
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
+# now models with all the variables
+formula_31 <- value ~
+  median_age + unemp_tot + unemp_immg + workers_ft_com + 
+  workers_pt_com + mining_ft_com + mining_pt_com + construction_pt_com + 
+  immigrants_total + immigrants_norge + immigrants_pure + marketplace + 
+  entertainment + clinic + hairdresser + shops + place_of_worship + 
+  retail + nursing_home + aerodrome + platform + kindergarten + 
+  schools + bakeries + higher_education + pop_dens + urb_dens +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+formula_32 <- value ~
+  median_age + unemp_tot + unemp_immg + workers_ft_com + 
+  workers_pt_com + mining_ft_com + mining_pt_com + construction_pt_com + 
+  immigrants_total + immigrants_norge + immigrants_pure + marketplace + 
+  entertainment + clinic + hairdresser + shops + place_of_worship + 
+  retail + nursing_home + aerodrome + platform + kindergarten + 
+  schools + bakeries + higher_education + pop_dens + urb_dens +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+# now models with all the variables
+formula_33 <- value ~
+  pop_dens + shops + median_age + sex + immigrants_pure + 
+  entertainment + unemp_immg + construction_pt_com + immigrants_total + 
+  nursing_home + place_of_worship + higher_education +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+formula_34 <- value ~
+  pop_dens + shops + median_age + sex + immigrants_pure + 
+  entertainment + unemp_immg + construction_pt_com + immigrants_total + 
+  nursing_home + place_of_worship + higher_education +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+
+res_31 <- inla(
+  formula_31,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+res_32 <- inla(
+  formula_32,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+res_33 <- inla(
+  formula_33,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+
+res_34 <- inla(
+  formula_34,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+
+
+models <- c(models, list(res_31, res_32, res_33, res_34))
+
+perf <- list(
+  dic = c(
+    res_31$dic$dic, res_32$dic$dic,
+    res_33$dic$dic, res_34$dic$dic
+  ),
+  waic = c(
+    res_31$waic$waic, res_32$waic$waic,
+    res_33$waic$waic, res_34$waic$waic
+  ),
+  cpo = c(
+    sum(log(res_31$cpo$cpo)), sum(log(res_32$cpo$cpo)),
+    sum(log(res_33$cpo$cpo)), sum(log(res_34$cpo$cpo))
   )
 )
 results <- c(results, list(res_9 = perf))
-
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 # now models with all the variables
 models_final <- list(models, results)
 save(models_final, file = "models/bym2_norway.Rda")

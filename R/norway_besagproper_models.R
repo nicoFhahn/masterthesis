@@ -22,7 +22,9 @@ prior_2 <- list(
     prior = "pc.prec",
     param = c(0.5 / 0.31, 0.01)
   )
-)
+) #
+models <- list()
+results <- list()
 #
 # create the neighbordhood matrix
 nb <- poly2nb(newest_numbers)
@@ -32,16 +34,15 @@ g <- inla.read.graph(filename = "maps/map_1.adj")
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + median_age +
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_2 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + median_age +
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
-
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 
 res_1 <- inla(
   formula_1,
@@ -65,113 +66,43 @@ res_2 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-results_frame <- newest_numbers
-dics <- c(res_1$dic$dic, res_2$dic$dic)
-dics[is.nan(dics)] <- 100000
-if (dics[1] == min(dics)) {
-  sfv <- res_1$summary.fitted.values
-} else {
-  sfv <- res_2$summary.fitted.values
-}
-results_frame$rr <- sfv$mean
-results_frame$q025 <- sfv$`0.025quant`
-results_frame$q5 <- sfv$`0.5quant`
-results_frame$q975 <- sfv$`0.975quant`
-rc1 <- colorRampPalette(
-  c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
+models <- c(models, list(res_1, res_2))
+perf <- list(
+  dic = c(
+    res_1$dic$dic, res_2$dic$dic
   ),
-  space = "Lab"
-)(10)
-rc2 <- colorRampPalette(
-  c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
+  waic = c(
+    res_1$waic$waic, res_2$waic$waic
   ),
-  space = "Lab"
-)(round(10 * range(results_frame$rr)[2] - 10))
-pal <- colorNumeric(
-  c(rc1, rc2),
-  domain = results_frame$rr
-)
-map <- leaflet(results_frame) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(rr),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Kommune: ", results_frame$kommune_name, "<br>",
-      "Population: ", results_frame$population, "<br>",
-      "Population density: ", round(results_frame$pop_dens), "<br>",
-      "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-      "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-      "Median age: ", results_frame$median_age, "<br>",
-      "Number of infections: ", results_frame$value, "<br>",
-      "Expected number of infections: ", round(results_frame$expected), "<br>",
-      "SIR: ", round(results_frame$sir, 3), "<br>",
-      "Relative risk: ", round(results_frame$rr, 3)
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = results_frame,
-    pal = pal,
-    values = ~rr,
-    title = htmltools::HTML(
-      paste(
-        "RR<br><span style='font-size:0.8em'>DIC:",
-        round(min(dics)),
-        "</span>"
-      )
-    ),
-    group = "RR"
-  )
-saveWidget(
-  map,
-  paste(
-    "html_plots/norway_bp2_model_",
-    which(dics %in% min(dics)),
-    ".html",
-    sep = ""
+  cpo = c(
+    sum(log(res_1$cpo$cpo)), sum(log(res_2$cpo$cpo))
   )
 )
-
-
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
+results <- c(results, list(res_1 = perf))
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 # now models with the mobility variables
 formula_3 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + median_age + groc_pha + parks + resident +
-  ret_recr + transit + workplace +
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
-
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_4 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + median_age + groc_pha + parks + resident +
-  ret_recr + transit + workplace +
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + sex +  + unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+# now models with the mobility variables
+formula_5 <- value ~
+  # add the demographic vars and pop density
+  unemp_tot + unemp_immg +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_6 <- value ~
+  # add the demographic vars and pop density
+  unemp_tot + unemp_immg +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+
 
 res_3 <- inla(
   formula_3,
@@ -194,121 +125,6 @@ res_4 <- inla(
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-results_frame <- newest_numbers
-dics <- c(res_3$dic$dic, res_4$dic$dic)
-dics[is.nan(dics)] <- 100000
-if (dics[1] == min(dics)) {
-  sfv <- res_3$summary.fitted.values
-} else {
-  sfv <- res_4$summary.fitted.values
-}
-results_frame$rr <- sfv$mean
-results_frame$q025 <- sfv$`0.025quant`
-results_frame$q5 <- sfv$`0.5quant`
-results_frame$q975 <- sfv$`0.975quant`
-rc1 <- colorRampPalette(
-  c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
-  ),
-  space = "Lab"
-)(10)
-rc2 <- colorRampPalette(
-  c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
-  ),
-  space = "Lab"
-)(round(10 * range(results_frame$rr)[2] - 10))
-pal <- colorNumeric(
-  c(rc1, rc2),
-  domain = results_frame$rr
-)
-map <- leaflet(results_frame) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(rr),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Kommune: ", results_frame$kommune_name, "<br>",
-      "Population: ", results_frame$population, "<br>",
-      "Population density: ", round(results_frame$pop_dens), "<br>",
-      "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-      "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-      "Median age: ", results_frame$median_age, "<br>",
-      "Mobility grocery & pharmacy: ", results_frame$groc_pha, "<br>",
-      "Mobility parks: ", results_frame$parks, "<br>",
-      "Mobility residential: ", results_frame$resident, "<br>",
-      "Mobility retail & recreation: ", results_frame$ret_recr, "<br>",
-      "Mobility transit: ", results_frame$transit, "<br>",
-      "Mobility workplace: ", results_frame$workplace, "<br>",
-      "Number of infections: ", results_frame$value, "<br>",
-      "Expected number of infections: ", round(results_frame$expected), "<br>",
-      "SIR: ", round(results_frame$sir, 3), "<br>",
-      "Relative risk: ", round(results_frame$rr, 3)
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = results_frame,
-    pal = pal,
-    values = ~rr,
-    title = htmltools::HTML(
-      paste(
-        "RR<br><span style='font-size:0.8em'>DIC:",
-        round(min(dics)),
-        "</span>"
-      )
-    ),
-    group = "RR"
-  )
-saveWidget(
-  map,
-  paste(
-    "html_plots/norway_bp2_model_",
-    which(dics %in% min(dics)) + 2,
-    ".html",
-    sep = ""
-  )
-)
-
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
-# now models with the infrastructure variables
-formula_5 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + office + platform +
-  higher_educ + kindergarten + schools + bakeries + gas + banks + atm +
-  marketplace + entertainment + sport + clinic + toilet + hairdresser +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
-formula_6 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + office + platform +
-  higher_educ + kindergarten + schools + bakeries + gas + banks + atm +
-  marketplace + entertainment + sport + clinic + toilet + hairdresser +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
 
 res_5 <- inla(
   formula_5,
@@ -321,6 +137,7 @@ res_5 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
+
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
@@ -331,123 +148,48 @@ res_6 <- inla(
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-results_frame <- newest_numbers
-dics <- c(res_5$dic$dic, res_6$dic$dic)
-dics[is.nan(dics)] <- 100000
-if (dics[1] == min(dics)) {
-  sfv <- res_5$summary.fitted.values
-} else {
-  sfv <- res_6$summary.fitted.values
-}
-results_frame$rr <- sfv$mean
-results_frame$q025 <- sfv$`0.025quant`
-results_frame$q5 <- sfv$`0.5quant`
-results_frame$q975 <- sfv$`0.975quant`
-rc1 <- colorRampPalette(
-  c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
-  ),
-  space = "Lab"
-)(10)
-rc2 <- colorRampPalette(
-  c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
-  ),
-  space = "Lab"
-)(round(10 * range(results_frame$rr)[2] - 10))
-pal <- colorNumeric(
-  c(rc1, rc2),
-  domain = results_frame$rr
-)
-map <- leaflet(results_frame) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(rr),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Kommune: ", results_frame$kommune_name, "<br>",
-      "Population: ", results_frame$population, "<br>",
-      "Population density: ", round(results_frame$pop_dens), "<br>",
-      "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-      "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-      "Median age: ", results_frame$median_age, "<br>",
-      "Number of aerodromes: ", results_frame$aerodrome, "<br>",
-      "Number of gas stations: ", results_frame$gas, "<br>",
-      "Number of bakeries: ", results_frame$bakeries, "<br>",
-      "Number of higher educational buildings: ", results_frame$higher_educ, "<br>",
-      "Number of restaurants: ", results_frame$restaurant, "<br>",
-      "Number of retail buildings: ", results_frame$retail, "<br>",
-      "Number of infections: ", results_frame$value, "<br>",
-      "Expected number of infections: ", round(results_frame$expected), "<br>",
-      "SIR: ", round(results_frame$sir, 3), "<br>",
-      "Relative risk: ", round(results_frame$rr, 3)
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = results_frame,
-    pal = pal,
-    values = ~rr,
-    title = htmltools::HTML(
-      paste(
-        "RR<br><span style='font-size:0.8em'>DIC:",
-        round(min(dics)),
-        "</span>"
-      )
-    ),
-    group = "RR"
-  )
-saveWidget(
-  map,
-  paste(
-    "html_plots/norway_bp2_model_",
-    which(dics %in% min(dics)) + 4,
-    ".html",
-    sep = ""
-  )
-)
 
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
-# now models with all the variables
+
+models <- c(models, list(res_3, res_4, res_5, res_6))
+
+perf <- list(
+  dic = c(
+    res_3$dic$dic, res_4$dic$dic,
+    res_5$dic$dic, res_6$dic$dic
+  ),
+  waic = c(
+    res_3$waic$waic, res_4$waic$waic,
+    res_5$waic$waic, res_6$waic$waic
+  ),
+  cpo = c(
+    sum(log(res_3$cpo$cpo)), sum(log(res_4$cpo$cpo)),
+    sum(log(res_5$cpo$cpo)), sum(log(res_6$cpo$cpo))
+  )
+)
+results <- c(results, list(res_2 = perf))
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
+# now models with the infrastructure variables
 formula_7 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + office + platform +
-  higher_educ + kindergarten + schools + bakeries + gas + banks + atm +
-  marketplace + entertainment + sport + clinic + toilet + hairdresser +
-  groc_pha + parks + resident + ret_recr + transit + workplace +
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + sex + immigrants_total + immigrants_norge +
+  immigrants_pure +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_8 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + median_age + shops + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + office + platform +
-  higher_educ + kindergarten + schools + bakeries + gas + banks + atm +
-  marketplace + entertainment + sport + clinic + toilet + hairdresser +
-  groc_pha + parks + resident + ret_recr + transit + workplace +
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + sex + immigrants_total + immigrants_norge +
+  immigrants_pure +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+formula_9 <- value ~
+  immigrants_total + immigrants_norge + immigrants_pure +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_10 <- value ~
+  immigrants_total + immigrants_norge + immigrants_pure +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+
 res_7 <- inla(
   formula_7,
   family = "nbinomial",
@@ -469,132 +211,8 @@ res_8 <- inla(
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-results_frame <- newest_numbers
-dics <- c(res_7$dic$dic, res_8$dic$dic)
-dics[is.nan(dics)] <- 100000
-if (dics[1] == min(dics)) {
-  sfv <- res_7$summary.fitted.values
-} else {
-  sfv <- res_8$summary.fitted.values
-}
-results_frame$rr <- sfv$mean
-results_frame$q025 <- sfv$`0.025quant`
-results_frame$q5 <- sfv$`0.5quant`
-results_frame$q975 <- sfv$`0.975quant`
-rc1 <- colorRampPalette(
-  c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
-  ),
-  space = "Lab"
-)(10)
-rc2 <- colorRampPalette(
-  c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
-  ),
-  space = "Lab"
-)(round(10 * range(results_frame$rr)[2] - 10))
-pal <- colorNumeric(
-  c(rc1, rc2),
-  domain = results_frame$rr
-)
-map <- leaflet(results_frame) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(rr),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Kommune: ", results_frame$kommune_name, "<br>",
-      "Population: ", results_frame$population, "<br>",
-      "Population density: ", round(results_frame$pop_dens), "<br>",
-      "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-      "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-      "Median age: ", results_frame$median_age, "<br>",
-      "Number of aerodromes: ", results_frame$aerodrome, "<br>",
-      "Number of gas stations: ", results_frame$gas, "<br>",
-      "Number of bakeries: ", results_frame$bakeries, "<br>",
-      "Number of banks: ", results_frame$banks, "<br>",
-      "Mobility workplace: ", results_frame$workplace, "<br>",
-      "Mobility groceries & pharmacies: ", results_frame$groc_pha, "<br>",
-      "Mobility retail & recreation: ", results_frame$ret_recr, "<br>",
-      "Number of infections: ", results_frame$value, "<br>",
-      "Expected number of infections: ", round(results_frame$expected), "<br>",
-      "SIR: ", round(results_frame$sir, 3), "<br>",
-      "Relative risk: ", round(results_frame$rr, 3)
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = results_frame,
-    pal = pal,
-    values = ~rr,
-    title = htmltools::HTML(
-      paste(
-        "RR<br><span style='font-size:0.8em'>DIC:",
-        round(min(dics)),
-        "</span>"
-      )
-    ),
-    group = "RR"
-  )
-saveWidget(
-  map,
-  paste(
-    "html_plots/norway_bp2_model_",
-    which(dics %in% min(dics)) + 6,
-    ".html",
-    sep = ""
-  )
-)
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
-########################################################
-# now models with all the variables
-formula_9 <- value ~
-# add the demographic vars and pop density
-groc_pha + parks + resident + ret_recr + transit + workplace + median_age +
-  marketplace + sport + clinic + toilet + retail + nursing_home + restaurant +
-  aerodrome + office + platform + kindergarten + schools + bakeries +
-  gas + banks + atm + pop_dens + urb_dens + sex +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
-# do normal machine learning first
-# don't use dic
-# check the reference intervals
-# models without random effect
-# play around with priors
-# train model 2 weeks ago, predict on today
-# social index east vs west oslo
-# gini koeffizient
-#
 
-formula_10 <- value ~
-# add the demographic vars and pop density
-groc_pha + parks + resident + ret_recr + transit + workplace + median_age +
-  marketplace + sport + clinic + toilet + retail + nursing_home + restaurant +
-  aerodrome + office + platform + kindergarten + schools + bakeries +
-  gas + banks + atm + pop_dens + urb_dens + sex +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
+
 res_9 <- inla(
   formula_9,
   family = "nbinomial",
@@ -606,6 +224,7 @@ res_9 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
+
 res_10 <- inla(
   formula_10,
   family = "nbinomial",
@@ -616,140 +235,50 @@ res_10 <- inla(
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-results_frame <- newest_numbers
-dics <- c(res_9$dic$dic, res_10$dic$dic)
-dics[is.nan(dics)] <- 100000
-if (dics[1] == min(dics)) {
-  sfv <- res_9$summary.fitted.values
-} else {
-  sfv <- res_10$summary.fitted.values
-}
-results_frame$rr <- sfv$mean
-results_frame$q025 <- sfv$`0.025quant`
-results_frame$q5 <- sfv$`0.5quant`
-results_frame$q975 <- sfv$`0.975quant`
-rc1 <- colorRampPalette(
-  c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
-  ),
-  space = "Lab"
-)(10)
-rc2 <- colorRampPalette(
-  c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
-  ),
-  space = "Lab"
-)(round(10 * range(results_frame$rr)[2] - 10))
-pal <- colorNumeric(
-  c(rc1, rc2),
-  domain = results_frame$rr
-)
-map <- leaflet(results_frame) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(rr),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Kommune: ", results_frame$kommune_name, "<br>",
-      "Population: ", results_frame$population, "<br>",
-      "Population density: ", round(results_frame$pop_dens), "<br>",
-      "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-      "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-      "Median age: ", results_frame$median_age, "<br>",
-      "Number of marketplace: ", results_frame$marketplace, "<br>",
-      "Number of gas stations: ", results_frame$gas, "<br>",
-      "Number of bakeries: ", results_frame$bakeries, "<br>",
-      "Number of banks: ", results_frame$banks, "<br>",
-      "Mobility residential: ", results_frame$resident, "<br>",
-      "Mobility workplace: ", results_frame$workplace, "<br>",
-      "Mobility retail & recreation: ", results_frame$ret_recr, "<br>",
-      "Number of infections: ", results_frame$value, "<br>",
-      "Expected number of infections: ", round(results_frame$expected), "<br>",
-      "SIR: ", round(results_frame$sir, 3), "<br>",
-      "Relative risk: ", round(results_frame$rr, 3)
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = results_frame,
-    pal = pal,
-    values = ~rr,
-    title = htmltools::HTML(
-      paste(
-        "RR<br><span style='font-size:0.8em'>DIC:",
-        round(min(dics)),
-        "</span>"
-      )
-    ),
-    group = "RR"
-  )
-saveWidget(
-  map,
-  paste(
-    "html_plots/norway_bp2_model_",
-    which(dics %in% min(dics)) + 8,
-    ".html",
-    sep = ""
-  )
-)
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
 
+models <- c(models, list(res_7, res_8, res_9, res_10))
+
+perf <- list(
+  dic = c(
+    res_7$dic$dic, res_8$dic$dic,
+    res_9$dic$dic, res_10$dic$dic
+  ),
+  waic = c(
+    res_7$waic$waic, res_8$waic$waic,
+    res_9$waic$waic, res_10$waic$waic
+  ),
+  cpo = c(
+    sum(log(res_7$cpo$cpo)), sum(log(res_8$cpo$cpo)),
+    sum(log(res_9$cpo$cpo)), sum(log(res_10$cpo$cpo))
+  )
+)
+results <- c(results, list(res_3 = perf))
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
 # now models with all the variables
 formula_11 <- value ~
-# add the demographic vars and pop density
-shops + retail + clinic + schools + banks + pop_dens + office + atm +
-  place_of_worship + restaurant + sport + hairdresser + gas +
+  pop_dens + urb_dens + sex +
+  # add the demographic vars and pop density
+  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
+  construction_ft_com + construction_pt_com +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_12 <- value ~
-# add the demographic vars and pop density
-shops + retail + clinic + schools + banks + pop_dens + office + atm +
-  place_of_worship + restaurant + sport + hairdresser + gas +
+  pop_dens + urb_dens + sex +
+  # add the demographic vars and pop density
+  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
+  construction_ft_com + construction_pt_com +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_13 <- value ~
-# add the demographic vars and pop density
-shops + retail + clinic + schools + banks + pop_dens + office + atm +
+  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
+  construction_ft_com + construction_pt_com +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
-
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_14 <- value ~
-# add the demographic vars and pop density
-shops + retail + clinic + schools + banks + pop_dens + office + atm +
+  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
+  construction_ft_com + construction_pt_com +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
-formula_15 <- value ~
-# add the demographic vars and pop density
-shops + retail + clinic + schools + banks +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
-formula_16 <- value ~
-# add the demographic vars and pop density
-shops + retail + clinic + schools + banks +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
-
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 res_11 <- inla(
   formula_11,
   family = "nbinomial",
@@ -794,6 +323,60 @@ res_14 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
+models <- c(models, list(res_11, res_12, res_13, res_14))
+perf <- list(
+  dic = c(
+    res_11$dic$dic, res_12$dic$dic,
+    res_13$dic$dic, res_14$dic$dic
+  ),
+  waic = c(
+    res_11$waic$waic, res_12$waic$waic,
+    res_13$waic$waic, res_14$waic$waic
+  ),
+  cpo = c(
+    sum(log(res_11$cpo$cpo)), sum(log(res_12$cpo$cpo)),
+    sum(log(res_13$cpo$cpo)), sum(log(res_14$cpo$cpo))
+  )
+)
+results <- c(results, list(res_4 = perf))
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
+########################################################
+# Now with variable selection
+formula_15 <- value ~
+  pop_dens + urb_dens + sex +
+  # add the demographic vars and pop density
+  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
+  construction_ft_com + construction_pt_com +
+  median_age + unemp_tot + unemp_immg + immigrants_total + immigrants_norge +
+  immigrants_pure +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_16 <- value ~
+  pop_dens + urb_dens + sex +
+  # add the demographic vars and pop density
+  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
+  construction_ft_com + construction_pt_com +
+  median_age + unemp_tot + unemp_immg + immigrants_total + immigrants_norge +
+  immigrants_pure +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+formula_17 <- value ~
+  # add the demographic vars and pop density
+  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
+  construction_ft_com + construction_pt_com +
+  median_age + unemp_tot + unemp_immg + immigrants_total + immigrants_norge +
+  immigrants_pure +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_18 <- value ~
+  # add the demographic vars and pop density
+  workers_ft_com + workers_pt_com + mining_ft_com + mining_pt_com +
+  construction_ft_com + construction_pt_com +
+  median_age + unemp_tot + unemp_immg + immigrants_total + immigrants_norge +
+  immigrants_pure +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+
 res_15 <- inla(
   formula_15,
   family = "nbinomial",
@@ -816,218 +399,21 @@ res_16 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-results_frame <- newest_numbers
-dics <- c(
-  res_11$dic$dic, res_12$dic$dic,
-  res_14$dic$dic, res_15$dic$dic,
-  res_13$dic$dic, res_16$dic$dic
-)
-dics[is.nan(dics)] <- 100000
-if (dics[1] == min(dics)) {
-  sfv <- res_11$summary.fitted.values
-} else if (dics[2] == min(dics)) {
-  sfv <- res_12$summary.fitted.values
-} else if (dics[3] == min(dics)) {
-  sfv <- res_13$summary.fitted.values
-} else if (dics[4] == min(dics)) {
-  sfv <- res_14$summary.fitted.values
-} else if (dics[5] == min(dics)) {
-  sfv <- res_15$summary.fitted.values
-} else if (dics[6] == min(dics)) {
-  sfv <- res_16$summary.fitted.values
-}
-results_frame$rr <- sfv$mean
-results_frame$q025 <- sfv$`0.025quant`
-results_frame$q5 <- sfv$`0.5quant`
-results_frame$q975 <- sfv$`0.975quant`
-rc1 <- colorRampPalette(
-  c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
-  ),
-  space = "Lab"
-)(10)
-rc2 <- colorRampPalette(
-  c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
-  ),
-  space = "Lab"
-)(round(10 * range(results_frame$rr)[2] - 10))
-pal <- colorNumeric(
-  c(rc1, rc2),
-  domain = results_frame$rr
-)
-map <- leaflet(results_frame) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(rr),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Kommune: ", results_frame$kommune_name, "<br>",
-      "Population: ", results_frame$population, "<br>",
-      "Population density: ", round(results_frame$pop_dens), "<br>",
-      "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-      "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-      "Median age: ", results_frame$median_age, "<br>",
-      "Number of gas stations: ", results_frame$gas, "<br>",
-      "Number of retail stores: ", results_frame$retail, "<br>",
-      "Number of hairdresser: ", results_frame$hairdresser, "<br>",
-      "Number of clinic: ", results_frame$clinic, "<br>",
-      "Number of shops: ", results_frame$shops, "<br>",
-      "Number of places of worship: ", results_frame$place_of_worship, "<br>",
-      "Number of infections: ", results_frame$value, "<br>",
-      "Expected number of infections: ", round(results_frame$expected), "<br>",
-      "SIR: ", round(results_frame$sir, 3), "<br>",
-      "Relative risk: ", round(results_frame$rr, 3)
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = results_frame,
-    pal = pal,
-    values = ~rr,
-    title = htmltools::HTML(
-      paste(
-        "RR<br><span style='font-size:0.8em'>DIC:",
-        round(min(dics)),
-        "</span>"
-      )
-    ),
-    group = "RR"
-  )
-saveWidget(
-  map,
-  paste(
-    "html_plots/norway_bp2_model_",
-    which(dics %in% min(dics)) + 10,
-    ".html",
-    sep = ""
-  )
-)
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
-########################################
-covariates <- newest_numbers[, c(8:14, 23:43, 45:54, 56, 58:66, 68:72, 80:82)]
-covariates <- covariates[, !str_detect(colnames(covariates), "_work")]
-covariates <- covariates[, !str_detect(colnames(covariates), "_com")]
-covariates$geometry <- NULL
-task <- makeRegrTask(
-  "regr_task",
-  data = covariates, target = "value"
-)
-
-
-filtered_task_25 <- filterFeatures(
-  task,
-  method = "FSelectorRcpp_information.gain",
-  perc = 0.25,
-  equal = TRUE
-)
-filtered_task_50 <- filterFeatures(
-  task,
-  method = "FSelectorRcpp_information.gain",
-  perc = 0.50,
-  equal = TRUE
-)
-filtered_task_75 <- filterFeatures(
-  task,
-  method = "FSelectorRcpp_information.gain",
-  perc = 0.75,
-  equal = TRUE
-)
-newest_numbers_25 <- filtered_task_25$env$data
-newest_numbers_50 <- filtered_task_50$env$data
-newest_numbers_75 <- filtered_task_75$env$data
-newest_numbers_25$geometry <- newest_numbers$geometry
-newest_numbers_50$geometry <- newest_numbers$geometry
-newest_numbers_75$geometry <- newest_numbers$geometry
-newest_numbers_25$idarea_1 <- seq_len(nrow(newest_numbers_25))
-newest_numbers_50$idarea_1 <- seq_len(nrow(newest_numbers_50))
-newest_numbers_75$idarea_1 <- seq_len(nrow(newest_numbers_75))
-newest_numbers_25$expected_count <- newest_numbers$expected_count
-newest_numbers_50$expected_count <- newest_numbers$expected_count
-newest_numbers_75$expected_count <- newest_numbers$expected_count
-newest_numbers_25 <- st_as_sf(newest_numbers_25)
-newest_numbers_50 <- st_as_sf(newest_numbers_50)
-newest_numbers_75 <- st_as_sf(newest_numbers_75)
-# now models with the mobility variables
-formula_17 <- value ~ unemp_tot + unemp_immg + mining_pt_res + immigrants_norge +
-  entertainment + place_of_worship + sport + schools + shops + bakeries + pop_dens +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
-
-formula_18 <- value ~ unemp_tot + unemp_immg + mining_pt_res + immigrants_norge +
-  entertainment + place_of_worship + sport + schools + shops + bakeries + pop_dens +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
-
-formula_19 <- value ~ unemp_tot + unemp_immg + mining_pt_res + immigrants_norge +
-  entertainment + place_of_worship + sport + schools + shops + bakeries + pop_dens +
-  median_age + workers_ft_res + clinic + hairdresser + nursing_home + office + gas +
-  atm + retail + restaurant + sex +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
-
-formula_20 <- value ~ unemp_tot + unemp_immg + mining_pt_res + immigrants_norge +
-  entertainment + place_of_worship + sport + schools + shops + bakeries + pop_dens +
-  median_age + workers_ft_res + clinic + hairdresser + nursing_home + office + gas +
-  atm + retail + restaurant + sex +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
-
-formula_21 <- value ~ unemp_tot + unemp_immg + mining_pt_res + immigrants_norge +
-  entertainment + place_of_worship + sport + schools + shops + bakeries + pop_dens +
-  median_age + workers_ft_res + clinic + hairdresser + nursing_home + office + gas +
-  groc_pha + resident + transit + workplace + workers_pt_res + construction_pt_res +
-  immigrants_total + aerodrome + platform + higher_educ +
-  atm + retail + restaurant + sex +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_1)
-
-formula_22 <- value ~ unemp_tot + unemp_immg + mining_pt_res + immigrants_norge +
-  entertainment + place_of_worship + sport + schools + shops + bakeries + pop_dens +
-  median_age + workers_ft_res + clinic + hairdresser + nursing_home + office + gas +
-  groc_pha + resident + transit + workplace + workers_pt_res + construction_pt_res +
-  immigrants_total + aerodrome + platform + higher_educ +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper2", graph = g, hyper = prior_2)
-
-
 res_17 <- inla(
   formula_17,
   family = "nbinomial",
-  data = newest_numbers_25,
+  data = newest_numbers,
   E = expected_count,
   control.predictor = list(
     compute = TRUE
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 
 res_18 <- inla(
   formula_18,
   family = "nbinomial",
-  data = newest_numbers_25,
+  data = newest_numbers,
   E = expected_count,
   control.predictor = list(
     compute = TRUE
@@ -1035,339 +421,487 @@ res_18 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
+models <- c(models, list(res_15, res_16, res_17, res_18))
+
+perf <- list(
+  dic = c(
+    res_15$dic$dic, res_16$dic$dic,
+    res_17$dic$dic, res_18$dic$dic
+  ),
+  waic = c(
+    res_15$waic$waic, res_16$waic$waic,
+    res_17$waic$waic, res_18$waic$waic
+  ),
+  cpo = c(
+    sum(log(res_15$cpo$cpo)), sum(log(res_16$cpo$cpo)),
+    sum(log(res_17$cpo$cpo)), sum(log(res_18$cpo$cpo))
+  )
+)
+results <- c(results, list(res_5 = perf))
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
+# now models with all the variables
+formula_19 <- value ~
+  median_age + unemp_tot + unemp_immg + workers_ft_com + 
+  workers_pt_com + mining_ft_com + construction_pt_com + immigrants_total + 
+  immigrants_norge + immigrants_pure + pop_dens + urb_dens + 
+  sex +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_20 <- value ~
+  median_age + unemp_tot + unemp_immg + workers_ft_com + 
+  workers_pt_com + mining_ft_com + construction_pt_com + immigrants_total + 
+  immigrants_norge + immigrants_pure + pop_dens + urb_dens + 
+  sex +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+formula_21 <- value ~
+  pop_dens + immigrants_pure + median_age + 
+  sex +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_22 <- value ~
+  pop_dens + immigrants_pure + median_age + 
+  sex +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 
 res_19 <- inla(
   formula_19,
   family = "nbinomial",
-  data = newest_numbers_50,
+  data = newest_numbers,
   E = expected_count,
   control.predictor = list(
     compute = TRUE
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 
 res_20 <- inla(
   formula_20,
   family = "nbinomial",
-  data = newest_numbers_50,
+  data = newest_numbers,
   E = expected_count,
   control.predictor = list(
     compute = TRUE
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 
 res_21 <- inla(
   formula_21,
   family = "nbinomial",
-  data = newest_numbers_75,
+  data = newest_numbers,
   E = expected_count,
   control.predictor = list(
     compute = TRUE
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 
 res_22 <- inla(
   formula_22,
   family = "nbinomial",
-  data = newest_numbers_75,
+  data = newest_numbers,
   E = expected_count,
   control.predictor = list(
     compute = TRUE
   ),
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-results_frame <- newest_numbers
-dics <- c(res_17$dic$dic, res_18$dic$dic)
-dics[is.nan(dics)] <- 100000
-if (dics[1] == min(dics)) {
-  sfv <- res_17$summary.fitted.values
-} else {
-  sfv <- res_18$summary.fitted.values
-}
-results_frame$rr <- sfv$mean
-results_frame$q025 <- sfv$`0.025quant`
-results_frame$q5 <- sfv$`0.5quant`
-results_frame$q975 <- sfv$`0.975quant`
-rc1 <- colorRampPalette(
-  c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
+
+
+models <- c(models, list(res_19, res_20, res_21, res_22))
+
+perf <- list(
+  dic = c(
+    res_19$dic$dic, res_20$dic$dic,
+    res_21$dic$dic, res_22$dic$dic
   ),
-  space = "Lab"
-)(10)
-rc2 <- colorRampPalette(
-  c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
+  waic = c(
+    res_19$waic$waic, res_20$waic$waic,
+    res_21$waic$waic, res_22$waic$waic
   ),
-  space = "Lab"
-)(round(10 * range(results_frame$rr)[2] - 10))
-pal <- colorNumeric(
-  c(rc1, rc2),
-  domain = results_frame$rr
-)
-map <- leaflet(results_frame) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(rr),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Kommune: ", results_frame$kommune_name, "<br>",
-      "Population: ", results_frame$population, "<br>",
-      "Population density: ", round(results_frame$pop_dens), "<br>",
-      "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-      "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-      "Median age: ", results_frame$median_age, "<br>",
-      "Mobility grocery & pharmacy: ", results_frame$groc_pha, "<br>",
-      "Mobility parks: ", results_frame$parks, "<br>",
-      "Mobility residential: ", results_frame$resident, "<br>",
-      "Mobility retail & recreation: ", results_frame$ret_recr, "<br>",
-      "Mobility transit: ", results_frame$transit, "<br>",
-      "Mobility workplace: ", results_frame$workplace, "<br>",
-      "Number of infections: ", results_frame$value, "<br>",
-      "Expected number of infections: ", round(results_frame$expected), "<br>",
-      "SIR: ", round(results_frame$sir, 3), "<br>",
-      "Relative risk: ", round(results_frame$rr, 3)
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = results_frame,
-    pal = pal,
-    values = ~rr,
-    title = htmltools::HTML(
-      paste(
-        "RR<br><span style='font-size:0.8em'>DIC:",
-        round(min(dics)),
-        "</span>"
-      )
-    ),
-    group = "RR"
-  )
-saveWidget(
-  map,
-  paste(
-    "html_plots/norway_bp2_model_",
-    which(dics %in% min(dics)) + 16,
-    ".html",
-    sep = ""
+  cpo = c(
+    sum(log(res_19$cpo$cpo)), sum(log(res_20$cpo$cpo)),
+    sum(log(res_21$cpo$cpo)), sum(log(res_22$cpo$cpo))
   )
 )
-results_frame <- newest_numbers
-dics <- c(res_19$dic$dic, res_20$dic$dic)
-dics[is.nan(dics)] <- 100000
-if (dics[1] == min(dics)) {
-  sfv <- res_19$summary.fitted.values
-} else {
-  sfv <- res_20$summary.fitted.values
-}
-results_frame$rr <- sfv$mean
-results_frame$q025 <- sfv$`0.025quant`
-results_frame$q5 <- sfv$`0.5quant`
-results_frame$q975 <- sfv$`0.975quant`
-rc1 <- colorRampPalette(
-  c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
+results <- c(results, list(res_6 = perf))
+
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
+
+# now models with all the variables
+formula_23 <- value ~
+  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools + higher_education +
+  kindergarten + bakeries + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_24 <- value ~
+  # add the demographic vars and pop density
+  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools + higher_education +
+  kindergarten + bakeries + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+formula_25 <- value ~
+  marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools + higher_education +
+  kindergarten + bakeries + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_26 <- value ~
+  # add the demographic vars and pop density
+  marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools + higher_education +
+  kindergarten + bakeries + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+
+
+res_23 <- inla(
+  formula_23,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
   ),
-  space = "Lab"
-)(10)
-rc2 <- colorRampPalette(
-  c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
-  ),
-  space = "Lab"
-)(round(10 * range(results_frame$rr)[2] - 10))
-pal <- colorNumeric(
-  c(rc1, rc2),
-  domain = results_frame$rr
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-map <- leaflet(results_frame) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(rr),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Kommune: ", results_frame$kommune_name, "<br>",
-      "Population: ", results_frame$population, "<br>",
-      "Population density: ", round(results_frame$pop_dens), "<br>",
-      "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-      "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-      "Median age: ", results_frame$median_age, "<br>",
-      "Mobility grocery & pharmacy: ", results_frame$groc_pha, "<br>",
-      "Mobility parks: ", results_frame$parks, "<br>",
-      "Mobility residential: ", results_frame$resident, "<br>",
-      "Mobility retail & recreation: ", results_frame$ret_recr, "<br>",
-      "Mobility transit: ", results_frame$transit, "<br>",
-      "Mobility workplace: ", results_frame$workplace, "<br>",
-      "Number of infections: ", results_frame$value, "<br>",
-      "Expected number of infections: ", round(results_frame$expected), "<br>",
-      "SIR: ", round(results_frame$sir, 3), "<br>",
-      "Relative risk: ", round(results_frame$rr, 3)
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = results_frame,
-    pal = pal,
-    values = ~rr,
-    title = htmltools::HTML(
-      paste(
-        "RR<br><span style='font-size:0.8em'>DIC:",
-        round(min(dics)),
-        "</span>"
-      )
-    ),
-    group = "RR"
-  )
-saveWidget(
-  map,
-  paste(
-    "html_plots/norway_bp2_model_",
-    which(dics %in% min(dics)) + 18,
-    ".html",
-    sep = ""
-  )
-)
-results_frame <- newest_numbers
-dics <- c(res_21$dic$dic, res_22$dic$dic)
-dics[is.nan(dics)] <- 100000
-if (dics[1] == min(dics)) {
-  sfv <- res_21$summary.fitted.values
-} else {
-  sfv <- res_22$summary.fitted.values
-}
-results_frame$rr <- sfv$mean
-results_frame$q025 <- sfv$`0.025quant`
-results_frame$q5 <- sfv$`0.5quant`
-results_frame$q975 <- sfv$`0.975quant`
-rc1 <- colorRampPalette(
-  c(
-    "#86e7b8",
-    "#93ff96",
-    "#b2ffa8",
-    "#d0ffb7",
-    "#f2f5de",
-    "white"
+
+res_24 <- inla(
+  formula_24,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
   ),
-  space = "Lab"
-)(10)
-rc2 <- colorRampPalette(
-  c(
-    "white",
-    "#fae0e4",
-    "#f7cad0",
-    "#f9bec7",
-    "#fbb1bd",
-    "#ff99ac",
-    "#ff85a1",
-    "#ff7096",
-    "#ff5c8a",
-    "#ff477e",
-    "#ff0a54"
-  ),
-  space = "Lab"
-)(round(10 * range(results_frame$rr)[2] - 10))
-pal <- colorNumeric(
-  c(rc1, rc2),
-  domain = results_frame$rr
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-map <- leaflet(results_frame) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(rr),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Kommune: ", results_frame$kommune_name, "<br>",
-      "Population: ", results_frame$population, "<br>",
-      "Population density: ", round(results_frame$pop_dens), "<br>",
-      "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-      "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-      "Median age: ", results_frame$median_age, "<br>",
-      "Mobility grocery & pharmacy: ", results_frame$groc_pha, "<br>",
-      "Mobility parks: ", results_frame$parks, "<br>",
-      "Mobility residential: ", results_frame$resident, "<br>",
-      "Mobility retail & recreation: ", results_frame$ret_recr, "<br>",
-      "Mobility transit: ", results_frame$transit, "<br>",
-      "Mobility workplace: ", results_frame$workplace, "<br>",
-      "Number of infections: ", results_frame$value, "<br>",
-      "Expected number of infections: ", round(results_frame$expected), "<br>",
-      "SIR: ", round(results_frame$sir, 3), "<br>",
-      "Relative risk: ", round(results_frame$rr, 3)
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = results_frame,
-    pal = pal,
-    values = ~rr,
-    title = htmltools::HTML(
-      paste(
-        "RR<br><span style='font-size:0.8em'>DIC:",
-        round(min(dics)),
-        "</span>"
-      )
-    ),
-    group = "RR"
-  )
-saveWidget(
-  map,
-  paste(
-    "html_plots/norway_bp2_model_",
-    which(dics %in% min(dics)) + 20,
-    ".html",
-    sep = ""
+
+res_25 <- inla(
+  formula_25,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+
+res_26 <- inla(
+  formula_26,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+
+models <- c(models, list(res_23, res_24, res_25, res_26))
+
+perf <- list(
+  dic = c(
+    res_23$dic$dic, res_24$dic$dic,
+    res_25$dic$dic, res_26$dic$dic
+  ),
+  waic = c(
+    res_23$waic$waic, res_24$waic$waic,
+    res_25$waic$waic, res_26$waic$waic
+  ),
+  cpo = c(
+    sum(log(res_23$cpo$cpo)), sum(log(res_24$cpo$cpo)),
+    sum(log(res_25$cpo$cpo)), sum(log(res_26$cpo$cpo))
   )
 )
-rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g")))
+results <- c(results, list(res_7 = perf))
+
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
+
+# now models with all the variables
+formula_27 <- value ~
+  entertainment + clinic + shops + place_of_worship + 
+  retail + nursing_home + restaurant + aerodrome + platform + 
+  kindergarten + schools + higher_education + pop_dens + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_28 <- value ~
+  entertainment + clinic + shops + place_of_worship + 
+  retail + nursing_home + restaurant + aerodrome + platform + 
+  kindergarten + schools + higher_education + pop_dens + 
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+# now models with all the variables
+formula_29 <- value ~
+  pop_dens + shops + retail + place_of_worship + 
+  schools + nursing_home + kindergarten +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_30 <- value ~
+  # add the demographic vars and pop density
+  pop_dens + shops + retail + place_of_worship + 
+  schools + nursing_home + kindergarten +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+
+res_27 <- inla(
+  formula_27,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+res_28 <- inla(
+  formula_28,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+res_29 <- inla(
+  formula_29,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+
+res_30 <- inla(
+  formula_30,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+
+
+models <- c(models, list(res_27, res_28, res_29, res_30))
+
+perf <- list(
+  dic = c(
+    res_27$dic$dic, res_28$dic$dic,
+    res_29$dic$dic, res_30$dic$dic
+  ),
+  waic = c(
+    res_27$waic$waic, res_28$waic$waic,
+    res_29$waic$waic, res_30$waic$waic
+  ),
+  cpo = c(
+    sum(log(res_27$cpo$cpo)), sum(log(res_28$cpo$cpo)),
+    sum(log(res_29$cpo$cpo)), sum(log(res_30$cpo$cpo))
+  )
+)
+results <- c(results, list(res_8 = perf))
+
+rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results")))
+# now models with all the variables
+formula_31 <- value ~
+  median_age + unemp_tot + unemp_immg + workers_ft_com + 
+  workers_pt_com + mining_ft_com + mining_pt_com + construction_pt_com + 
+  immigrants_total + immigrants_norge + immigrants_pure + marketplace + 
+  entertainment + clinic + hairdresser + shops + place_of_worship + 
+  retail + nursing_home + aerodrome + platform + kindergarten + 
+  schools + bakeries + higher_education + pop_dens + urb_dens +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_32 <- value ~
+  median_age + unemp_tot + unemp_immg + workers_ft_com + 
+  workers_pt_com + mining_ft_com + mining_pt_com + construction_pt_com + 
+  immigrants_total + immigrants_norge + immigrants_pure + marketplace + 
+  entertainment + clinic + hairdresser + shops + place_of_worship + 
+  retail + nursing_home + aerodrome + platform + kindergarten + 
+  schools + bakeries + higher_education + pop_dens + urb_dens +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+# now models with all the variables
+formula_33 <- value ~
+  pop_dens + shops + median_age + sex + immigrants_pure + 
+  entertainment + unemp_immg + construction_pt_com + immigrants_total + 
+  nursing_home + place_of_worship + higher_education +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+formula_34 <- value ~
+  pop_dens + shops + median_age + sex + immigrants_pure + 
+  entertainment + unemp_immg + construction_pt_com + immigrants_total + 
+  nursing_home + place_of_worship + higher_education +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
+
+res_31 <- inla(
+  formula_31,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+res_32 <- inla(
+  formula_32,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+res_33 <- inla(
+  formula_33,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+
+res_34 <- inla(
+  formula_34,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE
+  ),
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
+
+
+
+models <- c(models, list(res_31, res_32, res_33, res_34))
+
+perf <- list(
+  dic = c(
+    res_31$dic$dic, res_32$dic$dic,
+    res_33$dic$dic, res_34$dic$dic
+  ),
+  waic = c(
+    res_31$waic$waic, res_32$waic$waic,
+    res_33$waic$waic, res_34$waic$waic
+  ),
+  cpo = c(
+    sum(log(res_31$cpo$cpo)), sum(log(res_32$cpo$cpo)),
+    sum(log(res_33$cpo$cpo)), sum(log(res_34$cpo$cpo))
+  )
+)
+results <- c(results, list(res_9 = perf))
+# now models with all the variables
+models_final <- list(models, results)
+save(models_final, file = "models/besagproper_norway.Rda")
+
+# results_frame <- newest_numbers
+# dics[is.nan(dics)] <- 100000
+# if (dics[1] == min(dics)) {
+#   sfv <- res_1$summary.fitted.values
+# } else if (dics[2] == min(dics)) {
+#   sfv <- res_2$summary.fitted.values
+# } else if (dics[3] == min(dics)) {
+#   sfv <- res_3$summary.fitted.values
+# } else if (dics[4] == min(dics)) {
+#   sfv <- res_4$summary.fitted.values
+# }
+# results_frame$rr <- sfv$mean
+# results_frame$q025 <- sfv$`0.025quant`
+# results_frame$q5 <- sfv$`0.5quant`
+# results_frame$q975 <- sfv$`0.975quant`
+# rc1 <- colorRampPalette(
+#   c(
+#     "#86e7b8",
+#     "#93ff96",
+#     "#b2ffa8",
+#     "#d0ffb7",
+#     "#f2f5de",
+#     "white"
+#   ),
+#   space = "Lab"
+# )(10)
+# rc2 <- colorRampPalette(
+#   c(
+#     "white",
+#     "#fae0e4",
+#     "#f7cad0",
+#     "#f9bec7",
+#     "#fbb1bd",
+#     "#ff99ac",
+#     "#ff85a1",
+#     "#ff7096",
+#     "#ff5c8a",
+#     "#ff477e",
+#     "#ff0a54"
+#   ),
+#   space = "Lab"
+# )(round(10 * range(results_frame$rr)[2] - 10))
+# pal <- colorNumeric(
+#   c(rc1, rc2),
+#   domain = results_frame$rr
+# )
+# map <- leaflet(results_frame) %>%
+#   addMapboxGL(
+#     style = "mapbox://styles/mapbox/streets-v9",
+#     accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
+#   ) %>%
+#   addPolygons(
+#     weight = 1,
+#     fillColor = ~ pal(rr),
+#     fillOpacity = 0.7,
+#     color = "black",
+#     group = "Relative risk",
+#     label = paste(
+#       "Kommune: ", results_frame$Landkreis, "<br>",
+#       "Population: ", results_frame$PopulationTotal, "<br>",
+#       "Population density: ", round(results_frame$pop_dens), "<br>",
+#       "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
+#       "Proportion of females: ", round(results_frame$sex, 3), "<br>",
+#       "Number of infections: ", results_frame$value, "<br>",
+#       "Expected number of infections: ", round(results_frame$expected), "<br>",
+#       "SIR: ", round(results_frame$sir, 3), "<br>",
+#       "Relative risk: ", round(results_frame$rr, 3)
+#     ) %>%
+#       lapply(htmltools::HTML)
+#   ) %>%
+#   addLegend(
+#     data = results_frame,
+#     pal = pal,
+#     values = ~rr,
+#     title = htmltools::HTML(
+#       paste(
+#         "RR<br><span style='font-size:0.8em'>DIC:",
+#         round(min(dics)),
+#         "</span>"
+#       )
+#     ),
+#     group = "RR"
+#   )
