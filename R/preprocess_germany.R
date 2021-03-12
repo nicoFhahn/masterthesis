@@ -135,14 +135,10 @@ if (date_1 != date_2) {
   load("osmdata/germany_kindergarten.Rda")
   load("osmdata/germany_schools.Rda")
   load("osmdata/germany_bakeries.Rda")
-  load("osmdata/germany_gas.Rda")
-  load("osmdata/germany_banks.Rda")
-  load("osmdata/germany_atms.Rda")
   load("osmdata/germany_residential1.Rda")
   load("osmdata/germany_residential2.Rda")
   germany_residential <- c(germany_residential1, germany_residential2)
   load("osmdata/germany_hairdresser.Rda")
-  load("osmdata/germany_toilets.Rda")
   load("osmdata/germany_clinic.Rda")
   load("osmdata/germany_sport.Rda")
   load("osmdata/germany_entertainment.Rda")
@@ -223,27 +219,6 @@ if (date_1 != date_2) {
             unlist(
               st_intersects(
                 germany_shape[x, ], germany_clinic[[x]]
-              )
-            )
-          ),
-          0
-        )
-      }
-    )
-  )
-
-  germany_shape$toilet <- unlist(
-    lapply(
-      seq_len(
-        nrow(germany_shape)
-      ),
-      function(x, ...) {
-        ifelse(
-          nrow(germany_toilets[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_toilets[[x]]
               )
             )
           ),
@@ -568,71 +543,6 @@ if (date_1 != date_2) {
     )
   )
 
-  germany_shape$gas <- unlist(
-    lapply(
-      seq_len(
-        nrow(germany_shape)
-      ),
-      function(x, ...) {
-        ifelse(
-          nrow(germany_gas[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_gas[[x]]
-              )
-            )
-          ),
-          0
-        )
-      }
-    )
-  )
-
-  germany_shape$banks <- unlist(
-    lapply(
-      seq_len(
-        nrow(germany_shape)
-      ),
-      function(x, ...) {
-        ifelse(
-          nrow(germany_banks[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_banks[[x]]
-              )
-            )
-          ),
-          0
-        )
-      }
-    )
-  )
-
-
-  germany_shape$atm <- unlist(
-    lapply(
-      seq_len(
-        nrow(germany_shape)
-      ),
-      function(x, ...) {
-        ifelse(
-          nrow(germany_atms[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_atms[[x]]
-              )
-            )
-          ),
-          0
-        )
-      }
-    )
-  )
-
-
   germany_shape$residential <- unlist(
     lapply(
       seq_len(
@@ -670,7 +580,7 @@ if (date_1 != date_2) {
   germany_complete <- germany_complete[order(germany_complete$Date, germany_complete$Kennziffer), ]
   no_geometry <- cbind(germany, germany_complete)
   no_geometry$Stadt <- NULL
-  no_geometry[, c(3, 4, 19:22, 25:29, 32:34, 36:40, 44, 70:84)] <- NULL
+  no_geometry[, c(3, 4, 19:22, 25:29, 32:34, 36:40, 44, 66:80)] <- NULL
   colnames(no_geometry)[7] <- "stimmen"
 
   # calculate the SIR
@@ -682,7 +592,7 @@ if (date_1 != date_2) {
 germany_features$Gewerbesteuer <- as.numeric(trimws(germany_features$Gewerbesteuer))
 germany_features$schutzsuchende <- as.numeric(trimws(germany_features$schutzsuchende))
 germany_features[, 8:14] <- germany_features[, 8:14] / germany_features$stimmen
-germany_features[, c(2:5, 14:18, 26:48)] <- 1000 * germany_features[, c(2:5, 14:18, 26:48)] / germany_features$PopulationTotal
+germany_features[, c(2:5, 14:18, 26:44)] <- 1000 * germany_features[, c(2:5, 14:18, 26:44)] / germany_features$PopulationTotal
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 germany <- merge(
   germany_features,
@@ -713,7 +623,7 @@ newest_numbers$pop_dens <- newest_numbers$PopulationTotal / newest_numbers$area
 newest_numbers$urb_dens <- newest_numbers$residential / newest_numbers$area
 newest_numbers$sex <- newest_numbers$PopulationFemale / newest_numbers$PopulationTotal
 cols_imputed <- lapply(
-  c(1:51, 53:59),
+  c(1:47, 49:55),
   function(x, ...) {
     vals <- newest_numbers[, x]
     vals$geometry <- NULL

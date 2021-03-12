@@ -187,12 +187,8 @@ if (date_1 != date_2) {
   load("osmdata/norge_kindergarten.Rda")
   load("osmdata/norge_schools.Rda")
   load("osmdata/norge_bakeries.Rda")
-  load("osmdata/norge_gas.Rda")
-  load("osmdata/norge_banks.Rda")
-  load("osmdata/norge_atms.Rda")
   load("osmdata/norge_residential.Rda")
   load("osmdata/norge_hairdresser.Rda")
-  load("osmdata/norge_toilets.Rda")
   load("osmdata/norge_clinic.Rda")
   load("osmdata/norge_sport.Rda")
   load("osmdata/norge_entertainment.Rda")
@@ -274,27 +270,6 @@ if (date_1 != date_2) {
             unlist(
               st_intersects(
                 norge_shape[x, ], norge_clinic[[x]]
-              )
-            )
-          ),
-          0
-        )
-      }
-    )
-  )
-
-  norge_shape$toilet <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        ifelse(
-          nrow(norge_toilets[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                norge_shape[x, ], norge_toilets[[x]]
               )
             )
           ),
@@ -619,69 +594,6 @@ if (date_1 != date_2) {
     )
   )
 
-  norge_shape$gas <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        ifelse(
-          nrow(norge_gas[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                norge_shape[x, ], norge_gas[[x]]
-              )
-            )
-          ),
-          0
-        )
-      }
-    )
-  )
-
-  norge_shape$banks <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        ifelse(
-          nrow(norge_banks[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                norge_shape[x, ], norge_banks[[x]]
-              )
-            )
-          ),
-          0
-        )
-      }
-    )
-  )
-
-
-  norge_shape$atm <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        ifelse(
-          nrow(norge_atms[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                norge_shape[x, ], norge_atms[[x]]
-              )
-            )
-          ),
-          0
-        )
-      }
-    )
-  )
 
 
   norge_shape$residential <- unlist(
@@ -732,7 +644,7 @@ if (date_1 != date_2) {
   write_sf(st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1], "wrangled_data/shapes_norge.shp")
   norge_features <- read_csv("wrangled_data/norge_features.csv")
 }
-norge_features[, c(18:37, 39:64, 66)] <- 1000 * norge_features[, c(18:37, 39:64, 66)] / norge_features$population
+norge_features[, c(18:37, 39:60, 62)] <- 1000 * norge_features[, c(18:37, 39:60, 62)] / norge_features$population
 norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
 norge <- merge(
   norge_features,
@@ -807,5 +719,5 @@ newest_numbers$sex <- newest_numbers$population_female / newest_numbers$populati
 # newest_numbers_21$pop_dens <- newest_numbers_21$population / newest_numbers_21$area
 # newest_numbers_21$urb_dens <- newest_numbers_21$residential / newest_numbers_21$area
 # newest_numbers_21$sex <- newest_numbers_21$population_female / newest_numbers_21$population_total
-newest_numbers <- newest_numbers[, c(1, 3, 6:9, 17:19, 32:37, 39:54, 56:60, 62:76)]
+newest_numbers <- newest_numbers[, c(1, 3, 6:9, 17:19, 32:37, 39:51, 53:55, 58:72)]
 rm(list = setdiff(ls(), c("newest_numbers")))
