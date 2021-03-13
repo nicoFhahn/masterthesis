@@ -724,13 +724,16 @@ newest_numbers <- newest_numbers[, c(1, 3, 6:9, 17:19, 32:37, 39:51, 53:55, 58:7
 cols_imputed <- lapply(
   c(7:38, 40:46),
   function(x, ...) {
-    vals <-newest_numbers[, x]
+    vals <- newest_numbers[, x]
     vals$geometry <- NULL
-    vals[is.na(vals)] <- median(vals[, 1], na.rm = TRUE)
-    vals
+    vals <- unlist(vals)
+    vals[is.na(vals)] <- median(vals, na.rm = TRUE)
+    as.data.frame(vals)
   }
 )
 newest_numbers_imputed <- Reduce(cbind, cols_imputed)
+colnames(newest_numbers_imputed) <- colnames(newest_numbers)[c(7:38, 40:46)]
 newest_numbers_imputed <- cbind(newest_numbers[, 1:6], newest_numbers_imputed)
 newest_numbers <- st_as_sf(newest_numbers_imputed)
+rownames(newest_numbers) <- NULL
 rm(list = setdiff(ls(), c("newest_numbers")))

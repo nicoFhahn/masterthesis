@@ -136,7 +136,7 @@ Data were also gathered in relation to protection-seekers, as shown in Table~\re
 \caption{An excerpt from the protection-seekers data for Germany.\label{protectionGermany}}
 \begin{tabular}{l l r r r r}
 \toprule
-\textbf{District}	& \textbf{City}	& \textbf{protection-seekers}\\
+\textbf{District}	& \textbf{City}	& \textbf{protection\_seekers}\\
 \midrule
 2000 & Hamburg, City & 52730\\
 8221 & Heidelberg, City & 2570\\
@@ -149,7 +149,7 @@ Data were also gathered in relation to protection-seekers, as shown in Table~\re
 \caption{An excerpt from the social welfare data for Germany. Does not contain all variables.\label{welfareGermany}}
 \begin{tabular}{l l r r r r}
 \toprule
-\textbf{District}	& \textbf{City}	& \textbf{welfare recipients}\\
+\textbf{District}	& \textbf{City}	& \textbf{welfare\_recipients}\\
 \midrule
 2000 & Hamburg, City & 10076\\
 8221 & Heidelberg, City & 292\\
@@ -162,7 +162,7 @@ Data were also gathered in relation to protection-seekers, as shown in Table~\re
 \caption{An excerpt from the asylum-seeker benefits data for Germany. Does not contain all variables.\label{asylumGermany}}
 \begin{tabular}{l l r r r r}
 \toprule
-\textbf{District}	& \textbf{City}	& \textbf{asylum-seeker benefites}\\
+\textbf{District}	& \textbf{City}	& \textbf{asylum\_seeker\_benefits}\\
 \midrule
 2000 & Hamburg, City & 9665\\
 8221 & Heidelberg, City & 1326\\
@@ -202,7 +202,7 @@ A complete list of all key-value pairs used for this work can be found in the Ap
 \section{Data Wrangling}
 The final step before analyzing the research question at hand is to combine all of these data sources into one dataset. This section will show how this was achieved.
 \subsection*{Data Wrangling for Norway}
-The initial step in creating the final dataset was to convert the data from a wide format, as seen in table~\ref{datasetNorge}, to a long format. This was done using the function \texttt{melt()} from the R package \texttt{reshape2} \cite{reshape2}. The long version of the dataset is shown in table~\ref{norwayLong}.
+The initial step in creating the final dataset was to convert the data from a wide format, as seen in Table~\ref{datasetNorge}, to a long format. This was done using the function \texttt{melt()} from the R package \texttt{reshape2} \cite{reshape2}. The long version of the dataset is shown in Table~\ref{norwayLong}.
 \begin{table}[H] 
 \caption{An excerpt from the long version of the Norwegian Covid-19 data. Does not contain all variables.\label{norwayLong}}
 \begin{tabular}{l l r r r}

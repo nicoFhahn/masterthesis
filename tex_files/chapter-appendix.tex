@@ -179,3 +179,48 @@ formula_26_leroux <- CumNumberTestedIll ~
     Cmatrix = C, hyper = prior_2
   )
 \end{lstlisting}
+\subsubsection{Coefficients of BYM2 Model with all Variables for Germany}
+\begin{table}[H] 
+\caption{The fixed effects for the BYM2 model. Values are rounded. \label{allGermanyBYM2}}
+\begin{tabular}{l r r r r}
+\toprule
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025)} & \textbf{exp(q0975)} \\
+\midrule
+(Intercept) & -2.752 & 0.1308 & -5.103  & -0.407\\
+AfD & 3.930 & 57.70  & 2.944 & 4.907 \\
+sex & 3.726 & 436.4 & -0.5261 & 7.962 \\
+Union & 0.8027 & 2.406 & 0.04095 & 1.562 \\
+aerodrome & 0.3879 & 1.806 & -0.8624 & 1.635 \\
+kindergarten & 0.1613 & 1.182 & -0.05895 & 0.3812 \\
+entertainment & 0.1275 & 1.211 & -0.5746 & 0.8272 \\
+shops & 0.06951 & 1.084 &  -0.2293 & 0.3673 \\
+nursing\_home & 0.06812 & 1.144 & -0.6464 & 0.7793 \\
+bakeries & 0.05613 & 1.068 & -0.2200 & 0.3315 \\
+sport & 0.04839 & 1.052 &  -0.08367 & 0.1801 \\
+unemployed\_ & \multirow{2}{*}{0.04093} & \multirow{2}{*}{1.042}  & \multirow{2}{*}{0.02586} & \multirow{2}{*}{0.5594}\\
+foreigners  \\
+asylum\_seeker\_ & \multirow{2}{*}{0.004844} & \multirow{2}{*}{1.005}  & \multirow{2}{*}{-0.005108} & \multirow{2}{*}{0.01478}\\
+benefits  \\
+pop\_dens & 0.00007097 & 1.000 & 0.00001480 & 0.0001270 \\
+total\_income & 0.00001266 & 1.000 & -0.00003628 & 0.00006146 \\
+urb\_dens & 0.000009849  & 1.0000 & -0.0006510 & 0.0006684 \\
+trade\_tax &  0.0000001765 & 1.0000 & -0.00000008805 & 0.0000004411 \\
+income\_tax &  -0.00006125 & 0.9999 &  -0.0002156 & 0.00009267 \\
+welfare\_ & \multirow{2}{*}{-0.001508} & \multirow{2}{*}{0.9985}  & \multirow{2}{*}{-0.01493} & \multirow{2}{*}{0.01185}\\
+recipients \\
+protection\_ & \multirow{2}{*}{-0.003726} & \multirow{2}{*}{0.9963}  & \multirow{2}{*}{-0.007437} & \multirow{2}{*}{-0.00003260}\\
+seekers \\
+unemployed\_ & \multirow{2}{*}{-0.008041} & \multirow{2}{*}{0.9920}  & \multirow{2}{*}{-0.01448} & \multirow{2}{*}{-0.001612} \\
+total \\
+platform & -0.008767  & 0.9913 &  -0.01806 & 0.0004970 \\
+schools & -0.01115  & 0.9935 & -0.2000 & 0.17773 \\
+FDP & -0.01648  & 2.490 & -2.688 & 2.649 \\
+restaurant & -0.03560  & 0.9654 &  -0.0931 & 0.02173 \\
+clinic & -0.03697  & 0.9646 &  -0.1222 & 0.04803 \\
+hairdresser & -0.05900  & 0.9483 & -0.2732 & 0.1545 \\
+SPD & -0.1807  & 0.9439 &  -1.154 & 0.7900 \\
+die\_linke & -0.2930  & 1.043 &  -1.897 & 1.3084 \\
+other\_parties & -12.22  & 1.469e+31 & -46.58 & 22.06 \\
+\bottomrule
+\end{tabular}
+\end{table}

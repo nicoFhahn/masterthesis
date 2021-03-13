@@ -15,6 +15,7 @@ models_bym2 <- models_final_bym2[[1]]
 results_leroux <- models_final_leroux[[2]]
 results_besag <- models_final_besag[[2]]
 results_bym2 <- models_final_bym2[[2]]
+####################### DEMOGRAPHIC MODELS
 demo_results <- c(results_leroux[1:6], results_besag[1:6], results_bym2[1:6])
 demo_dic <- unlist(lapply(demo_results, function(x) x$dic))
 demo_waic <- unlist(lapply(demo_results, function(x) x$waic))
@@ -106,6 +107,7 @@ perc_var_u
 marg_hyper <- inla.hyperpar.sample(100000, models_leroux[[10]])
 perc_var_u1 <- mean(marg_hyper[, 1] / (marg_hyper[, 1] + marg_hyper[, 2]))
 perc_var_u1
+################## INFRASTRUCTURAL MODELS
 infra_results <- c(results_leroux[7:8], results_besag[7:8], results_bym2[7:8])
 infra_dic <- unlist(lapply(infra_results, function(x) x$dic))
 infra_waic <- unlist(lapply(infra_results, function(x) x$waic))
@@ -133,96 +135,8 @@ infra_cpo[which(infra_ranks[9:16, ]$total %in% min(infra_ranks[9:16, ]$total)) +
 infra_cpo[which(infra_ranks[17:24, ]$total %in% min(infra_ranks[17:24, ]$total)) + 16]
 options(scipen = 10)
 models_bym2[[26]]$summary.fixed[order(models_bym2[[26]]$summary.fixed$mean), ]
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$`(Intercept)`)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$marketplace)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$entertainment)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$hairdresser)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$shops)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$bakeries)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$place_of_worship)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$platform)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$nursing_home)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$schools)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$kindergarten)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$aerodrome)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$retail)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$restaurant)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$higher_education)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$office)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$clinic)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$sport)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$`(Intercept)`)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$marketplace)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$entertainment)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$hairdresser)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$shops)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$bakeries)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$place_of_worship)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$platform)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$nursing_home)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$schools)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$kindergarten)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$aerodrome)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$retail)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$restaurant)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$higher_education)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$office)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$clinic)
-)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_bym2[[26]]$marginals.fixed$sport)
-)
+sapply(models_bym2[[26]]$marginals.fixed, inla.emarginal, fun = exp)
+sapply(models_bym2[[26]]$marginals.fixed, inla.qmarginal, p = c(0.025, 0.975))
 range(newest_numbers$marketplace)
 range(newest_numbers$bakeries)
 range(newest_numbers$hairdresser)
@@ -267,10 +181,128 @@ var_v <- inla.rmarginal(
     models_bym2[[26]]$marginals.hyperpar$`Precision for idarea_1`
   )
 )
+######################################### ALL MODELS
+all_results <- c(results_leroux[9], results_besag[9], results_bym2[9])
+all_dic <- unlist(lapply(all_results, function(x) x$dic))
+all_waic <- unlist(lapply(all_results, function(x) x$waic))
+all_cpo <- unlist(lapply(all_results, function(x) x$cpo))
+all_dic_rank <- unlist(lapply(all_dic, function(x, ...) which(sort(all_dic) %in% x)))
+all_waic_rank <- unlist(lapply(all_waic, function(x, ...) which(sort(all_waic) %in% x)))
+all_cpo_rank <- unlist(lapply(all_cpo, function(x, ...) which(sort(all_cpo) %in% x)))
+all_ranks <- tibble(
+  dic = all_dic_rank,
+  waic = all_waic_rank,
+  cpo = all_cpo_rank
+)
+all_ranks$total <- rowSums(all_ranks)
+all_ranks[1:4, ]
+all_ranks[5:8, ]
+all_ranks[9:12, ]
+all_dic[which(all_ranks[1:4, ]$total %in% min(all_ranks[1:4, ]$total))]
+all_dic[which(all_ranks[5:8, ]$total %in% min(all_ranks[5:8, ]$total)) + 4]
+all_dic[which(all_ranks[9:12, ]$total %in% min(all_ranks[9:12, ]$total)) + 8]
+all_waic[which(all_ranks[1:4, ]$total %in% min(all_ranks[1:4, ]$total))]
+all_waic[which(all_ranks[5:8, ]$total %in% min(all_ranks[5:8, ]$total)) + 4]
+all_waic[which(all_ranks[9:12, ]$total %in% min(all_ranks[9:12, ]$total)) + 8]
+all_cpo[which(all_ranks[1:4, ]$total %in% min(all_ranks[1:4, ]$total))]
+all_cpo[which(all_ranks[5:8, ]$total %in% min(all_ranks[5:8, ]$total)) + 4]
+all_cpo[which(all_ranks[9:12, ]$total %in% min(all_ranks[9:12, ]$total)) + 8]
+options(scipen = 10)
+models_leroux[[34]]$summary.fixed[order(models_leroux[[34]]$summary.fixed$mean), ]
+sapply(models_leroux[[34]]$marginals.fixed, inla.emarginal, fun = exp)
+sapply(models_leroux[[34]]$marginals.fixed, inla.qmarginal, p = c(0.025, 0.975))
+sapply(
+  models_leroux[[34]]$marginals.fixed[
+    rownames(models_leroux[[34]]$summary.fixed[
+      order(models_leroux[[34]]$summary.fixed$mean), 
+    ])
+  ],
+  inla.emarginal,
+  fun = exp
+)
+sapply(
+  models_leroux[[34]]$marginals.fixed[
+    rownames(models_leroux[[34]]$summary.fixed[
+      order(models_leroux[[34]]$summary.fixed$mean), 
+    ])
+  ],
+  inla.qmarginal,
+  p = c(0.025, 0.975)
+)
+models_bym2[[31]]$summary.fixed[order(models_bym2[[31]]$summary.fixed$mean), ]
+sapply(
+  models_bym2[[31]]$marginals.fixed[
+    rownames(models_bym2[[31]]$summary.fixed[
+      order(models_bym2[[31]]$summary.fixed$mean), 
+      ])
+    ],
+  inla.emarginal,
+  fun = exp
+)
+sapply(
+  models_bym2[[31]]$marginals.fixed[
+    rownames(models_bym2[[31]]$summary.fixed[
+      order(models_bym2[[31]]$summary.fixed$mean), 
+    ])
+  ],
+  inla.qmarginal,
+  p = c(0.025, 0.975)
+)
+range(newest_numbers$marketplace)
+range(newest_numbers$bakeries)
+range(newest_numbers$hairdresser)
+range(newest_numbers$shops)
+inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$afd)^ 0.01
+inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$sonstige)^ 0.001
+inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$schools)^ 0.1
+range(newest_numbers$schools)
+sum(models_leroux[[34]]$cpo$failure)
+predicted.p.value <- c()
+n <- nrow(newest_numbers)
+for (i in (1:n)) {
+  predicted.p.value[i] <- inla.pmarginal(
+    q = newest_numbers$CumNumberTestedIll[i],
+    marginal = models_leroux[[34]]$marginals.fitted.values[[i]]
+  )
+}
+plot(
+  newest_numbers$CumNumberTestedIll,
+  models_leroux[[34]]$summary.fitted.values$mean,
+  xlab = "Observed Values",
+  ylab = "Mean Post. Pred. Distr."
+)
+hist(predicted.p.value, main = "", xlab = "Posterior predictive p-value")
+csi <- models_leroux[[34]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
+zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
+zeta_cutoff <- c(0.1, 0.5, 0.9, 1.3, 1.7, 2.1, 2.5)
+cat_zeta <- cut(
+  unlist(zeta),
+  breaks = zeta_cutoff,
+  include.lowest = TRUE
+)
+maps_cat_zeta <- data.frame(
+  ID = newest_numbers$idarea_1,
+  cat_zeta = cat_zeta
+)
+newest_numbers$cat_zeta <- cat_zeta
+var_v <- inla.rmarginal(
+  100000,
+  inla.tmarginal(
+    function(x) 1 / x,
+    models_leroux[[34]]$marginals.hyperpar$`Precision for idarea_1`
+  )
+)
+newest_numbers$rr <- models_leroux[[34]]$summary.fitted.values$mean
+csi <- models_leroux[[34]]$marginals.random$idarea_1[1:399]
+a <- 0
+prob.csi <- lapply(csi, function(x) {1 - inla.pmarginal(a, x)})
+newest_numbers$prob_csi <- unlist(prob.csi)
+color_low <- "#002FA7"
+color_high <- "#F50039"
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = rr)) +
   ggtitle(
-    label = "Relative risk based on demographic variables",
+    label = "Relative risk based on all variables",
     subtitle = "Germany"
   ) +
   scale_fill_gradient2(
@@ -281,16 +313,26 @@ plot_1 <- ggplot(data = newest_numbers) +
   ) +
   theme_minimal()
 plot_1
-
-
-models[[9]]
-models[11:18][unlist(results_sum[6]) == min(unlist(results_sum[6]))][[1]]$call
-results[6]
-models[[11]]
-models[13:14][unlist(results_sum[7]) == min(unlist(results_sum[7]))][[1]]$call
-results[[7]]
-models[[14]]
-models[15:16][unlist(results_sum[8]) == min(unlist(results_sum[8]))][[1]]$call
-results[[8]]
-models[[16]]
-models[unlist(results_sum) == min(unlist(results_sum))][[1]]$call
+plot_2 <- ggplot(data = newest_numbers) +
+  geom_sf(aes(fill = cat_zeta)) +
+  ggtitle(
+    label = "Posterior mean of the relative risk",
+    subtitle = "Germany"
+  ) +
+  scale_fill_viridis_d(option = "B", direction = -1) +
+  theme_minimal() +
+  guides(
+    fill = guide_legend(
+      title = "Relative risk"
+    )
+  )
+plot_2
+plot_3 <- ggplot(data = newest_numbers) +
+  geom_sf(aes(fill = prob_csi)) +
+  ggtitle(
+    label = "Relative risk based on all variables",
+    subtitle = "Germany"
+  ) +
+  scale_fill_viridis(option = "B", direction = -1) +
+  theme_minimal()
+plot_3
