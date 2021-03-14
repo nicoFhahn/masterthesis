@@ -124,10 +124,24 @@ For each model type, different values for the penalised prior component were tri
 Finally, due to the amount of covariates, forwards and backwards stepwise variable selection was performed with the intention of obtaining a model that fits the data well and at the same time is relatively easy to interpret. This can be done with the R package \texttt{INLAutils} \cite{inlautils}, as shown in Listing~\ref{codeSelection}. \\
 A list of all calculated models along with their performance measures is provided in the appendix.
 \subsection{Spatial Models for Germany}
-First, a look is taken at the spatial models calculated for Germany. 
+First, a look is taken at the spatial models calculated for Germany. These models are based on data from 10 March 2021, when 2534502 people in Germany were confirmed infected with Covid-19. The five municipalities with the most infections are shown in Table~\ref{top5germany}.
+\begin{table}[H] 
+\caption{The municipalities with the most infections as of March 10th 2021. \label{top5germany}}
+\begin{tabular}{l r r}
+\toprule
+\textbf{Municipality}	& \textbf{Population}	& \textbf{Number of infections} \\
+\midrule
+SK Berlin & 3644826 & 133158 \\     
+SK Munich & 1471508 & 55263 \\
+SK Hamburg & 1841179 & 54233 \\
+SK Cologne & 1085664 & 35034 \\
+Region Hannover & 1157624 & 33344 \\
+\bottomrule
+\end{tabular}
+\end{table}
 \subsubsection{Demographic Models}
 The model with the best performance based on the demographic variables was a Leroux model calculated with the following formula:
-\begin{lstlisting}[language=R]
+\begin{lstlisting}[caption={The formula for the best Leroux model based on the demographic variables}, label={codeDemoGermany}, language=R]
 formula_9_leroux <- CumNumberTestedIll ~
   trade_tax + income_total +
   f(
@@ -148,8 +162,8 @@ Leroux & 5611 (1) & 5682 (18) & -3872 (2) \\
 \bottomrule
 \end{tabular}
 \end{table}
-The summary of the fixed effects is shown in Table~\ref{fixedDemoGermany}. To compute the posterior mean of the coefficients, the following code can be used:
-\begin{lstlisting}[language=R]
+The summary of the fixed effects is shown in Table~\ref{fixedDemoGermany}. To compute the posterior mean of the coefficients, the following code shown in Listing~\ref{codePosteriorMean}
+\begin{lstlisting}[caption={Calculating the posterior mean of a coefficent.}, label={codePosteriorMean}, language=R]
 inla.emarginal(exp, model_9_leroux$marginals.fixed$trade_tax)
 # calculate the increase in risk if the 
 # trade tax increase by 25000
@@ -158,8 +172,8 @@ inla.emarginal(
   model_9_leroux$marginals.fixed$trade_tax
   ) ^ 25000
 \end{lstlisting}
-To obtain a credibility interval of the fixed effects on the original scale, the following code can be used:
-\begin{lstlisting}[language=R]
+To obtain a credibility interval of the fixed effects on the transformed scale, the code in Listing~\ref{codeCredibility} can be used.
+\begin{lstlisting}[caption={Extracting the credibility interval for a coefficient}, label={codeCredibility}, language=R]
 inla.qmarginal(
   c(0.025,0.975),
   inla.tmarginal(
@@ -172,11 +186,11 @@ inla.qmarginal(
 \caption{The fixed effects for model 10. Values are rounded. \label{fixedDemoGermany}}
 \begin{tabular}{l r r r r}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025)} & \textbf{exp(q0975)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
 (Intercept) & 0.1483 & 1.1658 & 0.9604 & 1.4012\\
-trade\_tax & 0.0000007026 & 1.000001  & 1.000000  & 1.000001 \\
-income\_total & -0.00001633 & 0.9999837 & 0.9999729 & 0.9999944\\
+trade\_tax & 0.0000007026 & 1.000 & 1.000  & 1.000 \\
+income\_total & -0.00001633 & 1.000 & 1.000 & 1.000\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -188,7 +202,7 @@ Since trade tax must be paid by all companies operating in Germany, this tax is 
 On the other hand, the risk of infection decreases in regions where there is a higher total income based on payroll and income tax, i.e. where people earn a higher salary. Traditionally, people in western Germany have a higher income compared to eastern Germany, which could explain why eastern Germany, especially Saxony, is more affected by Covid-19 than some of the western parts of Germany.
 \subsubsection{Infrastructure Models}
 When it comes to the models based on the infrastructural variables, a BYM2 model performed the best. It was computed using the following formula: 
-\begin{lstlisting}[language=R]
+\begin{lstlisting}[caption={The formula for the best BYM2 model based on the infrastructural variables}, label={codeInfraGermany}, language=R]
 formula_26_bym2 <- CumNumberTestedIll ~
   marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
@@ -218,7 +232,7 @@ The effect of the covariates are shown in Table~\ref{fixedInfraGermany}.
 \caption{The fixed effects for the BYM2 model. Values are rounded. \label{fixedInfraGermany}}
 \begin{tabular}{l r r r r}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025)} & \textbf{exp(q0975)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
 (Intercept) & 0.09038 & 1.100 & 0.9023 & 1.327\\
 marketplace & 0.9468 & 3.293  & 0.6496  & 10.09 \\
@@ -241,8 +255,24 @@ sport & -0.1211  & 0.8883 & 0.7693 & 1.020\\
 \bottomrule
 \end{tabular}
 \end{table}
-Some findings from these results are that the average risk ratio in Germany is 10\%. Marketplaces increase the risk by over 200\%, however, there is a maximum of only 0.1265 marketplaces per 1000 inhabitants, resulting in such a high value. If the number of marketplaces increases by 0.01 per 1000 inhabitants, the risk of infection increases by 1.20\%. More common sites that increase the risk of infection include bakeries (between 0.1169 and 0.9643 per 1000 inhabitants), hairdressers (between 0.09655 and 1.191 per 1000 inhabitants) and shops (between 0.3710 and 1.129 per 1000 inhabitants). An increase of 0.1 per 1000 for each of these types of establishments results in a risk increase of 0.3\%, 1.4\% and 0.6\%, respectively. It should not be surprising, in particular, that shops increase the risk of infection, as people tend to congregate there and people living in areas where a supermarket is nearby may prefer to go shopping more often in favour of fresh produce, rather than just once a week when a supermarket is further away. \\
+Some findings from these results are that the average risk ratio in Germany is 10\%. Marketplaces increase the risk by over 200\%, however, there is a maximum of only 0.1265 marketplaces per 1000 inhabitants, resulting in such a high value. If the number of marketplaces increases by 0.1 per 1000 inhabitants, the risk of infection increases by 12.7\%. More common sites that increase the risk of infection include bakeries (between 0.1169 and 0.9643 per 1000 inhabitants), hairdressers (between 0.09655 and 1.191 per 1000 inhabitants) and shops (between 0.3710 and 1.129 per 1000 inhabitants). An increase of 0.1 per 1000 for each of these types of establishments results in a risk increase of 0.3\%, 1.4\% and 0.6\%, respectively. It should not be surprising, in particular, that shops increase the risk of infection, as people tend to congregate there and people living in areas where a supermarket is nearby may prefer to go shopping more often in favour of fresh produce, rather than just once a week when a supermarket is further away. \\
 There are also effects that have a posterior mean of less than 1, suggesting that they reduce the risk of infection. However, this is not necessarily the case, as it is probably safer for a person to stay at home rather than go to a restaurant, for example.
+\begin{table}[H]
+\caption{How different variables affect the relative risk. Does not contain all variables.\label{riskTableGermany}}
+\begin{tabular}{l l r r}
+\toprule
+\textbf{Variable} & \textbf{Scale} & \textbf{Increase} & \textbf{Risk increase} \\
+\midrule
+marketplace & per 1000 inhabitants & 0.1 & 12.7\% \\
+entertainment & per 1000 inhabitants & 0.1 & 3.8\% \\
+hairdresser & per 1000 inhabitants & 0.1 & 1.4\% \\
+shops & per 1000 inhabitants & 0.1 & 0.6\% \\
+bakeries & per 1000 inhabitants & 0.1 & 0.3\% \\
+nursing\_home & per 1000 inhabitants & 0.1 & 0.5\% \\
+aerodrome & per 1000 inhabitants & 0.1 & 2.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
 \subsubsection{Combined Models}
 Finally, models are considered that include both the infrastructural and demographic covariates. Due to the amount of variables, all models run are based on variable selection. Since forwards and backwards variable selection was performed, a total of 12 models were run. The models with the best performance were a Leroux model that used forwards variable selection and a BYM2 model that used backwards variable selection. The difference between these types of variable selection can be seen in the Listing~\ref{formulaAllGermany}, as the Leroux model contains fewer variables.
 \begin{lstlisting}[caption={The formulas for the best models containing all variables.}, label={formulaAllGermany}, language=R]
@@ -280,38 +310,65 @@ Leroux & 5815 (4) & 5827 (5) & -3551 (2) \\
 \bottomrule
 \end{tabular}
 \end{table}
-A look is only taken at the covariates of the Leroux model, as it has a lower CPO and is therefore better at predicting. The covariates of the BYM2 model are shown in Table~\ref{allGermanyBYM2} in the Appendix. For the Leroux model, the covariates are shown in Table~\ref{allGermanyLeroux}.
+A look is only taken at the covariates of the Leroux model, as it has a lower CPO and is therefore better at predicting. The covariates of the BYM2 model are shown in Table~\ref{allGermanyBYM2} in the Appendix. For the Leroux model, the covariates are shown in Table~\ref{fixedAllGermany}.
 
 \begin{table}[H] 
-\caption{The fixed effects for model 34. Values are rounded. \label{allGermanyLeroux}}
+\caption{The fixed effects for model 34. Values are rounded. \label{fixedAllGermany}}
 \begin{tabular}{l r r r r}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025)} & \textbf{exp(q0975)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
-(Intercept) & -0.244 & 0.7857 & -0.3993 & -0.08969\\
-other\_parties & 29.01 & 1.176e+51  & -7.140  & 64.82 \\
-AfD & 4.115 & 65.03 & 3.437 & 4.791\\
-schools & 0.1743 & 1.198 & -0.05185 & 0.3999\\
-unemployed\_ & \multirow{2}{*}{0.0611} & \multirow{2}{*}{1.063} & \multirow{2}{*}{0.04780} & \multirow{2}{*}{0.07443}\\
+(Intercept) & -0.244 & 0.7857 & 0.6712 & 0.9137\\
+other\_parties & 29.01 & 1.176e+51  & -2.453e+25 & -4.135e+20 \\
+AfD & 4.115 & 65.03 & 31.16 & 120.2\\
+schools & 0.1743 & 1.198 & 0.9504 & 1.491\\
+unemployed\_ & \multirow{2}{*}{0.0611} & \multirow{2}{*}{1.063} & \multirow{2}{*}{1.049} & \multirow{2}{*}{1.077}\\
 foreigners \\
-pop\_dens & 0.00003913 & 1.000 & -0.00002088 & 0.00009896\\
-clinic & -0.002106 & 0.9990 & -0.09274 & 0.08818\\
-welfare\_ & \multirow{2}{*}{-0.01726} & \multirow{2}{*}{0.9829} & \multirow{2}{*}{-0.03298} & \multirow{2}{*}{-0.001590}\\
+pop\_dens & 0.00003913 & 1.000 & 1.000 & 1.000\\
+clinic & -0.002106 & 0.9990 & 0.9118 & 1.092\\
+welfare\_ & \multirow{2}{*}{-0.01726} & \multirow{2}{*}{0.9829} & \multirow{2}{*}{0.9676} & \multirow{2}{*}{0.9984}\\
 recipients \\
-unemployed\_ & \multirow{2}{*}{-0.01744} & \multirow{2}{*}{0.9827} & \multirow{2}{*}{-0.02280} & \multirow{2}{*}{-0.01210}\\
+unemployed\_ & \multirow{2}{*}{-0.01744} & \multirow{2}{*}{0.9827} & \multirow{2}{*}{0.9775} & \multirow{2}{*}{0.9880}\\
 total \\
-entertainment & -0.6267 & 0.5732 & -1.361 & 0.1069\\
-SPD & -1.666 & 0.1981  & -2.264 & -1.069\\
+entertainment & -0.6267 & 0.5732 & 0.2569 & 1.110\\
+SPD & -1.666 & 0.1981  & 0.1042 & 0.3426\\
 \bottomrule
 \end{tabular}
 \end{table}
-What is immediately noticeable here is the extremely high coefficient for \textit{other\_parties}. However, one should bear in mind that in the 2019 European election the highest combined percentage of all other political parties was 0.4\%. Therefore, an increase of 0.005\% only increases the risk by 0.59\%. One of the larger political parties in Germany, the AfD, is known for its opposition to the corona rules in Germany. If the proportion of votes for this party increases by 1\% in a given area, the risk of getting Covid-19 increases by 4.26\%. Since the people who voted for them tend not to wear masks or keep a safe distance from others, it is not surprising that the infection figures are also higher in Bavaria and Saxony, both federal states where the AfD receives a higher proportion of the vote. The last positive effect worth mentioning is the number of schools per 1000 inhabitants. If these increase by 0.1, then the risk of infection increases by 1.8\%.
-%%%%%%%%%%%%%% HIER GRAFIK
+What is immediately noticeable here is the extremely high coefficient for \textit{other\_parties}. However, one should bear in mind that in the 2019 European election the highest combined percentage of all other political parties was 0.4\%. Therefore, an increase of 0.005\% only increases the risk by 0.59\%. One of the larger political parties in Germany, the AfD, is known for its opposition to the corona rules in Germany. If the proportion of votes for this party increases by 1\% in a given area, the risk of getting Covid-19 increases by 4.26\%. Since the people who voted for them tend not to wear masks or keep a safe distance from others, it is not surprising that the infection figures are also higher in Bavaria and Saxony, both federal states where the AfD receives a higher proportion of the vote. Another positive effect worth mentioning is the number of schools per 1000 inhabitants. If these increase by 0.1, then the risk of infection increases by 1.8\%. If the number of unemployed foreigners per 1000 inhabitants increases by 1, then the risk of infection increases by 6.3\%. Finally, if the number of people per square kilometre increases by a value of 250, the risk of infection increases by 1.0\%.
+\\
+Finally, a look is taken at the posterior means $\pmb{\zeta} = \exp{\left(\xi\right)}$ of the area-specific risks. Since the uncertainty associated with them can also be mapped, the posterior probability $\mathbb{P}\left(\zeta_i > 1|y\right)$ is visualised as well. In Figure~\ref{posteriorGermany} it can be seen that the relative risk is higher in the southern parts of Bavaria, as well as in some parts of Saxony, Lower Saxony, North Rhine-Westphalia and Brandenburg. The posterior probability is highest in large parts of Bavaria, Saxony, North Rhine-Westphalia, Hesse and Lower Saxony. Both risks are low in the northern parts of Germany and in Baden-Württemberg, which is located in the south, west of Bavaria.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{posterior_germany.png}
+    \caption{Posterior mean of the area-specific risk and the posterior probabilit.}
+    \label{posteriorGermany}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = textwidth]{posterior_germany.svg}
+%     \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
+%     \label{nb_norge}
+% \end{figure}
 \subsection{Spatial Models for Norway}
-Next, the same types of models are evaluated for Norway.
+Next, the same types of models are evaluated for Norway. These models are based on data from 12 March 2021, when 76577 people in Norway were confirmed infected with Covid-19. The five municipalities with the most infections are shown in Table~\ref{top5norway}.
+\begin{table}[H] 
+\caption{The municipalities with the most infections as of March 12th 2021. \label{top5norway}}
+\begin{tabular}{l r r}
+\toprule
+\textbf{Municipality}	& \textbf{Population}	& \textbf{Number of infections} \\
+\midrule
+Oslo & 693494 & 22248 \\
+Bergen & 283929 & 4618 \\
+Drammen & 101386 & 2549 \\
+Lillestrøm & 85983 & 2390 \\
+Fredrikstad & 82385 & 2373 \\
+\bottomrule
+\end{tabular}
+\end{table}
 \subsubsection{Demographic Models}
 As with Germany, the best demographic model was again a Leroux model. Only this time, the covariates of the model were selected using forwards variable selection. The following formula was used for the model:
-\begin{lstlisting}[language = R]
+\begin{lstlisting}[caption={The formula for the best Leroux model based on the demographic variables}, label={codeDemoNorway}, language = R]
 formula_22_leroux <- value ~
   pop_dens + immigrants_pure + median_age +
   sex +
@@ -339,19 +396,172 @@ The effects of the covariates are shown in Table~\ref{fixedDemoNorway}.
 \caption{The fixed effects for model 22. Values are rounded. \label{fixedDemoNorway}}
 \begin{tabular}{l r r r r}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025)} & \textbf{exp(q0975)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
-(Intercept) & 1.087 & 222.4 & -4.681 & 6.826\\
-pop\_dens & 0.001775 & 1.002 & 0.001048 & 0.002507\\
-immigrants\_pure & -0.03358 & 0.9671 & -0.06291 & -0.005115\\
-median\_age & -0.03628  & 0.9645 & -0.06242 & -0.01030\\
-sex & -0.0426 & 2.902e+06 & -12.00 & 10.11 \\
+(Intercept) & 1.087 & 222.4 & -8.203e+09 & -9.140e+04\\
+pop\_dens & 0.001775 & 1.002 & 1.001 & 1.003\\
+immigrants\_pure & -0.03358 & 0.9671 & 0.9392 & 0.9948\\
+median\_age & -0.03628  & 0.9645 & 0.9396 & 0.9897\\
+sex & -0.0426 & 2.902e+06 & -6.904e+26 & -1.164e+22 \\
 \bottomrule
 \end{tabular}
 \end{table}
-There is little meaningful interpretation for the posterior mean of the intercept in this model due to its high value. Of note is that if the population density increases by 10 persons per square kilometre, the risk of infection increases by about 1.8\%. Furthermore, if the proportion of women in an area increases by 0.05, the risk of infection increases by around 7.7\%. Finally, if the average age in a community increases by 1 year, the risk of infection decreases by roughly 3.5\%. Because younger people tend to be more mobile, they come into contact with more people than older generations, so it makes sense that people living in younger areas have a higher risk of becoming infected with Covid-19.
+There is little meaningful interpretation for the posterior mean of the intercept in this model due to its high value. Of note is that if the population density increases by 100 persons per square kilometre, the risk of infection increases by about 19.4\%. Furthermore, if the proportion of women in an area increases by 0.05, the risk of infection increases by around 7.7\%. Finally, if the average age in a community increases by 1 year, the risk of infection decreases by roughly 3.5\%. Because younger people tend to be more mobile, they come into contact with more people than older generations, so it makes sense that people living in younger areas have a higher risk of becoming infected with Covid-19.
 \subsubsection{Infrastructure Models}
+Looking at the 24 models computed for Norway that are based on the infrastructural variables, once again a Leroux model based on forwards variable selection had the best performance. The formula is shown in Listing~\ref{codeInfraNorway}.
+\begin{lstlisting}[caption={The formula for the best Leroux model based on the infrastructural variables}, label={codeInfraNorway}, language = R]
+formula_30_leroux <- value ~
+  pop_dens + shops + retail + place_of_worship +
+  schools + nursing_home + kindergarten +
+  f(
+    idarea_1, model = "generic1",
+    Cmatrix = C, hyper = prior_2
+  )
+\end{lstlisting}
+The performance measure for the models are shown in Table~\ref{infraNorway}.
+\begin{table}[H] 
+\caption{The performance measures for the best performing demographic model of each type. The rank in relation to each performance measure is shown in the brackets. \label{infraNorway}}
+\begin{tabular}{l l l l}
+\toprule
+\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} \\
+\midrule
+Besags Proper  & 2816 (17) & 2813 (17) & -10347 (8) \\
+BYM2 & 2728 (2) & 2671 (2) & -9145 (14)\\
+Leroux & 2718 (1) & 2665 (1) & -9553 (11) \\
+\bottomrule
+\end{tabular}
+\end{table}
+The effect of the covariates are shown in Table~\ref{fixedInfraNorway}.
+\begin{table}[H] 
+\caption{The fixed effects for model 30. Values are rounded. \label{fixedInfraNorway}}
+\begin{tabular}{l r r r r}
+\toprule
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
+\midrule
+(Intercept) & -0.7263 & 0.4858 & 0.4024 & 0.5816 \\
+nursing\_home & 0.2017 & 1.270 & 0.7174 & 2.081 \\
+retail & 0.1541 & 1.169 & 1.023 & 1.329 \\
+kindergarten &  0.07385  &  1.082 & 0.8940 & 1.295 \\
+pop\_dens & 0.001853 & 1.002 & 1.001 & 1.003 \\
+schools & -0.1022 & 0.9065 & 0.7564 & 1.076 \\
+place\_of\_worship & -0.1098 & 0.8987 & 0.7710 & 1.040 \\
+shops & -0.1509 & 0.8633 & 0.7228 & 1.022 \\
+\bottomrule
+\end{tabular}
+\end{table}
+The posterior mean of the exponential intercept implies a risk rate of -51.42\% across Norway, with a credibility interval ranging from -59.76\% to -41.84\%. However, the risk rate increases if the number of nursing homes per 1000 inhabitants (between 0 and 1.851), retail shops per 1000 inhabitants (between 0 and 10.72), kindergartens per 1000 inhabitants (between 0 and 5.051) or the population density (between 0.1479 and 1437) increases. A 0.1 increase in nursing homes increases the risk by 2.4\%, an increase of 0.1 retail shops per 1000 inhabitants increases the risk by 1.6\% and an increase of 0.1 kindergartens per 1000 inhabitants increases the risk by 0.8\%. Finally, if the population density increases by 50 persons per square kilometre, the risk of infection increases by 20.4\%. Again, there are covariates that negatively affect the risk rate, but as stated earlier, it is probably safer to stay at home than to attend these facilities.
 \subsubsection{Combined Models}
+Looking at the models with both types of variables for Norway, a BYM2 model that used backwards variable selection performed the best. Its formula can be seen in Listing~\ref{codeAllNorway}
+\begin{lstlisting}[caption={The formula for the best BYM2 model based all variables}, label={codeAllNorway}, language = R]
+formula_31_bym2 <- value ~
+  median_age + unemp_tot + unemp_immg + workers_ft_com + 
+  workers_pt_com + mining_ft_com + mining_pt_com +
+  construction_pt_com + immigrants_total + immigrants_norge +
+  immigrants_pure + marketplace + entertainment + clinic + 
+  hairdresser + shops + place_of_worship + retail + 
+  nursing_home + aerodrome + platform + kindergarten + 
+  schools + bakeries + higher_education + pop_dens + urb_dens +
+  f(
+    idarea_1, model = "BYM2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  )
+\end{lstlisting}
+In Table~\ref{allNorway}, the performance measure of the respective models can be seen.
+\begin{table}[H] 
+\caption{The performance measures for the best performing demographic model of each type. The rank in relation to each performance measure is shown in the brackets. \label{allNorway}}
+\begin{tabular}{l l l l}
+\toprule
+\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} \\
+\midrule
+Besags Proper  & 2926 (9) & 2958 (9) & -5811 (9) \\
+BYM2 & 2711 (1) & 2673 (2) & -9609 (4)\\
+Leroux & 2734 (6) & 2666 (1) & -12201 (1) \\
+\bottomrule
+\end{tabular}
+\end{table}
+The effects of the covariates are shown in Table-\ref{fixedAllNorway}.
+
+\begin{table}[H] 
+\caption{The fixed effects for model 31. Values are rounded. \label{fixedAllNorway}}
+\begin{tabular}{l r r r r}
+\toprule
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
+\midrule
+(Intercept) & 0.5638 & 2.126 & 0.5236 & 5.868 \\
+marketplace & 0.5562 & 2.944 & 0.2227 & 12.83 \\
+entertainment & 0.4206 & 1.575 & 0.9194 & 2.525 \\
+bakeries & 0.3080 & 1.408 & 0.8087 & 2.2557 \\
+unemployment\_ & \multirow{2}{*}{0.1610} & \multirow{2}{*}{1.176} & \multirow{2}{*}{1.081} & \multirow{2}{*}{1.285} \\
+immigrants \\
+clinic & 0.1375 & 1.157 & 0.8903 & 1.474 \\
+retail & 0.08740 & 1.094 & 0.9575 & 1.243 \\
+nursing\_home & 0.06441 & 1.097 & 0.6728 & 1.689 \\
+kindergarten & 0.04593 & 1.052 & 0.8618 & 1.271 \\
+place\_of\_worship & 0.02894 & 1.033 & 0.8831 & 1.200 \\
+mining\_pt\_com & 0.01075 & 1.013 & 0.9013 & 1.134 \\
+immigrants\_ & \multirow{2}{*}{0.006865} & \multirow{2}{*}{1.542e+38} & \multirow{2}{*}{-1.480e+13} & \multirow{2}{*}{-2.495e+08} \\
+norway \\
+mining\_ft\_com & 0.003582 & 1.004 & 0.9934 & 1.014 \\
+workers\_pt\_com & 0.003072 & 1.003 & 0.9957 & 1.011 \\
+construction\_ & \multirow{2}{*}{0.002205} & \multirow{2}{*}{1.003} & \multirow{2}{*}{0.9529} & \multirow{2}{*}{1.054} \\
+pt\_com \\
+pop\_dens & 0.001339 & 1.001 & 1.000 & 1.003 \\
+platform & 0.001339 & 1.001 & 0.9916 & 1.011 \\
+workers\_ft\_com & -0.0009058 & 0.9991 & 0.9968 & 1.001 \\
+aerodrome & -0.003797 & 0.9966 & 0.9402 & 1.045 \\
+urb\_dens & -0.004528 & 0.9955 & 0.9825 & 1.009 \\
+immigrants\_total & -0.02282 & 1.494e+38 & -1.435e+13 & -2.418e+08\\
+immigrants\_pure & -0.02963 & 1.486e+38 & -1.425e+13 & -2.403e+08\\
+schools & -0.03689 & 0.9674 & 0.8133 & 1.142 \\
+median\_age & -0.03716 & 0.9636 & 0.9363 & 0.9914 \\
+hairdresser & -0.04620 & 0.9715 & 0.6628 & 1.371 \\
+shops & -0.09960 & 0.9090 & 0.7566 & 1.082 \\
+unemp\_tot & -0.1105 & 0.9018 & 0.6975 & 1.116 \\
+higher\_education & -1.279 & 0.3591 & 0.06780 & 1.117 \\
+\bottomrule
+\end{tabular}
+\end{table}
+How different variables influence the relative risk is shown in Table~\ref{riskTableNorway}.
+\begin{table}[H]
+\caption{How different variables affect the relative risk. Does not contain all variables.\label{riskTableNorway}}
+\begin{tabular}{l l r r}
+\toprule
+\textbf{Variable} & \textbf{Scale} & \textbf{Increase} & \textbf{Risk increase} \\
+\midrule
+marketplace & per 1000 inhabitants & 0.1 & 11.4\% \\
+entertainment & per 1000 inhabitants & 0.1 & 4.6\% \\
+bakeries & per 1000 inhabitants & 0.1 & 3.5\% \\
+clinic & per 1000 inhabitants & 0.1 & 1.4\% \\
+retail & per 1000 inhabitants & 0.1 & 0.9\% \\
+nursing\_home & per 1000 inhabitants & 0.1 & 0.9\% \\
+kindergarten & per 1000 inhabitants & 0.1 & 0.5\% \\
+place\_of\_worship & per 1000 inhabitants & 0.1 & 0.3\% \\
+platform & per 1000 inhabitants & 0.1 & 0.01\% \\
+unemployment\_ & \multirow{2}{*}{per 1000 inhabitants} & \multirow{2}{*}{0.5} & \multirow{2}{*}{8.4\%}\\
+immigrants \\
+mining\_pt\_com & per 1000 inhabitants & 0.5 & 0.6\% \\
+mining\_ft\_com & per 1000 inhabitants & 0.5 & 0.02\% \\
+workers\_pt\_com & per 1000 inhabitants & 0.5 & 0.02\% \\
+construction\_pt\_ & \multirow{2}{*}{per 1000 inhabitants} & \multirow{2}{*}{0.5} & \multirow{2}{*}{0.01\%}\\
+com \\
+pop\_dens & people per km² & 100 & 14.3\% \\
+urb\_dens & residential buildings per km² & 10 & -4.4\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+Finally, the posterior mean and posterior probability for Norway can be seen in Figure~\ref{posteriorNorway}. It can be seen that the risk is the highest in the region around the capital Oslo. In addition, there is a greater risk of infection in the Bergen region. The covid outbreak in Tromsø, which occurred in early March 2021, is also visible as the posterior probability for the region is between 0.75 and 1, while the relative risk is between 1.1 and 1.4.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{posterior_norway.png}
+    \caption{Posterior mean of the area-specific risk and the posterior probability.}
+    \label{posteriorNorway}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = textwidth]{posterior_norway.svg}
+%     \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
+%     \label{nb_norge}
+% \end{figure}
 \clearpage
 \section{Spatio-Temporal Models}
 \subsection{Spatio-Temporal Models for Germany}

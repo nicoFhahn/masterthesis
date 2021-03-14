@@ -1,7 +1,15 @@
-source("R/germany_leroux_models.R")
-source("R/germany_besagproper_models.R")
-source("R/germany_bym2_models.R")
-source("R/preprocess_germany.R")
+# source("R/germany_leroux_models.R")
+# source("R/germany_besagproper_models.R")
+# source("R/germany_bym2_models.R")
+newest_numbers <- read_csv("eval_data/newest_numbers_germany_march10.csv")
+germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
+newest_numbers <- merge(
+  newest_numbers,
+  germany_sf,
+  by.x = "Kreis",
+  by.y = "Kennziffer"
+)
+newest_numbers <- st_as_sf(newest_numbers)
 load("models/leroux_germany.Rda")
 models_final_leroux <- models_final
 load("models/besagproper_germany.Rda")
@@ -15,6 +23,7 @@ models_bym2 <- models_final_bym2[[1]]
 results_leroux <- models_final_leroux[[2]]
 results_besag <- models_final_besag[[2]]
 results_bym2 <- models_final_bym2[[2]]
+newest_numbers[order(newest_numbers$CumNumberTestedIll, decreasing = TRUE), ][1:5, c("Landkreis", "PopulationTotal", "CumNumberTestedIll")]
 ####################### DEMOGRAPHIC MODELS
 demo_results <- c(results_leroux[1:6], results_besag[1:6], results_bym2[1:6])
 demo_dic <- unlist(lapply(demo_results, function(x) x$dic))
@@ -46,41 +55,32 @@ demo_cpo[which(demo_ranks[23:44, ]$total %in% min(demo_ranks[23:44, ]$total)) + 
 demo_cpo[which(demo_ranks[45:66, ]$total %in% min(demo_ranks[45:66, ]$total)) + 44]
 options(scipen = 10)
 models_leroux[[9]]$summary.fixed
-inla.emarginal(exp, models_leroux[[9]]$marginals.fixed$Gewerbesteuer)
-range(newest_numbers$Gewerbesteuer)
-inla.emarginal(exp, models_leroux[[9]]$marginals.fixed$Gewerbesteuer)^25000
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_leroux[[9]]$marginals.fixed$Gewerbesteuer)
+sapply(
+  models_leroux[[9]]$marginals.fixed[
+    rownames(models_leroux[[9]]$summary.fixed[
+      order(models_leroux[[9]]$summary.fixed$mean), 
+    ])
+  ],
+  inla.emarginal,
+  fun = exp
 )
-inla.emarginal(exp, models_leroux[[9]]$marginals.fixed$einkuenfte_gesamt)
-range(newest_numbers$einkuenfte_gesamt)
-inla.emarginal(exp, models_leroux[[9]]$marginals.fixed$einkuenfte_gesamt)^1000
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_leroux[[9]]$marginals.fixed$einkuenfte_gesamt)
+sapply(
+  models_leroux[[9]]$marginals.fixed[
+    rownames(models_leroux[[9]]$summary.fixed[
+      order(models_leroux[[9]]$summary.fixed$mean), 
+    ])
+  ],
+  function(x) {
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, x
+      )
+    )
+  }
 )
-inla.emarginal(exp, models_leroux[[9]]$marginals.fixed$`(Intercept)`)
-inla.qmarginal(
-  c(0.025, 0.975),
-  inla.tmarginal(exp, models_leroux[[9]]$marginals.fixed$`(Intercept)`)
-)
-sum(models_leroux[[9]]$cpo$failure)
-predicted.p.value <- c()
-n <- nrow(newest_numbers)
-for (i in (1:n)) {
-  predicted.p.value[i] <- inla.pmarginal(
-    q = newest_numbers$CumNumberTestedIll[i],
-    marginal = models_leroux[[9]]$marginals.fitted.values[[i]]
-  )
-}
-plot(
-  newest_numbers$CumNumberTestedIll,
-  models_leroux[[9]]$summary.fitted.values$mean,
-  xlab = "Observed Values",
-  ylab = "Mean Post. Pred. Distr."
-)
-hist(predicted.p.value, main = "", xlab = "Posterior predictive p-value")
+inla.emarginal(exp, models_leroux[[9]]$marginals.fixed$Gewerbesteuer) ^ 25000
+inla.emarginal(exp, models_leroux[[9]]$marginals.fixed$einkuenfte_gesamt) ^ 1000
 csi <- models_leroux[[9]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
 zeta_cutoff <- c(0.6, 0.9, 1.0, 1.1, 1.8)
@@ -94,19 +94,6 @@ maps_cat_zeta <- data.frame(
   cat_zeta = cat_zeta
 )
 newest_numbers$cat_zeta <- cat_zeta
-var_v <- inla.rmarginal(
-  100000,
-  inla.tmarginal(
-    function(x) 1 / x,
-    models_leroux[[9]]$marginals.hyperpar$`Precision for idarea_1`
-  )
-)
-
-perc_var_u <- mean(var_u / (var_u + var_v))
-perc_var_u
-marg_hyper <- inla.hyperpar.sample(100000, models_leroux[[10]])
-perc_var_u1 <- mean(marg_hyper[, 1] / (marg_hyper[, 1] + marg_hyper[, 2]))
-perc_var_u1
 ################## INFRASTRUCTURAL MODELS
 infra_results <- c(results_leroux[7:8], results_besag[7:8], results_bym2[7:8])
 infra_dic <- unlist(lapply(infra_results, function(x) x$dic))
@@ -135,32 +122,37 @@ infra_cpo[which(infra_ranks[9:16, ]$total %in% min(infra_ranks[9:16, ]$total)) +
 infra_cpo[which(infra_ranks[17:24, ]$total %in% min(infra_ranks[17:24, ]$total)) + 16]
 options(scipen = 10)
 models_bym2[[26]]$summary.fixed[order(models_bym2[[26]]$summary.fixed$mean), ]
-sapply(models_bym2[[26]]$marginals.fixed, inla.emarginal, fun = exp)
-sapply(models_bym2[[26]]$marginals.fixed, inla.qmarginal, p = c(0.025, 0.975))
-range(newest_numbers$marketplace)
-range(newest_numbers$bakeries)
-range(newest_numbers$hairdresser)
-range(newest_numbers$shops)
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$marketplace)^ 0.01
-inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$bakeries)^ 0.1
+sapply(
+  models_bym2[[26]]$marginals.fixed[
+    rownames(models_bym2[[26]]$summary.fixed[
+      order(models_bym2[[26]]$summary.fixed$mean), 
+    ])
+  ],
+  inla.emarginal,
+  fun = exp
+)
+sapply(
+  models_bym2[[26]]$marginals.fixed[
+    rownames(models_bym2[[26]]$summary.fixed[
+      order(models_bym2[[26]]$summary.fixed$mean), 
+    ])
+  ],
+  function(x) {
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, x
+      )
+    )
+  }
+)
+inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$marketplace)^ 0.1
+inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$entertainment)^ 0.1
 inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$hairdresser)^ 0.1
 inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$shops)^ 0.1
-sum(models_bym2[[26]]$cpo$failure)
-predicted.p.value <- c()
-n <- nrow(newest_numbers)
-for (i in (1:n)) {
-  predicted.p.value[i] <- inla.pmarginal(
-    q = newest_numbers$CumNumberTestedIll[i],
-    marginal = models_bym2[[26]]$marginals.fitted.values[[i]]
-  )
-}
-plot(
-  newest_numbers$CumNumberTestedIll,
-  models_bym2[[26]]$summary.fitted.values$mean,
-  xlab = "Observed Values",
-  ylab = "Mean Post. Pred. Distr."
-)
-hist(predicted.p.value, main = "", xlab = "Posterior predictive p-value")
+inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$bakeries)^ 0.1
+inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$nursing_home)^ 0.1
+inla.emarginal(exp, models_bym2[[26]]$marginals.fixed$aerodrome)^ 0.1
 csi <- models_bym2[[26]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
 zeta_cutoff <- c(0.6, 0.9, 1.0, 1.1, 1.8)
@@ -226,9 +218,20 @@ sapply(
       order(models_leroux[[34]]$summary.fixed$mean), 
     ])
   ],
-  inla.qmarginal,
-  p = c(0.025, 0.975)
+  function(x) {
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, x
+      )
+    )
+  }
 )
+inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$afd)^ 0.01
+inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$sonstige)^ 0.001
+inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$schools)^ 0.1
+inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$arbeitslose_auslaender)^ 1
+inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$pop_dens)^ 250
 models_bym2[[31]]$summary.fixed[order(models_bym2[[31]]$summary.fixed$mean), ]
 sapply(
   models_bym2[[31]]$marginals.fixed[
@@ -245,60 +248,54 @@ sapply(
       order(models_bym2[[31]]$summary.fixed$mean), 
     ])
   ],
-  inla.qmarginal,
-  p = c(0.025, 0.975)
+  function(x) {
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, x
+      )
+    )
+  }
 )
-range(newest_numbers$marketplace)
-range(newest_numbers$bakeries)
-range(newest_numbers$hairdresser)
-range(newest_numbers$shops)
-inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$afd)^ 0.01
-inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$sonstige)^ 0.001
-inla.emarginal(exp, models_leroux[[34]]$marginals.fixed$schools)^ 0.1
-range(newest_numbers$schools)
-sum(models_leroux[[34]]$cpo$failure)
-predicted.p.value <- c()
-n <- nrow(newest_numbers)
-for (i in (1:n)) {
-  predicted.p.value[i] <- inla.pmarginal(
-    q = newest_numbers$CumNumberTestedIll[i],
-    marginal = models_leroux[[34]]$marginals.fitted.values[[i]]
-  )
-}
-plot(
-  newest_numbers$CumNumberTestedIll,
-  models_leroux[[34]]$summary.fitted.values$mean,
-  xlab = "Observed Values",
-  ylab = "Mean Post. Pred. Distr."
+newest_numbers$rr <- models_leroux[[34]]$summary.fitted.values$mean
+csi <- models_leroux[[34]]$marginals.random$idarea_1[1:399]
+a <- 0
+prob_csi <- lapply(csi, function(x) {1 - inla.pmarginal(a, x)})
+csi_cutoff <- c(0, 0.25, 0.5, 0.75, 1)
+cat_csi <- cut(
+  unlist(prob_csi),
+  breaks = csi_cutoff,
+  include.lowest = TRUE
 )
-hist(predicted.p.value, main = "", xlab = "Posterior predictive p-value")
-csi <- models_leroux[[34]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
-zeta_cutoff <- c(0.1, 0.5, 0.9, 1.3, 1.7, 2.1, 2.5)
+zeta_cutoff <- c(0.1, 0.5, 0.9, 1, 1.4, 1.8, 2.2, 2.6)
 cat_zeta <- cut(
   unlist(zeta),
   breaks = zeta_cutoff,
   include.lowest = TRUE
 )
-maps_cat_zeta <- data.frame(
-  ID = newest_numbers$idarea_1,
-  cat_zeta = cat_zeta
-)
 newest_numbers$cat_zeta <- cat_zeta
+newest_numbers$prob_csi <- cat_csi
+mat_marg <- matrix(NA, nrow = 399, ncol = 100000)
+m <- models_leroux[[34]]$marginals.random$idarea_1
+for (i in seq_len(399)) {
+  u <- m[[i]]
+  mat_marg[i, ] <- inla.rmarginal(100000, u)
+}
+var_u <- apply(mat_marg, 2, var)
 var_v <- inla.rmarginal(
   100000,
   inla.tmarginal(
-    function(x) 1 / x,
+    function(x) 1/x,
     models_leroux[[34]]$marginals.hyperpar$`Precision for idarea_1`
   )
 )
-newest_numbers$rr <- models_leroux[[34]]$summary.fitted.values$mean
-csi <- models_leroux[[34]]$marginals.random$idarea_1[1:399]
-a <- 0
-prob.csi <- lapply(csi, function(x) {1 - inla.pmarginal(a, x)})
-newest_numbers$prob_csi <- unlist(prob.csi)
+perc_var_u <- mean(var_u / (var_u + var_v))
+perc_var_u
+
 color_low <- "#002FA7"
 color_high <- "#F50039"
+library(ggplot2)
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = rr)) +
   ggtitle(
@@ -330,9 +327,70 @@ plot_2
 plot_3 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = prob_csi)) +
   ggtitle(
-    label = "Relative risk based on all variables",
+    label = "Posterior probability",
     subtitle = "Germany"
   ) +
-  scale_fill_viridis(option = "B", direction = -1) +
-  theme_minimal()
+  scale_fill_viridis_d(option = "B", direction = -1) +
+  theme_minimal() +
+  guides(
+    fill = guide_legend(
+      title = "Posterior probability"
+    )
+  )
 plot_3
+library(patchwork)
+plot_2 + plot_3
+library(leaflet)
+pal <- colorFactor(
+  viridis(4, direction = -1, option = "B"),
+  domain = newest_numbers$prob_csi
+)
+leaflet(newest_numbers) %>%
+  addMapboxGL(
+    style = "mapbox://styles/mapbox/streets-v9",
+    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
+  ) %>%
+  addPolygons(
+    weight = 1,
+    fillColor = ~ pal(prob_csi),
+    fillOpacity = 0.7,
+    color = "black",
+    group = "Relative risk",
+    label = paste(
+      "Municipality: ", newest_numbers$Landkreis
+    ) %>%
+      lapply(htmltools::HTML)
+  ) %>%
+  addLegend(
+    data = newest_numbers,
+    pal = pal,
+    values = ~prob_csi,
+    group = "RR"
+  )
+
+pal <- colorFactor(
+  viridis(6, direction = -1, option = "B"),
+  domain = newest_numbers$cat_zeta
+)
+leaflet(newest_numbers) %>%
+  addMapboxGL(
+    style = "mapbox://styles/mapbox/streets-v9",
+    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
+  ) %>%
+  addPolygons(
+    weight = 1,
+    fillColor = ~ pal(cat_zeta),
+    fillOpacity = 0.7,
+    color = "black",
+    group = "Relative risk",
+    label = paste(
+      "Municipality: ", newest_numbers$Landkreis
+    ) %>%
+      lapply(htmltools::HTML)
+  ) %>%
+  addLegend(
+    data = newest_numbers,
+    pal = pal,
+    values = ~cat_zeta,
+    group = "RR"
+  )
