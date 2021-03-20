@@ -1,114 +1,121 @@
-library(ggplot2)
 library(ggregplot)
-library(htmlwidgets)
 library(INLA)
 library(INLAutils)
-library(leaflet)
-library(leaflet.mapboxgl)
-library(mlr)
-library(randomForestSRC)
-library(spdep)
-start <- Sys.time()
 source("R/preprocess_germany.R")
-start <- Sys.time()
 parallelMap::parallelStartSocket(7)
 newest_numbers$geometry <- NULL
+set.seed(420)
 stack_all <- inla.stack(
-  data = list(CumNumberTestedIll = newest_numbers$CumNumberTestedIll),
+  data = list(value = newest_numbers$value),
   A = list(1),
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59)]
+      newest_numbers[, c(2:15, 20:35, 43:46)]
     )
   )
 )
 stack_demo <- inla.stack(
-  data = list(CumNumberTestedIll = newest_numbers$CumNumberTestedIll),
+  data = list(value = newest_numbers$value),
   A = list(1),
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(2:5, 8:18, 56:58)]
+      newest_numbers[, c(2:15, 43:45)]
     )
   )
 )
 stack_infra <- inla.stack(
-  data = list(CumNumberTestedIll = newest_numbers$CumNumberTestedIll),
+  data = list(value = newest_numbers$value),
   A = list(1),
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(26:36, 38:40, 43:48, 56:57, 59)]
+      newest_numbers[, c(20:35, 43, 44, 46)]
     )
   )
 )
-result_all <- INLAstep(
+result_all_backwards <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_all,
-  invariant = "0 + Intercept",
+  invariant = "Intercept",
   direction = "backwards",
-  include = c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59),
-  y = "CumNumberTestedIll",
-  y2 = "CumNumberTestedIll",
+  include = c(2:15, 20:35, 43:46),
+  y = "value",
+  y2 = "value",
   powerl = 1,
   inter = 1,
-  thresh = 2
+  thresh = 2,
+  num.threads = 7
 )
-result_demo <- INLAstep(
+result_all_forwards <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_all,
+  invariant = "Intercept",
+  direction = "forwards",
+  include = c(2:15, 20:35, 43:46),
+  y = "value",
+  y2 = "value",
+  powerl = 1,
+  inter = 1,
+  thresh = 2,
+  num.threads = 7
+)
+result_demo_backwards <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_demo,
-  invariant = "0 + Intercept",
+  invariant = "Intercept",
   direction = "backwards",
-  include = c(2:5, 8:18, 56:58),
-  y = "CumNumberTestedIll",
-  y2 = "CumNumberTestedIll",
+  include = c(2:15, 43:45),
+  y = "value",
+  y2 = "value",
   powerl = 1,
   inter = 1,
-  thresh = 2
+  thresh = 2,
+  num.threads = 7
 )
-result_infra <- INLAstep(
+result_demo_forwards <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_demo,
+  invariant = "Intercept",
+  direction = "forwards",
+  include = c(2:15, 43:45),
+  y = "value",
+  y2 = "value",
+  powerl = 1,
+  inter = 1,
+  thresh = 2,
+  num.threads = 7
+)
+result_infra_backwards <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_infra,
-  invariant = "0 + Intercept",
+  invariant = "Intercept",
   direction = "backwards",
-  include = c(26:36, 38:40, 43:48, 56:57, 59),
-  y = "CumNumberTestedIll",
-  y2 = "CumNumberTestedIll",
+  include = c(20:35, 43, 44, 46),
+  y = "value",
+  y2 = "value",
   powerl = 1,
   inter = 1,
-  thresh = 2
+  thresh = 2,
+  num.threads = 7
 )
-set.seed(420)
-sel_all <- INLAModelSel(
-  "CumNumberTestedIll",
-  colnames(newest_numbers)[c(2:5, 8:18, 26:36, 38:40, 43:48, 56:58, 60)],
-  "idarea_1",
-  "iid",
-  "nbinomial",
-  newest_numbers
+result_infra_forwards <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_infra,
+  invariant = "Intercept",
+  direction = "forwards",
+  include = c(20:35, 43, 44, 46),
+  y = "value",
+  y2 = "value",
+  powerl = 1,
+  inter = 1,
+  thresh = 2,
+  num.threads = 7
 )
-sel_demo <- INLAModelSel(
-  "CumNumberTestedIll",
-  colnames(newest_numbers)[c(2:5, 8:18, 56:58)],
-  "idarea_1",
-  "iid",
-  "nbinomial",
-  newest_numbers
-)
-sel_infra <- INLAModelSel(
-  "CumNumberTestedIll",
-  colnames(newest_numbers)[c(26:36, 38:40, 43:48, 56:57, 60)],
-  "idarea_1",
-  "iid",
-  "nbinomial",
-  newest_numbers
-)
-parallelMap::parallelStop()
-Sys.time() - start
-sel$AllModels <- NULL
-sel$FormulaList <- NULL
-save(sel, file = "sel_germany.Rda")
