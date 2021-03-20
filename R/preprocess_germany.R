@@ -113,7 +113,7 @@ if (date_1 != date_2) {
   )
   germany <- germany[, !str_detect(colnames(germany), "X1")]
   colnames(germany)[2] <- "Stadt"
-  germany <- germany[, c(1:5, 9, 11, 12, 15:23, 25, 27:31, 33:39)]
+  germany <- germany[, c(1:3, 9, 11, 12, 16:22, 25, 27, 33, 34)]
   germany <- merge(
     germany,
     germany_confirmed_population,
@@ -580,8 +580,8 @@ if (date_1 != date_2) {
   germany_complete <- germany_complete[order(germany_complete$Date, germany_complete$Kennziffer), ]
   no_geometry <- cbind(germany, germany_complete)
   no_geometry$Stadt <- NULL
-  no_geometry[, c(3, 4, 19:22, 25:29, 32:34, 36:40, 44, 66:80)] <- NULL
-  colnames(no_geometry)[7] <- "stimmen"
+  no_geometry[, c(1, 19:21, 23:27, 29, 31, 43, 54:67)] <- NULL
+  colnames(no_geometry)[5] <- "stimmen"
 
   # calculate the SIR
   write_csv(no_geometry, "wrangled_data/germany_features.csv")
@@ -591,14 +591,13 @@ if (date_1 != date_2) {
 }
 germany_features$Gewerbesteuer <- as.numeric(trimws(germany_features$Gewerbesteuer))
 germany_features$schutzsuchende <- as.numeric(trimws(germany_features$schutzsuchende))
-germany_features[, 8:14] <- germany_features[, 8:14] / germany_features$stimmen
-germany_features[, c(2:5, 14:18, 26:44)] <- 1000 * germany_features[, c(2:5, 14:18, 26:44)] / germany_features$PopulationTotal
+germany_features[, 6:11] <- germany_features[, 6:11] / germany_features$stimmen
+germany_features[, c(1:4, 12:15, 22:39)] <- 1000 * germany_features[, c(1:4, 12:15, 22:39)] / germany_features$PopulationTotal
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 germany <- merge(
   germany_features,
   germany_sf,
-  by.x = "Kreis",
-  by.y = "Kennziffer"
+  by = "Kennziffer"
 )
 germany$Date <- as.Date(germany$Date)
 newest_numbers <- germany[germany$Date == rev(names(table(germany$Date)[table(germany$Date) > 395]))[1], ]
@@ -622,8 +621,11 @@ newest_numbers$area <- as.numeric(set_units(st_area(newest_numbers), km^2))
 newest_numbers$pop_dens <- newest_numbers$PopulationTotal / newest_numbers$area
 newest_numbers$urb_dens <- newest_numbers$residential / newest_numbers$area
 newest_numbers$sex <- newest_numbers$PopulationFemale / newest_numbers$PopulationTotal
+newest_numbers$higher_education <- newest_numbers$college + newest_numbers$university
+newest_numbers$Landkreis_1 <- NULL
+newest_numbers$PopulationFemale <- NULL
 cols_imputed <- lapply(
-  c(1:47, 49:55),
+  c(1:41),
   function(x, ...) {
     vals <- newest_numbers[, x]
     vals$geometry <- NULL
@@ -632,41 +634,23 @@ cols_imputed <- lapply(
   }
 )
 newest_numbers_imputed <- Reduce(cbind, cols_imputed)
-newest_numbers_imputed$geometry <- newest_numbers$geometry
+newest_numbers_imputed <- cbind(newest_numbers_imputed, newest_numbers[, 43:50])
 newest_numbers <- st_as_sf(newest_numbers_imputed)
-
-# newest_numbers_21 <- norway_municipality_confirmed_long[norway_municipality_confirmed_long$date == (max(norway_municipality_confirmed_long$date) - 21), ]
-# newest_numbers_21$value <- NULL
-# newest_numbers_21$time <- NULL
-# newest_numbers_21$fylke_no <- NULL
-# newest_numbers_21$fylke_name <- NULL
-# newest_numbers_21$population <- NULL
-# newest_numbers_21$date <- NULL
-# newest_numbers_21$kommune_name <- NULL
-# newest_numbers_21 <- merge(
-#   newest_numbers_21,
-#   germany[germany$date == (max(germany$date) - 21), ],
-#   by = "kommune_no"
-# )
-# expected_count <- expected(
-#   population = newest_numbers_21$population,
-#   cases = newest_numbers_21$value,
-#   n.strata = 1
-# )
-# newest_numbers_21$expected_count <- expected_count
-# # calculate the SIR
-# newest_numbers_21$sir <- newest_numbers_21$value / newest_numbers_21$expected_count
-# newest_numbers_21 <- st_as_sf(newest_numbers_21)
-# st_crs(newest_numbers_21) <- 4326
-# # calculate the number of infected people
-# newest_numbers_21$inf_rate <- newest_numbers_21$value / newest_numbers_21$population
-# # add id area variables
-# newest_numbers_21$idarea_1 <- seq_len(nrow(newest_numbers_21))
-# newest_numbers_21$idarea_2 <- seq_len(nrow(newest_numbers_21))
-# # add the expected count
-# newest_numbers_21$area <- as.numeric(set_units(st_area(newest_numbers_21), km^2))
-# newest_numbers_21$pop_dens <- newest_numbers_21$population / newest_numbers_21$area
-# newest_numbers_21$urb_dens <- newest_numbers_21$residential / newest_numbers_21$area
-# newest_numbers_21$sex <- newest_numbers_21$population_female / newest_numbers_21$population_total
-newest_numbers$higher_education <- newest_numbers$college + newest_numbers$university
+newest_numbers$college <- NULL
+newest_numbers$university <- NULL
+newest_numbers$stimmen <- NULL
+colnames(newest_numbers)[c(1:5, 12:16, 18, 19)] <- c(
+  "municipality_id",
+  "asyl_benefits",
+  "trade_tax",
+  "income_total",
+  "income_tax",
+  "protection_seekers",
+  "welfare_recipients",
+  "unemployed_total",
+  "unemployed_foreigners",
+  "municipality",
+  "value",
+  "population"
+)
 rm(list = setdiff(ls(), c("newest_numbers")))

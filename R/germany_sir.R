@@ -11,7 +11,15 @@ library(sf)
 library(SpatialEpi)
 library(stringr)
 # load the data
-source("R/preprocess_germany.R")
+newest_numbers <- read_csv("eval_data/newest_numbers_germany_march10.csv")
+germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
+newest_numbers <- merge(
+  newest_numbers,
+  germany_sf,
+  by.x = "Kreis",
+  by.y = "Kennziffer"
+)
+newest_numbers <- st_as_sf(newest_numbers)
 color_low <- "#002FA7"
 color_high <- "#F50039"
 plot_1 <- ggplot(data = newest_numbers) +

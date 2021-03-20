@@ -11,7 +11,6 @@ library(sf)
 library(SpatialEpi)
 library(stringr)
 source("R/preprocess_norge.R")
-newest_numbers <- st_as_sf(newest_numbers)
 color_low <- "#002FA7"
 color_high <- "#F50039"
 plot_1 <- ggplot(data = newest_numbers) +
@@ -48,6 +47,41 @@ plot_1 +
     right = 1,
     top = 0.7
   )
+plot_3 <- ggplot(data = newest_numbers) +
+  geom_sf(aes(fill = log10(sir))) +
+  ggtitle(
+    label = "Standardised incidence ratio",
+    subtitle = "Norway"
+  ) +
+  scale_fill_gradient2(
+    "SIR",
+    low = color_low,
+    high = color_high,
+    midpoint = 0
+  ) +
+  theme_minimal()
+plot_4 <- ggplot(data = newest_numbers_south) +
+  geom_sf(aes(fill = log10(sir))) +
+  scale_fill_gradient2(
+    "SIR",
+    low = color_low,
+    high = color_high,
+    midpoint = 0
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "none"
+  )
+plot_3 +
+  inset_element(
+    plot_4,
+    left = 0.4,
+    bottom = 0.01,
+    right = 1,
+    top = 0.7
+  )
+
+
 rc1 <- colorRampPalette(
   c(
     "#002FA7",

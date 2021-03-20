@@ -109,27 +109,19 @@ if (date_1 != date_2) {
         region = x$region[1],
         workers_ft_res = x$`Employees by place of residence 2019`[8],
         workers_pt_res = x$`Employees by place of residence 2019`[7],
-        mining_ft_res = x$`Employees by place of residence 2019`[10],
-        mining_pt_res = x$`Employees by place of residence 2019`[9],
         construction_ft_res = x$`Employees by place of residence 2019`[12],
         construction_pt_res = x$`Employees by place of residence 2019`[11],
         workers_ft_work = x$`Employees by place of work 2019`[8],
         workers_pt_work = x$`Employees by place of work 2019`[7],
-        mining_ft_work = x$`Employees by place of work 2019`[10],
-        mining_pt_work = x$`Employees by place of work 2019`[9],
         construction_ft_work = x$`Employees by place of work 2019`[12],
         construction_pt_work = x$`Employees by place of work 2019`[11],
-        workers_ft_com = x$`Employees by place of work 2019`[8] -
+        workers_ft = x$`Employees by place of work 2019`[8] -
           x$`Employees by place of residence 2019`[8],
-        workers_pt_com = x$`Employees by place of work 2019`[7] -
+        workers_pt = x$`Employees by place of work 2019`[7] -
           x$`Employees by place of residence 2019`[7],
-        mining_ft_com = x$`Employees by place of work 2019`[10] -
-          x$`Employees by place of residence 2019`[10],
-        mining_pt_com = x$`Employees by place of work 2019`[9] -
-          x$`Employees by place of residence 2019`[9],
-        construction_ft_com = x$`Employees by place of work 2019`[12] -
+        construction_ft = x$`Employees by place of work 2019`[12] -
           x$`Employees by place of residence 2019`[12],
-        construction_pt_com = x$`Employees by place of work 2019`[11] -
+        construction_pt = x$`Employees by place of work 2019`[11] -
           x$`Employees by place of residence 2019`[11]
       )
     }
@@ -171,7 +163,7 @@ if (date_1 != date_2) {
   norge_no_shape$region.y <- NULL
   norge_no_shape$region.x <- NULL
   norge_no_shape$region.x <- NULL
-  colnames(norge_no_shape)[38] <- "region"
+  colnames(norge_no_shape)[32] <- "region"
   load("osmdata/norge_hospital.Rda")
   load("osmdata/norge_place_of_worship.Rda")
   load("osmdata/norge_retail.Rda")
@@ -620,31 +612,32 @@ if (date_1 != date_2) {
 
   setDT(norge_shape)
   colnames(norge_shape)[1] <- "kommune_no"
-  norge_complete <- merge(
+  norgeplete <- merge(
     norge_no_shape,
     norge_shape,
     by = "kommune_no",
     all = FALSE
   )
-  norge_complete$objtype <- NULL
-  norge_complete$lokalid <- NULL
-  norge_complete$oppdaterin <- NULL
-  norge_complete$datauttaks <- NULL
-  norge_complete$versjonid <- NULL
-  norge_complete$opphav <- NULL
-  norge_complete$samiskforv <- NULL
-  norge_complete$datafangst <- NULL
-  norge_complete$navnerom <- NULL
-  norge_complete$navn <- NULL
-  no_geometry <- norge_complete
+  norgeplete$objtype <- NULL
+  norgeplete$lokalid <- NULL
+  norgeplete$oppdaterin <- NULL
+  norgeplete$datauttaks <- NULL
+  norgeplete$versjonid <- NULL
+  norgeplete$opphav <- NULL
+  norgeplete$samiskforv <- NULL
+  norgeplete$datafangst <- NULL
+  norgeplete$navnerom <- NULL
+  norgeplete$navn <- NULL
+  no_geometry <- norgeplete
   no_geometry$geometry <- NULL
   no_geometry$higher_education <- no_geometry$college + no_geometry$university
   # calculate the SIR
   write_csv(no_geometry, "wrangled_data/norge_features.csv")
-  write_sf(st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1], "wrangled_data/shapes_norge.shp")
+  write_sf(st_as_sf(norgeplete)[!duplicated(norgeplete$kommune_no), ][, 1], "wrangled_data/shapes_norge.shp")
   norge_features <- read_csv("wrangled_data/norge_features.csv")
 }
-norge_features[, c(18:37, 39:60, 62)] <- 1000 * norge_features[, c(18:37, 39:60, 62)] / norge_features$population
+norge_features[, c(20:31, 36:54, 56)] <- 1000 * norge_features[, c(20:31, 36:54, 56)] / norge_features$population
+norge_features[, c(18, 19, 33, 34, 35)] <- norge_features[, c(18, 19, 33, 34, 35)] / 100
 norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
 norge <- merge(
   norge_features,
@@ -686,43 +679,10 @@ newest_numbers$pop_dens <- newest_numbers$population / newest_numbers$area
 newest_numbers$urb_dens <- newest_numbers$residential / newest_numbers$area
 newest_numbers$sex <- newest_numbers$population_female / newest_numbers$population_total
 
-# newest_numbers_21 <- norway_municipality_confirmed_long[norway_municipality_confirmed_long$date == (max(norway_municipality_confirmed_long$date) - 21), ]
-# newest_numbers_21$value <- NULL
-# newest_numbers_21$time <- NULL
-# newest_numbers_21$fylke_no <- NULL
-# newest_numbers_21$fylke_name <- NULL
-# newest_numbers_21$population <- NULL
-# newest_numbers_21$date <- NULL
-# newest_numbers_21$kommune_name <- NULL
-# newest_numbers_21 <- merge(
-#   newest_numbers_21,
-#   norge[norge$date == (max(norge$date) - 21), ],
-#   by = "kommune_no"
-# )
-# expected_count <- expected(
-#   population = newest_numbers_21$population,
-#   cases = newest_numbers_21$value,
-#   n.strata = 1
-# )
-# newest_numbers_21$expected_count <- expected_count
-# # calculate the SIR
-# newest_numbers_21$sir <- newest_numbers_21$value / newest_numbers_21$expected_count
-# newest_numbers_21 <- st_as_sf(newest_numbers_21)
-# st_crs(newest_numbers_21) <- 4326
-# # calculate the number of infected people
-# newest_numbers_21$inf_rate <- newest_numbers_21$value / newest_numbers_21$population
-# # add id area variables
-# newest_numbers_21$idarea_1 <- seq_len(nrow(newest_numbers_21))
-# newest_numbers_21$idarea_2 <- seq_len(nrow(newest_numbers_21))
-# # add the expected count
-# newest_numbers_21$area <- as.numeric(set_units(st_area(newest_numbers_21), km^2))
-# newest_numbers_21$pop_dens <- newest_numbers_21$population / newest_numbers_21$area
-# newest_numbers_21$urb_dens <- newest_numbers_21$residential / newest_numbers_21$area
-# newest_numbers_21$sex <- newest_numbers_21$population_female / newest_numbers_21$population_total
-newest_numbers <- newest_numbers[, c(1, 3, 6:9, 17:19, 32:37, 39:51, 53:55, 58:72)]
+newest_numbers <- newest_numbers[, c(1, 3, 6:8, 17:19, 28:33, 36:45, 47:49, 52:66)]
 
 cols_imputed <- lapply(
-  c(7:38, 40:46),
+  c(7:34, 36:42),
   function(x, ...) {
     vals <- newest_numbers[, x]
     vals$geometry <- NULL
@@ -732,8 +692,10 @@ cols_imputed <- lapply(
   }
 )
 newest_numbers_imputed <- Reduce(cbind, cols_imputed)
-colnames(newest_numbers_imputed) <- colnames(newest_numbers)[c(7:38, 40:46)]
+
+colnames(newest_numbers_imputed) <- colnames(newest_numbers)[c(7:34, 36:42)]
 newest_numbers_imputed <- cbind(newest_numbers[, 1:6], newest_numbers_imputed)
 newest_numbers <- st_as_sf(newest_numbers_imputed)
+newest_numbers$region <- NULL
 rownames(newest_numbers) <- NULL
 rm(list = setdiff(ls(), c("newest_numbers")))
