@@ -2,36 +2,50 @@
 %
 \chapter{Data Analysis}
 \label{sec:analysis}
-In this chapter the models calculated for each country are reviewed. First, a look at the standardised incidence rate for each country is taken, before spatial models, spatio-temporal models and finally regression models are discussed.
+In this chapter the models calculated for each country are reviewed. First, a look at the standardised incidence rate for each country is taken, before spatial models, spatio-temporal models and finally predictive models are discussed.
 \section{Standardised Incidence Ratio}
 This section takes a brief look at the standardised incidence ratio for the countries of interest.
 \subsection{Standardised Incidence Ratio for Germany}
-When looking at the standardised incidence ratio for Germany, it is noticeable that the actual number of infections in the eastern parts of Germany, especially in Saxony, is considerably higher than the expected number of infections. Furthermore, parts of Bavaria have an increased standardised incidence ratio compared to the rest of Germany, excluding Saxony, see Figure~\ref{sirgermany}
+When looking at the standardised incidence ratio for Germany, it is noticeable that the actual number of infections in the eastern parts of Germany, especially in Saxony, is considerably higher than the expected number of infections. Furthermore, parts of Bavaria have an increased standardised incidence ratio compared to the rest of Germany, excluding Saxony. This could be due to the fact that the regions share a border with the Czech Republic, a country that is substantially more affected by Covid-19 than Germany. The northern parts of Germany show the lowest SIR which is possibly due to the fact that this region is sparsely populated. For more information, see Figure~\ref{sirgermany}.
 % \begin{figure}[H]
 %   \centering
 %   \includesvg[width = 1.2\textwidth]{sir_germany.svg}
-%   \caption{The standardised incidence ratio for Germany based on the data of the 5th of March 2021}
+%   \caption{The standardised incidence ratio for Germany based on the data of the 18th of March 2021}
 %   \label{sirgermany}
 % \end{figure}
 \begin{figure}[H]
   \centering
   \includegraphics[width = 1.2\textwidth]{sir_germany.png}
-  \caption{The standardised incidence ratio for Germany based on the data of the 5th of March 2021}
+  \caption{The standardised incidence ratio for Germany based on the data of the 18th of March 2021}
   \label{sirgermany}
 \end{figure}
 \subsection{Standardised Incidence Ratio for Norway}
-Looking at the standardised incidence rate for Norway, a standardised incidence rate of less than 1 can be seen for most municipalities north of Trondheim. In the southern parts of Norway there are several municipalities with a rate above 1, for example the standardised incidence rate around the capital Oslo is around 2. However, the two small municipalities, Hyllestad and Ulvik, have the highest standardised incidence rate in Norway. The SIR in Hyllestad is around 5, following an outbreak in a shipyard in autumn 2020 \cite{newspaper1}, while Ulvik has a ratio of around 9, following an outbreak of the UK variant of Covid-19. According to the head of the municipality, Hans Petter Thorbjørnsen, the infections are thought to have spread through children \cite{newspaper2}. See Figure~\ref{sirnorway} for more information.
+Looking at the standardised incidence rate for Norway, a standardised incidence rate of less than 1 can be seen for most municipalities north of Trondheim. In the southern parts of Norway there are several municipalities with a rate above 1, for example the standardised incidence rate around the capital Oslo is around 2. However, the two small municipalities, Hyllestad and Ulvik, have the highest standardised incidence rate in Norway. In Hyllestad, 95 of 1328 people have been infected with Covid-19 so far, while in Ulvik, 134 of 1080 people have been infected so far. \\
+The SIR in Hyllestad is around 4.5, following an outbreak in a shipyard in autumn 2020 \cite{newspaper1}, while Ulvik has a ratio of around 8, following an outbreak of the UK variant of Covid-19. According to the head of the municipality, Hans Petter Thorbjørnsen, the infections are thought to have spread through children \cite{newspaper2}. See Figure~\ref{sirnorway} for more information.
 % \begin{figure}[H]
 %   \centering
-%   \includesvg[width = 1.2\textwidth]{sir_norge.svg}
-%   \caption{The standardised incidence ratio for Norway based on the data of the 5th of March 2021}
+%   \includesvg[width = 1.2\textwidth]{sir_norway.svg}
+%   \caption{The standardised incidence ratio for Norway based on the data of the 20th of March 2021}
 %   \label{sirnorway}
 % \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 1.2\textwidth]{sir_norge.png}
-  \caption{The standardised incidence ratio for Norway based on the data of the 5th of March 2021}
+  \includegraphics[width = 1.2\textwidth]{sir_norway.png}
+  \caption{The standardised incidence ratio for Norway based on the data of the 20th of March 2021}
   \label{sirnorway}
+\end{figure}
+Because the high numbers from two small municipalities complicate the interpretation of Figure~\ref{sirnorway}, Figure~\ref{sirnorwaylog} shows the SIR on a log10 scale. It is now clearer that the standardized incidence ratio is below 1 in most parts of Norway, but that there is a higher risk in the region around Oslo.
+% \begin{figure}[H]
+%   \centering
+%   \includesvg[width = 1.2\textwidth]{sir_norway_log.svg}
+%   \caption{The log10 standardised incidence ratio for Norway based on the data of the 20th of March 2021}
+%   \label{sirnorway}
+% \end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 1.2\textwidth]{sir_norway_log.png}
+  \caption{The log10 standardised incidence ratio for Norway based on the data of the 20th of March 2021}
+  \label{sirnorwaylog}
 \end{figure}
 \clearpage
 \section{Spatial Models}
@@ -42,16 +56,33 @@ After looking at the standardised incidence rates for the countries of interest,
     \item[3.] The Leroux-Model
 \end{itemize}
 All of these models were computed using the INLA \cite{rinla} R package. \\
-Before the models are computed, however, the distribution that fits the number of cases must first be found. For this, the function \texttt{descdist()} from the \texttt{fitdistrplus} R package is used. With this function, descriptive parameters of an empirical distribution can be calculated and a skewness-kurtosis plot is provided. The plots for Germany and Norway can be seen in Figure~\ref{cf_germany} and Figure~\ref{cf_norge}.
+To specify each type of model, the code shown in Listing~\ref{codeModels} can be used. \\
+Three measures are used to compare the models, the DIC, the WAIC and the CPO. \\
+For all countries, the models were computed with
+\begin{itemize}
+    \item[1.] only the demographic variables as covariates
+    \item[2.] only the infrastructural variables as covariates
+    \item[3.] both, demographic and infrastructural variables, as covariates
+    \begin{itemize}
+        \item[3.1] Without variable selection
+        \item[3.2] With variable selection
+    \end{itemize}
+\end{itemize}
+For each model type, different values for the penalised prior were tried. As this resulted in a large number of models, only the model with the best performance for each model class is examined in more detail. To decide which models perform best, the DIC, WAIC and CPO are used. To select the best model, all calculated models were first ranked according to their DIC, their WAIC and their CPO before the model with the lowest average rank was selected as the best model. \\
+Finally, due to the amount of covariates, forwards and backwards stepwise variable selection was performed with the intention of obtaining a model that fits the data well and at the same time is relatively easy to interpret. This can be done with the R package \texttt{INLAutils} \cite{inlautils}, as shown in Listing~\ref{codeSelection}. \\
+A list of all calculated models along with their performance measures is provided in the appendix.
+\subsection{Model Selection}
+Before the models are computed, however, the distribution that fits the number of cases must first be found. For this, the function \texttt{descdist()} from the \texttt{fitdistrplus} R package is used. The Cullen and Frey graph can be used to give an initial idea of which distributions fit the data, in this case the number of infections, reasonably well depending on the kurtosis and the square of the skewness. \\
+The plots for Germany and Norway can be seen in Figure~\ref{cf_germany} and Figure~\ref{cf_norge}.
 % \begin{figure}[H]
 %     \centering
-%     \includesvg[width = 0.8\textwidth]{cf-germany.svg}
+%     \includesvg[width = 0.8\textwidth]{cf_germany.svg}
 %     \caption{The Cullen and Frey graph for Germany}
 %     \label{cf_germany}
 % \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.8\textwidth]{cf-germany.png}
+    \includegraphics[width = 0.8\textwidth]{cf_germany.png}
     \caption{The Cullen and Frey graph for Germany}
     \label{cf_germany}
 \end{figure}
@@ -67,62 +98,48 @@ Before the models are computed, however, the distribution that fits the number o
     \caption{The Cullen and Frey graph for Norway}
     \label{cf_norge}
 \end{figure}
-Following these plots, a negative binomial distribution is fitted to the data using the maximum likelihood method. The function \texttt{fitdist()} is used for this. The fits can be seen in Figure~\ref{nb_germany} and Figure~\ref{nb_norge}.
+Next, a negative binomial distribution, a normal distribution, and a Poisson distribution are fitted to the data using the maximum likelihood method. The negative binomial fits for both countries can be seen in Figure~\ref{fitNegbinomGermany} and Figure~\ref{fitNegbinomNorway}. The fits for the normal and Poisson distribution for both countries, are shown in the Appendix in Figure~\ref{fitNormalGermany}, Figure~\ref{fitPoissonGermany}, Figure~\ref{fitNormalNorway} and Figure~\ref{fitPoissonNorway}.
 % \begin{figure}[H]
 %     \centering
-%     \includesvg[width = 0.8\textwidth]{neg_binom_germany.svg}
+%     \includesvg[width = 0.8\textwidth]{fit_nbinom_germany.svg}
 %     \caption{A negative binomial fit to the number of cases in German municipalities}
-%     \label{nb_germany}
+%     \label{fitNegbinomGermany}
 % \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.8\textwidth]{neg_binom_germany.png}
+    \includegraphics[width = 0.8\textwidth]{fit_nbinom_germany.png}
     \caption{A negative binomial fit to the number of cases in German municipalities}
-    \label{nb_germany}
+    \label{fitNegbinomGermany}
 \end{figure}
 % \begin{figure}[H]
 %     \centering
-%     \includesvg[width = 0.8\textwidth]{neg_binom_norge.svg}
+%     \includesvg[width = 0.8\textwidth]{fit_nbinom_norway.svg}
 %     \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
-%     \label{nb_norge}
+%     \label{fitNegbinomNorway}
 % \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.8\textwidth]{neg_binom_norge.png}
+    \includegraphics[width = 0.8\textwidth]{fit_nbinom_norway.png}
     \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
-    \label{nb_norge}
+    \label{fitNegbinomNorway}
 \end{figure}
 Lastly, the AIC was calculated for fitting a normal distribution to the data, a Poisson distribution to the data and a negative binomial distribution to the data. The values can be seen in Table~\ref{aic}. Afterwards, the negative binomial distribution was chosen as the distribution of the target variable in both cases. \\
 \begin{table}[H] 
-\caption{THE AIC for different distributions for Germany and Norway \label{aic}}
+\caption{The AIC for different distributions for Germany and Norway \label{aic}}
 \begin{tabular}{l l r}
 \toprule
 \textbf{Country}	& \textbf{Distribution}	& \textbf{AIC} \\
 \midrule
-Germany & Normal & 8364 \\
-Germany & Poisson & 2065103 \\
-Germany & Negative Binomial & 7726 \\
-Norway & Normal & 6052 \\
-Norway & Poisson & 314100 \\
-Norway & Negative Binomial & 4018 \\
+Germany & Normal & 8360 \\
+Germany & Poisson & 2148100 \\
+Germany & Negative Binomial & 7731 \\
+Norway & Normal & 6166 \\
+Norway & Poisson & 366181 \\
+Norway & Negative Binomial & 4086 \\
 \bottomrule
 \end{tabular}
 \end{table} 
-To specify each type of model, the following code shown in Listing~\ref{codeModels} can be used. \\
-Three measures are used to compare the models, the DIC, the WAIC and the CPO. \\
-For all countries, the models were computed with
-\begin{itemize}
-    \item[1.] only the demographic variables as covariates
-    \item[2.] only the infrastructural variables as covariates
-    \item[3.] both, demographic and infrastructural variables, as covariates
-    \begin{itemize}
-        \item[3.1] Without variable selection
-        \item[3.2] With variable selection
-    \end{itemize}
-\end{itemize}
-For each model type, different values for the penalised prior component were tried. As this resulted in a large number of models, only the model with the best performance for each model class is examined in more detail. To decide which models perform best, the DIC, WAIC and CPO are used. To select the best model, all calculated models were first ranked according to their DIC, their WAIC and their CPO before the model with the lowest average rank was selected as the best model. \\
-Finally, due to the amount of covariates, forwards and backwards stepwise variable selection was performed with the intention of obtaining a model that fits the data well and at the same time is relatively easy to interpret. This can be done with the R package \texttt{INLAutils} \cite{inlautils}, as shown in Listing~\ref{codeSelection}. \\
-A list of all calculated models along with their performance measures is provided in the appendix.
+The poor fit for the Poisson distribution can be explained by looking at the range of the number of confirmed cases in a given municipality. For Germany, this number ranges from 508 to 137634 (as of March 18, 2021), while for Norway, the number ranges from 0 to 24905 (as of March 20, 2021). This results in a mean and standard deviation for Germany of 6617 and 9014, respectively. For Norway, the values for these metrics are 236 and 1389.
 \subsection{Spatial Models for Germany}
 First, a look is taken at the spatial models calculated for Germany. These models are based on data from 10 March 2021, when 2534502 people in Germany were confirmed infected with Covid-19. The five municipalities with the most infections are shown in Table~\ref{top5germany}.
 \begin{table}[H] 
@@ -566,7 +583,7 @@ Finally, the posterior mean and posterior probability for Norway can be seen in 
 \section{Spatio-Temporal Models}
 \subsection{Spatio-Temporal Models for Germany}
 \subsection{Spatio-Temporal Models for Norway}
-\section{Regression Models}
+\section{Predictive Models}
 \clearpage
-\subsection{Regression Models for Germany}
-\subsection{Regression Models for Norway}
+\subsection{Predictive Models for Germany}
+\subsection{Predictive Models for Norway}

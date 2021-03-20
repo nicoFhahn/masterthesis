@@ -9,15 +9,15 @@
 In spatial statistics, two fundamental types of geographic data exist, namely \textit{vector data} and \textit{raster data}. In the vector data model, the world is represented by points, lines and polygons with discrete, well-defined boundaries, which tends to result in high accuracy. Raster data, on the other hand, divides the surface into cells of uniform size, and raster datasets are used as the basis for background images in web mapping. \\
 Determining which data type to use depends on the domain of the application. Vector data dominates in the social sciences because human settlements typically have discrete boundaries, while raster data are commonly used in many environmental sciences because they are based on remote sensing data. Naturally, there is also some overlap and both types can be used together or one form can be converted into the other \autocite[][]{lovelace2019geocomputation}.
 \subsection{Vector Data}
-The geographic vector data model is based on points located within a \textit{coordinate reference system} (CRS), in which points either represent self-standing features or form more complex geometric shapes, i.e. lines and polygons. Using this system, Trondheim can be represented by the coordinates $\left(10.4, 63.4\right)$, meaning $10.4$ degrees east of the prime meridian and $63.4$ degrees north of the equator. It could also be written as $\left(1157722.70, 9199010.75\right)$, which is the position of Trondheim using the Web Mercator projection, the de facto standard for web mapping applications. More will be said about CRS later, but for now it is sufficient to know that it is possible to display coordinates in various ways.
+The geographic vector data model is based on points located within a \textit{coordinate reference system} (CRS), in which points either represent self-standing features or form more complex geometric shapes, i.e. lines and polygons. Using this system, Trondheim can be represented by the coordinates $\left(10.4, 63.4\right)$, meaning $10.4$ degrees east of the prime meridian and $63.4$ degrees north of the equator. It could also be written as $\left(1157722.70, 9199010.75\right)$, which is the position of Trondheim using the Web Mercator projection, the de facto standard for web mapping applications. More will be said about CRS later, but for now it is sufficient to know that it is possible to display coordinates in various ways. An example of a CRS is shown in Figure~\ref{fig:globe}.
 \begin{figure}[H]
    \centering
        \includegraphics[page=1,width=.7\textwidth]{globe.pdf}
- \caption{A geographic CRS with an origin at 0° longitude an latitude. The red X denotes the location of Trondheim.}
+ \caption{A geographic CRS with an origin at 0° longitude and latitude. The red X denotes the location of Trondheim.}
  \label{fig:globe}
 \end{figure}
 \subsubsection*{Different Types of Vector Data}
-As mentioned earlier, there are different types of vector data. There are 17 different geometry types in the standard \textit{simple features}, but there are seven core types that can be used in most analysis software. These types are visualised in the following graphic.
+As mentioned earlier, there are different types of vector data. There are 17 different geometry types in the standard \textit{simple features}, but there are seven core types that can be used in most analysis software. These types are visualised in Figure~\ref{fig:sf}.
 \begin{figure}[H]
    \centering
        \includegraphics[width=.7\textwidth]{sf-classes.png}
@@ -26,7 +26,7 @@ As mentioned earlier, there are different types of vector data. There are 17 dif
 \end{figure} $\newline$
 Simple Features was developed by the Open Geospatial Consortium and is an open, standardised, hierarchical data model that represents a wide range of geometry types. The use of this data model ensures that scientific work can be transferred to other institutions, e.g. when importing from and exporting to spatial databases \autocite[][]{lovelace2019geocomputation}. 
 \subsection{Raster Data}
-The geographic raster data model consists in most cases of a raster header and a matrix representing uniformly distributed cells/pixels. The raster header defines the CRS, the origin (starting point) and the extent. Since the number of columns and rows and the resolution of the cell size are stored in the extent, starting from the origin, it is easy to access and change each cell by its ID or by specifying the row and column number. In this type of representation, the coordinates of the four vertices of each cell are not explicitly stored, instead only the origin is stored. This speeds up data processing and makes it more efficient, but each raster layer can only contain a single value, which can be either numeric or categorical. Typically, raster maps are used to depict continuous features such as elevation or temperature, but categorical variables, for example soil or land cover \autocite[][]{lovelace2019geocomputation}.
+The geographic raster data model consists in most cases of a raster header and a matrix representing uniformly distributed cells/pixels. The raster header defines the CRS, the origin (starting point) and the extent. Since the number of columns and rows and the resolution of the cell size are stored in the extent, starting from the origin, it is easy to access and change each cell by its ID or by specifying the row and column number. In this type of representation, the coordinates of the four vertices of each cell are not explicitly stored, instead only the origin is stored. This speeds up data processing and makes it more efficient, but each raster layer can only contain a single value, which can be either numeric or categorical. Typically, raster maps are used to depict continuous features such as elevation or temperature, but categorical variables, for example soil or land cover, as shown in Figure~\ref{fig:raster} \autocite[][]{lovelace2019geocomputation}.
 \begin{figure}[H]
    \centering
        \includegraphics[page=1,width=\textwidth]{raster.pdf}
@@ -42,7 +42,7 @@ The \textit{datum} is a broader component of CRS that contains information about
 \subsubsection*{Projected Coordinate Systems}
 Projected CRS are based on Cartesian coordinates on an implicitly flat surface and have an origin, $x$ and $y$ axes, and a linear unit of measurement, metres for instance. They are based on geographic CRS and rely on map projections to convert between the three-dimensional surface of the Earth and the east/north values ($x$ and $y$) in a projected CRS.\\
 This transition always entails some distortion, skewing some of the properties of the earth's surface, such as area, direction, distance and shape. Generally, the name of a projection is based on a property it preserves, e.g. equal area projection preserves area, equidistant projection preserves distance and conformal projection preserves local shape. \\
-Again, subgroups exist in projection coordinate systems, \textit{conic}, \textit{cylindrical} and \textit{planar} projections. In a conic projection, the earth's surface is projected onto a cone along one or two tangent lines. Along these lines the distortions are minimised and increase with the distance to the lines. The projection is therefore best suited for maps of mid-latitude areas. Cylindrical projections map the surface onto a cylinder. These types of projections can be created by touching the surface of the earth along one or two tangent lines. They are often used to map the entire Earth. A planar projection projects data onto a flat surface that touches the globe at a point or along a tangent line, and is typically used in mapping polar projections \autocite[][]{lovelace2019geocomputation}.
+Again, subgroups exist in projection coordinate systems, \textit{conic}, \textit{cylindrical} and \textit{planar} projections. In a conic projection, the earth's surface is projected onto a cone along one or two tangent lines. Along these lines the distortions are minimised and increase with the distance to the lines. The projection is therefore best suited for maps of mid-latitude areas. Cylindrical projections map the surface onto a cylinder. These types of projections can be created by touching the surface of the Earth along one or two tangent lines. They are often used to map the entire Earth. A planar projection projects data onto a flat surface that touches the globe at a point or along a tangent line, and is typically used in mapping polar projections \autocite[][]{lovelace2019geocomputation}.
 \clearpage
 \section{Spatial Point Processes}
 A stochastic process that describes the location of particular events/points that occur in a region is known as a point process. The number of points as well as the location of the points are random. An example of a point process would be the number of earthquakes and their locations.
@@ -51,7 +51,7 @@ Let $Z$ be a random, at most countable set of points in a space $\mathbb{X}$, fo
 \begin{equation}
     \omega\mapsto\eta\left(\omega, B\right):=\hbox{card}\left(z(\omega)\cap B\right), \hspace{20pt}B\subset\mathbb{X},
 \end{equation}
-which counts the number of points from $Z$ in $B$. For any fixed $\omega\in\Omega$, $\eta\left(\omega,\cdot\right)$ is the counting measure supported by $Z\left(\omega\right)$. \\
+which counts the number of points from $Z$ in $B$. For any fixed $\omega\in\Omega$, $\eta\left(\omega,\cdot\right)$ is the counting measure supported by $Z\left(\omega\right)$ \autocite[][]{cox1980point}. \\
 For a general definition of a point process, let $\left(\mathbb{X}, \mathcal{X}\right)$ be a measurable space and let $N_{<\infty}\left(\mathbb{X}\right)\equiv N_{<\infty}$ be the space of all measures $\mu$ on $\mathbb{X}$ such that $\mu(B)\in\mathbb{N}_0: =\mathbb{N}\cup\lbrace0\rbrace\,\forall B\in\mathcal{X}$. Let $N\left(\mathbb{X}\right)\equiv N$ be the space of all measures describable as a countable sum of measures from $N_{<\infty}$, for example the \textit{zero measure} 0 which is equal to $0$ on $\mathcal{X}$. In general, any sequence $\left(x_n\right)_{n=1}^k$ of elements of $\mathbb{X}$, where $k\in\overline{\mathbb{N}}:=\mathbb{N}\cup\lbrace\infty\rbrace$ denotes the number of terms in the sequence, can be used to define a measure
 \begin{align}
     \mu&=\sum_{n=1}^k\delta_{x_n}. \label{eq:measure} \\
@@ -65,8 +65,8 @@ For $k=0$ in \eqref{eq:measure}, $\mu$ is equal to the zero measure. The point s
 \begin{equation*}
     \hbox{card}\left\lbrace j\leq k:x_j=x_i\right\rbrace.
 \end{equation*}
-Any $\mu$ of the form \eqref{eq:measure} is interpreted as a counting measure with possible multiplicities, but in general it cannot be guaranteed that every $\mu\ in N$ can be written in this particular form. \\
-A point process $\eta$ on $\mathbb{X}$ is called \textit{proper point process} if random elements $X_1,X_2,...\ exist in \mathbb{X}$ and a $\overline{\mathbb{N}}_0$-valued random variable $\kappa$ such that almost surely
+Any $\mu$ of the form \eqref{eq:measure} is interpreted as a counting measure with possible multiplicities, but in general it cannot be guaranteed that every $\mu\in N$ can be written in this particular form. \\
+A point process $\eta$ on $\mathbb{X}$ is called \textit{proper point process} if random elements $X_1,X_2,...\hbox{exist} \in \mathbb{X}$ and a $\overline{\mathbb{N}}_0$-valued random variable $\kappa$ such that almost surely
 \begin{equation}
     \eta=\sum_{n=1}^{\kappa}\delta_{X_n}.
 \end{equation}
@@ -75,7 +75,7 @@ This terminology is motivated by the intuition that a point process is a (random
 \subsection{Poisson Processes}
 Poisson processes are defined by the fact that the number of points in a given set follows a Poisson distribution. Furthermore, the numbers of points in disjoint sets are stochastically independent. \\
 In application, Poisson processes are used in a wide range of fields, including biology, economics and image processing. \\
-Let $\lambda$ be an $s$-finite measure on $\mathbb{X}$. Let an \textit{Poisson process} with intensity measure $\lambda$ be defined as a point process $\eta$ on $\mathbb{X}$ with the following two properties:
+Let $\lambda$ be an $s$-finite measure on $\mathbb{X}$. Let a \textit{Poisson process} with intensity measure $\lambda$ be defined as a point process $\eta$ on $\mathbb{X}$ with the following two properties:
 \begin{itemize}
     \item[1.] $\forall B\in\mathcal{X}: \eta\left(B\right)\sim\hbox{Po}\left(\lambda(B);k\right)\forall k\in\mathbb{N}_0 \Longleftrightarrow \mathbb{P}\left(\eta\left(B\right)=k\right)$
     \item[2.] 
@@ -91,29 +91,29 @@ For the zero measure,
 \end{equation*}
 with $\lambda=0$ \autocite[][19]{last2017lectures}.
 
-\subsection{Random Measures and Cox Processes}
-A Poisson process with a random intensity measure, and thus the result of a \textit{doubly stochastic} process, is called a \textit{Cox process}. A random measure is a natural and important generalisation of a point process and it is the determining factor of the distribution of a Cox process. \\
-Since a Cox process $\eta$ can be interpreted as the result of a doubly stochastic process, a random measure $\xi$ is generated first, followed by a Poisson process with intensity measure $\xi$. \\
-These processes are often used to simulate spike trains or in financial mathematics for modeling the prices of financial instruments where credit risk is a major factor.
-\subsubsection{Random Measures}
-Let $\left(\mathbb{X}, \mathcal{X}\right)$ be a measurable space and let $M\left(\mathbb{X}\right)\equiv M$ denote the set of all $s$-finite measures $\mu$ on $\mathbb{X}$. Let $\mathcal{M}\left(\mathbb{X}\right)\equiv \mathcal{M}$ be the $\sigma$ field generated by all sets of the form
-\begin{equation*}
-    \left\lbrace\mu\in M:\mu(B)\leq t\right\rbrace, \hspace{20pt}B\in\mathcal{X}, t\in\mathbb{R}_{+}.
-\end{equation*}
-This is equal to the smallest $\sigma$-field of subsets of $M$ such that $\mu\mapsto\mu(B)$ is a measurable mapping for all $B\in\mathbb{X}$. \\
-A random measure on $\mathbb{X}$ is defined as a random element $\xi$ of the space $\left(M,\mathcal{M}\right)$, i.e. a measurable mapping $\xi:\Omega\mapsto M$. \\
-If $\xi$ is a random measure and $B\in\mathcal{X}$, then $\xi(B)$ denotes the random variable $\omega\mapsto\xi\left(\omega,B\right):=\xi\left(\omega\right)(B)$. This mapping represents a kernel from $\Omega$ to $\mathbb{X}$ with the additional property that the measure $\xi\left(\omega,\cdot\right)$ is $s$-finite for each $\omega\in\Omega$. \\
-A random measure $\xi$ on $\mathbb{X}$ follows the distribution of the probability measure $\mathbb{P}_{\xi}$ on $\left(M,\mathcal{M}\right)$ given by $A\mapsto\mathbb{P}\left(\xi\in A\right)$. This distribution is again determined by the family of random vectors $\left(\xi\left(B_1\right),...,\xi\left(B_m\right)\right)$ for pairwise disjoint $B_1,...,B_m\in\mathcal{X}$ and $m\in\mathbb{N}$  \autocite[][127--128]{last2017lectures}.
-\subsubsection{Cox Processes}
-Let $\Pi_{\lambda}$ denote the distribution of a Poisson process with intensity measure $\lambda\ in M\left(\mathbb{X}\right)$ and let $\xi$ be a random measure on $\mathbb{X}$. A point process $\eta$ on $\mathbb{X}$ is called a Cox process directed by $\xi$ if
-\begin{equation}
-    \mathbb{P}\left(\eta\in A|\xi\right)=\Pi_{\xi}(A),\hspace{20pt}\mathbb{P}\hbox{-almost surely}, A\in\mathcal{N}.
-\end{equation}
-$\mathcal{N}\left(\mathbb{X}\right)\equiv\mathcal{N}$ denotes the $\sigma$ field formed by the set of all subsets of $N$ of the form
-\begin{equation*}
-    \left\lbrace\mu\in N:\mu(B)=k\right\rbrace, \hspace{20pt}B\in\mathcal{X},k\in\mathbb{N}_0.
-\end{equation*}
-Thus $\mathcal{N}$ denotes the smallest $\sigma$ field on $N$ such that $\mu\mapsto\mu(B)$ is measurable for all $B\in\mathcal{X}$  \autocite[][129]{last2017lectures}.
+% \subsection{Random Measures and Cox Processes}
+% A Poisson process with a random intensity measure, and thus the result of a \textit{doubly stochastic} process, is called a \textit{Cox process}. A random measure is a natural and important generalisation of a point process and it is the determining factor of the distribution of a Cox process. \\
+% Since a Cox process $\eta$ can be interpreted as the result of a doubly stochastic process, a random measure $\xi$ is generated first, followed by a Poisson process with intensity measure $\xi$. \\
+% These processes are often used to simulate spike trains or in financial mathematics for modeling the prices of financial instruments where credit risk is a major factor.
+% \subsubsection{Random Measures}
+% Let $\left(\mathbb{X}, \mathcal{X}\right)$ be a measurable space and let $M\left(\mathbb{X}\right)\equiv M$ denote the set of all $s$-finite measures $\mu$ on $\mathbb{X}$. Let $\mathcal{M}\left(\mathbb{X}\right)\equiv \mathcal{M}$ be the $\sigma$ field generated by all sets of the form
+% \begin{equation*}
+%    \left\lbrace\mu\in M:\mu(B)\leq t\right\rbrace, \hspace{20pt}B\in\mathcal{X}, t\in\mathbb{R}_{+}.
+% \end{equation*}
+% This is equal to the smallest $\sigma$-field of subsets of $M$ such that $\mu\mapsto\mu(B)$ is a measurable mapping for all $B\in\mathbb{X}$. \\
+% A random measure on $\mathbb{X}$ is defined as a random element $\xi$ of the space $\left(M,\mathcal{M}\right)$, i.e. a measurable mapping $\xi:\Omega\mapsto M$. \\
+% If $\xi$ is a random measure and $B\in\mathcal{X}$, then $\xi(B)$ denotes the random variable $\omega\mapsto\xi\left(\omega,B\right):=\xi\left(\omega\right)(B)$. This mapping represents a kernel from $\Omega$ to $\mathbb{X}$ with the additional property that the measure $\xi\left(\omega,\cdot\right)$ is $s$-finite for each $\omega\in\Omega$. \\
+% A random measure $\xi$ on $\mathbb{X}$ follows the distribution of the probability measure $\mathbb{P}_{\xi}$ on $\left(M,\mathcal{M}\right)$ given by $A\mapsto\mathbb{P}\left(\xi\in A\right)$. This distribution is again determined by the family of random vectors $\left(\xi\left(B_1\right),...,\xi\left(B_m\right)\right)$ for pairwise disjoint $B_1,...,B_m\in\mathcal{X}$ and $m\in\mathbb{N}$  \autocite[][127--128]{last2017lectures}.
+% \subsubsection{Cox Processes}
+% Let $\Pi_{\lambda}$ denote the distribution of a Poisson process with intensity measure $\lambda\ in M\left(\mathbb{X}\right)$ and let $\xi$ be a random measure on $\mathbb{X}$. A point process $\eta$ on $\mathbb{X}$ is called a Cox process directed by $\xi$ if
+% \begin{equation}
+%    \mathbb{P}\left(\eta\in A|\xi\right)=\Pi_{\xi}(A),\hspace{20pt}\mathbb{P}\hbox{-almost surely}, A\in\mathcal{N}.
+% \end{equation}
+% $\mathcal{N}\left(\mathbb{X}\right)\equiv\mathcal{N}$ denotes the $\sigma$ field formed by the set of all subsets of $N$ of the form
+% \begin{equation*}
+%    \left\lbrace\mu\in N:\mu(B)=k\right\rbrace, \hspace{20pt}B\in\mathcal{X},k\in\mathbb{N}_0.
+% \end{equation*}
+% Thus $\mathcal{N}$ denotes the smallest $\sigma$ field on $N$ such that $\mu\mapsto\mu(B)$ is % measurable for all $B\in\mathcal{X}$  \autocite[][129]{last2017lectures}.
 \clearpage
 \section{Modeling and Visualising Health Data}
 \subsection{Areal Data}
@@ -128,7 +128,7 @@ Spatial or proximity matrices are useful for exploratory analysis of area data. 
     \end{cases}
 \end{equation}
 Since a region cannot share a boundary with itself, $w_{ii}=0$  \autocite[][]{moraga2019geospatial}.\\
-Below, the number of shared borders of each canton in Switzerland are mapped.
+In Figure~\ref{fig:neighbour}, the number of shared borders of each canton in Switzerland are mapped.
 \begin{figure}[H]
    \centering
        \includegraphics[page=1,width=\textwidth]{neighbours.pdf}
@@ -160,8 +160,8 @@ The overall risk in the region of study is represented by $\alpha$, $u_i$ is a r
 \begin{equation*}
     \log\left(\theta_i\right)=\pmb{d}_i\pmb{\beta}+u_i+v_i,
 \end{equation*}
-with $\pmb{d}_i = \left(1,d_{i1},...,d_{ip}\right)$ a vector of the intercept and $p$ covariates corresponding to the area $i$ and $\pmb{\beta}=\left(\beta_0,...,\beta_p\right)^T$ the vector of coefficients. An increase in $\pmb{d}_j\,\left(j = 1,...,p\right)$ by one unit, leads to an increase in the relative risk by a factor of $\exp\left(\beta_j\right)$, provided that all other covariates remain constant. \\
-In the Besag-York-Mollié (BYM) \autocite[][]{besag1991bayesian} model, this spatial random effect $u_i$ is assigned a conditional autoregressive (CAR) distribution that smoothes the data according to a given neighbourhood structure that defines two areas as neighbours if they share a common boundary, specifically,
+with $\pmb{d}_i = \left(1,d_{i1},...,d_{ip}\right)$ a vector of the intercept and $p$ covariates corresponding to the area $i$ and $\pmb{\beta}=\left(\beta_0,...,\beta_p\right)^T$ the vector of coefficients. An increase in $d_j\,\left(j = 1,...,p\right)$ by one unit, leads to an increase in the relative risk by a factor of $\exp\left(\beta_j\right)$, provided that all other covariates remain constant. \\
+In the Besag-York-Mollié (BYM) \autocite[][]{besag1991bayesian} model, this spatial random effect $u_i$ is assigned a conditional autoregressive (CAR) distribution that smooths the data according to a given neighbourhood structure that defines two areas as neighbours if they share a common boundary. Specifically,
 \begin{equation}
     u_i|\pmb{u}_{-i}\sim\mathcal{N}\left(\overline{u}_{\delta_i}, \frac{\sigma_u^2}{n_{\delta_i}}\right),
 \end{equation}
@@ -175,18 +175,19 @@ The precision parameter $\tau_b > 0$ controls the marginal variance contribution
     \mathbb{P}\left(\frac{1}{\sqrt{\tau_b}}>U\right)&=\alpha\nonumber\\
     \Longleftrightarrow\mathbb{P}\left(\phi <U\right)&=\alpha
 \end{align}
-\autocite[][]{moraga2019geospatial}.
+\autocite[][]{moraga2019geospatial}. \\
+DEFINE U AND ALPHA AND CONNECT IT TO PC PRIORS. ALSO ADD THE LEROUX AND BESAG MODEL
 \subsubsection{Spatio-Temporal Small Area Disease Risk Estimation}
 When disease counts are monitored over time, spatio-temporal models are useful as they take into account not only the spatial structure but also temporal correlations and spatio-temporal interactions \autocite[][]{martinez2008autoregressive}. Let $Y_{ij}$ be the counts observed in area $i$ and at time $j$, $\theta_{ij}$ be the relative risk, $E_{ij}$ be the expected number of cases in area $i$ and at time $j$, then
 \begin{equation}
-    Y_{ij}\sim\hbox{Po}\left(E_{ij}, \theta_{ij}\right), \hspace{20pt} i=1,...,I,\,j=1,...,J.
+    Y_{ij}\sim\hbox{Po}\left(E_{ij}\theta_{ij}\right), \hspace{20pt} i=1,...,I,\,j=1,...,J.
 \end{equation}
 $\log\left(\theta_{ij}\right)$ is written as the sum of several components, including spatial and temporal structures, to consider that neighbouring areas and successive times may have similar risk. Spatio-temporal interactions can be included to account for the fact that temporal trends may differ from area to area but may be more alike in neighbouring areas. \\
 Bernardinelli et al. \autocite[][]{bernardinelli1995bayesian}, for example, propose a spatio-temporal model with parametric time trends that expresses the logarithm of relative risks as
 \begin{equation}
     \log\left(\theta_{ij}\right)=\alpha+u_i+v_i+ \left(\beta+\delta_i\right)\times t_j.
 \end{equation}
-The intercept is denoted by $\alpha$, $u_i+v_i$ is a random area effect, $\beta$ represents a global linear trend effect and $\delta_i$ is an interaction between space and time which is the difference between $\beta$ and the area-specific trend. For modeling $u_i$ and $\delta_i$, a CAR distribution is used and $v_i$ is i.i.d.. This specification allows each of the areas to have its individual time trend, where the spatial intercept is given by $\alpha+u_i+v_i$ and the slope by $\beta+\delta_i$. $\delta_i$ is referred to as the differential trend of the $i$-th area and represents the amount by which the time trend of area $i$ deviates from the overall time trend $\beta$. If $\delta_i\neq is 0$, then area $i$ has a time trend with a slope that is either steeper or less steep than the overall time trend $\beta$. \\
+The intercept is denoted by $\alpha$, $u_i+v_i$ is a random area effect, $\beta$ represents a global linear trend effect and $\delta_i$ is an interaction between space and time which is the difference between $\beta$ and the area-specific trend. For modeling $u_i$ and $\delta_i$, a CAR distribution is used and $v_i$ is i.i.d.. This specification allows each of the areas to have its individual time trend, where the spatial intercept is given by $\alpha+u_i+v_i$ and the slope by $\beta+\delta_i$. $\delta_i$ is referred to as the differential trend of the $i$-th area and represents the amount by which the time trend of area $i$ deviates from the overall time trend $\beta$. If $\delta_i\neq 0$, then area $i$ has a time trend with a slope that is either steeper or less steep than the overall time trend $\beta$. \\
 For models that do not demand linearity of the time trend, non-parametric models such as the one proposed by Knorr-Held \autocite[][]{knorr2000bayesian} can be used. This specific model incorporates spatial effects, temporal random effects and an interaction between space and time as follows:
 \begin{equation}
     \log\left(\theta_{ij}\right)=\alpha+u_i+v_i+\gamma_j+\phi_j+\delta_{ij}.
@@ -199,7 +200,7 @@ or second order random walk in time (RW2)
 \begin{equation}
     \gamma_j|\gamma_{j-1},\gamma_{j-2}\sim\mathcal{N}\left(2\gamma_{j-1}-\gamma_{j-2},\sigma_\gamma^2\right).
 \end{equation}
-The unstructured temporal effect is given by $\phi_j, \phi_j\overset{i.i.d.}{\sim}\mathcal{N}\left(0, \sigma_\phi^2\right)$. The interaction between space and time, $\delta_{ij}$, can be specified in a number of ways by combining the structure of the random effects that interact. The interactions proposed by Knorr-Held are those between the effects $\left(u_i,\gamma_j\right)$, $\left(u_i,\phi_j\right)$, $\left(v_i,\gamma_j\right)$ and $\left(v_i,\phi_j\right)$ \autocite[][]{knorr2000bayesian}. \\
+The unstructured temporal effect is given by $\phi_j\overset{i.i.d.}{\sim}\mathcal{N}\left(0, \sigma_\phi^2\right)$. The interaction between space and time, $\delta_{ij}$, can be specified in a number of ways by combining the structure of the random effects that interact. The interactions proposed by Knorr-Held are those between the effects $\left(u_i,\gamma_j\right)$, $\left(u_i,\phi_j\right)$, $\left(v_i,\gamma_j\right)$ and $\left(v_i,\phi_j\right)$ \autocite[][]{knorr2000bayesian}. \\
 Using the last of these interactions leads to the assumption that there is no spatial or temporal structure on $\delta_{ij}$. Thus, the interaction term can be modeled as \\ $\delta_{ij}\sim\mathcal{N}\left(0,\sigma_\delta^2\right)$ \autocite[][]{moraga2019geospatial}.
 \subsubsection{Issues With Areal Data}
 The analysis of spatially aggregated data is subject to the "misaligned data problem" (MIDP), which arises when the data to be analysed is at a different scale from that at which it was collected \autocite[][]{banerjee2014hierarchical}. This may be solely due to the fact that the aim is to obtain the spatial distribution of a variable at a new spatial level of aggregation, e.g. if predictions are to be made at the county level with data that was originally collected at the postcode level. Another objective may be to try to find an association between variables available at different spatial scales, e.g. determining whether the risk of an unfavourable outcome provided at the country level correlates with exposure to an environmental pollutant measured at different stations, taking into account the population at risk and other demographic information available at the postcode level.\\
@@ -231,4 +232,4 @@ The SPDE can be solved approximately using the \textit{finite element} method, w
     x\left(\pmb{s}\right)=\sum_{k=1}^n\psi_k\left(\pmb{s}\right)x_k,
 \end{equation}
 with $n$ the number of vertices of the triangulate, $\psi_k\left(\cdot\right)$ the piecewise linear basis functions and $\left\lbrace x_k\right\rbrace$ zero-mean Gaussian distributed weights. \\
-The joint distribution of the weight vector follows a Gaussian distribution, $\pmb{x}=\left(x_1,... ,x_n\right)\sim\mathcal{N}\left(0, \pmb{Q}^{-1}\left(\tau, \kappa\right)\right)$, which approximates the solution $x\left(\pmb{s}\right)$ of the SPDE in the mesh nodes, and the basis functions transform $x\left(\pmb{s}\right)$ from the mesh nodes to the other spatial locations of interest \autocite[][]{moraga2019geospatial}.
+The joint distribution of the weight vector follows a Gaussian distribution, $\pmb{x}=\left(x_1,... ,x_n\right)\sim\mathcal{N}\left(0, \pmb{Q}^{-1}\left(\tau, \kappa\right)\right)$, which approximates the solution $x\left(\pmb{s}\right)$ of the SPDE in the mesh nodes, and the basis functions transform $x\left(\pmb{s}\right)$ from the mesh nodes to the other spatial locations of interest \autocite[][]{lindgren2011explicit}.
