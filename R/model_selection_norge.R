@@ -1,13 +1,6 @@
-library(ggplot2)
 library(ggregplot)
-library(htmlwidgets)
 library(INLA)
 library(INLAutils)
-library(leaflet)
-library(leaflet.mapboxgl)
-library(mlr)
-library(randomForestSRC)
-library(spdep)
 source("R/preprocess_norge.R")
 parallelMap::parallelStartSocket(7)
 newest_numbers$geometry <- NULL
@@ -17,7 +10,7 @@ stack_all <- inla.stack(
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(7:34, 36, 43:45)]
+      newest_numbers[, c(6:29, 31, 38:40)]
     )
   )
 )
@@ -27,7 +20,7 @@ stack_demo <- inla.stack(
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(7:18, 43:45)]
+      newest_numbers[, c(6:13, 38:40)]
     )
   )
 )
@@ -37,17 +30,17 @@ stack_infra <- inla.stack(
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(19:34, 36, 43, 44)]
+      newest_numbers[, c(14:29, 31, 38, 39)]
     )
   )
 )
-result_all <- INLAstep(
+result_all_backwards <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_all,
-  invariant = "0 + Intercept",
+  invariant = "Intercept",
   direction = "backwards",
-  include = c(7:34, 36, 43:45),
+  include = c(6:29, 31, 38:40),
   y = "value",
   y2 = "value",
   powerl = 1,
@@ -55,54 +48,73 @@ result_all <- INLAstep(
   thresh = 2,
   num.threads = 7
 )
-result_demo <- INLAstep(
+result_all_forwards <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_all,
+  invariant = "Intercept",
+  direction = "forwards",
+  include = c(6:29, 31, 38:40),
+  y = "value",
+  y2 = "value",
+  powerl = 1,
+  inter = 1,
+  thresh = 2,
+  num.threads = 7
+)
+result_demo_backwards <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_demo,
-  invariant = "0 + Intercept",
+  invariant = "Intercept",
   direction = "backwards",
-  include = c(7:18, 43:45),
+  include = c(6:13, 38:40),
   y = "value",
   y2 = "value",
   powerl = 1,
   inter = 1,
-  thresh = 2
+  thresh = 2,
+  num.threads = 7
 )
-result_infra <- INLAstep(
+result_demo_forwards <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_demo,
+  invariant = "Intercept",
+  direction = "forwards",
+  include = c(6:13, 38:40),
+  y = "value",
+  y2 = "value",
+  powerl = 1,
+  inter = 1,
+  thresh = 2,
+  num.threads = 7
+)
+result_infra_backwards <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_infra,
-  invariant = "0 + Intercept",
+  invariant = "Intercept",
   direction = "backwards",
-  include = c(19:34, 36, 43, 44),
+  include = c(14:29, 31, 38, 39),
   y = "value",
   y2 = "value",
   powerl = 1,
   inter = 1,
-  thresh = 2
+  thresh = 2,
+  num.threads = 7
 )
-set.seed(420)
-sel_all <- INLAModelSel(
-  "value",
-  colnames(newest_numbers)[c(7:34, 36, 43:45)],
-  "idarea_1",
-  "iid",
-  "nbinomial",
-  newest_numbers
-)
-sel_demo <- INLAModelSel(
-  "value",
-  colnames(newest_numbers)[c(7:18, 43:45)],
-  "idarea_1",
-  "iid",
-  "nbinomial",
-  newest_numbers
-)
-sel_infra <- INLAModelSel(
-  "value",
-  colnames(newest_numbers)[c(19:34, 36, 43, 44)],
-  "idarea_1",
-  "iid",
-  "nbinomial",
-  newest_numbers
+result_infra_forwards <- INLAstep(
+  fam1 = "nbinomial",
+  newest_numbers,
+  in_stack = stack_infra,
+  invariant = "Intercept",
+  direction = "forwads",
+  include = c(14:29, 31, 38, 39),
+  y = "value",
+  y2 = "value",
+  powerl = 1,
+  inter = 1,
+  thresh = 2,
+  num.threads = 7
 )
