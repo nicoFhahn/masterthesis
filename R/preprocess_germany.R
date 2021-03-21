@@ -592,7 +592,7 @@ if (date_1 != date_2) {
 germany_features$Gewerbesteuer <- as.numeric(trimws(germany_features$Gewerbesteuer))
 germany_features$schutzsuchende <- as.numeric(trimws(germany_features$schutzsuchende))
 germany_features[, 6:11] <- germany_features[, 6:11] / germany_features$stimmen
-germany_features[, c(1:4, 12:15, 22:39)] <- 1000 * germany_features[, c(1:4, 12:15, 22:39)] / germany_features$PopulationTotal
+# germany_features[, c(1:4, 12:15, 22:39)] <- 1000 * germany_features[, c(1:4, 12:15, 22:39)] / germany_features$PopulationTotal
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 germany <- merge(
   germany_features,
@@ -653,4 +653,9 @@ colnames(newest_numbers)[c(1:5, 12:16, 18, 19)] <- c(
   "value",
   "population"
 )
+geom <- newest_numbers$geometry
+newest_numbers$geometry <- NULL
+newest_numbers[, c(2:15, 20:35, 43:46)] <- scale(newest_numbers[, c(2:15, 20:35, 43:46)])
+newest_numbers$geometry <- geom
+newest_numbers <- st_as_sf(newest_numbers)
 rm(list = setdiff(ls(), c("newest_numbers")))
