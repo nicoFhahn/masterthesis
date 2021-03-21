@@ -2,14 +2,15 @@
 %
 \chapter{Appendix}
 \label{sec:appendix}
-
-\section{The Negative Binomial Distribution}
+\section{Probability Distributions}
+\subsection{The Negative Binomial Distribution}
 The negative binomial distribution is a univariate probability distribution that belongs to the discrete probability distributions. It models the number of trials required to achieve a given number of successes in a Bernoulli process. \\
 The density is given by
 \begin{equation}
     f\left(k,r,p\right)=\mathcal{P}\left(X=k\right)=\begin{pmatrix} k+r-1\\r-1\end{pmatrix}\left(1-p\right)^kp^r,
 \end{equation}
 with $r$ the number of successes, $k$ the number of failures, and $p$ the probability of success \cite{haldane1941fitting}.
+\clearpage
 \section{Distribution Fits}
 \subsection{Distribution Fits for Germany}
 % \begin{figure}[H]
@@ -61,176 +62,230 @@ with $r$ the number of successes, $k$ the number of failures, and $p$ the probab
     \caption{A Poisson fit to the number of cases in Norwegian municipalities}
     \label{fitPoissonNorway}
 \end{figure}
-
-
+\clearpage
 \section{Code examples}
-\subsubsection{Specifying the Different Types of Models}
+\subsection{Specifying the Different Types of Models}
 \begin{lstlisting}[caption={Specifying different models in INLA.}, label={codeModels}, language=R]
-# Specify a penalized prior
+# set the seed
+set.seed(420)
+# draw a sample
+test <- sample(
+    seq_len(nrow(newest_numbers)),
+    size = floor(0.2 * nrow(newest_numbers))
+  )
+# get the number of infections for the test data
+test_value <- newest_numbers$value[test]
+# set the number of infections to NA in the train data
+newest_numbers$value[test] <- NA
+# define the link function
+link <- rep(NA, nrow(newest_numbers))
+link[which(is.na(newest_numbers$value))] <- 1
+# define the penalised prior
 prior_1 <- list(
   prec = list(
     prior = "pc.prec",
     param = c(1, 0.01)
   )
 )
-# Create a neighbourhood list
-nb <- poly2nb(newest_numbers_germany)
-# save the neighbourhood
-nb2INLA("maps/map_2.adj", nb)
-# load it
-g <- inla.read.graph(filename = "maps/map_2.adj")
-# specify the model formula for the bym2 model
-formula_bym2 <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + 
-  # specify the model with neighbourhood matrix
+# create the neighbordhood matrix
+nb <- poly2nb(newest_numbers)
+# save the matrix
+nb2INLA("maps/map.adj", nb)
+g <- inla.read.graph(filename = "maps/map.adj")
+# define the C matrix for the Leroux model
+Q <- Diagonal(x = sapply(nb, length))
+for (i in 2:nrow(newest_numbers)) {
+  Q[i - 1, i] <- -1
+  Q[i, i - 1] <- -1
+}
+
+C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
+# define the formula for besags proper model
+formula_besag <- value ~
+  pop_dens + urb_dens + sex +
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+# define the formula for bym2 model
+formula_bym2 <- value ~
+  pop_dens + urb_dens + sex +
   f(
     idarea_1, model = "bym2", graph = g,
     scale.model = TRUE, hyper = prior_1
   )
-# compute the model
+# define the formula for leroux model
+formula_leroux <- value ~
+  pop_dens + urb_dens + sex +
+  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
+# compute the models
+res_besag <- inla(
+  formula_besag,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE,
+    link = link
+  ),
+  Ntrials = newest_numbers$population,
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+)
 res_bym2 <- inla(
   formula_bym2,
   family = "nbinomial",
   data = newest_numbers,
   E = expected_count,
   control.predictor = list(
-    compute = TRUE
+    compute = TRUE,
+    link = link
   ),
+  Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-# specify the model formula for besags proper spatial model
-formula_bp <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + 
-  # specify the model with neighbourhood matrix
-  f(
-    idarea_1, model = "besagproper",
-    graph = g, hyper = prior_1
-  )
-# compute the model
-res_bp <- inla(
-  formula_bp,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE
-  ),
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-# compute the Q matrix
-Q <- Diagonal(x = sapply(nb, length))
-for(i in 2:nrow(newest_numbers)) {
-  Q[i - 1, i] <- -1
-  Q[i, i - 1] <- -1
-}
-# compute the C matrix
-C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
-# specify the model formula for the leroux model
-formula_leroux <- CumNumberTestedIll ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + 
-  # specify the model with neighbourhood matrix
-  f(
-    idarea_1, model = "generic1",
-    Cmatrix = C, hyper = prior_1
-  )
-# compute the model
 res_leroux <- inla(
   formula_leroux,
   family = "nbinomial",
   data = newest_numbers,
   E = expected_count,
   control.predictor = list(
-    compute = TRUE
+    compute = TRUE,
+    link = link
   ),
+  Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 \end{lstlisting}
-\subsubsection{Variable Selection using INLA}
+\subsection{Making Predictions for the Test Data}
+\begin{lstlisting}[caption={The code for making predictions in INLA.}, label={codePrediction}, language=R]
+# create a vector to save the predictions to
+predicted <- c()
+# now make the predictions
+for(i in seq_len(nrow(newest_numbers))) {
+  predicted[i] <- inla.emarginal(
+    function(x) x * newest_numbers$population[i],
+    res_bym2$marginals.fitted.values[[i]]
+  )
+}
+# calculate the MAE for the test data
+mean(abs(predicted[test] - test))
+
+\end{lstlisting}
+\subsection{Variable Selection using INLA}
 \begin{lstlisting}[caption={The code for variable selection in INLA.}, label={codeSelection}, language=R]
 # define the stack
 stack_all <- inla.stack(
-  data = list(
-  CumNumberTestedIll = newest_numbers$CumNumberTestedIll
-    ),
+  data = list(value = newest_numbers$value),
   A = list(1),
   effects = list(
     data.frame(
       Intercept = 1,
-      newest_numbers[, c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59)]
+      newest_numbers[, c(2:15, 20:35, 43:46)]
     )
   )
 )
-# run the selection
-result_backwards <- INLAstep(
+# run backwards varaible selection
+result_all_backwards <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_all,
   invariant = "Intercept",
   direction = "backwards",
-  include = c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59),
-  y = "CumNumberTestedIll",
-  y2 = "CumNumberTestedIll",
+  include = c(2:15, 20:35, 43:46),
+  y = "value",
+  y2 = "value",
   powerl = 1,
   inter = 1,
-  thresh = 2
+  thresh = 2,
+  num.threads = 7
 )
-# run the selection
-result_forwards <- INLAstep(
+# run forwards variable selection
+result_all_forwards <- INLAstep(
   fam1 = "nbinomial",
   newest_numbers,
   in_stack = stack_all,
   invariant = "Intercept",
   direction = "forwards",
-  include = c(2:5, 8:18, 26:36, 38:40, 43:48, 56:59),
-  y = "CumNumberTestedIll",
-  y2 = "CumNumberTestedIll",
+  include = c(2:15, 20:35, 43:46),
+  y = "value",
+  y2 = "value",
   powerl = 1,
   inter = 1,
-  thresh = 2
+  thresh = 2,
+  num.threads = 7
 )
 \end{lstlisting}
-\subsubsection{Infrastructure Models for Germany}
-\begin{lstlisting}[caption={The code for the demographic models.}, label={infraGermanyCode}, language=R]
+\subsection{Calculating the Posterior Mean}
+\begin{lstlisting}[caption={Calculating the posterior mean of a coefficent.}, label={codePosteriorMean}, language=R]
+inla.emarginal(exp, model_leroux$marginals.fixed$trade_tax)
+# calculate the increase in risk for an increase 
+# by 2 in the trade tax
+inla.emarginal(
+  exp,
+  model_leroux$marginals.fixed$trade_tax
+  ) ^ 2
+\end{lstlisting}
+\subsection{Calculating a Credibility Interval}
+\begin{lstlisting}[caption={Extracting the credibility interval for a coefficient}, label={codeCredibility}, language=R]
+inla.qmarginal(
+  c(0.025,0.975),
+  inla.tmarginal(
+    exp,
+    model_leroux$marginals.fixed$trade_tax
+  )
+)
+\end{lstlisting}
+\subsection{Best Spatial Models For Germany}
+\subsubsection{Best Spatial Model using Demographic Variables}
+\begin{lstlisting}[caption={The code for the demographic models.}, label={codeDemoGermany}, language=R]
 prior_2 <- list(
   prec = list(
     prior = "pc.prec",
     param = c(0.5 / 0.31, 0.01)
   )
 )
-formula_22_bym2 <- CumNumberTestedIll ~
-  pop_dens + urb_dens + marketplace + entertainment + sport +
-  clinic + toilet + hairdresser + shops + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + office +
-  platform + schools + higher_education + banks + kindergarten +
-  bakeries + gas + atm +
-  f(
-    idarea_1, model = "bym2",
-    graph = g, scale.model = TRUE,
-    hyper = prior_2
-  ) 
-formula_23_bym2 <- CumNumberTestedIll ~
+formula <- value ~
+  Union + SPD + Gruene + FDP +
+  die_linke + afd + 
+  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
+\end{lstlisting}
+\subsubsection{Best Spatial Model using Infrastructural Variables}
+\begin{lstlisting}[caption={The code for the demographic models.}, label={codeInfraGermany}, language=R]
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
+  )
+)
+formula <- value ~
   marketplace + entertainment + sport + clinic +
-  toilet + hairdresser + shops + place_of_worship + retail +
-  nursing_home + restaurant + aerodrome + office + platform +
-  schools + higher_education + banks + kindergarten + bakeries +
-  gas + atm +
+  hairdresser + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + schools +
+  higher_education + kindergarten + bakeries + 
+  f(
+    idarea_1, model = "bym2", graph = G,
+    scale.model = TRUE, hyper = prior_1
+  )
+\end{lstlisting}
+\subsubsection{Best Spatial Model using Both Types of Variables}
+\begin{lstlisting}[caption={The code for the demographic models.}, label={codeBothGermany}, language=R]
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
+  )
+)
+formula <- value ~
+  schools + afd + die_linke + pop_dens +
+  place_of_worship + entertainment + bakeries + SPD +
+  platform + sport + nursing_home + welfare_recipients +
+  FDP + kindergarten + log(trade_tax) + office +
   f(
     idarea_1, model = "bym2", graph = g,
     scale.model = TRUE, hyper = prior_1
-  ) 
-formula_26_leroux <- CumNumberTestedIll ~
-  marketplace + entertainment + clinic + toilet + hairdresser +
-  place_of_worship + retail + nursing_home + restaurant +
-  terminal + platform + kindergarten + schools + bakeries +
-  gas + banks + atm + pop_dens + higher_education +
-  f(
-    idarea_1, model = "generic1",
-    Cmatrix = C, hyper = prior_2
   )
 \end{lstlisting}
+\subsection{Best Spatial Models For Norway}
+
+\clearpage
+\section{Models}
 \subsubsection{Coefficients of BYM2 Model with all Variables for Germany}
 \begin{table}[H] 
 \caption{The fixed effects for the BYM2 model. Values are rounded. \label{allGermanyBYM2}}

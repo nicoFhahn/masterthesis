@@ -77,7 +77,7 @@ perf <- list(
     res_1$waic$waic, res_2$waic$waic
   ),
   cpo = c(
-    sum(log(res_1$cpo$cpo)), sum(log(res_2$cpo$cpo))
+    sum(log(res_1$cpo$cpo), na.rm = TRUE), sum(log(res_2$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_1 = perf))
@@ -193,8 +193,8 @@ perf <- list(
     res_5$waic$waic, res_6$waic$waic
   ),
   cpo = c(
-    sum(log(res_3$cpo$cpo)), sum(log(res_4$cpo$cpo)),
-    sum(log(res_5$cpo$cpo)), sum(log(res_6$cpo$cpo))
+    sum(log(res_3$cpo$cpo), na.rm = TRUE), sum(log(res_4$cpo$cpo), na.rm = TRUE),
+    sum(log(res_5$cpo$cpo), na.rm = TRUE), sum(log(res_6$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_2 = perf))
@@ -230,22 +230,22 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 # now models with the infrastructure variables
 formula_7 <- value ~
   # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + trade_tax + income_total + income_tax +
+  pop_dens + urb_dens + sex + log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_8 <- value ~
   # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + trade_tax + income_total + income_tax +
+  pop_dens + urb_dens + sex + log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_9 <- value ~
   # add the demographic vars and pop density
-  trade_tax + income_total + income_tax +
+  log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_10 <- value ~
   # add the demographic vars and pop density
-  trade_tax + income_total + income_tax +
+  log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 
@@ -315,8 +315,8 @@ perf <- list(
     res_9$waic$waic, res_10$waic$waic
   ),
   cpo = c(
-    sum(log(res_7$cpo$cpo)), sum(log(res_8$cpo$cpo)),
-    sum(log(res_9$cpo$cpo)), sum(log(res_10$cpo$cpo))
+    sum(log(res_7$cpo$cpo), na.rm = TRUE), sum(log(res_8$cpo$cpo), na.rm = TRUE),
+    sum(log(res_9$cpo$cpo), na.rm = TRUE), sum(log(res_10$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_3 = perf))
@@ -437,8 +437,8 @@ perf <- list(
     res_13$waic$waic, res_14$waic$waic
   ),
   cpo = c(
-    sum(log(res_11$cpo$cpo)), sum(log(res_12$cpo$cpo)),
-    sum(log(res_13$cpo$cpo)), sum(log(res_14$cpo$cpo))
+    sum(log(res_11$cpo$cpo), na.rm = TRUE), sum(log(res_12$cpo$cpo), na.rm = TRUE),
+    sum(log(res_13$cpo$cpo), na.rm = TRUE), sum(log(res_14$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_4 = perf))
@@ -475,32 +475,32 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 # Now with variable selection
 formula_15 <- value ~
   # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + trade_tax +
-  income_total + income_tax + Union + SPD + Gruene + FDP +
+  pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_16 <- value ~
   # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + trade_tax +
-  income_total + income_tax + Union + SPD + Gruene + FDP +
+  pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_17 <- value ~
   # add the demographic vars and pop density
-  asyl_benefits + trade_tax +
-  income_total + income_tax + Union + SPD + Gruene + FDP +
+  asyl_benefits + log(trade_tax) +
+  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_18 <- value ~
   # add the demographic vars and pop density
-  asyl_benefits + trade_tax +
-  income_total + income_tax + Union + SPD + Gruene + FDP +
+  asyl_benefits + log(trade_tax) +
+  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
@@ -570,8 +570,8 @@ perf <- list(
     res_17$waic$waic, res_18$waic$waic
   ),
   cpo = c(
-    sum(log(res_15$cpo$cpo)), sum(log(res_16$cpo$cpo)),
-    sum(log(res_17$cpo$cpo)), sum(log(res_18$cpo$cpo))
+    sum(log(res_15$cpo$cpo), na.rm = TRUE), sum(log(res_16$cpo$cpo), na.rm = TRUE),
+    sum(log(res_17$cpo$cpo), na.rm = TRUE), sum(log(res_18$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_5 = perf))
@@ -606,14 +606,14 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 formula_19 <- value ~
-  trade_tax + income_total + income_tax + Union + 
+  log(trade_tax) + log(income_total) + log(income_tax) + Union + 
   SPD + Gruene + FDP + die_linke + afd + protection_seekers + 
   welfare_recipients + unemployed_total + unemployed_foreigners + 
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_20 <- value ~
-  trade_tax + income_total + income_tax + Union + 
+  log(trade_tax) + log(income_total) + log(income_tax) + Union + 
   SPD + Gruene + FDP + die_linke + afd + protection_seekers + 
   welfare_recipients + unemployed_total + unemployed_foreigners + 
   pop_dens + urb_dens + sex +
@@ -621,13 +621,13 @@ formula_20 <- value ~
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 
 formula_21 <- value ~
-  income_total + income_tax + afd + die_linke + 
-  pop_dens + unemployed_total + trade_tax + SPD + FDP + protection_seekers +
+  log(income_total) + log(income_tax) + afd + die_linke + 
+  pop_dens + unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_22 <- value ~
-  income_total + income_tax + afd + die_linke + 
-  pop_dens + unemployed_total + trade_tax + SPD + FDP + protection_seekers +
+  log(income_total) + log(income_tax) + afd + die_linke + 
+  pop_dens + unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 
@@ -699,8 +699,8 @@ perf <- list(
     res_21$waic$waic, res_22$waic$waic
   ),
   cpo = c(
-    sum(log(res_19$cpo$cpo)), sum(log(res_20$cpo$cpo)),
-    sum(log(res_21$cpo$cpo)), sum(log(res_22$cpo$cpo))
+    sum(log(res_19$cpo$cpo), na.rm = TRUE), sum(log(res_20$cpo$cpo), na.rm = TRUE),
+    sum(log(res_21$cpo$cpo), na.rm = TRUE), sum(log(res_22$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_6 = perf))
@@ -834,8 +834,8 @@ perf <- list(
     res_25$waic$waic, res_26$waic$waic
   ),
   cpo = c(
-    sum(log(res_23$cpo$cpo)), sum(log(res_24$cpo$cpo)),
-    sum(log(res_25$cpo$cpo)), sum(log(res_26$cpo$cpo))
+    sum(log(res_23$cpo$cpo), na.rm = TRUE), sum(log(res_24$cpo$cpo), na.rm = TRUE),
+    sum(log(res_25$cpo$cpo), na.rm = TRUE), sum(log(res_26$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_7 = perf))
@@ -964,8 +964,8 @@ perf <- list(
     res_29$waic$waic, res_30$waic$waic
   ),
   cpo = c(
-    sum(log(res_27$cpo$cpo)), sum(log(res_28$cpo$cpo)),
-    sum(log(res_29$cpo$cpo)), sum(log(res_30$cpo$cpo))
+    sum(log(res_27$cpo$cpo), na.rm = TRUE), sum(log(res_28$cpo$cpo), na.rm = TRUE),
+    sum(log(res_29$cpo$cpo), na.rm = TRUE), sum(log(res_30$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_8 = perf))
@@ -1000,7 +1000,7 @@ mae <- c(mae, list(
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 formula_31 <- value ~
-  trade_tax + income_total + income_tax + SPD + 
+  log(trade_tax) + log(income_total) + log(income_tax) + SPD + 
   Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients + 
   unemployed_total + unemployed_foreigners + entertainment + 
   sport + clinic + shops + place_of_worship + retail + nursing_home + 
@@ -1009,7 +1009,7 @@ formula_31 <- value ~
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_32 <- value ~ 
-  trade_tax + income_total + income_tax + SPD + 
+  log(trade_tax) + log(income_total) + log(income_tax) + SPD + 
   Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients + 
   unemployed_total + unemployed_foreigners + entertainment + 
   sport + clinic + shops + place_of_worship + retail + nursing_home + 
@@ -1020,13 +1020,13 @@ formula_32 <- value ~
 formula_33 <- value ~
   schools + afd + die_linke + pop_dens + place_of_worship + 
   entertainment + bakeries + SPD + platform + sport + nursing_home + 
-  welfare_recipients + FDP + kindergarten + trade_tax + office +
+  welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_34 <- value ~ 
   schools + afd + die_linke + pop_dens + place_of_worship + 
   entertainment + bakeries + SPD + platform + sport + nursing_home + 
-  welfare_recipients + FDP + kindergarten + trade_tax + office +
+  welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 
@@ -1097,8 +1097,8 @@ perf <- list(
     res_33$waic$waic, res_34$waic$waic
   ),
   cpo = c(
-    sum(log(res_31$cpo$cpo)), sum(log(res_32$cpo$cpo)),
-    sum(log(res_33$cpo$cpo)), sum(log(res_34$cpo$cpo))
+    sum(log(res_31$cpo$cpo), na.rm = TRUE), sum(log(res_32$cpo$cpo), na.rm = TRUE),
+    sum(log(res_33$cpo$cpo), na.rm = TRUE), sum(log(res_34$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_9 = perf))

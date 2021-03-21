@@ -84,7 +84,7 @@ perf <- list(
     res_1$waic$waic, res_2$waic$waic
   ),
   cpo = c(
-    sum(log(res_1$cpo$cpo)), sum(log(res_2$cpo$cpo))
+    sum(log(res_1$cpo$cpo), na.rm = TRUE), sum(log(res_2$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_1 = perf))
@@ -195,8 +195,8 @@ perf <- list(
     res_5$waic$waic, res_6$waic$waic
   ),
   cpo = c(
-    sum(log(res_3$cpo$cpo)), sum(log(res_4$cpo$cpo)),
-    sum(log(res_5$cpo$cpo)), sum(log(res_6$cpo$cpo))
+    sum(log(res_3$cpo$cpo), na.rm = TRUE), sum(log(res_4$cpo$cpo), na.rm = TRUE),
+    sum(log(res_5$cpo$cpo), na.rm = TRUE), sum(log(res_6$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_2 = perf))
@@ -315,8 +315,8 @@ perf <- list(
     res_9$waic$waic, res_10$waic$waic
   ),
   cpo = c(
-    sum(log(res_7$cpo$cpo)), sum(log(res_8$cpo$cpo)),
-    sum(log(res_9$cpo$cpo)), sum(log(res_10$cpo$cpo))
+    sum(log(res_7$cpo$cpo), na.rm = TRUE), sum(log(res_8$cpo$cpo), na.rm = TRUE),
+    sum(log(res_9$cpo$cpo), na.rm = TRUE), sum(log(res_10$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_3 = perf))
@@ -437,8 +437,8 @@ perf <- list(
     res_13$waic$waic, res_14$waic$waic
   ),
   cpo = c(
-    sum(log(res_11$cpo$cpo)), sum(log(res_12$cpo$cpo)),
-    sum(log(res_13$cpo$cpo)), sum(log(res_14$cpo$cpo))
+    sum(log(res_11$cpo$cpo), na.rm = TRUE), sum(log(res_12$cpo$cpo), na.rm = TRUE),
+    sum(log(res_13$cpo$cpo), na.rm = TRUE), sum(log(res_14$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_4 = perf))
@@ -566,8 +566,8 @@ perf <- list(
     res_17$waic$waic, res_18$waic$waic
   ),
   cpo = c(
-    sum(log(res_15$cpo$cpo)), sum(log(res_16$cpo$cpo)),
-    sum(log(res_17$cpo$cpo)), sum(log(res_18$cpo$cpo))
+    sum(log(res_15$cpo$cpo), na.rm = TRUE), sum(log(res_16$cpo$cpo), na.rm = TRUE),
+    sum(log(res_17$cpo$cpo), na.rm = TRUE), sum(log(res_18$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_5 = perf))
@@ -689,8 +689,8 @@ perf <- list(
     res_21$waic$waic, res_22$waic$waic
   ),
   cpo = c(
-    sum(log(res_19$cpo$cpo)), sum(log(res_20$cpo$cpo)),
-    sum(log(res_21$cpo$cpo)), sum(log(res_22$cpo$cpo))
+    sum(log(res_19$cpo$cpo), na.rm = TRUE), sum(log(res_20$cpo$cpo), na.rm = TRUE),
+    sum(log(res_21$cpo$cpo), na.rm = TRUE), sum(log(res_22$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_6 = perf))
@@ -824,8 +824,8 @@ perf <- list(
     res_25$waic$waic, res_26$waic$waic
   ),
   cpo = c(
-    sum(log(res_23$cpo$cpo)), sum(log(res_24$cpo$cpo)),
-    sum(log(res_25$cpo$cpo)), sum(log(res_26$cpo$cpo))
+    sum(log(res_23$cpo$cpo), na.rm = TRUE), sum(log(res_24$cpo$cpo), na.rm = TRUE),
+    sum(log(res_25$cpo$cpo), na.rm = TRUE), sum(log(res_26$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_7 = perf))
@@ -954,8 +954,8 @@ perf <- list(
     res_29$waic$waic, res_30$waic$waic
   ),
   cpo = c(
-    sum(log(res_27$cpo$cpo)), sum(log(res_28$cpo$cpo)),
-    sum(log(res_29$cpo$cpo)), sum(log(res_30$cpo$cpo))
+    sum(log(res_27$cpo$cpo), na.rm = TRUE), sum(log(res_28$cpo$cpo), na.rm = TRUE),
+    sum(log(res_29$cpo$cpo), na.rm = TRUE), sum(log(res_30$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_8 = perf))
@@ -1087,8 +1087,8 @@ perf <- list(
     res_33$waic$waic, res_34$waic$waic
   ),
   cpo = c(
-    sum(log(res_31$cpo$cpo)), sum(log(res_32$cpo$cpo)),
-    sum(log(res_33$cpo$cpo)), sum(log(res_34$cpo$cpo))
+    sum(log(res_31$cpo$cpo), na.rm = TRUE), sum(log(res_32$cpo$cpo), na.rm = TRUE),
+    sum(log(res_33$cpo$cpo), na.rm = TRUE), sum(log(res_34$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_9 = perf))

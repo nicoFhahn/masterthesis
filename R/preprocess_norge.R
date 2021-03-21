@@ -703,4 +703,5 @@ rownames(newest_numbers) <- NULL
 newest_numbers$pop_dens <- scale(newest_numbers$pop_dens)
 newest_numbers$urb_dens <- scale(newest_numbers$urb_dens)
 newest_numbers$sex <- scale(newest_numbers$sex)
+newest_numbers$median_age <- scale(newest_numbers$median_age)
 rm(list = setdiff(ls(), c("newest_numbers")))
