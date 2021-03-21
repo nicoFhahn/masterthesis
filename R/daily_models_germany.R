@@ -170,7 +170,7 @@ var_v <- inla.rmarginal(
   100000,
   inla.tmarginal(
     function(x) 1/x,
-    models_bym2[[33]]$marginals.hyperpar$`Precision for idarea_1`
+    models_bym2[[25]]$marginals.hyperpar$`Precision for idarea_1`
   )
 )
 perc_var_u <- mean(var_u / (var_u + var_v))
@@ -186,7 +186,7 @@ plot_1 <- ggplot(data = newest_numbers) +
     subtitle = "Germany"
   ) +
   scale_fill_gradient2(
-    "SIR",
+    "RR",
     low = color_low,
     high = color_high,
     midpoint = 1
