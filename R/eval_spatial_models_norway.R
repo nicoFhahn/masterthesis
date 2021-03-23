@@ -1,7 +1,10 @@
+library(readr)
+library(sf)
+library(INLA)
 # source("R/germany_leroux_models.R")
 # source("R/germany_besagproper_models.R")
 # source("R/germany_bym2_models.R")
-newest_numbers <- read_csv("eval_data/newest_numbers_norway_march12.csv")
+newest_numbers <- read_csv("eval_data/newest_numbers_norway_march20.csv")
 norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
 newest_numbers <- merge(
   newest_numbers,
@@ -22,49 +25,49 @@ models_bym2 <- models_final_bym2[[1]]
 results_leroux <- models_final_leroux[[2]]
 results_besag <- models_final_besag[[2]]
 results_bym2 <- models_final_bym2[[2]]
+mae_leroux <- models_final_leroux[[3]]
+mae_besag <- models_final_besag[[3]]
+mae_bym2 <- models_final_bym2[[3]]
+newest_numbers[order(newest_numbers$value, decreasing = TRUE), ][1:5, c("kommune_name", "population", "value")]
 ####################### DEMOGRAPHIC MODELS
-demo_results <- c(results_leroux[1:6], results_besag[1:6], results_bym2[1:6])
+demo_results <- c(results_besag[1:6], results_bym2[1:6], results_leroux[1:6])
 demo_dic <- unlist(lapply(demo_results, function(x) x$dic))
 demo_waic <- unlist(lapply(demo_results, function(x) x$waic))
 demo_cpo <- unlist(lapply(demo_results, function(x) x$cpo))
-demo_dic_rank <- unlist(lapply(demo_dic, function(x, ...) which(sort(demo_dic) %in% x)))
-demo_waic_rank <- unlist(lapply(demo_waic, function(x, ...) which(sort(demo_waic) %in% x)))
-demo_cpo_rank <- unlist(lapply(demo_cpo, function(x, ...) which(sort(demo_cpo) %in% x)))
-demo_ranks <- tibble(
-  dic = demo_dic_rank,
-  waic = demo_waic_rank,
-  cpo = demo_cpo_rank
-)
-demo_ranks$total <- rowSums(demo_ranks)
-demo_ranks[1:11, ]
-demo_ranks[12:22, ]
-demo_ranks[23:33, ]
-demo_ranks[34:44, ]
-demo_ranks[45:55, ]
-demo_ranks[56:66, ]
-demo_dic[which(demo_ranks[1:22, ]$total %in% min(demo_ranks[1:22, ]$total))]
-demo_dic[which(demo_ranks[23:44, ]$total %in% min(demo_ranks[23:44, ]$total)) + 22]
-demo_dic[which(demo_ranks[45:66, ]$total %in% min(demo_ranks[45:66, ]$total)) + 44]
-demo_waic[which(demo_ranks[1:22, ]$total %in% min(demo_ranks[1:22, ]$total))]
-demo_waic[which(demo_ranks[23:44, ]$total %in% min(demo_ranks[23:44, ]$total)) + 22]
-demo_waic[which(demo_ranks[45:66, ]$total %in% min(demo_ranks[45:66, ]$total)) + 44]
-demo_cpo[which(demo_ranks[1:22, ]$total %in% min(demo_ranks[1:22, ]$total))]
-demo_cpo[which(demo_ranks[23:44, ]$total %in% min(demo_ranks[23:44, ]$total)) + 22]
-demo_cpo[which(demo_ranks[45:66, ]$total %in% min(demo_ranks[45:66, ]$total)) + 44]
+min(unlist(mae_besag[1:22]))
+min(unlist(mae_bym2[1:22]))
+min(unlist(mae_leroux[1:22]))
+id_besag <- which(unlist(mae_besag[1:22]) %in% min(unlist(mae_besag[1:22])))
+demo_dic[id_besag]
+demo_waic[id_besag]
+demo_cpo[id_besag]
+mae_besag[id_besag]
+id_bym2 <- which(unlist(mae_bym2[1:22]) %in% min(unlist(mae_bym2[1:22])))
+demo_dic[id_bym2 + 22]
+demo_waic[id_bym2 + 22]
+demo_cpo[id_bym2 + 22]
+mae_bym2[id_bym2]
+id_leroux <- which(unlist(mae_leroux[1:22]) %in% min(unlist(mae_leroux[1:22])))
+demo_dic[id_leroux + 44]
+demo_waic[id_leroux + 44]
+demo_cpo[id_leroux + 44]
+mae_leroux[id_leroux]
 options(scipen = 10)
+models_leroux[[13]]$summary.fixed[order(models_leroux[[13]]$summary.fixed$mean), ]
+
 sapply(
-  models_leroux[[22]]$marginals.fixed[
-    rownames(models_leroux[[22]]$summary.fixed[
-      order(models_leroux[[22]]$summary.fixed$mean), 
+  models_leroux[[13]]$marginals.fixed[
+    rownames(models_leroux[[13]]$summary.fixed[
+      order(models_leroux[[13]]$summary.fixed$mean), 
     ])
   ],
   inla.emarginal,
   fun = exp
 )
 sapply(
-  models_leroux[[22]]$marginals.fixed[
-    rownames(models_leroux[[22]]$summary.fixed[
-      order(models_leroux[[22]]$summary.fixed$mean), 
+  models_leroux[[13]]$marginals.fixed[
+    rownames(models_leroux[[13]]$summary.fixed[
+      order(models_leroux[[13]]$summary.fixed$mean), 
     ])
   ],
   function(x) {
