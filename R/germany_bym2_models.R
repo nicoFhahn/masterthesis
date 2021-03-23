@@ -83,7 +83,7 @@ perf <- list(
 results <- c(results, list(res_1 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_1$marginals.fitted.values[[i]]
@@ -202,7 +202,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_3$marginals.fitted.values[[i]]
@@ -324,7 +324,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_7$marginals.fitted.values[[i]]
@@ -353,25 +353,25 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 formula_11 <- value ~
 # add the demographic vars and pop density
 pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
-  die_linke + afd + 
+  die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_12 <- value ~
 # add the demographic vars and pop density
 pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
-  die_linke + afd + 
+  die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_13 <- value ~
 # add the demographic vars and pop density
 Union + SPD + Gruene + FDP +
-  die_linke + afd + 
+  die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_14 <- value ~
 # add the demographic vars and pop density
 Union + SPD + Gruene + FDP +
-  die_linke + afd + 
+  die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 res_11 <- inla(
@@ -446,7 +446,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_11$marginals.fitted.values[[i]]
@@ -579,7 +579,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_15$marginals.fitted.values[[i]]
@@ -606,27 +606,27 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 formula_19 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + Union + 
-  SPD + Gruene + FDP + die_linke + afd + protection_seekers + 
-  welfare_recipients + unemployed_total + unemployed_foreigners + 
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
+  SPD + Gruene + FDP + die_linke + afd + protection_seekers +
+  welfare_recipients + unemployed_total + unemployed_foreigners +
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_20 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + Union + 
-  SPD + Gruene + FDP + die_linke + afd + protection_seekers + 
-  welfare_recipients + unemployed_total + unemployed_foreigners + 
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
+  SPD + Gruene + FDP + die_linke + afd + protection_seekers +
+  welfare_recipients + unemployed_total + unemployed_foreigners +
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
 formula_21 <- value ~
-  log(income_total) + log(income_tax) + afd + die_linke + 
+log(income_total) + log(income_tax) + afd + die_linke +
   pop_dens + unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_22 <- value ~
-  log(income_total) + log(income_tax) + afd + die_linke + 
+log(income_total) + log(income_tax) + afd + die_linke +
   pop_dens + unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
@@ -708,7 +708,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_19$marginals.fitted.values[[i]]
@@ -740,7 +740,7 @@ formula_23 <- value ~
 pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries + 
+  kindergarten + bakeries +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_24 <- value ~
@@ -748,14 +748,14 @@ formula_24 <- value ~
 pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries + 
+  kindergarten + bakeries +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_25 <- value ~
 marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries + 
+  kindergarten + bakeries +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_26 <- value ~
@@ -763,7 +763,7 @@ formula_26 <- value ~
 marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries + 
+  kindergarten + bakeries +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -843,7 +843,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_23$marginals.fitted.values[[i]]
@@ -872,29 +872,29 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 
 # now models with all the variables
 formula_27 <- value ~
-  # add the demographic vars and pop density
-  entertainment + sport + hairdresser + place_of_worship + 
-  retail + nursing_home + restaurant + aerodrome + platform + 
+# add the demographic vars and pop density
+entertainment + sport + hairdresser + place_of_worship +
+  retail + nursing_home + restaurant + aerodrome + platform +
   kindergarten + schools + bakeries + pop_dens + higher_education +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_28 <- value ~
 # add the demographic vars and pop density
-  entertainment + sport + hairdresser + place_of_worship + 
-  retail + nursing_home + restaurant + aerodrome + platform + 
+entertainment + sport + hairdresser + place_of_worship +
+  retail + nursing_home + restaurant + aerodrome + platform +
   kindergarten + schools + bakeries + pop_dens + higher_education +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 # now models with all the variables
 formula_29 <- value ~
-  schools + place_of_worship + pop_dens + office + 
-  bakeries + entertainment + platform + kindergarten + nursing_home + 
+schools + place_of_worship + pop_dens + office +
+  bakeries + entertainment + platform + kindergarten + nursing_home +
   sport +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_30 <- value ~
-  schools + place_of_worship + pop_dens + office + 
-  bakeries + entertainment + platform + kindergarten + nursing_home + 
+schools + place_of_worship + pop_dens + office +
+  bakeries + entertainment + platform + kindergarten + nursing_home +
   sport +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
@@ -973,7 +973,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_27$marginals.fitted.values[[i]]
@@ -1000,32 +1000,32 @@ mae <- c(mae, list(
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 formula_31 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + SPD + 
-  Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients + 
-  unemployed_total + unemployed_foreigners + entertainment + 
-  sport + clinic + shops + place_of_worship + retail + nursing_home + 
-  restaurant + aerodrome + office + platform + kindergarten + 
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+  Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
+  unemployed_total + unemployed_foreigners + entertainment +
+  sport + clinic + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + kindergarten +
   schools + bakeries + pop_dens + sex + higher_education +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
-formula_32 <- value ~ 
-  log(trade_tax) + log(income_total) + log(income_tax) + SPD + 
-  Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients + 
-  unemployed_total + unemployed_foreigners + entertainment + 
-  sport + clinic + shops + place_of_worship + retail + nursing_home + 
-  restaurant + aerodrome + office + platform + kindergarten + 
+formula_32 <- value ~
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+  Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
+  unemployed_total + unemployed_foreigners + entertainment +
+  sport + clinic + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + kindergarten +
   schools + bakeries + pop_dens + sex + higher_education +
-# specify the model with neighborhood matrix
+  # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_33 <- value ~
-  schools + afd + die_linke + pop_dens + place_of_worship + 
-  entertainment + bakeries + SPD + platform + sport + nursing_home + 
+schools + afd + die_linke + pop_dens + place_of_worship +
+  entertainment + bakeries + SPD + platform + sport + nursing_home +
   welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
-formula_34 <- value ~ 
-  schools + afd + die_linke + pop_dens + place_of_worship + 
-  entertainment + bakeries + SPD + platform + sport + nursing_home + 
+formula_34 <- value ~
+schools + afd + die_linke + pop_dens + place_of_worship +
+  entertainment + bakeries + SPD + platform + sport + nursing_home +
   welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
@@ -1106,7 +1106,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_31$marginals.fitted.values[[i]]

@@ -58,7 +58,7 @@ models_leroux[[13]]$summary.fixed[order(models_leroux[[13]]$summary.fixed$mean),
 sapply(
   models_leroux[[13]]$marginals.fixed[
     rownames(models_leroux[[13]]$summary.fixed[
-      order(models_leroux[[13]]$summary.fixed$mean), 
+      order(models_leroux[[13]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
@@ -67,7 +67,7 @@ sapply(
 sapply(
   models_leroux[[13]]$marginals.fixed[
     rownames(models_leroux[[13]]$summary.fixed[
-      order(models_leroux[[13]]$summary.fixed$mean), 
+      order(models_leroux[[13]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -79,7 +79,7 @@ sapply(
     )
   }
 )
-inla.emarginal(exp, models_leroux[[22]]$marginals.fixed$pop_dens)^ 100
+inla.emarginal(exp, models_leroux[[22]]$marginals.fixed$pop_dens)^100
 csi <- models_leroux[[22]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
 zeta_cutoff <- c(0.6, 0.9, 1.0, 1.1, 1.8)
@@ -124,7 +124,7 @@ models_leroux[[30]]$summary.fixed[order(models_leroux[[30]]$summary.fixed$mean),
 sapply(
   models_leroux[[30]]$marginals.fixed[
     rownames(models_leroux[[30]]$summary.fixed[
-      order(models_leroux[[30]]$summary.fixed$mean), 
+      order(models_leroux[[30]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
@@ -133,7 +133,7 @@ sapply(
 sapply(
   models_leroux[[30]]$marginals.fixed[
     rownames(models_leroux[[30]]$summary.fixed[
-      order(models_leroux[[30]]$summary.fixed$mean), 
+      order(models_leroux[[30]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -149,10 +149,10 @@ range(newest_numbers$nursing_home)
 range(newest_numbers$retail)
 range(newest_numbers$kindergarten)
 range(newest_numbers$pop_dens)
-inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$nursing_home)^ 0.1
-inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$retail)^ 0.1
-inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$kindergarten)^ 0.1
-inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$pop_dens) ^ 100
+inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$nursing_home)^0.1
+inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$retail)^0.1
+inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$kindergarten)^0.1
+inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$pop_dens)^100
 sum(models_leroux[[30]]$cpo$failure)
 csi <- models_leroux[[30]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
@@ -205,7 +205,7 @@ models_bym2[[31]]$summary.fixed[order(models_bym2[[31]]$summary.fixed$mean), ]
 sapply(
   models_bym2[[31]]$marginals.fixed[
     rownames(models_bym2[[31]]$summary.fixed[
-      order(models_bym2[[31]]$summary.fixed$mean), 
+      order(models_bym2[[31]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
@@ -214,7 +214,7 @@ sapply(
 sapply(
   models_bym2[[31]]$marginals.fixed[
     rownames(models_bym2[[31]]$summary.fixed[
-      order(models_bym2[[31]]$summary.fixed$mean), 
+      order(models_bym2[[31]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -227,27 +227,29 @@ sapply(
   }
 )
 range(newest_numbers$marketplace)
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$marketplace)^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$entertainment)^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$bakeries)^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$clinic) ^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$retail)^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$nursing_home)^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$kindergarten)^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$place_of_worship)^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$marketplace)^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$platform)^ 0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$unemp_immg)^ 0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$mining_pt_com)^ 0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$mining_ft_com)^ 0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$workers_pt_com)^ 0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$construction_pt_com)^ 0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$pop_dens)^ 100
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$urb_dens) ^ 10
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$marketplace)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$entertainment)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$bakeries)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$clinic)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$retail)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$nursing_home)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$kindergarten)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$place_of_worship)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$marketplace)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$platform)^0.1
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$unemp_immg)^0.5
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$mining_pt_com)^0.5
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$mining_ft_com)^0.5
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$workers_pt_com)^0.5
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$construction_pt_com)^0.5
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$pop_dens)^100
+inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$urb_dens)^10
 newest_numbers$rr <- models_bym2[[31]]$summary.fitted.values$mean
 csi <- models_bym2[[31]]$marginals.random$idarea_1[1:356]
 a <- 0
-prob_csi <- lapply(csi, function(x) {1 - inla.pmarginal(a, x)})
+prob_csi <- lapply(csi, function(x) {
+  1 - inla.pmarginal(a, x)
+})
 csi_cutoff <- c(0, 0.25, 0.5, 0.75, 1)
 cat_csi <- cut(
   unlist(prob_csi),
@@ -273,7 +275,7 @@ var_u <- apply(mat_marg, 2, var)
 var_v <- inla.rmarginal(
   100000,
   inla.tmarginal(
-    function(x) 1/x,
+    function(x) 1 / x,
     models_bym2[[31]]$marginals.hyperpar$`Precision for idarea_1`
   )
 )

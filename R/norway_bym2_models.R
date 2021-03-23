@@ -33,13 +33,13 @@ g <- inla.read.graph(filename = "maps/map_1.adj")
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_2 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -84,7 +84,7 @@ perf <- list(
 results <- c(results, list(res_1 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_1$marginals.fitted.values[[i]]
@@ -101,24 +101,24 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with the mobility variables
 formula_3 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_4 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +  + unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + +unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 # now models with the mobility variables
 formula_5 <- value ~
-  # add the demographic vars and pop density
-  unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_6 <- value ~
-  # add the demographic vars and pop density
-  unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -198,7 +198,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_3$marginals.fitted.values[[i]]
@@ -225,21 +225,21 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with the infrastructure variables
 formula_7 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + immigrants_total + 
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_8 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + immigrants_total +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_9 <- value ~
-  immigrants_total + 
+immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_10 <- value ~
-  immigrants_total + 
+immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -318,7 +318,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_7$marginals.fitted.values[[i]]
@@ -345,26 +345,26 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 formula_11 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft + workers_pt +
   construction_ft + construction_pt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_12 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
-  workers_ft + workers_pt + 
+  workers_ft + workers_pt +
   construction_ft + construction_pt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_13 <- value ~
-  workers_ft + workers_pt + 
+workers_ft + workers_pt +
   construction_ft + construction_pt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_14 <- value ~
-  workers_ft + workers_pt + 
+workers_ft + workers_pt +
   construction_ft + construction_pt +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
@@ -440,7 +440,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_11$marginals.fitted.values[[i]]
@@ -468,31 +468,31 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 ########################################################
 # Now with variable selection
 formula_15 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
-  workers_ft + workers_pt + 
+  workers_ft + workers_pt +
   construction_ft + construction_pt +
-  median_age + unemp_tot + unemp_immg + immigrants_total + 
+  median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_16 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
-  workers_ft + workers_pt + 
+  workers_ft + workers_pt +
   construction_ft + construction_pt +
-  median_age + unemp_tot + unemp_immg + immigrants_total + 
+  median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_17 <- value ~
-  workers_ft + workers_pt + 
+workers_ft + workers_pt +
   construction_ft + construction_pt +
-  median_age + unemp_tot + unemp_immg + immigrants_total + 
+  median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_18 <- value ~
-  workers_ft + workers_pt + 
+workers_ft + workers_pt +
   construction_ft + construction_pt +
-  median_age + unemp_tot + unemp_immg + immigrants_total + 
+  median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -569,7 +569,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_15$marginals.fitted.values[[i]]
@@ -596,24 +596,24 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 formula_19 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_ft + 
-  construction_ft + construction_pt + immigrants_total + pop_dens + 
+median_age + unemp_tot + unemp_immg + workers_ft +
+  construction_ft + construction_pt + immigrants_total + pop_dens +
   sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_20 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_ft + 
-  construction_ft + construction_pt + immigrants_total + pop_dens + 
+median_age + unemp_tot + unemp_immg + workers_ft +
+  construction_ft + construction_pt + immigrants_total + pop_dens +
   sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_21 <- value ~
-  pop_dens + median_age + sex + unemp_tot + 
+pop_dens + median_age + sex + unemp_tot +
   workers_ft + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_22 <- value ~
-  pop_dens + median_age + sex + unemp_tot + 
+pop_dens + median_age + sex + unemp_tot +
   workers_ft + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
@@ -692,7 +692,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_19$marginals.fitted.values[[i]]
@@ -721,33 +721,33 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 
 # now models with all the variables
 formula_23 <- value ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries + 
+  kindergarten + bakeries +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_24 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries + 
+  kindergarten + bakeries +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_25 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries + 
+  kindergarten + bakeries +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_26 <- value ~
-  # add the demographic vars and pop density
-  marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries + 
+  kindergarten + bakeries +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 
@@ -827,7 +827,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_23$marginals.fitted.values[[i]]
@@ -857,26 +857,26 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 
 # now models with all the variables
 formula_27 <- value ~
-  marketplace + clinic + hairdresser + place_of_worship + 
-  retail + nursing_home + restaurant + aerodrome + office + 
+marketplace + clinic + hairdresser + place_of_worship +
+  retail + nursing_home + restaurant + aerodrome + office +
   platform + kindergarten + schools + higher_education + pop_dens +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_28 <- value ~
-  marketplace + clinic + hairdresser + place_of_worship + 
-  retail + nursing_home + restaurant + aerodrome + office + 
+marketplace + clinic + hairdresser + place_of_worship +
+  retail + nursing_home + restaurant + aerodrome + office +
   platform + kindergarten + schools + higher_education + pop_dens +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 # now models with all the variables
 formula_29 <- value ~
-  pop_dens + shops + place_of_worship + office +
+pop_dens + shops + place_of_worship + office +
   schools + nursing_home + kindergarten + restaurant +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_30 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + shops + place_of_worship + office +
+# add the demographic vars and pop density
+pop_dens + shops + place_of_worship + office +
   schools + nursing_home + kindergarten + restaurant +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
@@ -957,7 +957,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_27$marginals.fitted.values[[i]]
@@ -985,31 +985,31 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 formula_31 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_pt + 
-  construction_ft + construction_pt + immigrants_total + marketplace + 
-  entertainment + sport + clinic + shops + retail + nursing_home + 
-  restaurant + aerodrome + office + platform + kindergarten + 
-  schools + bakeries + higher_education + pop_dens + urb_dens + 
+median_age + unemp_tot + unemp_immg + workers_pt +
+  construction_ft + construction_pt + immigrants_total + marketplace +
+  entertainment + sport + clinic + shops + retail + nursing_home +
+  restaurant + aerodrome + office + platform + kindergarten +
+  schools + bakeries + higher_education + pop_dens + urb_dens +
   sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_32 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_pt + 
-  construction_ft + construction_pt + immigrants_total + marketplace + 
-  entertainment + sport + clinic + shops + retail + nursing_home + 
-  restaurant + aerodrome + office + platform + kindergarten + 
-  schools + bakeries + higher_education + pop_dens + urb_dens + 
+median_age + unemp_tot + unemp_immg + workers_pt +
+  construction_ft + construction_pt + immigrants_total + marketplace +
+  entertainment + sport + clinic + shops + retail + nursing_home +
+  restaurant + aerodrome + office + platform + kindergarten +
+  schools + bakeries + higher_education + pop_dens + urb_dens +
   sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 # now models with all the variables
 formula_33 <- value ~
-  schools + unemp_tot + sex + median_age + 
+schools + unemp_tot + sex + median_age +
   construction_ft + pop_dens + hairdresser +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_34 <- value ~
-  schools + unemp_tot + sex + median_age + 
+schools + unemp_tot + sex + median_age +
   construction_ft + pop_dens + hairdresser +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
@@ -1090,7 +1090,7 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for(i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(newest_numbers))) {
   predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
     res_31$marginals.fitted.values[[i]]

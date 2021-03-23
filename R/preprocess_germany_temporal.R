@@ -10,9 +10,11 @@ library(covid19germany)
 rki <- get_RKI_timeseries()
 # germany_confirmed <- group_RKI_timeseries(rki, Landkreis, Gender, Age)
 germany_confirmed <- group_RKI_timeseries(rki, Landkreis)
-germany_features <- read_csv("wrangled_data/germany_features.csv")
-date_1 <- rev(names(table(germany_confirmed$Date)[table(germany_confirmed$Date) > 395]))[1]
-date_2 <- rev(names(table(germany_features$Date)[table(germany_features$Date) > 395]))[1]
+germany_confirmed$Date <- as.Date(germany_confirmed$Date)
+germany_lk <- unique(germany_confirmed$Landkreis)
+germany_features <- read_csv("wrangled_data/germany_features_temporal.csv")
+date_1 <- max(as.Date(germany_confirmed$Date))
+date_2 <- max(as.Date(germany_features$Date))
 if (date_1 != date_2) {
   germany_population <- ew_kreise
   germany_confirmed[str_detect(germany_confirmed$Landkreis, "Berlin"), ]$Landkreis <- "SK Berlin"
@@ -41,6 +43,48 @@ if (date_1 != date_2) {
   germany_confirmed <- germany_confirmed[germany_confirmed$Landkreis != "SK Berlin", ]
   germany_confirmed <- rbind(germany_confirmed, berlin_grouped)
   colnames(germany_confirmed)[9] <- "Kennziffer"
+  germany_confirmed_split <- split(germany_confirmed, germany_confirmed$Date)
+  germany_confirmed_split <- lapply(
+    germany_confirmed_split,
+    function(x, ...) {
+      missing <- germany_lk[!germany_lk %in% unique(x$Landkreis)]
+      missing <- missing[!str_detect(missing, "Berlin ")]
+      missing_tib <- tibble(
+        Landkreis = missing,
+        Date = rep(unique(x$Date), length(missing)),
+        NumberNewTestedIll = rep(0, length(missing)),
+        NumberNewDead = rep(NA, length(missing)),
+        NumberNewRecovered = rep(NA, length(missing)),
+        CumNumberTestedIll = rep(NA, length(missing)),
+        CumNumberDead = rep(NA, length(missing)),
+        CumNumberRecovered = rep(NA, length(missing)),
+        Kennziffer = unique(germany_confirmed[germany_confirmed$Landkreis %in% missing, ]$Kennziffer)
+      )
+      tib <- rbind(x, missing_tib)
+      tib[order(tib$Landkreis), ]
+    }
+  )
+  germany_confirmed <- do.call(rbind, germany_confirmed_split)
+  germany_confirmed_split <- split(germany_confirmed, germany_confirmed$Landkreis)
+  germany_confirmed_split <- lapply(
+    germany_confirmed_split,
+    function(x) {
+      if (is.na(x$CumNumberTestedIll[1])) {
+        ind_1 <- min(which(is.na(x$CumNumberTestedIll) %in% FALSE)) - 1
+        x[1:ind_1, 3:8] <- 0
+      }
+      ind_2 <- which(x$CumNumberTestedIll %in% NA)
+      x[ind_2, 4:5] <- 0
+      x[ind_2, 6:8] <- x[ind_2 - 1, 6:8]
+      ind_3 <- which(x$CumNumberTestedIll %in% NA)
+      while (length(ind_3) > 0) {
+        x[ind_3, 6:8] <- x[ind_3 - 1, 6:8]
+        ind_3 <- which(x$CumNumberTestedIll %in% NA)
+      }
+      x
+    }
+  )
+  germany_confirmed <- do.call(rbind, germany_confirmed_split)
   germany_confirmed_population <- merge(
     setDT(germany_confirmed),
     setDT(germany_population),
@@ -143,7 +187,7 @@ if (date_1 != date_2) {
   load("osmdata/germany_sport.Rda")
   load("osmdata/germany_entertainment.Rda")
   load("osmdata/germany_marketplace.Rda")
-  
+
   germany_shape$marketplace <- unlist(
     lapply(
       seq_len(
@@ -164,7 +208,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$entertainment <- unlist(
     lapply(
       seq_len(
@@ -185,7 +229,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$sport <- unlist(
     lapply(
       seq_len(
@@ -206,7 +250,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$clinic <- unlist(
     lapply(
       seq_len(
@@ -227,7 +271,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$hairdresser <- unlist(
     lapply(
       seq_len(
@@ -248,7 +292,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$shops <- unlist(
     lapply(
       seq_len(
@@ -269,7 +313,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$place_of_worship <- unlist(
     lapply(
       seq_len(
@@ -290,7 +334,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$retail <- unlist(
     lapply(
       seq_len(
@@ -311,7 +355,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$nursing_home <- unlist(
     lapply(
       seq_len(
@@ -332,7 +376,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$restaurant <- unlist(
     lapply(
       seq_len(
@@ -353,7 +397,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$terminal <- unlist(
     lapply(
       seq_len(
@@ -374,7 +418,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$aerodrome <- unlist(
     lapply(
       seq_len(
@@ -395,7 +439,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$office <- unlist(
     lapply(
       seq_len(
@@ -416,7 +460,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$platform <- unlist(
     lapply(
       seq_len(
@@ -437,7 +481,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$university <- unlist(
     lapply(
       seq_len(
@@ -458,7 +502,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$college <- unlist(
     lapply(
       seq_len(
@@ -479,7 +523,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$kindergarten <- unlist(
     lapply(
       seq_len(
@@ -500,7 +544,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$schools <- unlist(
     lapply(
       seq_len(
@@ -521,7 +565,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$bakeries <- unlist(
     lapply(
       seq_len(
@@ -542,7 +586,7 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   germany_shape$residential <- unlist(
     lapply(
       seq_len(
@@ -563,9 +607,9 @@ if (date_1 != date_2) {
       }
     )
   )
-  
+
   rm(list = setdiff(ls(), c("germany_shape", "germany_confirmed_population", "germany", "germany_confirmed")))
-  
+
   germany_complete <- merge(
     germany_shape,
     germany_confirmed_population,
@@ -582,12 +626,12 @@ if (date_1 != date_2) {
   no_geometry$Stadt <- NULL
   no_geometry[, c(3, 4, 19:22, 25:29, 32:34, 36:40, 44, 66:80)] <- NULL
   colnames(no_geometry)[7] <- "stimmen"
-  
+
   # calculate the SIR
-  write_csv(no_geometry, "wrangled_data/germany_features.csv")
+  write_csv(no_geometry, "wrangled_data/germany_features_temporal.csv")
   rm(list = ls())
   # prepare the data
-  germany_features <- read_csv("wrangled_data/germany_features.csv")
+  germany_features <- read_csv("wrangled_data/germany_features_temporal.csv")
 }
 germany_features$Gewerbesteuer <- as.numeric(trimws(germany_features$Gewerbesteuer))
 germany_features$schutzsuchende <- as.numeric(trimws(germany_features$schutzsuchende))
@@ -601,7 +645,6 @@ germany <- merge(
   by.y = "Kennziffer"
 )
 germany$Date <- as.Date(germany$Date)
-newest_numbers <- germany[germany$Date == rev(names(table(germany$Date)[table(germany$Date) > 395]))[1], ]
 germany_split <- split(germany, germany$Date)
 germany_split_e <- pbapply::pblapply(
   germany_split,
@@ -648,4 +691,13 @@ cols_imputed <- lapply(
 germany_imputed <- Reduce(cbind, cols_imputed)
 germany_imputed$geometry <- germany$geometry
 germany <- st_as_sf(germany_imputed)
+date_id <- tibble(
+  Date = sort(unique(germany$Date)),
+  id_date = seq_len(length(unique(germany$Date)))
+)
+germany <- merge(
+  germany,
+  date_id,
+  by = "Date"
+)
 rm(list = setdiff(ls(), c("germany")))

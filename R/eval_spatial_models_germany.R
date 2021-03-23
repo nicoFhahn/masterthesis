@@ -58,7 +58,7 @@ models_leroux[[14]]$summary.fixed[order(models_leroux[[14]]$summary.fixed$mean),
 sapply(
   models_leroux[[14]]$marginals.fixed[
     rownames(models_leroux[[14]]$summary.fixed[
-      order(models_leroux[[14]]$summary.fixed$mean), 
+      order(models_leroux[[14]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
@@ -67,7 +67,7 @@ sapply(
 sapply(
   models_leroux[[14]]$marginals.fixed[
     rownames(models_leroux[[14]]$summary.fixed[
-      order(models_leroux[[14]]$summary.fixed$mean), 
+      order(models_leroux[[14]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -82,7 +82,9 @@ sapply(
 newest_numbers$rr <- models_leroux[[14]]$summary.fitted.values$mean
 csi <- models_leroux[[14]]$marginals.random$idarea_1[1:397]
 a <- 0
-prob_csi <- lapply(csi, function(x) {1 - inla.pmarginal(a, x)})
+prob_csi <- lapply(csi, function(x) {
+  1 - inla.pmarginal(a, x)
+})
 csi_cutoff <- c(0, 0.25, 0.5, 0.75, 1)
 cat_csi <- cut(
   unlist(prob_csi),
@@ -108,7 +110,7 @@ var_u <- apply(mat_marg, 2, var)
 var_v <- inla.rmarginal(
   100000,
   inla.tmarginal(
-    function(x) 1/x,
+    function(x) 1 / x,
     models_leroux[[14]]$marginals.hyperpar$`Precision for idarea_1`
   )
 )
@@ -203,7 +205,7 @@ models_bym2[[25]]$summary.fixed[order(models_bym2[[25]]$summary.fixed$mean), ]
 sapply(
   models_bym2[[25]]$marginals.fixed[
     rownames(models_bym2[[25]]$summary.fixed[
-      order(models_bym2[[25]]$summary.fixed$mean), 
+      order(models_bym2[[25]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
@@ -212,7 +214,7 @@ sapply(
 sapply(
   models_bym2[[25]]$marginals.fixed[
     rownames(models_bym2[[25]]$summary.fixed[
-      order(models_bym2[[25]]$summary.fixed$mean), 
+      order(models_bym2[[25]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -253,16 +255,16 @@ models_bym2[[33]]$summary.fixed[order(models_bym2[[33]]$summary.fixed$mean), ]
 sapply(
   models_bym2[[33]]$marginals.fixed[
     rownames(models_bym2[[33]]$summary.fixed[
-      order(models_bym2[[33]]$summary.fixed$mean), 
-      ])
-    ],
+      order(models_bym2[[33]]$summary.fixed$mean),
+    ])
+  ],
   inla.emarginal,
   fun = exp
 )
 sapply(
   models_bym2[[33]]$marginals.fixed[
     rownames(models_bym2[[33]]$summary.fixed[
-      order(models_bym2[[33]]$summary.fixed$mean), 
+      order(models_bym2[[33]]$summary.fixed$mean),
     ])
   ],
   function(x) {

@@ -67,12 +67,12 @@ if (date_1 != date_2) {
   germany_shape <- st_transform(germany_shape, 4326)
   # now all the demographic data gets loaded
   germany_politics <- read_delim("germany_data/europawahl_2019.csv", delim = ";")[1:538, ]
-  germany_unemployed <- read_delim("germany_data/arbeitslose_2019.csv", delim = ";") 
-  germany_protect <- read_delim("germany_data/schutzsuchende_2018.csv", delim = ";") 
-  germany_social <- read_delim("germany_data/sozialhilfe_2019.csv", delim = ";") 
+  germany_unemployed <- read_delim("germany_data/arbeitslose_2019.csv", delim = ";")
+  germany_protect <- read_delim("germany_data/schutzsuchende_2018.csv", delim = ";")
+  germany_social <- read_delim("germany_data/sozialhilfe_2019.csv", delim = ";")
   germany_company_tax <- read_delim("germany_data/gewerbesteuer_2015.csv", delim = ";")
-  germany_income_tax <- read_delim("germany_data/einkommen_lohn_steuer_2016.csv", delim = ";") 
-  germany_asyl <- read_delim("germany_data/asylbewerberleistungen_2019.csv", delim = ";") 
+  germany_income_tax <- read_delim("germany_data/einkommen_lohn_steuer_2016.csv", delim = ";")
+  germany_asyl <- read_delim("germany_data/asylbewerberleistungen_2019.csv", delim = ";")
   # replace comma by decimal point
   germany_politics$Wahlbeteiligung <- str_replace_all(germany_politics$Wahlbeteiligung, "\\,", ".")
   # turn the data into numeric
@@ -159,7 +159,7 @@ if (date_1 != date_2) {
   load("osmdata/germany_college.Rda")
   load("osmdata/germany_kindergarten.Rda")
   load("osmdata/germany_schools.Rda")
-  load("osmdata/germany_bakeries.Rda")
+  load("osmdata/germany_bakery.Rda")
   load("osmdata/germany_residential1.Rda")
   load("osmdata/germany_residential2.Rda")
   # create the residential list
