@@ -25,6 +25,7 @@ norge_schools <- lapply(
     }
   }
 )
+names(norge_schools) <- norge$kommunenum
 save(norge_schools, file = "osmdata/norge_schools.Rda")
 norge_kindergarten <- pblapply(
   norge_bbox,
@@ -47,6 +48,7 @@ norge_kindergarten <- lapply(
     }
   }
 )
+names(norge_kindergarten) <- norge$kommunenum
 save(norge_kindergarten, file = "osmdata/norge_kindergarten.Rda")
 norge_college <- pblapply(
   norge_bbox,
@@ -69,6 +71,7 @@ norge_college <- lapply(
     }
   }
 )
+names(norge_college) <- norge$kommunenum
 save(norge_college, file = "osmdata/norge_college.Rda")
 norge_university <- pblapply(
   norge_bbox,
@@ -91,6 +94,7 @@ norge_university <- lapply(
     }
   }
 )
+names(norge_university) <- norge$kommunenum
 save(norge_university, file = "osmdata/norge_university.Rda")
 norge_platform <- pblapply(
   norge_bbox,
@@ -113,6 +117,7 @@ norge_platform <- lapply(
     }
   }
 )
+names(norge_platform) <- norge$kommunenum
 save(norge_platform, file = "osmdata/norge_platform.Rda")
 norge_shops <- pblapply(
   norge_bbox,
@@ -135,6 +140,7 @@ norge_shops <- lapply(
     }
   }
 )
+names(norge_shops) <- norge$kommunenum
 save(norge_shops, file = "osmdata/norge_shops.Rda")
 norge_office <- pblapply(
   norge_bbox,
@@ -157,6 +163,7 @@ norge_office <- lapply(
     }
   }
 )
+names(norge_office) <- norge$kommunenum
 save(norge_office, file = "osmdata/norge_office.Rda")
 norge_aerodrome <- pblapply(
   norge_bbox,
@@ -179,6 +186,7 @@ norge_aerodrome <- lapply(
     }
   }
 )
+names(norge_aerodrome) <- norge$kommunenum
 save(norge_aerodrome, file = "osmdata/norge_aerodrome.Rda")
 norge_restaurant <- pblapply(
   norge_bbox,
@@ -201,6 +209,7 @@ norge_restaurant <- lapply(
     }
   }
 )
+names(norge_restaurant) <- norge$kommunenum
 save(norge_restaurant, file = "osmdata/norge_restaurant.Rda")
 norge_hospital <- pblapply(
   norge_bbox,
@@ -223,6 +232,7 @@ norge_hospital <- lapply(
     }
   }
 )
+names(norge_hospital) <- norge$kommunenum
 save(norge_hospital, file = "osmdata/norge_hospital.Rda")
 norge_nursing_home <- pblapply(
   norge_bbox,
@@ -245,6 +255,7 @@ norge_nursing_home <- lapply(
     }
   }
 )
+names(norge_nursing_home) <- norge$kommunenum
 save(norge_nursing_home, file = "osmdata/norge_nursing_home.Rda")
 norge_retail <- pblapply(
   norge_bbox,
@@ -267,6 +278,7 @@ norge_retail <- lapply(
     }
   }
 )
+names(norge_retail) <- norge$kommunenum
 save(norge_retail, file = "osmdata/norge_retail.Rda")
 norge_place_of_worship <- pblapply(
   norge_bbox,
@@ -289,6 +301,7 @@ norge_place_of_worship <- lapply(
     }
   }
 )
+names(norge_place_of_worship) <- norge$kommunenum
 save(norge_place_of_worship, file = "osmdata/norge_place_of_worship.Rda")
 norge_bakeries <- pblapply(
   norge_bbox,
@@ -311,6 +324,7 @@ norge_bakeries <- lapply(
     }
   }
 )
+names(norge_bakeries) <- norge$kommunenum
 save(norge_bakeries, file = "osmdata/norge_bakery.Rda")
 norge_hairdresser <- pblapply(
   norge_bbox,
@@ -333,6 +347,7 @@ norge_hairdresser <- lapply(
     }
   }
 )
+names(norge_hairdresser) <- norge$kommunenum
 save(norge_hairdresser, file = "osmdata/norge_hairdresser.Rda")
 norge_clinic <- pblapply(
   norge_bbox,
@@ -355,6 +370,7 @@ norge_clinic <- lapply(
     }
   }
 )
+names(norge_clinic) <- norge$kommunenum
 save(norge_clinic, file = "osmdata/norge_clinic.Rda")
 norge_sport <- pblapply(
   norge_bbox,
@@ -377,6 +393,7 @@ norge_sport <- lapply(
     }
   }
 )
+names(norge_sport) <- norge$kommunenum
 save(norge_sport, file = "osmdata/norge_sport.Rda")
 norge_entertainment <- pblapply(
   norge_bbox,
@@ -399,6 +416,7 @@ norge_entertainment <- lapply(
     }
   }
 )
+names(norge_entertainment) <- norge$kommunenum
 save(norge_entertainment, file = "osmdata/norge_entertainment.Rda")
 norge_marketplace <- pblapply(
   norge_bbox,
@@ -421,6 +439,7 @@ norge_marketplace <- lapply(
     }
   }
 )
+names(norge_marketplace) <- norge$kommunenum
 save(norge_marketplace, file = "osmdata/norge_marketplace.Rda")
 norge_residential <- pblapply(
   norge_bbox,
@@ -447,6 +466,7 @@ norge_residential <- lapply(
     }
   }
 )
+names(norge_residential) <- norge$kommunenum
 save(norge_residential, file = "osmdata/norge_residential.Rda")
 
 germany <- read_sf("shapefiles/Kreisgrenzen_2017_mit_Einwohnerzahl.shp")

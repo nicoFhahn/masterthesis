@@ -206,7 +206,7 @@ if (date_1 != date_2) {
   load("osmdata/norge_college.Rda")
   load("osmdata/norge_kindergarten.Rda")
   load("osmdata/norge_schools.Rda")
-  load("osmdata/norge_bakeries.Rda")
+  load("osmdata/norge_bakery.Rda")
   load("osmdata/norge_residential.Rda")
   load("osmdata/norge_hairdresser.Rda")
   load("osmdata/norge_clinic.Rda")
