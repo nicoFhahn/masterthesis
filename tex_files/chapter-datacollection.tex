@@ -89,7 +89,7 @@ The initial step in creating the final dataset was to convert the data from a wi
 Next, the demographic data for Norway was loaded and processed. Since the age data contains the number of people of a certain age, the median age was calculated for each region based on how many people of each age group live in each region. \\
 The other demographic variables are left unchanged. To combine the demographic data with the Covid-19 data, the municipality IDs were extracted using the \texttt{str\_extract()} function from the \texttt{stringr} \cite{stringr} R package using the regular expression \texttt{[0-9]\{4\}}. Next, all demographic datasets and the Covid-19 dataset were merged using the \texttt{merge()} function. \\
 Using the \texttt{st\_intersects()} function from the \texttt{sf} \cite{sf} R package, the number of points of interest downloaded via OpenStreetMap was calculated for each municipality. Since the shapefiles contain the ID for each community, these data were then merged with the data containing the demographic and Covid-19 data. \\
-For each variable representing an absolute number, e.g. the number of schools or the number of employees, this number was calculated per 1000 inhabitants of the respective area. \\
+For each numeric variable, e.g. the number of schools or the number of employees, this number was scaled. \\
 If there were missing values in the covariates, these values were imputed using the median of the respective variable. \\
 Finally, seven new variables were created:
 \begin{itemize}
@@ -114,52 +114,51 @@ population & Population in a municipality & None \\
 date & The date of the data used & None \\
 value & The number of infected people & None \\
 median\_age & The median age & None \\
-\multirow{2}{*}{unemp\_tot} & The proportion of &\multirow{2}{*}{[0;1]}\\
+\multirow{2}{*}{unemp\_tot} & The proportion of &\multirow{2}{*}{scaled}\\
 & unemployed people \\
-\multirow{2}{*}{unemp\_immg} & The proportion of & \multirow{2}{*}{[0;1]}\\
+\multirow{2}{*}{unemp\_immg} & The proportion of & \multirow{2}{*}{scaled}\\
  & unemployed immigrants  \\
-\multirow{2}{*}{workers\_ft} & The number of & \multirow{2}{*}{per 1000} \\
+\multirow{2}{*}{workers\_ft} & The number of & \multirow{2}{*}{scaled} \\
 & full-time workers \\
-\multirow{2}{*}{workers\_pt} & The number of & \multirow{2}{*}{per 1000} \\
+\multirow{2}{*}{workers\_pt} & The number of & \multirow{2}{*}{scaled} \\
 & part-time workers \\
-\multirow{2}{*}{construction\_ft} & The number of full-time & \multirow{2}{*}{per 1000} \\
+\multirow{2}{*}{construction\_ft} & The number of full-time & \multirow{2}{*}{scaled} \\
 & construction workers \\
-\multirow{2}{*}{construction\_pt} & The number of part-time & \multirow{2}{*}{per 1000} \\
+\multirow{2}{*}{construction\_pt} & The number of part-time & \multirow{2}{*}{scaled} \\
 & construction workers \\
-immigrants\_total & The proportion of immigrants  & [0;1] \\
-marketplace & The number of marketplaces & per 1000 \\
-entertainment & The number of entertainment venues & per 1000 \\
-sport & The number of sports amenities & per 1000 \\
-clinic & The number of clinics & per 1000 \\
-hairdresser & The number of hairdresser & per 1000 \\
-shops & The number of shops & per 1000 \\
-place\_of\_worship & The number of places of worship & per 1000 \\
-retail & The number of retail stores & per 1000 \\
-nursing\_home & The number of nursing homes & per 1000 \\
-restaurant & The number of restaurants & per 1000 \\
-aerodrome & The number of aerodromes & per 1000 \\
-office & The number of offices & per 1000 \\
-\multirow{2}{*}{platform} & The number of public & \multirow{2}{*}{per 1000} \\
+immigrants\_total & The proportion of immigrants  & scaled \\
+marketplace & The number of marketplaces & scaled \\
+entertainment & The number of entertainment venues & scaled \\
+sport & The number of sports amenities & scaled \\
+clinic & The number of clinics & scaled \\
+hairdresser & The number of hairdresser & scaled \\
+shops & The number of shops & scaled \\
+place\_of\_worship & The number of places of worship & scaled \\
+retail & The number of retail stores & scaled \\
+nursing\_home & The number of nursing homes & scaled \\
+restaurant & The number of restaurants & scaled \\
+aerodrome & The number of aerodromes & scaled \\
+office & The number of offices & scaled \\
+\multirow{2}{*}{platform} & The number of public & \multirow{2}{*}{scaled} \\
 & transport platforms \\
-kindergarten & The number of kindergartens & per 1000 \\
-schools & The number of schools & per 1000 \\
-bakeries & The number of bakeries & per 1000 \\
+kindergarten & The number of kindergartens & scaled \\
+schools & The number of schools & scaled \\
+bakeries & The number of bakeries & scaled \\
 residential & The number of residential buildings & None \\
-\multirow{2}{*}{higher\_education} & The number of colleges & \multirow{2}{*}{per 1000} \\
+\multirow{2}{*}{higher\_education} & The number of colleges & \multirow{2}{*}{scaled} \\
 & and universities \\
 expected\_count & The expected number of infections & None \\
 sir & The standardised incidence ratio & None \\
 idarea\_1 & A unique ID & None \\
 area & The area in km$^2$ & None \\
-pop\_dens & The population density & People per km$^2$ \\
-\multirow{2}{*}{urb\_dens} & \multirow{2}{*}{The urban density}  & Residential buildings\\
-& & per km$^2$\\
-sex & The proportion of females & [0;1] \\
+pop\_dens & People per km$^2$ & scaled\\
+\multirow{1}{*}{urb\_dens} &  Residential buildings per km$^2$ & scaled \\
+sex & The proportion of females & scaled \\
 \bottomrule
 \end{tabular}
 \end{table}
 \subsection{Data Wrangling for Germany}
-The data processing procedure for Germany is identical to that for Norway. First, all demographic variables were loaded and left unchanged before being merged with the Covid-19 data prior to calculating the spatial intersections between the points of interest and the NUTS-3 areas. After merging all the data, the numbers per 1000 inhabitants were calculated for the variables containing absolute numbers. For the variables containing the number of people who voted for a particular political party, the relative percentage of votes the party received was calculated. Again, missing values were imputed using the median.
+The data processing procedure for Germany is identical to that for Norway. First, all demographic variables were loaded and left unchanged before being merged with the Covid-19 data prior to calculating the spatial intersections between the points of interest and the NUTS-3 areas. After merging all the data, the scaled numbers were calculated for the numeric variables. For the variables containing the number of people who voted for a particular political party, the relative percentage of votes the party received was calculated. Again, missing values were imputed using the median.
 Finally, the same seven new variables were created. 
 The final dataset contains the variables shown in Table~\ref{finalGermany}.
 \begin{table}[H] 
@@ -173,49 +172,48 @@ municipality & The municipality name & None \\
 population & Population in a municipality & None \\
 date & The date of the data used & None\\
 value & The number of infected people & None \\
-trade\_tax & The trade tax in Euros & per 1000 \\
-income\_tax & The income tax in Euros & per 1000 \\
-income\_total & The income and payroll tax in Euros & per 1000 \\
-\multirow{2}{*}{asyl\_benefits} & The number of people & \multirow{2}{*}{per 1000} \\
+trade\_tax & The trade tax in Euros & scaled \\
+income\_tax & The income tax in Euros & scaled \\
+income\_total & The income and payroll tax in Euros & scaled \\
+\multirow{2}{*}{asyl\_benefits} & The number of people & \multirow{2}{*}{scaled} \\
 & receiving asylum seeker benefits \\
-welfare\_recipients & The number of welfare recipients & per 1000 \\
-unemployed\_total & The number of unemployed people & per 1000 \\
-unemployed\_foreigners & The number of unemployed foreigners & per 1000 \\
-protection\_seekers & The number of protection seekers & per 1000 \\
-Union & Percentage of vote for Union & [0;1]\\
-SPD & Percentage of vote for SPD & [0;1]\\
-Gruene & Percentage of vote for Gruene & [0;1]\\
-FDP & Percentage of vote for FDP & [0;1]\\
-die\_linke & Percentage of vote for die Linke & [0;1]\\
-afd & Percentage of vote voted for AfD & [0;1] \\
-marketplace & The number of marketplaces & per 1000 \\
-entertainment & The number of entertainment venues & per 1000 \\
-sport & The number of sports amenities & per 1000 \\
-clinic & The number of clinics & per 1000 \\
-hairdresser & The number of hairdresser & per 1000 \\
-shops & The number of shops & per 1000 \\
-place\_of\_worship & The number of places of worship & per 1000 \\
-retail & The number of retail stores & per 1000 \\
-nursing\_home & The number of nursing homes & per 1000 \\
-restaurant & The number of restaurants & per 1000 \\
-aerodrome & The number of aerodromes & per 1000 \\
-office & The number of offices & per 1000 \\
-\multirow{2}{*}{platform} & The number of public & \multirow{2}{*}{per 1000} \\
+welfare\_recipients & The number of welfare recipients & scaled \\
+unemployed\_total & The number of unemployed people & scaled \\
+unemployed\_foreigners & The number of unemployed foreigners & scaled \\
+protection\_seekers & The number of protection seekers & scaled \\
+Union & Percentage of vote for Union & scaled\\
+SPD & Percentage of vote for SPD & scaled\\
+Gruene & Percentage of vote for Gruene & scaled\\
+FDP & Percentage of vote for FDP & scaled\\
+die\_linke & Percentage of vote for die Linke & scaled\\
+afd & Percentage of vote voted for AfD & scaled \\
+marketplace & The number of marketplaces & scaled \\
+entertainment & The number of entertainment venues & scaled \\
+sport & The number of sports amenities & scaled \\
+clinic & The number of clinics & scaled \\
+hairdresser & The number of hairdresser & scaled \\
+shops & The number of shops & scaled \\
+place\_of\_worship & The number of places of worship & scaled \\
+retail & The number of retail stores & scaled \\
+nursing\_home & The number of nursing homes & scaled \\
+restaurant & The number of restaurants & scaled \\
+aerodrome & The number of aerodromes & scaled \\
+office & The number of offices & scaled \\
+\multirow{2}{*}{platform} & The number of public & \multirow{2}{*}{scaled} \\
 & transport platforms \\
-kindergarten & The number of kindergartens & per 1000 \\
-schools & The number of schools & per 1000 \\
-bakeries & The number of bakeries & per 1000 \\
+kindergarten & The number of kindergartens & scaled \\
+schools & The number of schools & scaled \\
+bakeries & The number of bakeries & scaled \\
 residential & The number of residential buildings & None \\
-\multirow{2}{*}{higher\_education} & The number of colleges & \multirow{2}{*}{per 1000} \\
+\multirow{2}{*}{higher\_education} & The number of colleges & \multirow{2}{*}{scaled} \\
 & and universities \\
 expected\_count & The expected number of infections & None \\
 sir & The standardised incidence ratio & None \\
 idarea\_1 & A unique ID & None \\
 area & The area in km$^2$ & None \\
-pop\_dens & The population density & People per km$^2$ \\
-\multirow{2}{*}{urb\_dens} & \multirow{2}{*}{The urban density}  & Residential buildings\\
-& & per km$^2$\\
-sex & The proportion of females & [0;1] \\
+pop\_dens & People per km$^2$ & scaled  \\
+\multirow{1}{*}{urb\_dens} & Residential buildings per km$^2$  & scaled\\
+sex & The proportion of females & scaled \\
 \bottomrule
 \end{tabular}
 \end{table}

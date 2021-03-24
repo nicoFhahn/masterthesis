@@ -234,7 +234,7 @@ inla.qmarginal(
 \end{lstlisting}
 \subsection{Best Spatial Models For Germany}
 \subsubsection{Best Spatial Model using Demographic Variables}
-\begin{lstlisting}[caption={The code for the demographic models.}, label={codeDemoGermany}, language=R]
+\begin{lstlisting}[caption={The code for the demographic model.}, label={codeDemoGermany}, language=R]
 prior_2 <- list(
   prec = list(
     prior = "pc.prec",
@@ -247,7 +247,7 @@ formula <- value ~
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 \end{lstlisting}
 \subsubsection{Best Spatial Model using Infrastructural Variables}
-\begin{lstlisting}[caption={The code for the demographic models.}, label={codeInfraGermany}, language=R]
+\begin{lstlisting}[caption={The code for the infrastructure model.}, label={codeInfraGermany}, language=R]
 prior_1 <- list(
   prec = list(
     prior = "pc.prec",
@@ -265,7 +265,7 @@ formula <- value ~
   )
 \end{lstlisting}
 \subsubsection{Best Spatial Model using Both Types of Variables}
-\begin{lstlisting}[caption={The code for the demographic models.}, label={codeBothGermany}, language=R]
+\begin{lstlisting}[caption={The code for the demographic + infrastructure model.}, label={codeBothGermany}, language=R]
 prior_1 <- list(
   prec = list(
     prior = "pc.prec",
@@ -283,51 +283,51 @@ formula <- value ~
   )
 \end{lstlisting}
 \subsection{Best Spatial Models For Norway}
-
+\subsubsection{Best Spatial Model using Demographic Variables}
+\begin{lstlisting}[caption={The code for the demographic model.}, label={codeDemoNorway}, language = R]
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
+  )
+)
+formula <- value ~
+  unemp_immg + unemp_tot
+  f(
+    idarea_1, model = "generic1",
+    Cmatrix = C, hyper = prior_1
+  )
+\end{lstlisting}
+\subsubsection{Best Spatial Model using Infrastructural Variables}
+\begin{lstlisting}[caption={The code for the infrastructural model.}, label={codeInfraNorway}, language = R]
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
+  )
+)
+formula <- value ~
+  schools + shops + place_of_worship + office +
+  schools + nursing_home + kindergarten + restaurant +
+  f(
+    idarea_1, model = "besagproper",
+    graph = g, hyper = prior_1
+  )
+\end{lstlisting}
+\subsubsection{Best Spatial Model using Both Types of Variables}
+\begin{lstlisting}[caption={The code for the demographic + infrastructure model.}, label={codeBothNorway}, language=R]
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
+  )
+)
+formula <- value ~
+  schools + unemp_tot + restaurant + sex + 
+  median_age + pop_dens + construction_ft + clinic +
+  f(
+    idarea_1, model = "besagproper",
+    graph = g, hyper = prior_1
+  )
+\end{lstlisting}
 \clearpage
-\section{Models}
-\subsubsection{Coefficients of BYM2 Model with all Variables for Germany}
-\begin{table}[H] 
-\caption{The fixed effects for the BYM2 model. Values are rounded. \label{allGermanyBYM2}}
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
-\midrule
-(Intercept) & -2.752 & 0.1308 & 0.005269 & 0.6603\\
-AfD & 3.930 & 57.70  & 19.04 & 135.1 \\
-sex & 3.726 & 436.4 & -528.5 & 2156 \\
-Union & 0.8027 & 2.406 & 1.044 & 4.758 \\
-aerodrome & 0.3879 & 1.806 & 0.4220 & 5.111 \\
-kindergarten & 0.1613 & 1.182 & 0.9437 & 1.463 \\
-entertainment & 0.1275 & 1.211 & 0.5643 & 2.282 \\
-shops & 0.06951 & 1.084 & 0.7961 & 1.442 \\
-nursing\_home & 0.06812 & 1.144 & 0.5251 & 2.175 \\
-bakeries & 0.05613 & 1.068 & 0.8035 & 1.392 \\
-sport & 0.04839 & 1.052 &  0.9203 & 1.120 \\
-unemployed\_ & \multirow{2}{*}{0.04093} & \multirow{2}{*}{1.042}  & \multirow{2}{*}{1.026} & \multirow{2}{*}{1.057}\\
-foreigners  \\
-asylum\_seeker\_ & \multirow{2}{*}{0.004844} & \multirow{2}{*}{1.005}  & \multirow{2}{*}{0.9950} & \multirow{2}{*}{1.015}\\
-benefits  \\
-pop\_dens & 0.00007097 & 1.000 & 1.000 & 1.000 \\
-total\_income & 0.00001266 & 1.000 & 1.000 & 1.000 \\
-urb\_dens & 0.000009849  & 1.0000 & 0.9993 & 1.001 \\
-trade\_tax &  0.0000001765 & 1.0000 & 1.000 & 1.000\\
-income\_tax &  -0.00006125 & 0.9999 &  0.9998 & 1.000 \\
-welfare\_ & \multirow{2}{*}{-0.001508} & \multirow{2}{*}{0.9985}  & \multirow{2}{*}{0.9852} & \multirow{2}{*}{1.012}\\
-recipients \\
-protection\_ & \multirow{2}{*}{-0.003726} & \multirow{2}{*}{0.9963}  & \multirow{2}{*}{0.9926} & \multirow{2}{*}{1.000}\\
-seekers \\
-unemployed\_ & \multirow{2}{*}{-0.008041} & \multirow{2}{*}{0.9920}  & \multirow{2}{*}{0.9857} & \multirow{2}{*}{0.9984} \\
-total \\
-platform & -0.008767  & 0.9913 &  0.9821 & 1.000 \\
-schools & -0.01115  & 0.9935 & 0.8194 & 1.193 \\
-FDP & -0.01648  & 2.490 & 0.04743 & 14.02\\
-restaurant & -0.03560  & 0.9654 & 0.9113 & 1.022 \\
-clinic & -0.03697  & 0.9646 &  0.8853 & 1.049 \\
-hairdresser & -0.05900  & 0.9483 & 0.7617 & 1.1166 \\
-SPD & -0.1807  & 0.9439 & 0.3160 & 2.197 \\
-die\_linke & -0.2930  & 1.043 &  0.1483 & 3.682 \\
-other\_parties & -12.22  & 1.469e+31 & -8.710e+8 & 1.468e+04\\
-\bottomrule
-\end{tabular}
-\end{table}

@@ -743,14 +743,17 @@ germany <- merge(
   by.x = "municipality_id",
   by.y = "Kennziffer"
 )
-
+# add id variable for the date
 date_id <- tibble(
   Date = sort(unique(germany$Date)),
   id_date = seq_len(length(unique(germany$Date)))
 )
+# merge it together
 germany <- merge(
   germany,
   date_id,
   by = "Date"
 )
+# sort it
+germany <- germany[order(germany$idarea_1, germany$id_date), ]
 rm(list = setdiff(ls(), c("germany")))
