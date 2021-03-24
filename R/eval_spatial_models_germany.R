@@ -80,7 +80,7 @@ sapply(
   }
 )
 newest_numbers$rr <- models_leroux[[14]]$summary.fitted.values$mean
-csi <- models_leroux[[14]]$marginals.random$idarea_1[1:397]
+csi <- models_leroux[[14]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
 a <- 0
 prob_csi <- lapply(csi, function(x) {
   1 - inla.pmarginal(a, x)
@@ -100,9 +100,9 @@ cat_zeta <- cut(
 )
 newest_numbers$cat_zeta <- cat_zeta
 newest_numbers$prob_csi <- cat_csi
-mat_marg <- matrix(NA, nrow = 397, ncol = 100000)
+mat_marg <- matrix(NA, nrow = nrow(newest_numbers), ncol = 100000)
 m <- models_leroux[[14]]$marginals.random$idarea_1
-for (i in seq_len(397)) {
+for (i in seq_len(nrow(newest_numbers))) {
   u <- m[[i]]
   mat_marg[i, ] <- inla.rmarginal(100000, u)
 }

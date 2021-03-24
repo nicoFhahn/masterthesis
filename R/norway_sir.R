@@ -1,15 +1,8 @@
 # load the packages
-library(data.table)
-library(dplyr)
 library(ggplot2)
 library(leaflet)
 library(leaflet.mapboxgl)
 library(patchwork)
-library(readr)
-library(reshape2)
-library(sf)
-library(SpatialEpi)
-library(stringr)
 source("R/preprocess_norge.R")
 color_low <- "#002FA7"
 color_high <- "#F50039"

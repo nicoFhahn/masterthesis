@@ -1,10 +1,10 @@
 library(readr)
 library(sf)
 library(INLA)
-# source("R/germany_leroux_models.R")
-# source("R/germany_besagproper_models.R")
-# source("R/germany_bym2_models.R")
-newest_numbers <- read_csv("eval_data/newest_numbers_norway_march20.csv")
+# source("R/norway_leroux_models.R")
+# source("R/norway_besagproper_models.R")
+# source("R/norway_bym2_models.R")
+newest_numbers <- read_csv("eval_data/newest_numbers_norway_march24.csv")
 norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
 newest_numbers <- merge(
   newest_numbers,
@@ -53,21 +53,21 @@ demo_waic[id_leroux + 44]
 demo_cpo[id_leroux + 44]
 mae_leroux[id_leroux]
 options(scipen = 10)
-models_leroux[[13]]$summary.fixed[order(models_leroux[[13]]$summary.fixed$mean), ]
+models_leroux[[5]]$summary.fixed[order(models_leroux[[5]]$summary.fixed$mean), ]
 
 sapply(
-  models_leroux[[13]]$marginals.fixed[
-    rownames(models_leroux[[13]]$summary.fixed[
-      order(models_leroux[[13]]$summary.fixed$mean),
+  models_leroux[[5]]$marginals.fixed[
+    rownames(models_leroux[[5]]$summary.fixed[
+      order(models_leroux[[5]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
   fun = exp
 )
 sapply(
-  models_leroux[[13]]$marginals.fixed[
-    rownames(models_leroux[[13]]$summary.fixed[
-      order(models_leroux[[13]]$summary.fixed$mean),
+  models_leroux[[5]]$marginals.fixed[
+    rownames(models_leroux[[5]]$summary.fixed[
+      order(models_leroux[[5]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -79,8 +79,8 @@ sapply(
     )
   }
 )
-inla.emarginal(exp, models_leroux[[22]]$marginals.fixed$pop_dens)^100
-csi <- models_leroux[[22]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
+inla.emarginal(exp, models_leroux[[5]]$marginals.fixed$pop_dens)^100
+csi <- models_leroux[[5]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
 zeta_cutoff <- c(0.6, 0.9, 1.0, 1.1, 1.8)
 cat_zeta <- cut(
@@ -94,158 +94,55 @@ maps_cat_zeta <- data.frame(
 )
 newest_numbers$cat_zeta <- cat_zeta
 ################## INFRASTRUCTURAL MODELS
-infra_results <- c(results_leroux[7:8], results_besag[7:8], results_bym2[7:8])
 infra_dic <- unlist(lapply(infra_results, function(x) x$dic))
 infra_waic <- unlist(lapply(infra_results, function(x) x$waic))
 infra_cpo <- unlist(lapply(infra_results, function(x) x$cpo))
-infra_dic_rank <- unlist(lapply(infra_dic, function(x, ...) which(sort(infra_dic) %in% x)))
-infra_waic_rank <- unlist(lapply(infra_waic, function(x, ...) which(sort(infra_waic) %in% x)))
-infra_cpo_rank <- unlist(lapply(infra_cpo, function(x, ...) which(sort(infra_cpo) %in% x)))
-infra_ranks <- tibble(
-  dic = infra_dic_rank,
-  waic = infra_waic_rank,
-  cpo = infra_cpo_rank
-)
-infra_ranks$total <- rowSums(infra_ranks)
-infra_ranks[1:8, ]
-infra_ranks[9:16, ]
-infra_ranks[17:24, ]
-infra_dic[which(infra_ranks[1:8, ]$total %in% min(infra_ranks[1:8, ]$total))]
-infra_dic[which(infra_ranks[9:16, ]$total %in% min(infra_ranks[9:16, ]$total)) + 8]
-infra_dic[which(infra_ranks[17:24, ]$total %in% min(infra_ranks[17:24, ]$total)) + 16]
-infra_waic[which(infra_ranks[1:8, ]$total %in% min(infra_ranks[1:8, ]$total))]
-infra_waic[which(infra_ranks[9:16, ]$total %in% min(infra_ranks[9:16, ]$total)) + 8]
-infra_waic[which(infra_ranks[17:24, ]$total %in% min(infra_ranks[17:24, ]$total)) + 16]
-infra_cpo[which(infra_ranks[1:8, ]$total %in% min(infra_ranks[1:8, ]$total))]
-infra_cpo[which(infra_ranks[9:16, ]$total %in% min(infra_ranks[9:16, ]$total)) + 8]
-infra_cpo[which(infra_ranks[17:24, ]$total %in% min(infra_ranks[17:24, ]$total)) + 16]
+min(unlist(mae_besag[23:30]))
+min(unlist(mae_bym2[23:30]))
+min(unlist(mae_leroux[23:30]))
+id_besag <- which(unlist(mae_besag[23:30]) %in% min(unlist(mae_besag[23:30])))
+infra_dic[id_besag]
+infra_waic[id_besag]
+infra_cpo[id_besag]
+mae_besag[id_besag + 22]
+id_bym2 <- which(unlist(mae_bym2[23:30]) %in% min(unlist(mae_bym2[23:30])))
+infra_dic[id_bym2 + 8]
+infra_waic[id_bym2 + 8]
+infra_cpo[id_bym2 + 8]
+mae_bym2[id_bym2 + 22]
+id_leroux <- which(unlist(mae_leroux[23:30]) %in% min(unlist(mae_leroux[23:30])))
+infra_dic[id_leroux + 16]
+infra_waic[id_leroux + 16]
+infra_cpo[id_leroux + 16]
+mae_leroux[id_leroux + 22]
 options(scipen = 10)
-models_leroux[[30]]$summary.fixed[order(models_leroux[[30]]$summary.fixed$mean), ]
+models_besag[[29]]$summary.fixed[order(models_besag[[29]]$summary.fixed$mean), ]
 sapply(
-  models_leroux[[30]]$marginals.fixed[
-    rownames(models_leroux[[30]]$summary.fixed[
-      order(models_leroux[[30]]$summary.fixed$mean),
+  models_besag[[29]]$marginals.fixed[
+    rownames(models_besag[[29]]$summary.fixed[
+      order(models_besag[[29]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
   fun = exp
 )
 sapply(
-  models_leroux[[30]]$marginals.fixed[
-    rownames(models_leroux[[30]]$summary.fixed[
-      order(models_leroux[[30]]$summary.fixed$mean),
+  models_besag[[29]]$marginals.fixed[
+    rownames(models_besag[[29]]$summary.fixed[
+      order(models_besag[[29]]$summary.fixed$mean),
     ])
   ],
   function(x) {
     inla.qmarginal(
-      c(0.025, 0.975),
+      c(0.029, 0.975),
       inla.tmarginal(
         exp, x
       )
     )
   }
 )
-range(newest_numbers$nursing_home)
-range(newest_numbers$retail)
-range(newest_numbers$kindergarten)
-range(newest_numbers$pop_dens)
-inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$nursing_home)^0.1
-inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$retail)^0.1
-inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$kindergarten)^0.1
-inla.emarginal(exp, models_leroux[[30]]$marginals.fixed$pop_dens)^100
-sum(models_leroux[[30]]$cpo$failure)
-csi <- models_leroux[[30]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
-zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
-zeta_cutoff <- c(0.6, 0.9, 1.0, 1.1, 1.8)
-cat_zeta <- cut(
-  unlist(zeta),
-  breaks = zeta_cutoff,
-  include.lowest = TRUE
-)
-maps_cat_zeta <- data.frame(
-  ID = newest_numbers$idarea_1,
-  cat_zeta = cat_zeta
-)
-newest_numbers$cat_zeta <- cat_zeta
-var_v <- inla.rmarginal(
-  100000,
-  inla.tmarginal(
-    function(x) 1 / x,
-    models_leroux[[30]]$marginals.hyperpar$`Precision for idarea_1`
-  )
-)
-######################################### ALL MODELS
-all_results <- c(results_leroux[9], results_besag[9], results_bym2[9])
-all_dic <- unlist(lapply(all_results, function(x) x$dic))
-all_waic <- unlist(lapply(all_results, function(x) x$waic))
-all_cpo <- unlist(lapply(all_results, function(x) x$cpo))
-all_dic_rank <- unlist(lapply(all_dic, function(x, ...) which(sort(all_dic) %in% x)))
-all_waic_rank <- unlist(lapply(all_waic, function(x, ...) which(sort(all_waic) %in% x)))
-all_cpo_rank <- unlist(lapply(all_cpo, function(x, ...) which(sort(all_cpo) %in% x)))
-all_ranks <- tibble(
-  dic = all_dic_rank,
-  waic = all_waic_rank,
-  cpo = all_cpo_rank
-)
-all_ranks$total <- rowSums(all_ranks)
-all_ranks[1:4, ]
-all_ranks[5:8, ]
-all_ranks[9:12, ]
-all_dic[which(all_ranks[1:4, ]$total %in% min(all_ranks[1:4, ]$total))]
-all_dic[which(all_ranks[5:8, ]$total %in% min(all_ranks[5:8, ]$total)) + 4]
-all_dic[which(all_ranks[9:12, ]$total %in% min(all_ranks[9:12, ]$total)) + 8]
-all_waic[which(all_ranks[1:4, ]$total %in% min(all_ranks[1:4, ]$total))]
-all_waic[which(all_ranks[5:8, ]$total %in% min(all_ranks[5:8, ]$total)) + 4]
-all_waic[which(all_ranks[9:12, ]$total %in% min(all_ranks[9:12, ]$total)) + 8]
-all_cpo[which(all_ranks[1:4, ]$total %in% min(all_ranks[1:4, ]$total))]
-all_cpo[which(all_ranks[5:8, ]$total %in% min(all_ranks[5:8, ]$total)) + 4]
-all_cpo[which(all_ranks[9:12, ]$total %in% min(all_ranks[9:12, ]$total)) + 8]
-options(scipen = 10)
-models_bym2[[31]]$summary.fixed[order(models_bym2[[31]]$summary.fixed$mean), ]
-sapply(
-  models_bym2[[31]]$marginals.fixed[
-    rownames(models_bym2[[31]]$summary.fixed[
-      order(models_bym2[[31]]$summary.fixed$mean),
-    ])
-  ],
-  inla.emarginal,
-  fun = exp
-)
-sapply(
-  models_bym2[[31]]$marginals.fixed[
-    rownames(models_bym2[[31]]$summary.fixed[
-      order(models_bym2[[31]]$summary.fixed$mean),
-    ])
-  ],
-  function(x) {
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, x
-      )
-    )
-  }
-)
-range(newest_numbers$marketplace)
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$marketplace)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$entertainment)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$bakeries)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$clinic)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$retail)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$nursing_home)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$kindergarten)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$place_of_worship)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$marketplace)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$platform)^0.1
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$unemp_immg)^0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$mining_pt_com)^0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$mining_ft_com)^0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$workers_pt_com)^0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$construction_pt_com)^0.5
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$pop_dens)^100
-inla.emarginal(exp, models_bym2[[31]]$marginals.fixed$urb_dens)^10
-newest_numbers$rr <- models_bym2[[31]]$summary.fitted.values$mean
-csi <- models_bym2[[31]]$marginals.random$idarea_1[1:356]
+newest_numbers$rr <- models_besag[[29]]$summary.fitted.values$mean
+csi <- models_besag[[29]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
 a <- 0
 prob_csi <- lapply(csi, function(x) {
   1 - inla.pmarginal(a, x)
@@ -257,7 +154,7 @@ cat_csi <- cut(
   include.lowest = TRUE
 )
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
-zeta_cutoff <- c(0.1, 0.5, 0.9, 1, 1.4, 1.8, 2.2, 2.6, 3, 5, 10, 15)
+zeta_cutoff <- c(0.1, 0.5, 0.9, 1, 1.4, 1.8, 2.2, 2.6, 3.4, 6, 9.2, 15.6, 22)
 cat_zeta <- cut(
   unlist(zeta),
   breaks = zeta_cutoff,
@@ -265,9 +162,9 @@ cat_zeta <- cut(
 )
 newest_numbers$cat_zeta <- cat_zeta
 newest_numbers$prob_csi <- cat_csi
-mat_marg <- matrix(NA, nrow = 356, ncol = 100000)
-m <- models_bym2[[31]]$marginals.random$idarea_1
-for (i in seq_len(356)) {
+mat_marg <- matrix(NA, nrow = nrow(newest_numbers), ncol = 100000)
+m <- models_besag[[29]]$marginals.random$idarea_1
+for (i in seq_len(nrow(newest_numbers))) {
   u <- m[[i]]
   mat_marg[i, ] <- inla.rmarginal(100000, u)
 }
@@ -276,7 +173,7 @@ var_v <- inla.rmarginal(
   100000,
   inla.tmarginal(
     function(x) 1 / x,
-    models_bym2[[31]]$marginals.hyperpar$`Precision for idarea_1`
+    models_besag[[29]]$marginals.hyperpar$`Precision for idarea_1`
   )
 )
 perc_var_u <- mean(var_u / (var_u + var_v))
@@ -292,7 +189,7 @@ plot_1 <- ggplot(data = newest_numbers) +
     subtitle = "Norway"
   ) +
   scale_fill_gradient2(
-    "SIR",
+    "RR",
     low = color_low,
     high = color_high,
     midpoint = 1
@@ -329,34 +226,56 @@ plot_3 <- ggplot(data = newest_numbers) +
 plot_3
 library(patchwork)
 plot_2 + plot_3
-library(leaflet)
-pal <- colorFactor(
-  viridis(4, direction = -1, option = "B"),
-  domain = newest_numbers$prob_csi
-)
-leaflet(newest_numbers) %>%
-  addMapboxGL(
-    style = "mapbox://styles/mapbox/streets-v9",
-    accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-  ) %>%
-  addPolygons(
-    weight = 1,
-    fillColor = ~ pal(prob_csi),
-    fillOpacity = 0.7,
-    color = "black",
-    group = "Relative risk",
-    label = paste(
-      "Municipality: ", newest_numbers$kommune_name
-    ) %>%
-      lapply(htmltools::HTML)
-  ) %>%
-  addLegend(
-    data = newest_numbers,
-    pal = pal,
-    values = ~prob_csi,
-    group = "RR"
-  )
+######################################### ALL MODELS
+all_results <- c(results_besag[9], results_bym2[9], results_leroux[9])
+all_dic <- unlist(lapply(all_results, function(x) x$dic))
+all_waic <- unlist(lapply(all_results, function(x) x$waic))
+all_cpo <- unlist(lapply(all_results, function(x) x$cpo))
+min(unlist(mae_besag[31:34]))
+min(unlist(mae_bym2[31:34]))
+min(unlist(mae_leroux[31:34]))
+id_besag <- which(unlist(mae_besag[31:34]) %in% min(unlist(mae_besag[31:34])))
+demo_dic[id_besag]
+demo_waic[id_besag]
+demo_cpo[id_besag]
+mae_besag[id_besag + 30]
+id_bym2 <- which(unlist(mae_bym2[31:34]) %in% min(unlist(mae_bym2[31:34])))
+demo_dic[id_bym2 + 4]
+demo_waic[id_bym2 + 4]
+demo_cpo[id_bym2 + 4]
+mae_bym2[id_bym2 + 30]
+id_leroux <- which(unlist(mae_leroux[31:34]) %in% min(unlist(mae_leroux[31:34])))
+demo_dic[id_leroux + 8]
+demo_waic[id_leroux + 8]
+demo_cpo[id_leroux + 8]
+mae_leroux[id_leroux + 30]
 
+options(scipen = 10)
+models_besag[[33]]$summary.fixed[order(models_besag[[33]]$summary.fixed$mean), ]
+sapply(
+  models_besag[[33]]$marginals.fixed[
+    rownames(models_besag[[33]]$summary.fixed[
+      order(models_besag[[33]]$summary.fixed$mean),
+    ])
+  ],
+  inla.emarginal,
+  fun = exp
+)
+sapply(
+  models_besag[[33]]$marginals.fixed[
+    rownames(models_besag[[33]]$summary.fixed[
+      order(models_besag[[33]]$summary.fixed$mean),
+    ])
+  ],
+  function(x) {
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, x
+      )
+    )
+  }
+)
 pal <- colorFactor(
   viridis(6, direction = -1, option = "B"),
   domain = newest_numbers$cat_zeta
@@ -374,7 +293,7 @@ leaflet(newest_numbers) %>%
     group = "Relative risk",
     label = paste(
       "Municipality: ", newest_numbers$kommune_name, "<br>",
-      "Zeta: ", newest_numbers$cat_zeta
+      newest_numbers$cat_zeta, "<br>", newest_numbers$prob_csi
     ) %>%
       lapply(htmltools::HTML)
   ) %>%

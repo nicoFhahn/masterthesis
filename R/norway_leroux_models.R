@@ -1,7 +1,7 @@
 library(INLA)
 library(spdep)
 source("R/preprocess_norge.R")
-set.seed(420)
+set.seed(7918)
 test <- sample(seq_len(nrow(newest_numbers)), size = floor(0.2 * nrow(newest_numbers)))
 test_value <- newest_numbers$value[test]
 newest_numbers$value[test] <- NA
@@ -602,26 +602,22 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 formula_19 <- value ~
-median_age + unemp_tot + unemp_immg + workers_ft +
-  construction_ft + construction_pt + immigrants_total + pop_dens +
+  median_age + unemp_tot + unemp_immg + workers_ft + 
+  construction_ft + construction_pt + immigrants_total + pop_dens + 
   sex +
-  # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_20 <- value ~
-median_age + unemp_tot + unemp_immg + workers_ft +
-  construction_ft + construction_pt + immigrants_total + pop_dens +
+  median_age + unemp_tot + unemp_immg + workers_ft + 
+  construction_ft + construction_pt + immigrants_total + pop_dens + 
   sex +
-  # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 formula_21 <- value ~
-pop_dens + median_age + sex + unemp_tot +
+  pop_dens + median_age + sex + unemp_tot + 
   workers_ft + immigrants_total +
-  # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_22 <- value ~
-pop_dens + median_age + sex + unemp_tot +
+  pop_dens + median_age + sex + unemp_tot + 
   workers_ft + immigrants_total +
-  # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 
 res_19 <- inla(
@@ -863,15 +859,15 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models",
 
 # now models with all the variables
 formula_27 <- value ~
-marketplace + clinic + hairdresser + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + office +
-  platform + kindergarten + schools + higher_education + pop_dens +
+  marketplace + entertainment + sport + place_of_worship + 
+  nursing_home + restaurant + aerodrome + office + platform + 
+  kindergarten + schools + bakeries + higher_education + pop_dens +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_28 <- value ~
-marketplace + clinic + hairdresser + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + office +
-  platform + kindergarten + schools + higher_education + pop_dens +
+  marketplace + entertainment + sport + place_of_worship + 
+  nursing_home + restaurant + aerodrome + office + platform + 
+  kindergarten + schools + bakeries + higher_education + pop_dens +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 # now models with all the variables
@@ -991,32 +987,30 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 formula_31 <- value ~
-median_age + unemp_tot + unemp_immg + workers_pt +
-  construction_ft + construction_pt + immigrants_total + marketplace +
-  entertainment + sport + clinic + shops + retail + nursing_home +
-  restaurant + aerodrome + office + platform + kindergarten +
-  schools + bakeries + higher_education + pop_dens + urb_dens +
-  sex +
+  median_age + unemp_tot + unemp_immg + workers_pt + 
+  construction_ft + construction_pt + immigrants_total + marketplace + 
+  entertainment + clinic + retail + nursing_home + restaurant + 
+  aerodrome + office + platform + kindergarten + schools + 
+  higher_education + pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_32 <- value ~
-median_age + unemp_tot + unemp_immg + workers_pt +
-  construction_ft + construction_pt + immigrants_total + marketplace +
-  entertainment + sport + clinic + shops + retail + nursing_home +
-  restaurant + aerodrome + office + platform + kindergarten +
-  schools + bakeries + higher_education + pop_dens + urb_dens +
-  sex +
+  median_age + unemp_tot + unemp_immg + workers_pt + 
+  construction_ft + construction_pt + immigrants_total + marketplace + 
+  entertainment + clinic + retail + nursing_home + restaurant + 
+  aerodrome + office + platform + kindergarten + schools + 
+  higher_education + pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 # now models with all the variables
 formula_33 <- value ~
-schools + unemp_tot + sex + median_age +
-  construction_ft + pop_dens + hairdresser +
+  schools + unemp_tot + restaurant + sex + 
+  median_age + pop_dens + construction_ft + clinic +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_34 <- value ~
-schools + unemp_tot + sex + median_age +
-  construction_ft + pop_dens + hairdresser +
+  schools + unemp_tot + restaurant + sex + 
+  median_age + pop_dens + construction_ft + clinic +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 
@@ -1124,87 +1118,3 @@ mae <- c(mae, list(
 # now models with all the variables
 models_final <- list(models, results, mae)
 save(models_final, file = "models/leroux_norway.Rda")
-
-# results_frame <- newest_numbers
-# dics[is.nan(dics)] <- 100000
-# if (dics[1] == min(dics)) {
-#   sfv <- res_1$summary.fitted.values
-# } else if (dics[2] == min(dics)) {
-#   sfv <- res_2$summary.fitted.values
-# } else if (dics[3] == min(dics)) {
-#   sfv <- res_3$summary.fitted.values
-# } else if (dics[4] == min(dics)) {
-#   sfv <- res_4$summary.fitted.values
-# }
-# results_frame$rr <- sfv$mean
-# results_frame$q025 <- sfv$`0.025quant`
-# results_frame$q5 <- sfv$`0.5quant`
-# results_frame$q975 <- sfv$`0.975quant`
-# rc1 <- colorRampPalette(
-#   c(
-#     "#86e7b8",
-#     "#93ff96",
-#     "#b2ffa8",
-#     "#d0ffb7",
-#     "#f2f5de",
-#     "white"
-#   ),
-#   space = "Lab"
-# )(10)
-# rc2 <- colorRampPalette(
-#   c(
-#     "white",
-#     "#fae0e4",
-#     "#f7cad0",
-#     "#f9bec7",
-#     "#fbb1bd",
-#     "#ff99ac",
-#     "#ff85a1",
-#     "#ff7096",
-#     "#ff5c8a",
-#     "#ff477e",
-#     "#ff0a54"
-#   ),
-#   space = "Lab"
-# )(round(10 * range(results_frame$rr)[2] - 10))
-# pal <- colorNumeric(
-#   c(rc1, rc2),
-#   domain = results_frame$rr
-# )
-# map <- leaflet(results_frame) %>%
-#   addMapboxGL(
-#     style = "mapbox://styles/mapbox/streets-v9",
-#     accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-#   ) %>%
-#   addPolygons(
-#     weight = 1,
-#     fillColor = ~ pal(rr),
-#     fillOpacity = 0.7,
-#     color = "black",
-#     group = "Relative risk",
-#     label = paste(
-#       "Kommune: ", results_frame$Landkreis, "<br>",
-#       "Population: ", results_frame$PopulationTotal, "<br>",
-#       "Population density: ", round(results_frame$pop_dens), "<br>",
-#       "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-#       "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-#       "Number of infections: ", results_frame$value, "<br>",
-#       "Expected number of infections: ", round(results_frame$expected), "<br>",
-#       "SIR: ", round(results_frame$sir, 3), "<br>",
-#       "Relative risk: ", round(results_frame$rr, 3)
-#     ) %>%
-#       lapply(htmltools::HTML)
-#   ) %>%
-#   addLegend(
-#     data = results_frame,
-#     pal = pal,
-#     values = ~rr,
-#     title = htmltools::HTML(
-#       paste(
-#         "RR<br><span style='font-size:0.8em'>DIC:",
-#         round(min(dics)),
-#         "</span>"
-#       )
-#     ),
-#     group = "RR"
-#   )

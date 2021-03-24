@@ -21,7 +21,7 @@ if (date_1 != date_2) {
   # get the population of the municipalities
   germany_population <- ew_kreise
   # the data for berlin needs to be manually grouped
-  # chamge the municpality name and ID to the same for all berlin cases
+  # change the municipality name and ID to the same for all berlin cases
   germany_confirmed[str_detect(germany_confirmed$Landkreis, "Berlin"), ]$Landkreis <- "SK Berlin"
   germany_confirmed[str_detect(germany_confirmed$Landkreis, "Berlin"), ]$IdLandkreis <- 11000
   # create a berlin frame
@@ -88,6 +88,7 @@ if (date_1 != date_2) {
   germany_protect[str_detect(germany_protect$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
   germany_social[str_detect(germany_social$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
   germany_social[str_detect(germany_social$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
+  germany_company_tax <- germany_company_tax[!is.na(germany_company_tax$Kreis), ]
   germany_company_tax[str_detect(germany_company_tax$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
   germany_company_tax[str_detect(germany_company_tax$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
   germany_income_tax[str_detect(germany_income_tax$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
@@ -99,7 +100,6 @@ if (date_1 != date_2) {
   germany_unemployed <- germany_unemployed[germany_unemployed$Kreis %in% germany_shape$Kennziffer, ]
   germany_protect <- germany_protect[germany_protect$Kreis %in% germany_shape$Kennziffer, ]
   germany_social <- germany_social[germany_social$Kreis %in% germany_shape$Kennziffer, ]
-  germany_company_tax <- germany_company_tax[!is.na(germany_company_tax$Kreis), ]
   germany_income_tax <- germany_income_tax[germany_income_tax$Kreis %in% germany_shape$Kennziffer, ]
   germany_asyl <- germany_asyl[germany_asyl$Kreis %in% germany_shape$Kennziffer, ]
   germany_company_tax <- germany_company_tax[germany_company_tax$Kreis %in% germany_shape$Kennziffer, ]
