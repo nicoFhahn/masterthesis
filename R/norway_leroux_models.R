@@ -101,8 +101,8 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 # now models with the mobility variables
@@ -223,10 +223,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 # now models with the infrastructure variables
@@ -343,10 +343,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
@@ -465,10 +465,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 ########################################################
@@ -594,10 +594,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
@@ -713,10 +713,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
@@ -848,10 +848,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
 
@@ -978,10 +978,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
@@ -1109,10 +1109,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
 # now models with all the variables

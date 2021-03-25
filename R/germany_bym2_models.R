@@ -94,8 +94,8 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value))
 ))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
@@ -221,10 +221,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with the infrastructure variables
@@ -343,10 +343,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
@@ -465,10 +465,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 ########################################################
@@ -598,10 +598,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
@@ -727,10 +727,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
@@ -862,10 +862,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
@@ -992,10 +992,10 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
@@ -1125,97 +1125,13 @@ for (i in seq_len(nrow(newest_numbers))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test)),
-  mean(abs(predicted_2[test] - test)),
-  mean(abs(predicted_3[test] - test)),
-  mean(abs(predicted_4[test] - test))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 models_final <- list(models, results, mae)
 save(models_final, file = "models/bym2_germany.Rda")
-
-# results_frame <- newest_numbers
-# dics[is.nan(dics)] <- 100000
-# if (dics[1] == min(dics)) {
-#   sfv <- res_1$summary.fitted.values
-# } else if (dics[2] == min(dics)) {
-#   sfv <- res_2$summary.fitted.values
-# } else if (dics[3] == min(dics)) {
-#   sfv <- res_3$summary.fitted.values
-# } else if (dics[4] == min(dics)) {
-#   sfv <- res_4$summary.fitted.values
-# }
-# results_frame$rr <- sfv$mean
-# results_frame$q025 <- sfv$`0.025quant`
-# results_frame$q5 <- sfv$`0.5quant`
-# results_frame$q975 <- sfv$`0.975quant`
-# rc1 <- colorRampPalette(
-#   c(
-#     "#86e7b8",
-#     "#93ff96",
-#     "#b2ffa8",
-#     "#d0ffb7",
-#     "#f2f5de",
-#     "white"
-#   ),
-#   space = "Lab"
-# )(10)
-# rc2 <- colorRampPalette(
-#   c(
-#     "white",
-#     "#fae0e4",
-#     "#f7cad0",
-#     "#f9bec7",
-#     "#fbb1bd",
-#     "#ff99ac",
-#     "#ff85a1",
-#     "#ff7096",
-#     "#ff5c8a",
-#     "#ff477e",
-#     "#ff0a54"
-#   ),
-#   space = "Lab"
-# )(round(10 * range(results_frame$rr)[2] - 10))
-# pal <- colorNumeric(
-#   c(rc1, rc2),
-#   domain = results_frame$rr
-# )
-# map <- leaflet(results_frame) %>%
-#   addMapboxGL(
-#     style = "mapbox://styles/mapbox/streets-v9",
-#     accessToken = "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
-#   ) %>%
-#   addPolygons(
-#     weight = 1,
-#     fillColor = ~ pal(rr),
-#     fillOpacity = 0.7,
-#     color = "black",
-#     group = "Relative risk",
-#     label = paste(
-#       "Kommune: ", results_frame$Landkreis, "<br>",
-#       "Population: ", results_frame$PopulationTotal, "<br>",
-#       "Population density: ", round(results_frame$pop_dens), "<br>",
-#       "Urban density: ", round(results_frame$urb_dens, 3), "<br>",
-#       "Proportion of females: ", round(results_frame$sex, 3), "<br>",
-#       "Number of infections: ", results_frame$value, "<br>",
-#       "Expected number of infections: ", round(results_frame$expected), "<br>",
-#       "SIR: ", round(results_frame$sir, 3), "<br>",
-#       "Relative risk: ", round(results_frame$rr, 3)
-#     ) %>%
-#       lapply(htmltools::HTML)
-#   ) %>%
-#   addLegend(
-#     data = results_frame,
-#     pal = pal,
-#     values = ~rr,
-#     title = htmltools::HTML(
-#       paste(
-#         "RR<br><span style='font-size:0.8em'>DIC:",
-#         round(min(dics)),
-#         "</span>"
-#       )
-#     ),
-#     group = "RR"
-#   )

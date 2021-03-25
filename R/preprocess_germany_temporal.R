@@ -64,8 +64,7 @@ if (date_1 != date_2) {
   germany_confirmed_split <- lapply(
     germany_confirmed_split,
     function(x, ...) {
-      missing <- germany_lk[!germany_lk %in% unique(x$Landkreis)]
-      missing <- missing[!str_detect(missing, "Berlin ")]
+      missing <- unique(germany_confirmed$Landkreis)[!unique(germany_confirmed$Landkreis) %in% unique(x$Landkreis)]
       missing_tib <- tibble(
         Landkreis = missing,
         Date = rep(unique(x$Date), length(missing)),
@@ -227,16 +226,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_marketplace[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_marketplace[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_marketplace[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -247,16 +243,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_entertainment[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_entertainment[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_entertainment[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -267,16 +260,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_sport[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_sport[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_sport[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -287,16 +277,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_clinic[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_clinic[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_clinic[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -307,16 +294,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_hairdresser[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_hairdresser[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_hairdresser[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -327,16 +311,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_shops[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_shops[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_shops[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -347,16 +328,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_place_of_worship[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_place_of_worship[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_place_of_worship[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -367,16 +345,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_retail[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_retail[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_retail[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -387,16 +362,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_nursing_home[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_nursing_home[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_nursing_home[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -407,16 +379,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_restaurant[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_restaurant[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_restaurant[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -427,16 +396,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_aerodrome[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_aerodrome[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_aerodrome[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -447,16 +413,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_office[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_office[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_office[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -467,16 +430,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_platform[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_platform[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_platform[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -487,16 +447,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_university[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_university[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_university[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -507,16 +464,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_college[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_college[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_college[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -527,16 +481,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_kindergarten[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_kindergarten[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_kindergarten[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -547,16 +498,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_schools[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_schools[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_schools[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -567,16 +515,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_bakeries[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_bakeries[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_bakeries[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -587,16 +532,13 @@ if (date_1 != date_2) {
         nrow(germany_shape)
       ),
       function(x, ...) {
-        ifelse(
-          nrow(germany_residential[[x]]) > 0,
-          length(
-            unlist(
-              st_intersects(
-                germany_shape[x, ], germany_residential[[x]]
-              )
+        length(
+          unlist(
+            st_intersects(
+              germany_shape[x, ],
+              germany_residential[[as.character(germany_shape$Kennziffer[x])]]
             )
-          ),
-          0
+          )
         )
       }
     )
@@ -746,7 +688,8 @@ germany <- merge(
 # add id variable for the date
 date_id <- tibble(
   Date = sort(unique(germany$Date)),
-  id_date = seq_len(length(unique(germany$Date)))
+  id_date_1 = seq_len(length(unique(germany$Date))),
+  id_date_2 = seq_len(length(unique(germany$Date)))
 )
 # merge it together
 germany <- merge(
@@ -755,5 +698,5 @@ germany <- merge(
   by = "Date"
 )
 # sort it
-germany <- germany[order(germany$idarea_1, germany$id_date), ]
+germany <- germany[order(germany$idarea_1, germany$id_date_1), ]
 rm(list = setdiff(ls(), c("germany")))

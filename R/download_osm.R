@@ -491,6 +491,7 @@ germany_schools <- lapply(
     }
   }
 )
+names(germany_schools) <- germany$Kennziffer
 save(germany_schools, file = "osmdata/germany_schools.Rda")
 germany_kindergarten <- pblapply(
   germany_bbox,
@@ -508,6 +509,7 @@ germany_kindergarten <- lapply(
     }
   }
 )
+names(germany_kindergarten) <- germany$Kennziffer
 save(germany_kindergarten, file = "osmdata/germany_kindergarten.Rda")
 germany_college <- pblapply(
   germany_bbox,
@@ -525,6 +527,7 @@ germany_college <- lapply(
     }
   }
 )
+names(germany_college) <- germany$Kennziffer
 save(germany_college, file = "osmdata/germany_college.Rda")
 germany_university <- pblapply(
   germany_bbox,
@@ -542,6 +545,7 @@ germany_university <- lapply(
     }
   }
 )
+names(germany_university) <- germany$Kennziffer
 save(germany_university, file = "osmdata/germany_university.Rda")
 germany_platform <- pblapply(
   germany_bbox,
@@ -559,6 +563,7 @@ germany_platform <- lapply(
     }
   }
 )
+names(germany_platform) <- germany$Kennziffer
 save(germany_platform, file = "osmdata/germany_platform.Rda")
 germany_shops <- pblapply(
   germany_bbox,
@@ -576,6 +581,7 @@ germany_shops <- lapply(
     }
   }
 )
+names(germany_shops) <- germany$Kennziffer
 save(germany_shops, file = "osmdata/germany_shops.Rda")
 germany_office <- pblapply(
   germany_bbox,
@@ -593,6 +599,7 @@ germany_office <- lapply(
     }
   }
 )
+names(germany_office) <- germany$Kennziffer
 save(germany_office, file = "osmdata/germany_office.Rda")
 germany_aerodrome <- pblapply(
   germany_bbox,
@@ -610,6 +617,7 @@ germany_aerodrome <- lapply(
     }
   }
 )
+names(germany_aerodrome) <- germany$Kennziffer
 save(germany_aerodrome, file = "osmdata/germany_aerodrome.Rda")
 germany_restaurant <- pblapply(
   germany_bbox,
@@ -627,6 +635,7 @@ germany_restaurant <- lapply(
     }
   }
 )
+names(germany_restaurant) <- germany$Kennziffer
 save(germany_restaurant, file = "osmdata/germany_restaurant.Rda")
 germany_hospital <- pblapply(
   germany_bbox,
@@ -644,6 +653,7 @@ germany_hospital <- lapply(
     }
   }
 )
+names(germany_hospital) <- germany$Kennziffer
 save(germany_hospital, file = "osmdata/germany_hospital.Rda")
 germany_nursing_home <- pblapply(
   germany_bbox,
@@ -661,6 +671,7 @@ germany_nursing_home <- lapply(
     }
   }
 )
+names(germany_nursing_home) <- germany$Kennziffer
 save(germany_nursing_home, file = "osmdata/germany_nursing_home.Rda")
 germany_retail <- pblapply(
   germany_bbox,
@@ -678,6 +689,7 @@ germany_retail <- lapply(
     }
   }
 )
+names(germany_retail) <- germany$Kennziffer
 save(germany_retail, file = "osmdata/germany_retail.Rda")
 germany_place_of_worship <- pblapply(
   germany_bbox,
@@ -695,6 +707,7 @@ germany_place_of_worship <- lapply(
     }
   }
 )
+names(germany_place_of_worship) <- germany$Kennziffer
 save(germany_place_of_worship, file = "osmdata/germany_place_of_worship.Rda")
 germany_bakeries <- pblapply(
   germany_bbox,
@@ -712,6 +725,7 @@ germany_bakeries <- lapply(
     }
   }
 )
+names(germany_bakeries) <- germany$Kennziffer
 save(germany_bakeries, file = "osmdata/germany_bakery.Rda")
 germany_hairdresser <- pblapply(
   germany_bbox,
@@ -729,6 +743,7 @@ germany_hairdresser <- lapply(
     }
   }
 )
+names(germany_hairdresser) <- germany$Kennziffer
 save(germany_hairdresser, file = "osmdata/germany_hairdresser.Rda")
 germany_clinic <- pblapply(
   germany_bbox,
@@ -746,6 +761,7 @@ germany_clinic <- lapply(
     }
   }
 )
+names(germany_clinic) <- germany$Kennziffer
 save(germany_clinic, file = "osmdata/germany_clinic.Rda")
 germany_sport <- pblapply(
   germany_bbox,
@@ -763,6 +779,7 @@ germany_sport <- lapply(
     }
   }
 )
+names(germany_sport) <- germany$Kennziffer
 save(germany_sport, file = "osmdata/germany_sport.Rda")
 germany_entertainment <- pblapply(
   germany_bbox,
@@ -780,6 +797,7 @@ germany_entertainment <- lapply(
     }
   }
 )
+names(germany_entertainment) <- germany$Kennziffer
 save(germany_entertainment, file = "osmdata/germany_entertainment.Rda")
 germany_marketplace <- pblapply(
   germany_bbox,
@@ -797,6 +815,7 @@ germany_marketplace <- lapply(
     }
   }
 )
+names(germany_marketplace) <- germany$Kennziffer
 save(germany_marketplace, file = "osmdata/germany_marketplace.Rda")
 germany_residential <- pblapply(
   germany_bbox,
@@ -822,6 +841,7 @@ germany_residential <- lapply(
     }
   }
 )
+names(germany_residential) <- germany$Kennziffer
 germany_residential1 <- germany_residential[1:120]
 germany_residential2 <- germany_residential[121:401]
 save(germany_residential1, file = "osmdata/germany_residential1.Rda")
