@@ -1,7 +1,7 @@
 library(INLA)
 library(spdep)
 source("R/preprocess_germany.R")
-set.seed(420)
+set.seed(8262)
 test <- sample(seq_len(nrow(newest_numbers)), size = floor(0.2 * nrow(newest_numbers)))
 test_value <- newest_numbers$value[test]
 newest_numbers$value[test] <- NA
@@ -608,11 +608,7 @@ mae <- c(mae, list(
   mean(abs(predicted_1[test] - test_value)),
   mean(abs(predicted_2[test] - test_value)),
   mean(abs(predicted_3[test] - test_value)),
-  ifelse(
-    class(
-      try(mean(abs(predicted_4[test] - test_value)), silent = TRUE)
-    ) == "try-error", NA, mean(abs(predicted_4[test] - test_value))
-  )
+  mean(abs(predicted_4[test] - test_value))
 ))
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables

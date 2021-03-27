@@ -36,7 +36,7 @@ An \textit{irregular lattice} refers to a spatial configuration of regions $i=1,
 \end{figure}
 \subsection{General Notation and Abbreviations}
 For $C\in\mathcal{I}=\left\lbrace1,...,n\right\rbrace$ let $\pmb{x}_C=\left\lbrace x_i:i\in C\right\rbrace$. $-C$ denotes the set $\mathcal{I-C}$ such that $\pmb{x}_{-C}=\left\lbrace x_i:i\notin C\right\rbrace$. For two sets $A$ and $B$, $A\setminus B=\left\lbrace i:i\in A \hbox{ and } i \notin B\right\rbrace$. \\
-$\pi\left(\cdot\right)$ denotes the density of its arguments, for example $\pi\left(\pmb{x}\right)$ for the density of $\pmb{x}$ and $\pi\left(\pmb{x}_A|\pmb{x}_{-A}\right)$ for the conditional density of $\pmb{x}_A$, given $\pmb{x}_{-A}$. '$\sim$' is used when a variable is 'distributed' according to the law $\mathcal{L}$.  \\
+$\pi\left(\cdot\right)$ denotes the density of its arguments, for example $\pi\left(\pmb{x}\right)$ for the density of $\pmb{x}$ and $\pi\left(\pmb{x}_A|\pmb{x}_{-A}\right)$ for the conditional density of $\pmb{x}_A$, given $\pmb{x}_{-A}$. '$\sim$' is used when a variable is 'distributed' according to the law $l$.  \\
 The expected value is denoted by $\mathbb{E}\left[\cdot\right]$, the variance by $\hbox{Var}\left(\cdot\right)$, the covariance by $\hbox{Cov}\left(\cdot\right)$, the precision by $\hbox{Prec}\left(\cdot\right)=\hbox{Cov}\left(\cdot\right)^{-1}$, the correlation by $\hbox{Corr}\left(\cdot,\cdot\right)$ and a probability by $\mathbb{P}\left(\cdot\right)$  \autocite[][16]{rue2005gaussian}.
 \subsection{Symmetric Positive Definite Matrices}
 An $n \times n$ matrix $\pmb{A}$ is \textit{positive definite} exactly if
@@ -173,7 +173,20 @@ Some basic properties of the multivariate normal distribution are the following.
 \end{itemize}
 \clearpage
 \subsection{Skewness}
+Skewness is a statistical indicator that describes the type and strength of the asymmetry of a probability distribution. It shows whether and how strongly the distribution is skewed to the right (right-skewed, left-skewed, negative skewness) or to the left (left-skewed, right-skewed, positive skewness). Any non-symmetrical distribution is called skewed. \\
+The skewness of a random variable $X$ is the third standardized moment, defined as
+\begin{equation}
+    \hbox{Skew}[X]=\mathbb{E}\left[\left(\frac{X-\mu}{\sigma}\right)^3\right] = \frac{\mathbb{E}\left[\left(X-\mu\right)^3\right]}{\left(\mathbb{E}\left[\left(X-\mu\right)^{3/2}\right]\right)^2}=\frac{\mu_3}{\sigma^3},
+\end{equation}
+with $\mu_3$ the third central moment and $\sigma$ the standard deviation \autocite[][]{doane2011measuring, wilkins1944note}.
 \subsection{Kurtosis}
+Kurtosis is a measure of the slope of a probability distribution of a random variable. Distributions with low kurtosis scatter relatively evenly; for distributions with high kurtosis, the scatter results more from extreme but rare events. \\
+The kurtosis of a random variable $X$ is the fourth standardized moment, defined as
+\begin{equation}
+    \hbox{Kurt}[X]=\mathbb{E}\left[\left(\frac{X-\mu}{\sigma}\right)^4\right] = \frac{\mathbb{E}\left[\left(X-\mu\right)^4\right]}{\left(\mathbb{E}\left[\left(X-\mu\right)^2\right]\right)^2}=\frac{\mu_4}{\sigma^4},
+\end{equation}
+with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \autocite[][]{decarlo1997meaning, wilkins1944note}.
+\clearpage
 \section{Prior Selection}
 \subsection{Conjugate Priors}
 One property of exponential families is that they have conjugate priors \autocite[][]{diaconis1979conjugate}, which is an important property in Bayesian statistics. If the posterior distribution $\pi\left(\pmb{\theta}|\pmb{x}\right)$ and the prior distribution $\pi\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $\pi\left(\pmb{x}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. These priors were first discussed and formalised by Raifa and Schlaifer in 1961 \autocite[][]{raiffaapplied}. \\
@@ -718,9 +731,55 @@ To obtain the approximations for the posterior marginals for the $x_i$'s conditi
 \subsection{The Leroux Model}
 \clearpage
 \section{Goodness-of-Fit indicators}
+The goodness of fit indicates "how well" an estimated model can explain a set of observations. Measures of goodness of fit allow a statement to be made about the discrepancy between the theoretical values of the random variables under investigation, which are expected or predicted on the basis of the model, and the values actually measured. \\
+The goodness of fit of a model to available data can be assessed with the help of statistical tests or suitable ratios.
 \subsection{The Akaike Information Criterion}
-\subsection{The Conditional Predictive Ordinate}
+The historically oldest criterion was proposed in 1973 by Hirotsugu Akaike (1927-2009) as an information criterion and is known today as the Akaike information criterion (AIC). The AIC is one of the most frequently used criteria for model selection in the context of likelihood-based inference.  \\
+Let the population contain the distribution of a variable with unknown density function $p$. The maximum likelihood estimation assumes a known distribution with an unknown parameter $\theta$, hence the density function can be written as $q\left(\theta\right)$. The Kullback-Leibler divergence is used as a distance measure between $p$ and $q\left(\widehat{\theta}\right)$ with $\widehat{\theta}$ the estimated parameter from the maximum likelihood estimation. The better the maximum likelihood model, the small the Kullback-Leibler divergence $D\left(P||Q\right)$. \\
+For a maximum likelihood model with a $p$-dimensional parameter vector $\widehat{\pmb{\theta}}$, the Akaike information criterion is defined as
+\begin{equation}
+    \hbox{AIC}=-2l\left(\widehat{\pmb{\theta}}_{ML}\right)+2p,
+\end{equation}
+with $l$ the log-likelihood function \autocite[][]{akaike1974new}.
 \subsection{The Deviance Information Criterion}
-\subsection{The Widely Applicable Bayesian Informatio Criterion}
+In statistics, the deviance information criterion, or DIC for short, is a measure (criterion) for the prediction error of a model.
+This measure is an information criterion and belongs to the environment of the Bayesian method for model comparisons. The smaller the deviance information criterion, the better the model fit. The deviance information criterion can be regarded as the Bayesian equivalent of the Akaike information criterion. \\
+The deviance is defined as 
+\begin{equation}
+    D\left(\pmb{\theta}\right)=-2\log\left(l\left(\pmb{y}|\pmb{\theta}\right)\right)+C,
+\end{equation}
+with $\pmb{y}$ the data, $\pmb{\theta}$ the unknown parameters of the model and l the likelihood function. $C$ is a constant that cancels out in all calculations that compare different models and therefore it does not need to be known \autocite[][]{nelder1972generalized}. \\
+The DIC is given by
+\begin{equation}
+    \hbox{DIC}=D\left(\overline{\pmb{\theta}}\right)+2p_D,
+\end{equation}
+with
+\begin{equation}
+    p_D=\overline{D\left(\pmb{\theta}\right)}-D\left(\overline{\pmb{\theta}}\right),
+\end{equation}
+where $\overline{\pmb{\theta}}$ is the expected value of $\pmb{\theta}$ \autocite[][]{spiegelhalter2014deviance}.
+\subsection{The Watanabe-Akaike Information Criterion}
+The Watanabe-Akaike information criterion (WAIC) is the generalised AIC onto singular statistical models. \\
+The WAIC is given by
+\begin{equation}
+    \hbox{WAIC} = -2\hbox{LLPD}+2p_{\hbox{WAIC}},
+\end{equation}
+with the log pointwise predictive density (LLPD) given by
+\begin{equation}
+    \hbox{LLPD} = \sum_{i=1}^n\log\left(\int p\left(y_i|\pmb{\theta}\right)p_{\hbox{post}}\left(\pmb{\theta}\right)\right)d\pmb{\theta}.
+\end{equation}
+LLPD can be seen as the Bayesian analogue of $l\left(\widehat{\pmb{\theta}}_{ML}\right)$ in the calculation of the AIC.\\
+The penalty term of the WAIC is also fully Bayesian and given by
+\begin{equation}
+    p_{\hbox{WAIC}}=\sum_{i=1}^n\hbox{Var}_{\hbox{post}}\left(\log\left(p\left(y_i|\pmb{\theta}\right)\right)\right),
+\end{equation}
+where the term represents the variance of the individual terms in the LLPD over all data points \autocite[][]{watanabe2010asymptotic, yong2018loo}.
+\subsection{The Conditional Predictive Ordinate}
+The conditional predictive ordinate (CPO) is a Bayesian diagnostic that can be used to detect surprising observations. It is often used in the context of univariate sampling, the multivariate normal distribution and regression models. \\
+The conditional predictive ordinate is given by
+\begin{equation}
+    \hbox{CPO} = p\left(y_i|y_{-i}\right)
+\end{equation}
+with $\pmb{y}$ the data, $y_{-i}$ the data without the $i$-th observation, and $p\left(\cdot|y_{-i}\right)$ the predictive distribution of a new observation at $y_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
 %https://arxiv.org/pdf/1708.02723.pdf \\
 %http://www.leg.ufpr.br/~elias/cursos/br2019/slides1.pdf

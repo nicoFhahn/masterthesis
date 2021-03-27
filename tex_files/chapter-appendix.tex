@@ -3,13 +3,48 @@
 \chapter{Appendix}
 \label{sec:appendix}
 \section{Probability Distributions}
+\subsection{The Normal Distribution}
+The normal distribution is an important type of continuous probability distribution in stochastics. The special significance of the normal distribution is based, among other things, on the central limit theorem, according to which distributions that result from the additive combination of a large number of independent influences are approximately normally distributed under weak conditions. \\
+The density is given by
+\begin{equation}
+    f\left(x|\mu,\sigma\right)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2\right).
+\end{equation}
+The first two moments of the distribution are given by
+\begin{align}
+    \mathbb{E}\left[X\right] &= \mu \\
+    \hbox{Var}\left[X\right] &= \sigma^2.
+\end{align}
+The graph of this density function has a "bell-shaped form" and is symmetrical with $\mu$ as the centre of symmetry \autocite[][83-85]{fahrmeir2016statistik}.
+\subsection{The Poisson Distribution}
+The Poisson distribution is a discrete probability distribution that can be used to model the number of events that occur independently of each other at a constant mean rate in a fixed time interval or spatial area. \\
+The density is given by
+\begin{equation}
+    f\left(k\right)=\mathbb{P}\left(X=k\right)=\begin{cases}
+    \frac{\lambda^k}{k!}\exp\left(-\lambda\right) & \hbox{for }x\in\left\lbrace0,1,...\right\rbrace \\
+    0 & \hbox{else}
+    \end{cases}
+\end{equation}
+with $\lambda$ representing the expected value of $X$.  \\
+The first two moments of the distribution are given by
+\begin{align}
+    \mathbb{E}\left[X\right] &= \lambda \\
+    \hbox{Var}\left[X\right] &= \lambda.
+\end{align}
+For $\lambda\geq10$ the distribution becomes approximately symmetrical and can thus be approximated by a normal distribution \autocite[][243]{fahrmeir2016statistik}.
 \subsection{The Negative Binomial Distribution}
 The negative binomial distribution is a univariate probability distribution that belongs to the discrete probability distributions. It models the number of trials required to achieve a given number of successes in a Bernoulli process. \\
 The density is given by
 \begin{equation}
-    f\left(k,r,p\right)=\mathcal{P}\left(X=k\right)=\begin{pmatrix} k+r-1\\r-1\end{pmatrix}\left(1-p\right)^kp^r,
+    f\left(k,r,p\right)=\mathbb{P}\left(X=k\right)=\begin{pmatrix} k+r-1\\r-1\end{pmatrix}\left(1-p\right)^kp^r,
 \end{equation}
-with $r$ the number of successes, $k$ the number of failures, and $p$ the probability of success \cite{haldane1941fitting}.
+with $r$ the number of successes, $k$ the number of failures, and $p$ the probability of success. \\
+The first two moments of the distribution are given by
+\begin{align}
+    \mathbb{E}\left[X\right] &= \frac{pr}{1-p} \\
+    \hbox{Var}\left[X\right] &= \frac{pr}{\left(1-p\right)^2}.
+\end{align} 
+For large values of $r$, the negative binomial distribution can be approximated by a normal distribution
+\cite{haldane1941fitting}.
 \clearpage
 \section{Distribution Fits}
 \subsection{Distribution Fits for Germany}

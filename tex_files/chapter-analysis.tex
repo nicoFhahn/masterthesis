@@ -38,13 +38,13 @@ Because the high numbers from two small municipalities complicate the interpreta
 % \begin{figure}[H]
 %   \centering
 %   \includesvg[width = 1.2\textwidth]{sir_norway_log.svg}
-%   \caption{The log10 standardised incidence ratio for Norway based on the data of the 20th of March 2021}
+%   \caption{The log10 standardised incidence ratio for Norway based on the data of the 24th of March 2021}
 %   \label{sirnorway}
 % \end{figure}
 \begin{figure}[H]
   \centering
   \includegraphics[width = 1.2\textwidth]{sir_norway_log.png}
-  \caption{The log10 standardised incidence ratio for Norway based on the data of the 20th of March 2021}
+  \caption{The log10 standardised incidence ratio for Norway based on the data of the 24th of March 2021}
   \label{sirnorwaylog}
 \end{figure}
 \clearpage
@@ -143,23 +143,23 @@ Norway & Negative Binomial & 4086 \\
 \end{table} 
 The poor fit for the Poisson distribution can be explained by looking at the range of the number of confirmed cases in a given municipality. For Germany, this number ranges from 508 to 137634 (as of March 18, 2021), while for Norway, the number ranges from 0 to 24905 (as of March 20, 2021). This results in a mean and standard deviation for Germany of 6617 and 9014, respectively. For Norway, the values for these metrics are 236 and 1389.
 \subsection{Spatial Models for Germany}
-First, a look is taken at the spatial models calculated for Germany. These models are based on data from 18 March 2021, when 2.669.233 people in Germany were confirmed infected with Covid-19. The five municipalities with the most infections are shown in Table~\ref{top5germany}.
+First, a look is taken at the spatial models calculated for Germany. These models are based on data from 24 March 2021, when 2.695.037 people in Germany were confirmed infected with Covid-19. The five municipalities with the most infections are shown in Table~\ref{top5germany}.
 \begin{table}[H] 
-\caption{The municipalities with the most infections as of March 18th 2021. \label{top5germany}}
+\caption{The municipalities with the most infections as of March 24th 2021. \label{top5germany}}
 \begin{tabular}{l r r}
 \toprule
 \textbf{Municipality}	& \textbf{Population}	& \textbf{Number of infections} \\
 \midrule
-SK Berlin & 3644826 & 137634 \\     
-SK Hamburg & 1841179 & 56656 \\
-SK Munich & 1471508 & 56559 \\
-SK Cologne & 1085664 & 36455 \\
-Region Hannover & 1157624 & 35097 \\
+SK Berlin & 3644826 & 141639   \\     
+SK Hamburg & 1841179 & 58661   \\
+SK Munich & 1471508 & 57690   \\
+SK Cologne & 1085664 & 37592   \\
+Region Hannover & 1157624 & 36241   \\
 \bottomrule
 \end{tabular}
 \end{table}
 \subsubsection{Demographic Models}\label{sssec:demoGermany}
-The model with the best performance based on the demographic variables was a Leroux model calculated formula in Listing~\ref{codeDemoGermany}. The variables used for this model were the percentages of the vote for the six biggest German political parties. \\
+The model with the best performance based on the demographic variables was a Leroux model computed using the formula in Listing~\ref{codeDemoGermany}. The variables used for this model were the percentages of the vote for the six biggest German political parties. \\
 The performance measures of this model and the best-performing BYM2 and Besag proper models are shown in Table~\ref{demoGermany}. 
 \begin{table}[H] 
 \caption{The performance measures for the best performing demographic model of each type. \label{demoGermany}}
@@ -167,9 +167,9 @@ The performance measures of this model and the best-performing BYM2 and Besag pr
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-Besag  & 4598 & 4598 & -2715 & 219618 \\
-BYM2 & 4535 & 4502 & -2704 & 219109\\
-Leroux & 4685  & 4716 & -2976 & 216908\\
+Besag  & 4916 & 4919 & -2719 &  193968 \\
+BYM2 & 4682 & 4670 & -2726 &  193922\\
+Leroux & 4728  & 4753 & -3005 & 191965\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -181,21 +181,21 @@ To obtain a credibility interval of the fixed effects on the transformed scale, 
 \toprule
 \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
-(Intercept) & -0.07733 & 0.9257 & 0.8953 & 0.9568 \\
-Union & -0.1307 & 0.8804 & 0.7485 & 1.029 \\
-SPD & -0.1597 & 0.8531 & 0.7842 & 0.9264 \\
-Gruene & -0.1055 & 0.9022 & 0.7812 & 1.036 \\
-FDP & 0.001426 & 1.002 & 0.9630 & 1.041 \\
-die\_linke & -0.1930 & 0.8254 & 0.7505 & 0.9057 \\
-afd & 0.1377 & 1.150 & 1.005 & 1.311 \\
+(Intercept) & -0.07468 & 0.9282 & 0.8976 & 0.9594 \\
+afd & 0.1230 & 1.134& 0.9820 & 1.302 \\
+FDP & -0.01211 & 0.9881& 0.9515 & 1.026 \\
+Gruene & -0.1363 & 0.8750& 0.7555 & 1.008 \\
+SPD & -0.1702 & 0.8443 & 0.7749 & 0.9179 \\
+Union & -0.1714 & 0.8453& 0.7175 & 0.9889 \\
+die\_linke & -0.2159 & 0.8067 & 0.7353 & 0.8830 \\
 \bottomrule
 \end{tabular}
 \end{table}
-The posterior mean of the exponentiated intercept implies a -7.43\% risk rate across Germany with a credibility interval ranging from -10.47\% to 4.32\%.  \\
+The posterior mean of the exponentiated intercept implies a -7.2\% risk rate across Germany with a credibility interval ranging from -10.2\% to 4.1\%.  \\
 This summary shows that especially people who come from regions where the AfD gets a higher share of the vote have a higher risk of contracting Covid-19. In Figure~\ref{sirgermany}, regions in eastern Germany often had a higher SIR. These are also the regions where the AfD tends to perform better in elections. The connection between the two can be attributed to the fact that the AfD is a right-wing party that openly criticises the measures taken to prevent the spread of the coronavirus. As a result, a large proportion of people who vote for the AfD do not take the measures seriously either and refuse to keep a safe distance or wear a mask in public spaces. \\
-A one standard deviation increase for the AfD leads to a risk increase of about 15\%. The only other party with a posterior mean greater than 1 is the liberal FDP, which is known for its capitalist views. An increase of one standard deviation increases the risk by 0.16\%. \\
+A one standard deviation increase for the AfD leads to a risk increase of about 13.4\%. The only other party with a posterior mean close to 1 is the liberal FDP, which is known for its capitalist views. However, it is still below 1. An increase of 1 standard deviation leads to a risk reduction of 1.8\%. \\
 As for the rest of the parties, they are either the leading party in Germany (Union) or left-wing oriented (SPD, the Greens and the Left). People who vote for left-wing parties may respect the Corona rules more and show more consideration for other people.
-As this was the overall best-performing spatial model for Germany, a look is taken at the posterior means $\pmb{\zeta} = \exp{\left(\xi\right)}$ of the area-specific risks. Since the uncertainty associated with them can also be mapped, the posterior probability $\mathbb{P}\left(\zeta_i > 1|y\right)$ is visualised as well. In Figure~\ref{posteriorGermany} it can be seen that the relative risk is higher in the south-eastern parts of Bavaria as well as in parts of Saxony, North Rhine-Westphalia and Brandenburg. The posterior probability for these regions is mostly between 0.75 and 1. Both Saxony and Brandenburg are political strongholds for the AfD, while North Rhine-Westphalia is home to the Ruhr region, Germany's most populous metropolitan area. The higher numbers in Bavaria can be explained by the large common borders with Austria and the Czech Republic, two countries that were more affected by the pandemic. Many people cross these borders because of tourism and many guest workers come from the Czech Republic to work on agricultural land in Bavaria, which resulted in several Covid-19 outbreak events.
+As this was the overall best-performing spatial model for Germany, a look is taken at the posterior means $\pmb{\zeta} = \exp{\left(\xi\right)}$ of the area-specific risks. Since the uncertainty associated with them can also be mapped, the posterior probability $\mathbb{P}\left(\zeta_i > 1|y\right)$ is visualised as well. In Figure~\ref{posteriorGermany}, it can be seen that the relative risk is above 1 for large parts of Germany, except for most of northern Germany and some parts in the south of the country. The posterior probability is highest for parts of North Rhine-Westphalia, home to Germany's most populous metropolitan area, the Ruhr area, and for Saxony and Thuringia, both political strongholds of the AfD. The higher numbers in Bavaria can be explained by the large common borders with Austria and the Czech Republic, two countries that were more affected by the pandemic. Many people cross these borders because of tourism and many guest workers come from the Czech Republic to work on agricultural land in Bavaria, which resulted in several Covid-19 outbreak events.
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{posterior_germany.png}
@@ -217,9 +217,9 @@ The performance measures of this model and the best-performing Besag proper and 
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-Besag & 4604 & 4598 & -2742 & 232444\\
-BYM2 & 4561 & 4539 & -2714 & 230728\\
-Leroux & 4727 & 4754 & -3318 & 238526\\
+Besag & 4749 & 4745 & -2799 & 194009\\
+BYM2 & 4635 & 4620 & -2758 & 193472\\
+Leroux & 4785 & 4823 & -3444 & 1947560\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -230,32 +230,33 @@ The values of the covariates are shown in Table~\ref{fixedInfraGermany}.
 \toprule
 \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
-(Intercept) & -0.07275 & 0.9299 & 0.9168 & 0.9430 \\
-shops & 0.1590 & 1.179 & 0.9487 & 1.448 \\
-hairdresser & 0.1554 & 1.172 & 1.003 & 1.360 \\
-marketplace & 0.03241 & 1.034 & 0.9663 & 1.104 \\
-schools & 0.03174 & 1.034 & 0.9325 & 1.143 \\
-nursing\_home & 0.006124 & 1.006 & 0.9775 & 1.036 \\
-bakeries & 0.005910 & 1.009 & 0.8563 & 1.181 \\
-place\_of\_worship & 0.001925 & 1.002 & 0.9591 & 1.047 \\
-entertainment & -0.01105 & 0.9907 & 0.8812 & 1.110 \\
-retail & -0.01147 & 0.9892 & 0.9235 & 1.058 \\
-aerodrome & -0.01204 & 0.9884 & 0.9368 & 1.042 \\
-sport & -0.01208 & 0.9888 & 0.9151 & 1.067 \\
-higher\_education & -0.02014 & 0.9803 & 0.9420 & 1.020 \\
-office & -0.03995 & 0.9615 & 0.8942 & 1.032 \\
-platform & -0.04970 & 0.9519 & 0.8971 & 1.009 \\
-clinic & -0.05596 & 0.9460 & 0.8929 & 1.001 \\
-kindergarten & -0.09283 & 0.9143 & 0.7797 & 1.065 \\
-restaurant & -0.1094 & 0.8984 & 0.7877 & 1.020 \\
+(Intercept) & -0.07373 & 0.9289 & 0.9159 & 0.9421 \\
+shops & 0.3860 & 1.479 & 1.197 & 1.808 \\
+hairdresser & 0.1123 & 1.122 & 0.9655 & 1.296 \\
+marketplace & 0.04187 & 1.043 & 0.9846 & 1.104 \\
+schools & 0.02157 & 1.023 & 0.9199 & 1.135 \\
+nursing\_home & 0.01399 & 1.014 & 0.9879 & 1.042 \\
+aerodrome & 0.01273 & 1.013 & 0.9648 & 1.063 \\
+bakeries & 0.008426 & 1.011 & 0.8684 & 1.171 \\
+sport & 0.007894 & 1.009 & 0.9374 & 1.084 \\
+office & 0.005687 & 1.006 & 0.9533 & 1.061 \\
+retail & -0.0028888 & 0.9977 & 0.9317 & 1.067 \\
+place\_of\_worship & -0.005710 & 0.9945 & 0.9562 & 1.034 \\
+higher\_education & -0.03179 & 0.9689 & 0.9324 & 1.006 \\
+clinic & -0.03258 & 0.9683 & 0.9154 & 1.023 \\
+entertainment & -0.03454 & 0.9676 & 0.8656 & 1.078 \\
+platform & -0.05867 & 0.9434 & 0.8913 & 0.9976 \\
+restaurant & -0.1990 & 0.8213 & 0.7206 & 0.9316 \\
+kindergarten & -0.2268 & 0.7993 & 0.6871 & 0.9243 \\
 \bottomrule
 \end{tabular}
 \end{table}
-Some findings from these results are that shops, defined as supermarkets, convenience stores and drugstores, hairdressers, marketplaces, schools, nursing homes, bakeries and places of worship all increase the risk of infection. The two highest are shops and hairdressers, where a 1 standard deviation increase leads to a 17.9\% increase in risk in the case of shops and a 17.2\% increase in risk for hairdressers. It should not be surprising that shops in particular increase the risk of infection, as people tend to congregate there and people living in areas where a supermarket is nearby may prefer to go shopping more often to buy fresh produce rather than just once a week when a supermarket is further away. \\
+Some findings from these results are that shops, defined as supermarkets, convenience stores and drugstores, hairdressers, marketplaces, schools, nursing homes and bakeries, among others, increase the risk of infection. The two highest are shops and hairdressers, where a 1 standard deviation increase leads to a 47.9\% increase in risk in the case of shops and a 12.2\% increase in risk for hairdressers. It should not be surprising that shops in particular increase the risk of infection, as people tend to congregate there and people living in areas where a supermarket is nearby may prefer to go shopping more often to buy fresh produce rather than just once a week when a supermarket is further away. \\
 In Germany, there was a big discussion about whether hairdressers should be allowed to stay open during lockdowns, as they were forced to close and could only work when there was no lockdown. Seeing how much hairdressers increase the risk of infection, it might have been a wise decision not to allow them to continue working during a closure. \\
-Finally, the number of schools in a given community also increases the risk of infection. An increase of 1 standard deviation increases the risk by about 3.4\%.
+Finally, the number of schools in a given community also increases the risk of infection. An increase of 1 standard deviation increases the risk by about 2.3\%.
 \\
-There are also effects that have a posterior mean of less than 1, suggesting that they reduce the risk of infection. However, this is not necessarily the case, as it is probably safer for a person to stay at home than to go to a restaurant, for example. It is interesting to note, however, that the lowest posterior mean was observed for restaurants. This could be due to the fact that during most of the time restaurants were either only allowed to serve take-away food or had very strict hygiene policies. The low value could indicate that these measures worked as intended.
+There are also effects that have a posterior mean of less than 1, suggesting that they reduce the risk of infection. However, this is not necessarily the case, as it is probably safer for a person to stay at home than to go to a restaurant, for example. It is interesting to note, however, that the two lowest posterior means were observed for restaurants and kindergartens. In the case of restaurants, this could be due to the fact that during most of the period restaurants were either only allowed to serve take-away food or had very strict hygiene rules. The low value could indicate that these measures worked as intended. \\
+For the kindergartens, the reason could be that they were also closed most of the time and the children therefore stayed at home with their families and did not interact with other children.
 \subsubsection{Combined Models}
 Finally, models are considered that include both the infrastructural and demographic covariates. Due to the amount of variables, all models run are based on variable selection. \\
 The best performing model was again a BYM2 model, run with the formula shown in Listing~\ref{codeBothGermany}. \\
@@ -266,9 +267,9 @@ The performance measures of the computed models are shown in Table~\ref{allGerma
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-Besag&  4628 & 4605 & -2673 & 249901\\
-BYM2 & 4580 & 4571 & -2683 & 247323\\
-Leroux & 4764 & 4791 & -2833 & 248031 \\
+Besag&  4755 & 4721 & -2756 & 198553\\
+BYM2 & 4753 & 4774 & -2776 & 198461\\
+Leroux & 4847 & 4818 & -2684 & 204102 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -280,27 +281,27 @@ The fixed effects are shown in Table~\ref{fixedAllGermany}.
 \toprule
 \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
-(Intercept) & -0.07327 & 0.9294 & 0.9149 & 0.9438 \\
-afd & 0.2488 & 1.283 & 1.213 & 1.356 \\
-pop\_dens & 0.1196 & 1.127 & 1.078 & 1.178 \\
-schools & 0.04867 & 1.051 & 0.9586 & 1.150 \\
-welfare\_recipients & 0.04565 & 1.048 & 0.9579 & 1.143 \\
-sport & 0.02466 & 1.026 & 0.9586 & 1.096 \\
-place\_of\_worship & -0.0002002 & 1.000 & 0.9633 & 1.038 \\
-nursing\_home & -0.0006482 & 0.9994 & 0.9752 & 1.024 \\
-kindergarten & -0.002457 &  0.9993 & 0.8898 & 1.119 \\
-log(trade\_tax) & -0.006766 & 0.9933 & 0.9705 & 1.016 \\
-FDP & -0.01635 & 0.9840 & 0.9453 & 1.024 \\
-office & -0.01770 & 0.9830 & 0.9178 & 1.051 \\
-bakeries & -0.02426 & 0.9780 & 0.8627 & 1.1104 \\
-platform & -0.03003 & 0.9708 & 0.9186 & 1.025 \\
-entertainment & -0.04251 & 0.9594 & 0.8763 & 1.048 \\
-SPD & -0.05188 & 0.9497 & 0.9088 & 0.9919 \\
-die\_linke & -0.1284 &  0.8799 & 0.8288 & 0.9333\\
+(Intercept) & -0.0716 & 0.9309 & 0.9168 & 0.9450 \\
+afd & 0.2528 & 1.288 & 1.222 & 1.357 \\
+pop\_dens & 0.09614 & 1.101 & 1.055 & 1.148 \\
+welfare\_recipients & 0.07515 & 1.079 & 1.004 & 1.157 \\
+sport & 0.05575 & 1.058 & 0.9945 & 1.124 \\
+schools & 0.03926 & 1.041 & 0.9485 & 1.140 \\
+nursing\_home & 0.008492 & 1.009 & 0.9856 & 1.032 \\
+office & -0.007482 & 0.9928 & 0.9510 & 1.036 \\
+log(trade\_tax) & -0.007660 & 0.9924 & 0.9695 & 1.016 \\
+place\_of\_worship & -0.01141 & 0.9888 & 0.9557 & 1.023 \\
+platform & -0.02052 & 0.9800 & 0.9322 & 1.029 \\
+kindergarten & -0.02174 &  0.9799 & 0.8812 & 1.087 \\
+FDP & -0.03154 & 0.9691 & 0.9340 & 1.005 \\
+SPD & -0.03197 & 0.9688 & 0.9288 & 1.010 \\
+entertainment & -0.03963 & 0.9619 & 0.8891 & 1.039 \\
+bakeries & -0.06149 & 0.9419 & 0.8412 & 1.051 \\
+die\_linke & -0.08336 &  0.9204 & 0.8697 & 0.9734\\
 \bottomrule
 \end{tabular}
 \end{table}
-According to this model, the three biggest driving factors are the percentage of votes the AfD receives, the population density and the number of schools in a municipality. The influence of the AfD and the number of schools has already been discussed in section~\ref{sssec:demoGermany}. Regarding population density, it can be said that if it increases by 1 standard deviation, the risk of infection increases by 12.7\%. The more people are concentrated per square kilometre, the easier it is for a virus to spread because the distances between people become smaller. Other factors that positively influence the risk of infection are the number of social welfare recipients, the number of sports facilities and the number of places of worship, although the risk increase for the latter is only just above 0. Sports facilities are again a place where many people come together, and here, depending on the type of sport, there can also be more contact, which in turn favours the spread of a virus. The last effect worth mentioning is the logarithmic business tax. If a region receives more revenue through business tax, the risk of infection in that region decreases. Therefore, people in communities where there is less money are at higher risk. 
+According to this model, the three biggest driving factors are the percentage of votes the AfD receives, the population density and the number of welfare recipients in a municipality. The influence of the AfD has already been discussed in section~\ref{sssec:demoGermany}, only in this case a 1 standard deviation increase leads to a risk increase of 28.8\%. Regarding population density, it can be said that if it increases by 1 standard deviation, the risk of infection increases by 10.1\%. The more people are concentrated per square kilometre, the easier it is for a virus to spread because the distances between people become smaller. Other factors that positively influence the risk of infection are the number of sports facilities, the number of schools and the number of nursing homes, although the risk increase for the latter is only just above 0. Sports facilities are again a place where many people come together, and here, depending on the type of sport, there can also be more contact, which in turn favours the spread of a virus. The last effect worth mentioning is the logarithmic trade tax. If a region receives more revenue through trade tax, the risk of infection in that region decreases. Therefore, people in communities where there is less money are at higher risk. 
 \subsection{Spatial Models for Norway}
 Next, the same types of models are evaluated for Norway. These models are based on data from 24 March 2021, when 87537 people in Norway were confirmed infected with Covid-19. The five municipalities with the most infections are shown in Table~\ref{top5norway}.
 \begin{table}[H] 
@@ -326,9 +327,9 @@ The performance measures for all three models are shown in Table~\ref{demoNorway
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-Besag  & 2385 & 2397 & -3994 & 10210 \\
-BYM2 & 2212 & 2186 & -6241 & 10062\\
-Leroux & 2225  & 2182 & -7781 & 8922\\
+Besag  & 2385 & 2397 & -3994 & 10161 \\
+BYM2 & 2212 & 2186 & -6241 & 10013\\
+Leroux & 2225  & 2182 & -7781 & 8876\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -356,9 +357,9 @@ The performance measure for the models are shown in Table~\ref{infraNorway}.
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
 \midrule
-Besag  & 2222 & 2171 & -8196 & 11890 \\
-BYM2 & 2303 & 2310 & -8209 & 12048\\
-Leroux &  2201 & 2159 & -7015 & 13071\\
+Besag  & 2303 & 2310 & -8209 & 11841 \\
+BYM2 & 2206 & 2167 & -6823 & 12000\\
+Leroux &  2219 & 2177 & -7396 & 13025\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -395,8 +396,21 @@ The risk seems to be lowest in the parts north of Trondheim and south of Bodø, 
 % \begin{figure}[H]
 %     \centering
 %     \includesvg[width = textwidth]{posterior_norway.svg}
-%     \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
-%     \label{nb_norge}
+%     \caption{Posterior mean of the area-specific risk and the posterior probability.}
+%     \label{posteriorNorway}
+% \end{figure}
+For better interpretability, the logarithmic posterior mean is shown in Figure~\ref{posteriorNorwayLog}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{posterior_norway_log.png}
+    \caption{Logarithmic posterior mean of the area-specific risk.}
+    \label{posteriorNorwayLog}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = textwidth]{posterior_norway_log.svg}
+%    \caption{Logarithmic posterior mean of the area-specific risk.}
+%     \label{posteriorNorwayLog}
 % \end{figure}
 \subsubsection{Combined Models}
 For the models containing variables related to the demographic of Norway and the infrastructure, again a Besag model performed the best. Its formula can be seen in Listing~\ref{codeBothNorway}. \\
@@ -407,9 +421,9 @@ The performance measures for the models are shown in Table~\ref{bothNorway}
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
 \midrule
-Besag  & 2409 & 2424 & -3977 & 12480 \\
-BYM2 & 2369 & 2383 & -4439 & 13193\\
-Leroux &  2322 & 2328 & -8020 & 12818\\
+Besag  & 2409 & 2424 & -3977 & 12431 \\
+BYM2 & 2369 & 2383 & -4439 & 13144\\
+Leroux &  2322 & 2328 & -8020 & 12769\\
 \bottomrule
 \end{tabular}
 \end{table}

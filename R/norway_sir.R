@@ -43,7 +43,7 @@ plot_1 +
 plot_3 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = log10(sir))) +
   ggtitle(
-    label = "Standardised incidence ratio",
+    label = "Logarithmic standardised incidence ratio",
     subtitle = "Norway"
   ) +
   scale_fill_gradient2(

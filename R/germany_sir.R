@@ -11,12 +11,12 @@ library(sf)
 library(SpatialEpi)
 library(stringr)
 # load the data
-newest_numbers <- read_csv("eval_data/newest_numbers_germany_march10.csv")
+newest_numbers <- read_csv("eval_data/newest_numbers_germany_march24.csv")
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 newest_numbers <- merge(
   newest_numbers,
   germany_sf,
-  by.x = "Kreis",
+  by.x = "municipality_id",
   by.y = "Kennziffer"
 )
 newest_numbers <- st_as_sf(newest_numbers)

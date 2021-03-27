@@ -79,21 +79,8 @@ sapply(
     )
   }
 )
-inla.emarginal(exp, models_leroux[[5]]$marginals.fixed$pop_dens)^100
-csi <- models_leroux[[5]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
-zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
-zeta_cutoff <- c(0.6, 0.9, 1.0, 1.1, 1.8)
-cat_zeta <- cut(
-  unlist(zeta),
-  breaks = zeta_cutoff,
-  include.lowest = TRUE
-)
-maps_cat_zeta <- data.frame(
-  ID = newest_numbers$idarea_1,
-  cat_zeta = cat_zeta
-)
-newest_numbers$cat_zeta <- cat_zeta
 ################## INFRASTRUCTURAL MODELS
+infra_results <- c(results_besag[7:8], results_bym2[7:8], results_leroux[7:8])
 infra_dic <- unlist(lapply(infra_results, function(x) x$dic))
 infra_waic <- unlist(lapply(infra_results, function(x) x$waic))
 infra_cpo <- unlist(lapply(infra_results, function(x) x$cpo))
@@ -154,13 +141,21 @@ cat_csi <- cut(
   include.lowest = TRUE
 )
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
+zeta_log <- lapply(csi, function(x) log10(inla.emarginal(exp, x)))
 zeta_cutoff <- c(0.1, 0.5, 0.9, 1, 1.4, 1.8, 2.2, 2.6, 3.4, 6, 9.2, 15.6, 22)
+zeta_log_cutoff <- c(-1, -0.6, -0.2, 0, 0.2, 0.4, 0.8, 1.2, 1.6)
 cat_zeta <- cut(
   unlist(zeta),
   breaks = zeta_cutoff,
   include.lowest = TRUE
 )
+cat_zeta_log <- cut(
+  unlist(zeta_log),
+  breaks = zeta_log_cutoff,
+  include.lowest = TRUE
+)
 newest_numbers$cat_zeta <- cat_zeta
+newest_numbers$cat_zeta_log <- cat_zeta_log
 newest_numbers$prob_csi <- cat_csi
 mat_marg <- matrix(NA, nrow = nrow(newest_numbers), ncol = 100000)
 m <- models_besag[[29]]$marginals.random$idarea_1
@@ -223,9 +218,23 @@ plot_3 <- ggplot(data = newest_numbers) +
       title = "Posterior probability"
     )
   )
+plot_4 <- ggplot(data = newest_numbers) +
+  geom_sf(aes(fill = cat_zeta_log)) +
+  ggtitle(
+    label = "Log10 Posterior mean of the relative risk",
+    subtitle = "Norway"
+  ) +
+  scale_fill_viridis_d(option = "B", direction = -1) +
+  theme_minimal() +
+  guides(
+    fill = guide_legend(
+      title = "Relative risk"
+    )
+  )
 plot_3
 library(patchwork)
-plot_2 + plot_3
+plot_2 + plot_3 
+plot_4
 ######################################### ALL MODELS
 all_results <- c(results_besag[9], results_bym2[9], results_leroux[9])
 all_dic <- unlist(lapply(all_results, function(x) x$dic))

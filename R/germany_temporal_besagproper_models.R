@@ -1,7 +1,7 @@
 library(INLA)
 library(spdep)
 source("R/preprocess_germany_temporal.R")
-set.seed(420)
+set.seed(42340)
 germany <- germany[germany$Date %in% seq(from = min(germany$Date), to = max(germany$Date), by = 4), ]
 test <- sample(seq_len(nrow(germany)), size = floor(0.2 * nrow(germany)))
 test_value <- germany$value[test]

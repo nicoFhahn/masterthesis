@@ -1,7 +1,7 @@
 library(INLA)
 library(spdep)
 source("R/preprocess_germany.R")
-set.seed(420)
+set.seed(8262)
 test <- sample(seq_len(nrow(newest_numbers)), size = floor(0.2 * nrow(newest_numbers)))
 test_value <- newest_numbers$value[test]
 newest_numbers$value[test] <- NA
