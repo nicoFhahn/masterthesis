@@ -143,7 +143,7 @@ formula_6 <- value ~
 res_3 <- inla(
   formula_3,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -156,7 +156,7 @@ res_3 <- inla(
 res_4 <- inla(
   formula_4,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -169,7 +169,7 @@ res_4 <- inla(
 res_5 <- inla(
   formula_5,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -183,7 +183,7 @@ res_5 <- inla(
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -273,7 +273,7 @@ formula_10 <- value ~
 res_7 <- inla(
   formula_7,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -286,7 +286,7 @@ res_7 <- inla(
 res_8 <- inla(
   formula_8,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -300,7 +300,7 @@ res_8 <- inla(
 res_9 <- inla(
   formula_9,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -314,7 +314,7 @@ res_9 <- inla(
 res_10 <- inla(
   formula_10,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -406,7 +406,7 @@ formula_14 <- value ~
 res_11 <- inla(
   formula_11,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -419,7 +419,7 @@ res_11 <- inla(
 res_12 <- inla(
   formula_12,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -432,7 +432,7 @@ res_12 <- inla(
 res_13 <- inla(
   formula_13,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -445,7 +445,7 @@ res_13 <- inla(
 res_14 <- inla(
   formula_14,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -546,7 +546,7 @@ formula_18 <- value ~
 res_15 <- inla(
   formula_15,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -559,7 +559,7 @@ res_15 <- inla(
 res_16 <- inla(
   formula_16,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -572,7 +572,7 @@ res_16 <- inla(
 res_17 <- inla(
   formula_17,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -585,7 +585,7 @@ res_17 <- inla(
 res_18 <- inla(
   formula_18,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -680,7 +680,7 @@ formula_22 <- value ~
 res_19 <- inla(
   formula_19,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -693,7 +693,7 @@ res_19 <- inla(
 res_20 <- inla(
   formula_20,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -706,7 +706,7 @@ res_20 <- inla(
 res_21 <- inla(
   formula_21,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -720,7 +720,7 @@ res_21 <- inla(
 res_22 <- inla(
   formula_22,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -824,7 +824,7 @@ formula_26 <- value ~
 res_23 <- inla(
   formula_23,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -837,7 +837,7 @@ res_23 <- inla(
 res_24 <- inla(
   formula_24,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -850,7 +850,7 @@ res_24 <- inla(
 res_25 <- inla(
   formula_25,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -864,7 +864,7 @@ res_25 <- inla(
 res_26 <- inla(
   formula_26,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -963,7 +963,7 @@ formula_30 <- value ~
 res_27 <- inla(
   formula_27,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -976,7 +976,7 @@ res_27 <- inla(
 res_28 <- inla(
   formula_28,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -989,7 +989,7 @@ res_28 <- inla(
 res_29 <- inla(
   formula_29,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -1002,7 +1002,7 @@ res_29 <- inla(
 res_30 <- inla(
   formula_30,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -1102,7 +1102,7 @@ formula_34 <- value ~
 res_31 <- inla(
   formula_31,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -1115,7 +1115,7 @@ res_31 <- inla(
 res_32 <- inla(
   formula_32,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -1128,7 +1128,7 @@ res_32 <- inla(
 res_33 <- inla(
   formula_33,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
@@ -1142,7 +1142,7 @@ res_33 <- inla(
 res_34 <- inla(
   formula_34,
   family = "nbinomial",
-  data = germany_3,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
