@@ -1,7 +1,13 @@
 library(pbapply)
 source("R/functions.R")
 # create a dummy frame
-df <- st_sf(osm_id = 0, geometry = st_sfc(lapply(0, function(x) st_geometrycollection())), crs = 4326)[0, ]
+df <- st_sf(
+  osm_id = 0,
+  geometry = st_sfc(lapply(
+    0, function(x) st_geometrycollection()
+  )),
+  crs = 4326
+)[0, ]
 norge <- read_sf("shapefiles/kommuner_komprimert-polygon.shp")
 norge_bbox <- lapply(norge$geometry, st_bbox)
 norge_schools <- pblapply(
@@ -449,9 +455,9 @@ norge_residential <- pblapply(
       x,
       key = "building",
       value = c(
-        "apartments", "bungalow", "cabin", "detached", "dormitory", "farm", "ger",
-        "hotel", "house", "houseboat", "residential", "semidetached_house",
-        "static caravan", "terrace"
+        "apartments", "bungalow", "cabin", "detached", "dormitory", "farm",
+        "ger", "hotel", "house", "houseboat", "residential",
+        "semidetached_house", "static caravan", "terrace"
       )
     )
   }
@@ -824,9 +830,9 @@ germany_residential <- pblapply(
       x,
       key = "building",
       value = c(
-        "apartments", "bungalow", "cabin", "detached", "dormitory", "farm", "ger",
-        "hotel", "house", "houseboat", "residential", "semidetached_house",
-        "static caravan", "terrace"
+        "apartments", "bungalow", "cabin", "detached", "dormitory", "farm",
+        "ger", "hotel", "house", "houseboat", "residential",
+        "semidetached_house", "static caravan", "terrace"
       )
     )
   }

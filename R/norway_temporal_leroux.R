@@ -2,7 +2,9 @@ library(INLA)
 library(spdep)
 source("R/preprocess_norge_temporal.R")
 set.seed(7918)
-norge <- norge[norge$date %in% seq(from = min(norge$date), to = max(norge$date), by = 7), ]
+norge <- norge[
+  norge$date %in% seq(from = min(norge$date), to = max(norge$date), by = 7),
+]
 test <- sample(seq_len(nrow(norge)), size = floor(0.2 * nrow(norge)))
 test_value <- norge$value[test]
 norge$value[test] <- NA
@@ -40,15 +42,15 @@ C <- Diagonal(x = 1, n = length(nb)) - Q
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_2 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -89,7 +91,8 @@ perf <- list(
     res_1$waic$waic, res_2$waic$waic
   ),
   cpo = c(
-    sum(log(res_1$cpo$cpo), na.rm = TRUE), sum(log(res_2$cpo$cpo), na.rm = TRUE)
+    sum(log(res_1$cpo$cpo), na.rm = TRUE),
+    sum(log(res_2$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_1 = perf))
@@ -109,33 +112,42 @@ mae <- c(mae, list(
   mean(abs(predicted_1[test] - test_value)),
   mean(abs(predicted_2[test] - test_value))
 ))
-rm(list = setdiff(ls(), c("norge", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "norge", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 # now models with the mobility variables
 formula_3 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_4 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + +unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + +unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 # now models with the mobility variables
 formula_5 <- value ~
-  # add the demographic vars and pop density
-  unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_6 <- value ~
-  # add the demographic vars and pop density
-  unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -208,8 +220,10 @@ perf <- list(
     res_5$waic$waic, res_6$waic$waic
   ),
   cpo = c(
-    sum(log(res_3$cpo$cpo), na.rm = TRUE), sum(log(res_4$cpo$cpo), na.rm = TRUE),
-    sum(log(res_5$cpo$cpo), na.rm = TRUE), sum(log(res_6$cpo$cpo), na.rm = TRUE)
+    sum(log(res_3$cpo$cpo), na.rm = TRUE),
+    sum(log(res_4$cpo$cpo), na.rm = TRUE),
+    sum(log(res_5$cpo$cpo), na.rm = TRUE),
+    sum(log(res_6$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_2 = perf))
@@ -241,30 +255,38 @@ mae <- c(mae, list(
   mean(abs(predicted_3[test] - test_value)),
   mean(abs(predicted_4[test] - test_value))
 ))
-rm(list = setdiff(ls(), c("norge", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
-# now models with the infrastructure variables
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "norge", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+) # now models with the infrastructure variables
 formula_7 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + immigrants_total +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_8 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + immigrants_total +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_9 <- value ~
-  immigrants_total +
+immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_10 <- value ~
-  immigrants_total +
+immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -336,8 +358,10 @@ perf <- list(
     res_9$waic$waic, res_10$waic$waic
   ),
   cpo = c(
-    sum(log(res_7$cpo$cpo), na.rm = TRUE), sum(log(res_8$cpo$cpo), na.rm = TRUE),
-    sum(log(res_9$cpo$cpo), na.rm = TRUE), sum(log(res_10$cpo$cpo), na.rm = TRUE)
+    sum(log(res_7$cpo$cpo), na.rm = TRUE),
+    sum(log(res_8$cpo$cpo), na.rm = TRUE),
+    sum(log(res_9$cpo$cpo), na.rm = TRUE),
+    sum(log(res_10$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_3 = perf))
@@ -369,10 +393,18 @@ mae <- c(mae, list(
   mean(abs(predicted_3[test] - test_value)),
   mean(abs(predicted_4[test] - test_value))
 ))
-rm(list = setdiff(ls(), c("norge", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
-# now models with all the variables
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "norge", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+) # now models with all the variables
 formula_11 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
@@ -381,7 +413,7 @@ formula_11 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_12 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
@@ -390,14 +422,14 @@ formula_12 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_13 <- value ~
-  workers_ft_work + workers_pt_work +
+workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_14 <- value ~
-  workers_ft_work + workers_pt_work +
+workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -466,8 +498,10 @@ perf <- list(
     res_13$waic$waic, res_14$waic$waic
   ),
   cpo = c(
-    sum(log(res_11$cpo$cpo), na.rm = TRUE), sum(log(res_12$cpo$cpo), na.rm = TRUE),
-    sum(log(res_13$cpo$cpo), na.rm = TRUE), sum(log(res_14$cpo$cpo), na.rm = TRUE)
+    sum(log(res_11$cpo$cpo), na.rm = TRUE),
+    sum(log(res_12$cpo$cpo), na.rm = TRUE),
+    sum(log(res_13$cpo$cpo), na.rm = TRUE),
+    sum(log(res_14$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_4 = perf))
@@ -499,11 +533,19 @@ mae <- c(mae, list(
   mean(abs(predicted_3[test] - test_value)),
   mean(abs(predicted_4[test] - test_value))
 ))
-rm(list = setdiff(ls(), c("norge", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
-########################################################
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "norge", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+) ########################################################
 # Now with variable selection
 formula_15 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
@@ -513,7 +555,7 @@ formula_15 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_16 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
@@ -523,7 +565,7 @@ formula_16 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_17 <- value ~
-  workers_ft_work + workers_pt_work +
+workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
@@ -531,7 +573,7 @@ formula_17 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_18 <- value ~
-  workers_ft_work + workers_pt_work +
+workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
@@ -603,8 +645,10 @@ perf <- list(
     res_17$waic$waic, res_18$waic$waic
   ),
   cpo = c(
-    sum(log(res_15$cpo$cpo), na.rm = TRUE), sum(log(res_16$cpo$cpo), na.rm = TRUE),
-    sum(log(res_17$cpo$cpo), na.rm = TRUE), sum(log(res_18$cpo$cpo), na.rm = TRUE)
+    sum(log(res_15$cpo$cpo), na.rm = TRUE),
+    sum(log(res_16$cpo$cpo), na.rm = TRUE),
+    sum(log(res_17$cpo$cpo), na.rm = TRUE),
+    sum(log(res_18$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_5 = perf))
@@ -636,30 +680,38 @@ mae <- c(mae, list(
   mean(abs(predicted_3[test] - test_value)),
   mean(abs(predicted_4[test] - test_value))
 ))
-rm(list = setdiff(ls(), c("norge", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
-# now models with all the variables
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "norge", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+) # now models with all the variables
 formula_19 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_ft_work + 
-  workers_pt_work + construction_pt_work + immigrants_total + 
+median_age + unemp_tot + unemp_immg + workers_ft_work +
+  workers_pt_work + construction_pt_work + immigrants_total +
   pop_dens + urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_20 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_ft_work + 
-  workers_pt_work + construction_pt_work + immigrants_total + 
+median_age + unemp_tot + unemp_immg + workers_ft_work +
+  workers_pt_work + construction_pt_work + immigrants_total +
   pop_dens + urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_21 <- value ~
-  construction_pt_work + unemp_tot + sex + 
+construction_pt_work + unemp_tot + sex +
   median_age + pop_dens +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_22 <- value ~
-  construction_pt_work + unemp_tot + sex + 
+construction_pt_work + unemp_tot + sex +
   median_age + pop_dens +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -730,8 +782,10 @@ perf <- list(
     res_21$waic$waic, res_22$waic$waic
   ),
   cpo = c(
-    sum(log(res_19$cpo$cpo), na.rm = TRUE), sum(log(res_20$cpo$cpo), na.rm = TRUE),
-    sum(log(res_21$cpo$cpo), na.rm = TRUE), sum(log(res_22$cpo$cpo), na.rm = TRUE)
+    sum(log(res_19$cpo$cpo), na.rm = TRUE),
+    sum(log(res_20$cpo$cpo), na.rm = TRUE),
+    sum(log(res_21$cpo$cpo), na.rm = TRUE),
+    sum(log(res_22$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_6 = perf))
@@ -764,11 +818,19 @@ mae <- c(mae, list(
   mean(abs(predicted_4[test] - test_value))
 ))
 
-rm(list = setdiff(ls(), c("norge", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "norge", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 # now models with all the variables
 formula_23 <- value ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -777,8 +839,8 @@ formula_23 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_24 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -787,7 +849,7 @@ formula_24 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_25 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -796,8 +858,8 @@ formula_25 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_26 <- value ~
-  # add the demographic vars and pop density
-  marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -873,8 +935,10 @@ perf <- list(
     res_25$waic$waic, res_26$waic$waic
   ),
   cpo = c(
-    sum(log(res_23$cpo$cpo), na.rm = TRUE), sum(log(res_24$cpo$cpo), na.rm = TRUE),
-    sum(log(res_25$cpo$cpo), na.rm = TRUE), sum(log(res_26$cpo$cpo), na.rm = TRUE)
+    sum(log(res_23$cpo$cpo), na.rm = TRUE),
+    sum(log(res_24$cpo$cpo), na.rm = TRUE),
+    sum(log(res_25$cpo$cpo), na.rm = TRUE),
+    sum(log(res_26$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_7 = perf))
@@ -908,22 +972,30 @@ mae <- c(mae, list(
 ))
 
 
-rm(list = setdiff(ls(), c("norge", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
 
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "norge", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 # now models with all the variables
 formula_27 <- value ~
-  marketplace + entertainment + sport + clinic + 
-  hairdresser + shops + place_of_worship + restaurant + aerodrome + 
-  office + platform + kindergarten + schools + bakeries + pop_dens + 
+marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + restaurant + aerodrome +
+  office + platform + kindergarten + schools + bakeries + pop_dens +
   urb_dens +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_28 <- value ~
-  marketplace + entertainment + sport + clinic + 
-  hairdresser + shops + place_of_worship + restaurant + aerodrome + 
-  office + platform + kindergarten + schools + bakeries + pop_dens + 
+marketplace + entertainment + sport + clinic +
+  hairdresser + shops + place_of_worship + restaurant + aerodrome +
+  office + platform + kindergarten + schools + bakeries + pop_dens +
   urb_dens +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -931,15 +1003,15 @@ formula_28 <- value ~
   f(id_date_2, model = "iid")
 # now models with all the variables
 formula_29 <- value ~
-  pop_dens + shops + place_of_worship + office +
+pop_dens + shops + place_of_worship + office +
   schools + nursing_home + kindergarten + restaurant +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_30 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + shops + place_of_worship + office +
+# add the demographic vars and pop density
+pop_dens + shops + place_of_worship + office +
   schools + nursing_home + kindergarten + restaurant +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -1013,8 +1085,10 @@ perf <- list(
     res_29$waic$waic, res_30$waic$waic
   ),
   cpo = c(
-    sum(log(res_27$cpo$cpo), na.rm = TRUE), sum(log(res_28$cpo$cpo), na.rm = TRUE),
-    sum(log(res_29$cpo$cpo), na.rm = TRUE), sum(log(res_30$cpo$cpo), na.rm = TRUE)
+    sum(log(res_27$cpo$cpo), na.rm = TRUE),
+    sum(log(res_28$cpo$cpo), na.rm = TRUE),
+    sum(log(res_29$cpo$cpo), na.rm = TRUE),
+    sum(log(res_30$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_8 = perf))
@@ -1047,25 +1121,33 @@ mae <- c(mae, list(
   mean(abs(predicted_4[test] - test_value))
 ))
 
-rm(list = setdiff(ls(), c("norge", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
-# now models with all the variables
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "norge", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+) # now models with all the variables
 formula_31 <- value ~
-  median_age + unemp_tot + workers_ft_work + 
-  workers_pt_work + construction_pt_work + immigrants_total + 
-  marketplace + entertainment + clinic + hairdresser + shops + 
-  retail + nursing_home + restaurant + aerodrome + office + 
-  platform + kindergarten + schools + bakeries + higher_education + 
+median_age + unemp_tot + workers_ft_work +
+  workers_pt_work + construction_pt_work + immigrants_total +
+  marketplace + entertainment + clinic + hairdresser + shops +
+  retail + nursing_home + restaurant + aerodrome + office +
+  platform + kindergarten + schools + bakeries + higher_education +
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_32 <- value ~
-  median_age + unemp_tot + workers_ft_work + 
-  workers_pt_work + construction_pt_work + immigrants_total + 
-  marketplace + entertainment + clinic + hairdresser + shops + 
-  retail + nursing_home + restaurant + aerodrome + office + 
-  platform + kindergarten + schools + bakeries + higher_education + 
+median_age + unemp_tot + workers_ft_work +
+  workers_pt_work + construction_pt_work + immigrants_total +
+  marketplace + entertainment + clinic + hairdresser + shops +
+  retail + nursing_home + restaurant + aerodrome + office +
+  platform + kindergarten + schools + bakeries + higher_education +
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -1073,16 +1155,16 @@ formula_32 <- value ~
   f(id_date_2, model = "iid")
 # now models with all the variables
 formula_33 <- value ~
-  schools + unemp_tot + restaurant + sex + 
-  median_age + pop_dens + construction_pt_work + workers_ft_work + 
+schools + unemp_tot + restaurant + sex +
+  median_age + pop_dens + construction_pt_work + workers_ft_work +
   higher_education + clinic +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_34 <- value ~
-  schools + unemp_tot + restaurant + sex + 
-  median_age + pop_dens + construction_pt_work + workers_ft_work + 
+schools + unemp_tot + restaurant + sex +
+  median_age + pop_dens + construction_pt_work + workers_ft_work +
   higher_education + clinic +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -1156,8 +1238,10 @@ perf <- list(
     res_33$waic$waic, res_34$waic$waic
   ),
   cpo = c(
-    sum(log(res_31$cpo$cpo), na.rm = TRUE), sum(log(res_32$cpo$cpo), na.rm = TRUE),
-    sum(log(res_33$cpo$cpo), na.rm = TRUE), sum(log(res_34$cpo$cpo), na.rm = TRUE)
+    sum(log(res_31$cpo$cpo), na.rm = TRUE),
+    sum(log(res_32$cpo$cpo), na.rm = TRUE),
+    sum(log(res_33$cpo$cpo), na.rm = TRUE),
+    sum(log(res_34$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_9 = perf))
@@ -1191,5 +1275,15 @@ mae <- c(mae, list(
 ))
 
 # now models with all the variables
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "norge", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 models_final <- list(models, results, mae)
 save(models_final, file = "models/leroux_norway_temporal.Rda")

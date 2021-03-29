@@ -19,7 +19,17 @@ plot_1 <- ggplot(data = newest_numbers) +
     midpoint = 1
   ) +
   theme_minimal()
-newest_numbers_south <- newest_numbers[unlist(lapply(lapply(newest_numbers$geometry, st_bbox), function(x) x[4] <= 64)), ]
+newest_numbers_south <- newest_numbers[
+  unlist(
+    lapply(
+      lapply(
+        newest_numbers$geometry,
+        st_bbox
+      ),
+      function(x) x[4] <= 64
+    )
+  ),
+]
 plot_2 <- ggplot(data = newest_numbers_south) +
   geom_sf(aes(fill = sir)) +
   scale_fill_gradient2(
@@ -119,8 +129,8 @@ leaflet() %>%
     label = paste(
       "Kommune: ", newest_numbers$kommune_name, "<br>",
       "Number of infections: ", newest_numbers$value, "<br>",
-      "Expected number of infections: ", round(newest_numbers$expected_count), "<br>",
-      "SIR: ", round(newest_numbers$sir, 3)
+      "Expected number of infections: ", round(newest_numbers$expected_count),
+      "<br>", "SIR: ", round(newest_numbers$sir, 3)
     ) %>%
       lapply(htmltools::HTML)
   ) %>%

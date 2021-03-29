@@ -80,8 +80,8 @@ leaflet() %>%
     label = paste(
       "Kommune: ", newest_numbers$Landkreis, "<br>",
       "Number of infections: ", newest_numbers$CumNumberTestedIll, "<br>",
-      "Expected number of infections: ", round(newest_numbers$expected_count), "<br>",
-      "SIR: ", round(newest_numbers$sir, 3)
+      "Expected number of infections: ", round(newest_numbers$expected_count),
+      "<br>", "SIR: ", round(newest_numbers$sir, 3)
     ) %>%
       lapply(htmltools::HTML)
   ) %>%

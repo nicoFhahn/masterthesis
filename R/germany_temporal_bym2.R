@@ -1,15 +1,19 @@
 library(INLA)
 library(spdep)
-source("R/preprocess_norge.R")
-set.seed(7918)
-test <- sample(
-  seq_len(nrow(newest_numbers)),
-  size = floor(0.2 * nrow(newest_numbers))
-)
-test_value <- newest_numbers$value[test]
-newest_numbers$value[test] <- NA
-link <- rep(NA, nrow(newest_numbers))
-link[which(is.na(newest_numbers$value))] <- 1
+source("R/preprocess_germany_temporal.R")
+set.seed(42340)
+germany <- germany[
+  germany$Date %in% seq(
+    from = min(germany$Date),
+    to = max(germany$Date),
+    by = 7
+  ),
+]
+test <- sample(seq_len(nrow(germany)), size = floor(0.2 * nrow(germany)))
+test_value <- germany$value[test]
+germany$value[test] <- NA
+link <- rep(NA, nrow(germany))
+link[which(is.na(germany$value))] <- 1
 #####################################################
 # specify penalized prior
 prior_1 <- list(
@@ -29,46 +33,49 @@ results <- list()
 mae <- list()
 #
 # create the neighbordhood matrix
-nb <- poly2nb(newest_numbers)
+nb <- poly2nb(germany[!duplicated(germany$municipality_id), ])
 # save the matrix
-nb2INLA("maps/map_1.adj", nb)
-g <- inla.read.graph(filename = "maps/map_1.adj")
+nb2INLA("maps/map_4.adj", nb)
+g <- inla.read.graph(filename = "maps/map_4.adj")
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
 # add the demographic vars and pop density
 pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_2 <- value ~
 # add the demographic vars and pop density
 pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 
 res_1 <- inla(
   formula_1,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 res_2 <- inla(
   formula_2,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -88,13 +95,13 @@ perf <- list(
 results <- c(results, list(res_1 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_1$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_2$marginals.fitted.values[[i]]
   )
 }
@@ -103,74 +110,87 @@ mae <- c(mae, list(
   mean(abs(predicted_2[test] - test_value))
 ))
 
+
 rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "prior_2", "g", "models", "results",
+      "germany", "prior_1", "prior_2", "g", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with the mobility variables
+)
 formula_3 <- value ~
 # add the demographic vars and pop density
-pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
+pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
+  welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_4 <- value ~
 # add the demographic vars and pop density
-pop_dens + urb_dens + sex + +unemp_tot + unemp_immg +
+pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
+  welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 # now models with the mobility variables
 formula_5 <- value ~
 # add the demographic vars and pop density
-unemp_tot + unemp_immg +
+asyl_benefits + protection_seekers +
+  welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_6 <- value ~
 # add the demographic vars and pop density
-unemp_tot + unemp_immg +
+asyl_benefits + protection_seekers +
+  welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 
 
 res_3 <- inla(
   formula_3,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_4 <- inla(
   formula_4,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_5 <- inla(
   formula_5,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -178,13 +198,13 @@ res_5 <- inla(
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -212,21 +232,21 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_3$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_4$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_5$marginals.fitted.values[[i]]
   )
   predicted_4[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_6$marginals.fitted.values[[i]]
   )
 }
@@ -241,53 +261,65 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "prior_2", "g", "models", "results",
+      "germany", "prior_1", "prior_2", "g", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with the infrastructure variables
+)
 formula_7 <- value ~
 # add the demographic vars and pop density
-pop_dens + urb_dens + sex + immigrants_total +
+pop_dens + urb_dens + sex + log(trade_tax) +
+  log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_8 <- value ~
 # add the demographic vars and pop density
-pop_dens + urb_dens + sex + immigrants_total +
+pop_dens + urb_dens + sex + log(trade_tax) +
+  log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_9 <- value ~
-immigrants_total +
+# add the demographic vars and pop density
+log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_10 <- value ~
-immigrants_total +
+# add the demographic vars and pop density
+log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 
 res_7 <- inla(
   formula_7,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_8 <- inla(
   formula_8,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -295,13 +327,13 @@ res_8 <- inla(
 res_9 <- inla(
   formula_9,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -309,13 +341,13 @@ res_9 <- inla(
 res_10 <- inla(
   formula_10,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -342,21 +374,21 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_7$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_8$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_9$marginals.fitted.values[[i]]
   )
   predicted_4[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_10$marginals.fitted.values[[i]]
   )
 }
@@ -371,84 +403,92 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "prior_2", "g", "models", "results",
+      "germany", "prior_1", "prior_2", "g", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
+)
 formula_11 <- value ~
-pop_dens + urb_dens + sex +
-  # add the demographic vars and pop density
-  workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+  die_linke + afd +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_12 <- value ~
-pop_dens + urb_dens + sex +
-  # add the demographic vars and pop density
-  workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+  die_linke + afd +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_13 <- value ~
-workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
+  die_linke + afd +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_14 <- value ~
-workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
+  die_linke + afd +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 res_11 <- inla(
   formula_11,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_12 <- inla(
   formula_12,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_13 <- inla(
   formula_13,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_14 <- inla(
   formula_14,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -474,21 +514,21 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_11$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_12$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_13$marginals.fitted.values[[i]]
   )
   predicted_4[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_14$marginals.fitted.values[[i]]
   )
 }
@@ -503,90 +543,101 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "prior_2", "g", "models", "results",
+      "germany", "prior_1", "prior_2", "g", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) ########################################################
-# Now with variable selection
+)
 formula_15 <- value ~
-pop_dens + urb_dens + sex +
-  # add the demographic vars and pop density
-  workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
+  die_linke + afd + protection_seekers + welfare_recipients +
+  unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_16 <- value ~
-pop_dens + urb_dens + sex +
-  # add the demographic vars and pop density
-  workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
+  die_linke + afd + protection_seekers + welfare_recipients +
+  unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_17 <- value ~
-workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total +
+# add the demographic vars and pop density
+asyl_benefits + log(trade_tax) +
+  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
+  die_linke + afd + protection_seekers + welfare_recipients +
+  unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_18 <- value ~
-workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total +
+# add the demographic vars and pop density
+asyl_benefits + log(trade_tax) +
+  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
+  die_linke + afd + protection_seekers + welfare_recipients +
+  unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 
 res_15 <- inla(
   formula_15,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_16 <- inla(
   formula_16,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_17 <- inla(
   formula_17,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_18 <- inla(
   formula_18,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -613,21 +664,21 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_15$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_16$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_17$marginals.fitted.values[[i]]
   )
   predicted_4[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_18$marginals.fitted.values[[i]]
   )
 }
@@ -642,84 +693,99 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "prior_2", "g", "models", "results",
+      "germany", "prior_1", "prior_2", "g", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
+)
 formula_19 <- value ~
-median_age + unemp_tot + unemp_immg + workers_ft_work +
-  workers_pt_work + construction_pt_work + immigrants_total +
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
+  SPD + Gruene + FDP + die_linke + afd + protection_seekers +
+  welfare_recipients + unemployed_total + unemployed_foreigners +
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_20 <- value ~
-median_age + unemp_tot + unemp_immg + workers_ft_work +
-  workers_pt_work + construction_pt_work + immigrants_total +
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
+  SPD + Gruene + FDP + die_linke + afd + protection_seekers +
+  welfare_recipients + unemployed_total + unemployed_foreigners +
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
+
 formula_21 <- value ~
-construction_pt_work + unemp_tot + sex +
-  median_age + pop_dens +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
-formula_22 <- value ~
-construction_pt_work + unemp_tot + sex +
-  median_age + pop_dens +
+log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
+  unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
+formula_22 <- value ~
+log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
+  unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
+
 
 res_19 <- inla(
   formula_19,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_20 <- inla(
   formula_20,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_21 <- inla(
   formula_21,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+
 
 res_22 <- inla(
   formula_22,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+
 
 
 models <- c(models, list(res_19, res_20, res_21, res_22))
@@ -745,21 +811,21 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_19$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_20$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_21$marginals.fitted.values[[i]]
   )
   predicted_4[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_22$marginals.fitted.values[[i]]
   )
 }
@@ -775,19 +841,20 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "prior_2", "g", "models", "results",
+      "germany", "prior_1", "prior_2", "g", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
 )
-# now models with all the variables
 formula_23 <- value ~
 pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_24 <- value ~
 # add the demographic vars and pop density
 pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
@@ -795,14 +862,18 @@ pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_25 <- value ~
 marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_26 <- value ~
 # add the demographic vars and pop density
 marketplace + entertainment + sport + clinic +
@@ -810,45 +881,47 @@ marketplace + entertainment + sport + clinic +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 
 
 res_23 <- inla(
   formula_23,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_24 <- inla(
   formula_24,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_25 <- inla(
   formula_25,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -856,13 +929,13 @@ res_25 <- inla(
 res_26 <- inla(
   formula_26,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -890,21 +963,21 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_23$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_24$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_25$marginals.fitted.values[[i]]
   )
   predicted_4[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_26$marginals.fitted.values[[i]]
   )
 }
@@ -916,97 +989,102 @@ mae <- c(mae, list(
 ))
 
 
-
 rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "prior_2", "g", "models", "results",
+      "germany", "prior_1", "prior_2", "g", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
 )
-# now models with all the variables
 formula_27 <- value ~
-marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + restaurant + aerodrome +
-  office + platform + kindergarten + schools + bakeries + pop_dens +
-  urb_dens +
+# add the demographic vars and pop density
+entertainment + sport + hairdresser + place_of_worship +
+  retail + nursing_home + restaurant + aerodrome + platform +
+  kindergarten + schools + bakeries + pop_dens + higher_education +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_28 <- value ~
-marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + restaurant + aerodrome +
-  office + platform + kindergarten + schools + bakeries + pop_dens +
-  urb_dens +
+# add the demographic vars and pop density
+entertainment + sport + hairdresser + place_of_worship +
+  retail + nursing_home + restaurant + aerodrome + platform +
+  kindergarten + schools + bakeries + pop_dens + higher_education +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 # now models with all the variables
 formula_29 <- value ~
-pop_dens + shops + place_of_worship + office +
-  schools + nursing_home + kindergarten + restaurant +
+schools + place_of_worship + pop_dens + office +
+  bakeries + entertainment + platform + kindergarten + nursing_home +
+  sport +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_30 <- value ~
-# add the demographic vars and pop density
-pop_dens + shops + place_of_worship + office +
-  schools + nursing_home + kindergarten + restaurant +
+schools + place_of_worship + pop_dens + office +
+  bakeries + entertainment + platform + kindergarten + nursing_home +
+  sport +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 
 res_27 <- inla(
   formula_27,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_28 <- inla(
   formula_28,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_29 <- inla(
   formula_29,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 
 res_30 <- inla(
   formula_30,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 
 
 models <- c(models, list(res_27, res_28, res_29, res_30))
@@ -1032,21 +1110,21 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_27$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_28$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_29$marginals.fitted.values[[i]]
   )
   predicted_4[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_30$marginals.fitted.values[[i]]
   )
 }
@@ -1062,79 +1140,86 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "prior_2", "g", "models", "results",
+      "germany", "prior_1", "prior_2", "g", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
+)
 formula_31 <- value ~
-median_age + unemp_tot + workers_ft_work +
-  workers_pt_work + construction_pt_work + immigrants_total +
-  marketplace + entertainment + clinic + hairdresser + shops +
-  retail + nursing_home + restaurant + aerodrome + office +
-  platform + kindergarten + schools + bakeries + higher_education +
-  pop_dens + urb_dens + sex +
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+  Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
+  unemployed_total + unemployed_foreigners + entertainment +
+  sport + clinic + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + kindergarten +
+  schools + bakeries + pop_dens + sex + higher_education +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_32 <- value ~
-median_age + unemp_tot + workers_ft_work +
-  workers_pt_work + construction_pt_work + immigrants_total +
-  marketplace + entertainment + clinic + hairdresser + shops +
-  retail + nursing_home + restaurant + aerodrome + office +
-  platform + kindergarten + schools + bakeries + higher_education +
-  pop_dens + urb_dens + sex +
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+  Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
+  unemployed_total + unemployed_foreigners + entertainment +
+  sport + clinic + shops + place_of_worship + retail + nursing_home +
+  restaurant + aerodrome + office + platform + kindergarten +
+  schools + bakeries + pop_dens + sex + higher_education +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
-# now models with all the variables
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_33 <- value ~
-schools + unemp_tot + restaurant + sex +
-  median_age + pop_dens + construction_pt_work + workers_ft_work +
-  higher_education + clinic +
+schools + afd + die_linke + pop_dens + place_of_worship +
+  entertainment + bakeries + SPD + platform + sport + nursing_home +
+  welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 formula_34 <- value ~
-schools + unemp_tot + restaurant + sex +
-  median_age + pop_dens + construction_pt_work + workers_ft_work +
-  higher_education + clinic +
+schools + afd + die_linke + pop_dens + place_of_worship +
+  entertainment + bakeries + SPD + platform + sport + nursing_home +
+  welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 
 res_31 <- inla(
   formula_31,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_32 <- inla(
   formula_32,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
 res_33 <- inla(
   formula_33,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -1142,13 +1227,13 @@ res_33 <- inla(
 res_34 <- inla(
   formula_34,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
     link = link
   ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
@@ -1177,21 +1262,21 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 predicted_4 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_31$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_32$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_33$marginals.fitted.values[[i]]
   )
   predicted_4[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * germany$population[i],
     res_34$marginals.fitted.values[[i]]
   )
 }
@@ -1202,15 +1287,15 @@ mae <- c(mae, list(
   mean(abs(predicted_4[test] - test_value))
 ))
 
+
 rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "prior_2", "g", "models", "results",
+      "germany", "prior_1", "prior_2", "g", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
 )
-# now models with all the variables
 models_final <- list(models, results, mae)
-save(models_final, file = "models/bym2_norway.Rda")
+save(models_final, file = "models/bym2_germany_temporal.Rda")

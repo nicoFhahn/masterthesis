@@ -26,8 +26,12 @@ if (date_1 != date_2) {
   germany_population <- ew_kreise
   # the data for berlin needs to be manually grouped
   # change the municipality name and ID to the same for all berlin cases
-  germany_confirmed[str_detect(germany_confirmed$Landkreis, "Berlin"), ]$Landkreis <- "SK Berlin"
-  germany_confirmed[str_detect(germany_confirmed$Landkreis, "Berlin"), ]$IdLandkreis <- 11000
+  germany_confirmed[
+    str_detect(germany_confirmed$Landkreis, "Berlin"),
+  ]$Landkreis <- "SK Berlin"
+  germany_confirmed[
+    str_detect(germany_confirmed$Landkreis, "Berlin"),
+  ]$IdLandkreis <- 11000
   # create a berlin frame
   berlin <- germany_confirmed[germany_confirmed$Landkreis == "SK Berlin", ]
   # sum the numbers by date
@@ -49,12 +53,29 @@ if (date_1 != date_2) {
   berlin_grouped <- berlin_grouped[order(berlin_grouped$Date), ]
   # calculate the correct cumulative numbers
   for (i in 2:nrow(berlin_grouped)) {
-    berlin_grouped[i, ]$CumNumberTestedIll <- berlin_grouped[i - 1, ]$CumNumberTestedIll + berlin_grouped[i, ]$NumberNewTestedIll
-    berlin_grouped[i, ]$CumNumberDead <- berlin_grouped[i - 1, ]$CumNumberDead + berlin_grouped[i, ]$NumberNewDead
-    berlin_grouped[i, ]$CumNumberRecovered <- berlin_grouped[i - 1, ]$CumNumberRecovered + berlin_grouped[i, ]$NumberNewRecovered
+    berlin_grouped[i, ]$CumNumberTestedIll <- berlin_grouped[
+      i - 1,
+    ]$CumNumberTestedIll +
+      berlin_grouped[
+        i,
+      ]$NumberNewTestedIll
+    berlin_grouped[i, ]$CumNumberDead <- berlin_grouped[
+      i - 1,
+    ]$CumNumberDead +
+      berlin_grouped[
+        i,
+      ]$NumberNewDead
+    berlin_grouped[i, ]$CumNumberRecovered <- berlin_grouped[
+      i - 1,
+    ]$CumNumberRecovered +
+      berlin_grouped[
+        i,
+      ]$NumberNewRecovered
   }
   # remove the old data from the frame
-  germany_confirmed <- germany_confirmed[germany_confirmed$Landkreis != "SK Berlin", ]
+  germany_confirmed <- germany_confirmed[
+    germany_confirmed$Landkreis != "SK Berlin",
+  ]
   # attach the new data
   germany_confirmed <- rbind(germany_confirmed, berlin_grouped)
   colnames(germany_confirmed)[9] <- "Kennziffer"
@@ -64,7 +85,13 @@ if (date_1 != date_2) {
   germany_confirmed_split <- lapply(
     germany_confirmed_split,
     function(x, ...) {
-      missing <- unique(germany_confirmed$Landkreis)[!unique(germany_confirmed$Landkreis) %in% unique(x$Landkreis)]
+      missing <- unique(
+        germany_confirmed$Landkreis
+      )[
+        !unique(
+          germany_confirmed$Landkreis
+        ) %in% unique(x$Landkreis)
+      ]
       missing_tib <- tibble(
         Landkreis = missing,
         Date = rep(unique(x$Date), length(missing)),
@@ -74,7 +101,11 @@ if (date_1 != date_2) {
         CumNumberTestedIll = rep(NA, length(missing)),
         CumNumberDead = rep(NA, length(missing)),
         CumNumberRecovered = rep(NA, length(missing)),
-        Kennziffer = unique(germany_confirmed[germany_confirmed$Landkreis %in% missing, ]$Kennziffer)
+        Kennziffer = unique(
+          germany_confirmed[
+            germany_confirmed$Landkreis %in% missing,
+          ]$Kennziffer
+        )
       )
       tib <- rbind(x, missing_tib)
       tib[order(tib$Landkreis), ]
@@ -83,7 +114,10 @@ if (date_1 != date_2) {
   # bind it together
   germany_confirmed <- do.call(rbind, germany_confirmed_split)
   # now split it by the municipality
-  germany_confirmed_split <- split(germany_confirmed, germany_confirmed$Landkreis)
+  germany_confirmed_split <- split(
+    germany_confirmed,
+    germany_confirmed$Landkreis
+  )
   # now add the missing numbers
   germany_confirmed_split <- lapply(
     germany_confirmed_split,
@@ -116,43 +150,114 @@ if (date_1 != date_2) {
   # transform it
   germany_shape <- st_transform(germany_shape, 4326)
   # now all the demographic data gets loaded
-  germany_politics <- read_delim("germany_data/europawahl_2019.csv", delim = ";")[1:538, ]
-  germany_unemployed <- read_delim("germany_data/arbeitslose_2019.csv", delim = ";")
-  germany_protect <- read_delim("germany_data/schutzsuchende_2018.csv", delim = ";")
-  germany_social <- read_delim("germany_data/sozialhilfe_2019.csv", delim = ";")
-  germany_company_tax <- read_delim("germany_data/gewerbesteuer_2015.csv", delim = ";")
-  germany_income_tax <- read_delim("germany_data/einkommen_lohn_steuer_2016.csv", delim = ";")
-  germany_asyl <- read_delim("germany_data/asylbewerberleistungen_2019.csv", delim = ";")
+  germany_politics <- read_delim(
+    "germany_data/europawahl_2019.csv",
+    delim = ";"
+  )[1:538, ]
+  germany_unemployed <- read_delim(
+    "germany_data/arbeitslose_2019.csv",
+    delim = ";"
+  )
+  germany_protect <- read_delim(
+    "germany_data/schutzsuchende_2018.csv",
+    delim = ";"
+  )
+  germany_social <- read_delim(
+    "germany_data/sozialhilfe_2019.csv",
+    delim = ";"
+  )
+  germany_company_tax <- read_delim(
+    "germany_data/gewerbesteuer_2015.csv",
+    delim = ";"
+  )
+  germany_income_tax <- read_delim(
+    "germany_data/einkommen_lohn_steuer_2016.csv",
+    delim = ";"
+  )
+  germany_asyl <- read_delim(
+    "germany_data/asylbewerberleistungen_2019.csv",
+    delim = ";"
+  )
   # replace comma by decimal point
-  germany_politics$Wahlbeteiligung <- str_replace_all(germany_politics$Wahlbeteiligung, "\\,", ".")
+  germany_politics$Wahlbeteiligung <- str_replace_all(
+    germany_politics$Wahlbeteiligung,
+    "\\,",
+    "."
+  )
   # turn the data into numeric
-  germany_politics$Wahlbeteiligung <- as.numeric(germany_politics$Wahlbeteiligung)
+  germany_politics$Wahlbeteiligung <- as.numeric(
+    germany_politics$Wahlbeteiligung
+  )
   # get the newest company tax data
   germany_company_tax <- germany_company_tax[germany_company_tax$X1 == 2015, ]
   # set the correct ids for hamburg and berlin
-  germany_politics[str_detect(germany_politics$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
-  germany_politics[str_detect(germany_politics$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
-  germany_unemployed[str_detect(germany_unemployed$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
-  germany_unemployed[str_detect(germany_unemployed$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
-  germany_protect[str_detect(germany_protect$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
-  germany_protect[str_detect(germany_protect$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
-  germany_social[str_detect(germany_social$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
-  germany_social[str_detect(germany_social$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
-  germany_company_tax <- germany_company_tax[!is.na(germany_company_tax$Kreis), ]
-  germany_company_tax[str_detect(germany_company_tax$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
-  germany_company_tax[str_detect(germany_company_tax$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
-  germany_income_tax[str_detect(germany_income_tax$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
-  germany_income_tax[str_detect(germany_income_tax$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
-  germany_asyl[str_detect(germany_asyl$Stadt, "Hamburg"), ]$Kreis[1] <- "2000"
-  germany_asyl[str_detect(germany_asyl$Stadt, "Berlin"), ]$Kreis[1] <- "11000"
+  germany_politics[
+    str_detect(germany_politics$Stadt, "Hamburg"),
+  ]$Kreis[1] <- "2000"
+  germany_politics[
+    str_detect(germany_politics$Stadt, "Berlin"),
+  ]$Kreis[1] <- "11000"
+  germany_unemployed[
+    str_detect(germany_unemployed$Stadt, "Hamburg"),
+  ]$Kreis[1] <- "2000"
+  germany_unemployed[
+    str_detect(germany_unemployed$Stadt, "Berlin"),
+  ]$Kreis[1] <- "11000"
+  germany_protect[
+    str_detect(germany_protect$Stadt, "Hamburg"),
+  ]$Kreis[1] <- "2000"
+  germany_protect[
+    str_detect(germany_protect$Stadt, "Berlin"),
+  ]$Kreis[1] <- "11000"
+  germany_social[
+    str_detect(germany_social$Stadt, "Hamburg"),
+  ]$Kreis[1] <- "2000"
+  germany_social[
+    str_detect(germany_social$Stadt, "Berlin"),
+  ]$Kreis[1] <- "11000"
+  germany_company_tax <- germany_company_tax[
+    !is.na(germany_company_tax$Kreis),
+  ]
+  germany_company_tax[
+    str_detect(germany_company_tax$Stadt, "Hamburg"),
+  ]$Kreis[1] <- "2000"
+  germany_company_tax[
+    str_detect(germany_company_tax$Stadt, "Berlin"),
+  ]$Kreis[1] <- "11000"
+  germany_income_tax[
+    str_detect(germany_income_tax$Stadt, "Hamburg"),
+  ]$Kreis[1] <- "2000"
+  germany_income_tax[
+    str_detect(germany_income_tax$Stadt, "Berlin"),
+  ]$Kreis[1] <- "11000"
+  germany_asyl[
+    str_detect(germany_asyl$Stadt, "Hamburg"),
+  ]$Kreis[1] <- "2000"
+  germany_asyl[
+    str_detect(germany_asyl$Stadt, "Berlin"),
+  ]$Kreis[1] <- "11000"
   # remove data with unknown ids
-  germany_politics <- germany_politics[germany_politics$Kreis %in% germany_shape$Kennziffer, ]
-  germany_unemployed <- germany_unemployed[germany_unemployed$Kreis %in% germany_shape$Kennziffer, ]
-  germany_protect <- germany_protect[germany_protect$Kreis %in% germany_shape$Kennziffer, ]
-  germany_social <- germany_social[germany_social$Kreis %in% germany_shape$Kennziffer, ]
-  germany_income_tax <- germany_income_tax[germany_income_tax$Kreis %in% germany_shape$Kennziffer, ]
-  germany_asyl <- germany_asyl[germany_asyl$Kreis %in% germany_shape$Kennziffer, ]
-  germany_company_tax <- germany_company_tax[germany_company_tax$Kreis %in% germany_shape$Kennziffer, ]
+  germany_politics <- germany_politics[
+    germany_politics$Kreis %in% germany_shape$Kennziffer,
+  ]
+  germany_unemployed <- germany_unemployed[
+    germany_unemployed$Kreis %in% germany_shape$Kennziffer,
+  ]
+  germany_protect <- germany_protect[
+    germany_protect$Kreis %in% germany_shape$Kennziffer,
+  ]
+  germany_social <- germany_social[
+    germany_social$Kreis %in% germany_shape$Kennziffer,
+  ]
+  germany_income_tax <- germany_income_tax[
+    germany_income_tax$Kreis %in% germany_shape$Kennziffer,
+  ]
+  germany_asyl <- germany_asyl[
+    germany_asyl$Kreis %in% germany_shape$Kennziffer,
+  ]
+  germany_company_tax <- germany_company_tax[
+    germany_company_tax$Kreis %in% germany_shape$Kennziffer,
+  ]
   # now all this data gets merged together
   germany <- merge(
     germany_asyl,
@@ -332,7 +437,9 @@ if (date_1 != date_2) {
           unlist(
             st_intersects(
               germany_shape[x, ],
-              germany_place_of_worship[[as.character(germany_shape$Kennziffer[x])]]
+              germany_place_of_worship[[as.character(
+                germany_shape$Kennziffer[x]
+              )]]
             )
           )
         )
@@ -544,7 +651,15 @@ if (date_1 != date_2) {
     )
   )
   # remove needless files from the enviroment
-  rm(list = setdiff(ls(), c("germany_shape", "germany_confirmed_population", "germany", "germany_confirmed")))
+  rm(
+    list = setdiff(
+      ls(),
+      c(
+        "germany_shape", "germany_confirmed_population",
+        "germany", "germany_confirmed"
+      )
+    )
+  )
   # once again merging data
   germany_complete <- merge(
     germany_shape,
@@ -553,7 +668,10 @@ if (date_1 != date_2) {
     all = FALSE
   )
   # # safe the shapes
-  write_sf(st_as_sf(germany_complete)[!duplicated(germany_complete$Kennziffer), ][, 1], "wrangled_data/shapes_germany.shp")
+  write_sf(
+    st_as_sf(germany_complete)[!duplicated(germany_complete$Kennziffer), ][, 1],
+    "wrangled_data/shapes_germany.shp"
+  )
   # # remove more needless variables
   germany_complete[, 2:23] <- NULL
   germany_complete$geometry <- NULL
@@ -579,8 +697,12 @@ if (date_1 != date_2) {
   germany_features <- read_csv("wrangled_data/germany_features_temporal.csv")
 }
 # turn variables into numeric
-germany_features$Gewerbesteuer <- as.numeric(trimws(germany_features$Gewerbesteuer))
-germany_features$schutzsuchende <- as.numeric(trimws(germany_features$schutzsuchende))
+germany_features$Gewerbesteuer <- as.numeric(
+  trimws(germany_features$Gewerbesteuer)
+)
+germany_features$schutzsuchende <- as.numeric(
+  trimws(germany_features$schutzsuchende)
+)
 # calculate the percentage of the vote
 germany_features[, 7:12] <- germany_features[, 7:12] / germany_features$stimmen
 # germany_features[, c(1:4, 12:15, 22:39)] <- 1000 * germany_features[, c(1:4, 12:15, 22:39)] / germany_features$PopulationTotal
@@ -668,7 +790,8 @@ germany_split_e <- future_map(
     x$geometry <- geom
     x <- st_as_sf(x)
     x
-  }, .progress = TRUE
+  },
+  .progress = TRUE
 )
 future::plan(future::sequential)
 # bind it all together

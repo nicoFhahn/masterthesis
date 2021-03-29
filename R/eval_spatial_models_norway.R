@@ -28,7 +28,9 @@ results_bym2 <- models_final_bym2[[2]]
 mae_leroux <- models_final_leroux[[3]]
 mae_besag <- models_final_besag[[3]]
 mae_bym2 <- models_final_bym2[[3]]
-newest_numbers[order(newest_numbers$value, decreasing = TRUE), ][1:5, c("kommune_name", "population", "value")]
+newest_numbers[
+  order(newest_numbers$value, decreasing = TRUE),
+][1:5, c("kommune_name", "population", "value")]
 ####################### DEMOGRAPHIC MODELS
 demo_results <- c(results_besag[1:6], results_bym2[1:6], results_leroux[1:6])
 demo_dic <- unlist(lapply(demo_results, function(x) x$dic))
@@ -98,7 +100,9 @@ infra_dic[id_bym2 + 8]
 infra_waic[id_bym2 + 8]
 infra_cpo[id_bym2 + 8]
 mae_bym2[id_bym2 + 22]
-id_leroux <- which(unlist(mae_leroux[23:30]) %in% min(unlist(mae_leroux[23:30])))
+id_leroux <- which(
+  unlist(mae_leroux[23:30]) %in% min(unlist(mae_leroux[23:30]))
+)
 infra_dic[id_leroux + 16]
 infra_waic[id_leroux + 16]
 infra_cpo[id_leroux + 16]
@@ -130,7 +134,9 @@ sapply(
   }
 )
 newest_numbers$rr <- models_besag[[29]]$summary.fitted.values$mean
-csi <- models_besag[[29]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
+csi <- models_besag[[29]]$marginals.random$idarea_1[
+  seq_len(nrow(newest_numbers))
+]
 a <- 0
 prob_csi <- lapply(csi, function(x) {
   1 - inla.pmarginal(a, x)
@@ -234,7 +240,7 @@ plot_4 <- ggplot(data = newest_numbers) +
   )
 plot_3
 library(patchwork)
-plot_2 + plot_3 
+plot_2 + plot_3
 plot_4
 ######################################### ALL MODELS
 all_results <- c(results_besag[9], results_bym2[9], results_leroux[9])
@@ -254,7 +260,9 @@ all_dic[id_bym2 + 4]
 all_waic[id_bym2 + 4]
 all_cpo[id_bym2 + 4]
 mae_bym2[id_bym2 + 30]
-id_leroux <- which(unlist(mae_leroux[31:34]) %in% min(unlist(mae_leroux[31:34])))
+id_leroux <- which(
+  unlist(mae_leroux[31:34]) %in% min(unlist(mae_leroux[31:34]))
+)
 all_dic[id_leroux + 8]
 all_waic[id_leroux + 8]
 all_cpo[id_leroux + 8]

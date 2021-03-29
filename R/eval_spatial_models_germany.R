@@ -29,7 +29,9 @@ results_bym2 <- models_final_bym2[[2]]
 mae_leroux <- models_final_leroux[[3]]
 mae_besag <- models_final_besag[[3]]
 mae_bym2 <- models_final_bym2[[3]]
-newest_numbers[order(newest_numbers$value, decreasing = TRUE), ][1:5, c("municipality", "population", "value")]
+newest_numbers[
+  order(newest_numbers$value, decreasing = TRUE),
+][1:5, c("municipality", "population", "value")]
 ####################### DEMOGRAPHIC MODELS
 demo_results <- c(results_besag[1:6], results_bym2[1:6], results_leroux[1:6])
 demo_dic <- unlist(lapply(demo_results, function(x) x$dic))
@@ -54,7 +56,9 @@ demo_waic[id_leroux + 44]
 demo_cpo[id_leroux + 44]
 mae_leroux[id_leroux]
 options(scipen = 10)
-models_leroux[[14]]$summary.fixed[order(models_leroux[[14]]$summary.fixed$mean), ]
+models_leroux[[14]]$summary.fixed[
+  order(models_leroux[[14]]$summary.fixed$mean),
+]
 sapply(
   models_leroux[[14]]$marginals.fixed[
     rownames(models_leroux[[14]]$summary.fixed[
@@ -80,7 +84,9 @@ sapply(
   }
 )
 newest_numbers$rr <- models_leroux[[14]]$summary.fitted.values$mean
-csi <- models_leroux[[14]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
+csi <- models_leroux[[14]]$marginals.random$idarea_1[
+  seq_len(nrow(newest_numbers))
+]
 a <- 0
 prob_csi <- lapply(csi, function(x) {
   1 - inla.pmarginal(a, x)
@@ -164,19 +170,6 @@ plot_3 <- ggplot(data = newest_numbers) +
 plot_3
 library(patchwork)
 plot_2 + plot_3
-# csi <- models_leroux[[9]]$marginals.random$idarea_1[1:nrow(newest_numbers)]
-# zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
-# zeta_cutoff <- c(0.6, 0.9, 1.0, 1.1, 1.8)
-# cat_zeta <- cut(
-#   unlist(zeta),
-#   breaks = zeta_cutoff,
-#   include.lowest = TRUE
-# )
-# maps_cat_zeta <- data.frame(
-#   ID = newest_numbers$idarea_1,
-#   cat_zeta = cat_zeta
-# )
-# newest_numbers$cat_zeta <- cat_zeta
 ################## INFRASTRUCTURAL MODELS
 infra_results <- c(results_besag[7:8], results_bym2[7:8], results_leroux[7:8])
 infra_dic <- unlist(lapply(infra_results, function(x) x$dic))
@@ -195,7 +188,9 @@ infra_dic[id_bym2 + 8]
 infra_waic[id_bym2 + 8]
 infra_cpo[id_bym2 + 8]
 mae_bym2[id_bym2 + 22]
-id_leroux <- which(unlist(mae_leroux[23:30]) %in% min(unlist(mae_leroux[23:30])))
+id_leroux <- which(
+  unlist(mae_leroux[23:30]) %in% min(unlist(mae_leroux[23:30]))
+)
 infra_dic[id_leroux + 16]
 infra_waic[id_leroux + 16]
 infra_cpo[id_leroux + 16]
@@ -244,7 +239,9 @@ demo_dic[id_bym2 + 4]
 demo_waic[id_bym2 + 4]
 demo_cpo[id_bym2 + 4]
 mae_bym2[id_bym2 + 30]
-id_leroux <- which(unlist(mae_leroux[31:34]) %in% min(unlist(mae_leroux[31:34])))
+id_leroux <- which(
+  unlist(mae_leroux[31:34]) %in% min(unlist(mae_leroux[31:34]))
+)
 demo_dic[id_leroux + 8]
 demo_waic[id_leroux + 8]
 demo_cpo[id_leroux + 8]

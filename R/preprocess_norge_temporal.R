@@ -29,7 +29,9 @@ date_2 <- max(as.Date(norge_features$date))
 if (date_1 != date_2) {
   # this kommune exists twice, therefore we merge the geometry
   kommune_4602 <- norge_shape[norge_shape$kommunenum == 4602, ][1, ]
-  kommune_4602$geometry <- st_union(norge_shape[norge_shape$kommunenum == 4602, ])
+  kommune_4602$geometry <- st_union(
+    norge_shape[norge_shape$kommunenum == 4602, ]
+  )
   # remove the two data points
   norge_shape <- norge_shape[norge_shape$kommunenum != 4602, ]
   # add the new data
@@ -43,7 +45,10 @@ if (date_1 != date_2) {
   # split the data by region
   norge_demo_region <- split(norge_demo, norge_demo$region)
   # split the regions by gender
-  norge_demo_region_sex <- lapply(norge_demo_region, function(x) split(x, x$sex))
+  norge_demo_region_sex <- lapply(
+    norge_demo_region,
+    function(x) split(x, x$sex)
+  )
   # now calculate for each region the gender-specific mean and median age
   norge_demo <- lapply(
     norge_demo_region_sex,
@@ -67,7 +72,9 @@ if (date_1 != date_2) {
       frame <- do.call(rbind, frames)
       frame_both <- do.call(rbind, x)
       frame$median_age <- median(rep(frame_both$age, frame_both$`Persons 2020`))
-      frame$mean_age <- sum(frame_both$total_age) / sum(frame_both$`Persons 2020`)
+      frame$mean_age <- sum(
+        frame_both$total_age
+      ) / sum(frame_both$`Persons 2020`)
       frame_final <- as_tibble(
         data.frame(
           region = frame$region[1],
@@ -165,7 +172,10 @@ if (date_1 != date_2) {
     by = "kommune_no"
   )
   # now the same for immigration data
-  norge_immigration <- read_delim("norge_data/norge_immigration.csv", delim = ";")
+  norge_immigration <- read_delim(
+    "norge_data/norge_immigration.csv",
+    delim = ";"
+  )
   norge_immigration_s <- split(norge_immigration, norge_immigration$region)
   norge_immigration_s <- lapply(
     norge_immigration_s,
@@ -565,16 +575,24 @@ if (date_1 != date_2) {
   no_geometry$higher_education <- no_geometry$college + no_geometry$university
   # safe the data
   write_csv(no_geometry, "wrangled_data/norge_features_temporal.csv")
-  write_sf(st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1], "wrangled_data/shapes_norge.shp")
+  write_sf(
+    st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1],
+    "wrangled_data/shapes_norge.shp"
+  )
   rm(list = ls())
   # load the data
   norge_features <- read_csv("wrangled_data/norge_features_temporal.csv")
 }
 # norge_features[, c(20:31, 36:53, 55)] <- 1000 * norge_features[, c(20:31, 36:53, 55)] / norge_features$population
 # scale the data
-norge_features[, c(20:31, 36:53, 55)] <- scale(norge_features[, c(20:31, 36:53, 55)])
+norge_features[, c(20:31, 36:53, 55)] <- scale(
+  norge_features[, c(20:31, 36:53, 55)]
+)
 # norge_features[, c(18, 19, 33, 34, 35)] <- norge_features[, c(18, 19, 33, 34, 35)] / 100
-norge_features[, c(18, 19, 33, 34, 35)] <- scale(norge_features[, c(18, 19, 33, 34, 35)])
+norge_features[, c(18, 19, 33, 34, 35)] <- scale(
+  norge_features[, c(18, 19, 33, 34, 35)]
+)
+
 # load the shapefiles
 norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
 # merge it together

@@ -12,9 +12,20 @@ fit_normal <- fitdist(newest_numbers$value, "norm")
 # plot the fits
 ecdf_value <- ecdf(newest_numbers$value)
 newest_numbers$ecdf <- ecdf_value(newest_numbers$value)
-x_nbinom <- rnbinom(nrow(newest_numbers), size = fit_nbinomial$estimate[1], mu = fit_nbinomial$estimate[2])
-x_normal <- rnorm(nrow(newest_numbers), mean = fit_normal$estimate[1], sd = fit_normal$estimate[2])
-x_poisson <- rpois(nrow(newest_numbers), lambda = fit_poisson$estimate[1])
+x_nbinom <- rnbinom(
+  nrow(newest_numbers),
+  size = fit_nbinomial$estimate[1],
+  mu = fit_nbinomial$estimate[2]
+)
+x_normal <- rnorm(
+  nrow(newest_numbers),
+  mean = fit_normal$estimate[1],
+  sd = fit_normal$estimate[2]
+)
+x_poisson <- rpois(
+  nrow(newest_numbers),
+  lambda = fit_poisson$estimate[1]
+)
 ecdf_nbinom <- ecdf(x_nbinom)
 ecdf_normal <- ecdf(x_normal)
 ecdf_poisson <- ecdf(x_poisson)
@@ -173,4 +184,3 @@ qqplot_poisson + cdf_plot_poisson
 fit_poisson$aic
 fit_nbinomial$aic
 fit_normal$aic
-# https://stats.stackexchange.com/questions/132652/how-to-determine-which-distribution-fits-my-data-best

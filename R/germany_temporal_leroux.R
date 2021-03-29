@@ -2,7 +2,13 @@ library(INLA)
 library(spdep)
 source("R/preprocess_germany_temporal.R")
 set.seed(42340)
-germany <- germany[germany$Date %in% seq(from = min(germany$Date), to = max(germany$Date), by = 7), ]
+germany <- germany[
+  germany$Date %in% seq(
+    from = min(germany$Date),
+    to = max(germany$Date),
+    by = 7
+  ),
+]
 test <- sample(seq_len(nrow(germany)), size = floor(0.2 * nrow(germany)))
 test_value <- germany$value[test]
 germany$value[test] <- NA
@@ -41,15 +47,15 @@ C <- Diagonal(x = 1, n = length(nb)) - Q
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_2 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -89,7 +95,8 @@ perf <- list(
     res_1$waic$waic, res_2$waic$waic
   ),
   cpo = c(
-    sum(log(res_1$cpo$cpo), na.rm = TRUE), sum(log(res_2$cpo$cpo), na.rm = TRUE)
+    sum(log(res_1$cpo$cpo), na.rm = TRUE),
+    sum(log(res_2$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_1 = perf))
@@ -106,23 +113,32 @@ for (i in seq_len(nrow(germany))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test]- test_value)),
-  mean(abs(predicted_2[test]- test_value))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value))
 ))
 
-rm(list = setdiff(ls(), c("germany", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "germany", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 # now models with the mobility variables
 formula_3 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_4 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -130,16 +146,16 @@ formula_4 <- value ~
   f(id_date_2, model = "iid")
 # now models with the mobility variables
 formula_5 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_6 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -213,8 +229,10 @@ perf <- list(
     res_5$waic$waic, res_6$waic$waic
   ),
   cpo = c(
-    sum(log(res_3$cpo$cpo), na.rm = TRUE), sum(log(res_4$cpo$cpo), na.rm = TRUE),
-    sum(log(res_5$cpo$cpo), na.rm = TRUE), sum(log(res_6$cpo$cpo), na.rm = TRUE)
+    sum(log(res_3$cpo$cpo), na.rm = TRUE),
+    sum(log(res_4$cpo$cpo), na.rm = TRUE),
+    sum(log(res_5$cpo$cpo), na.rm = TRUE),
+    sum(log(res_6$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_2 = perf))
@@ -241,37 +259,48 @@ for (i in seq_len(nrow(germany))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test]- test_value)),
-  mean(abs(predicted_2[test]- test_value)),
-  mean(abs(predicted_3[test]- test_value)),
-  mean(abs(predicted_4[test]- test_value))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
-rm(list = setdiff(ls(), c("germany", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "germany", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 # now models with the infrastructure variables
 formula_7 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + log(trade_tax) + log(income_total) + log(income_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + log(trade_tax) +
+  log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_8 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + log(trade_tax) + log(income_total) + log(income_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + log(trade_tax) +
+  log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_9 <- value ~
-  # add the demographic vars and pop density
-  log(trade_tax) + log(income_total) + log(income_tax) +
+# add the demographic vars and pop density
+log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_10 <- value ~
-  # add the demographic vars and pop density
-  log(trade_tax) + log(income_total) + log(income_tax) +
+# add the demographic vars and pop density
+log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -343,8 +372,10 @@ perf <- list(
     res_9$waic$waic, res_10$waic$waic
   ),
   cpo = c(
-    sum(log(res_7$cpo$cpo), na.rm = TRUE), sum(log(res_8$cpo$cpo), na.rm = TRUE),
-    sum(log(res_9$cpo$cpo), na.rm = TRUE), sum(log(res_10$cpo$cpo), na.rm = TRUE)
+    sum(log(res_7$cpo$cpo), na.rm = TRUE),
+    sum(log(res_8$cpo$cpo), na.rm = TRUE),
+    sum(log(res_9$cpo$cpo), na.rm = TRUE),
+    sum(log(res_10$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_3 = perf))
@@ -371,40 +402,49 @@ for (i in seq_len(nrow(germany))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test]- test_value)),
-  mean(abs(predicted_2[test]- test_value)),
-  mean(abs(predicted_3[test]- test_value)),
-  mean(abs(predicted_4[test]- test_value))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
-rm(list = setdiff(ls(), c("germany", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "germany", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 # now models with all the variables
 formula_11 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_12 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_13 <- value ~
-  # add the demographic vars and pop density
-  Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_14 <- value ~
-  # add the demographic vars and pop density
-  Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -473,8 +513,10 @@ perf <- list(
     res_13$waic$waic, res_14$waic$waic
   ),
   cpo = c(
-    sum(log(res_11$cpo$cpo), na.rm = TRUE), sum(log(res_12$cpo$cpo), na.rm = TRUE),
-    sum(log(res_13$cpo$cpo), na.rm = TRUE), sum(log(res_14$cpo$cpo), na.rm = TRUE)
+    sum(log(res_11$cpo$cpo), na.rm = TRUE),
+    sum(log(res_12$cpo$cpo), na.rm = TRUE),
+    sum(log(res_13$cpo$cpo), na.rm = TRUE),
+    sum(log(res_14$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_4 = perf))
@@ -501,17 +543,26 @@ for (i in seq_len(nrow(germany))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test]- test_value)),
-  mean(abs(predicted_2[test]- test_value)),
-  mean(abs(predicted_3[test]- test_value)),
-  mean(abs(predicted_4[test]- test_value))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
-rm(list = setdiff(ls(), c("germany", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "germany", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 ########################################################
 # Now with variable selection
 formula_15 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
@@ -520,8 +571,8 @@ formula_15 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_16 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
@@ -530,8 +581,8 @@ formula_16 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_17 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
@@ -540,8 +591,8 @@ formula_17 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_18 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
@@ -614,8 +665,10 @@ perf <- list(
     res_17$waic$waic, res_18$waic$waic
   ),
   cpo = c(
-    sum(log(res_15$cpo$cpo), na.rm = TRUE), sum(log(res_16$cpo$cpo), na.rm = TRUE),
-    sum(log(res_17$cpo$cpo), na.rm = TRUE), sum(log(res_18$cpo$cpo), na.rm = TRUE)
+    sum(log(res_15$cpo$cpo), na.rm = TRUE),
+    sum(log(res_16$cpo$cpo), na.rm = TRUE),
+    sum(log(res_17$cpo$cpo), na.rm = TRUE),
+    sum(log(res_18$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_5 = perf))
@@ -642,15 +695,24 @@ for (i in seq_len(nrow(germany))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test]- test_value)),
-  mean(abs(predicted_2[test]- test_value)),
-  mean(abs(predicted_3[test]- test_value)),
-  mean(abs(predicted_4[test]- test_value))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
-rm(list = setdiff(ls(), c("germany", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "germany", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 # now models with all the variables
 formula_19 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + Union +
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
   SPD + Gruene + FDP + die_linke + afd + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   pop_dens + urb_dens + sex +
@@ -659,7 +721,7 @@ formula_19 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_20 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + Union +
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
   SPD + Gruene + FDP + die_linke + afd + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   pop_dens + urb_dens + sex +
@@ -669,15 +731,15 @@ formula_20 <- value ~
   f(id_date_2, model = "iid")
 
 formula_21 <- value ~
-  log(income_total) + log(income_tax) + afd + die_linke +
-  pop_dens + unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
+log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
+  unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_22 <- value ~
-  log(income_total) + log(income_tax) + afd + die_linke +
-  pop_dens + unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
+log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
+  unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -751,8 +813,10 @@ perf <- list(
     res_21$waic$waic, res_22$waic$waic
   ),
   cpo = c(
-    sum(log(res_19$cpo$cpo), na.rm = TRUE), sum(log(res_20$cpo$cpo), na.rm = TRUE),
-    sum(log(res_21$cpo$cpo), na.rm = TRUE), sum(log(res_22$cpo$cpo), na.rm = TRUE)
+    sum(log(res_19$cpo$cpo), na.rm = TRUE),
+    sum(log(res_20$cpo$cpo), na.rm = TRUE),
+    sum(log(res_21$cpo$cpo), na.rm = TRUE),
+    sum(log(res_22$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_6 = perf))
@@ -779,17 +843,26 @@ for (i in seq_len(nrow(germany))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test]- test_value)),
-  mean(abs(predicted_2[test]- test_value)),
-  mean(abs(predicted_3[test]- test_value)),
-  mean(abs(predicted_4[test]- test_value))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
-rm(list = setdiff(ls(), c("germany", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "germany", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 
 # now models with all the variables
 formula_23 <- value ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -798,8 +871,8 @@ formula_23 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_24 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -808,7 +881,7 @@ formula_24 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_25 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -817,8 +890,8 @@ formula_25 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_26 <- value ~
-  # add the demographic vars and pop density
-  marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -894,8 +967,10 @@ perf <- list(
     res_25$waic$waic, res_26$waic$waic
   ),
   cpo = c(
-    sum(log(res_23$cpo$cpo), na.rm = TRUE), sum(log(res_24$cpo$cpo), na.rm = TRUE),
-    sum(log(res_25$cpo$cpo), na.rm = TRUE), sum(log(res_26$cpo$cpo), na.rm = TRUE)
+    sum(log(res_23$cpo$cpo), na.rm = TRUE),
+    sum(log(res_24$cpo$cpo), na.rm = TRUE),
+    sum(log(res_25$cpo$cpo), na.rm = TRUE),
+    sum(log(res_26$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_7 = perf))
@@ -922,18 +997,27 @@ for (i in seq_len(nrow(germany))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test]- test_value)),
-  mean(abs(predicted_2[test]- test_value)),
-  mean(abs(predicted_3[test]- test_value)),
-  mean(abs(predicted_4[test]- test_value))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
-rm(list = setdiff(ls(), c("germany", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "germany", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 
 # now models with all the variables
 formula_27 <- value ~
-  # add the demographic vars and pop density
-  entertainment + sport + hairdresser + place_of_worship +
+# add the demographic vars and pop density
+entertainment + sport + hairdresser + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + platform +
   kindergarten + schools + bakeries + pop_dens + higher_education +
   # specify the model with neighborhood matrix
@@ -941,8 +1025,8 @@ formula_27 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_28 <- value ~
-  # add the demographic vars and pop density
-  entertainment + sport + hairdresser + place_of_worship +
+# add the demographic vars and pop density
+entertainment + sport + hairdresser + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + platform +
   kindergarten + schools + bakeries + pop_dens + higher_education +
   # specify the model with neighborhood matrix
@@ -951,7 +1035,7 @@ formula_28 <- value ~
   f(id_date_2, model = "iid")
 # now models with all the variables
 formula_29 <- value ~
-  schools + place_of_worship + pop_dens + office +
+schools + place_of_worship + pop_dens + office +
   bakeries + entertainment + platform + kindergarten + nursing_home +
   sport +
   # specify the model with neighborhood matrix
@@ -959,7 +1043,7 @@ formula_29 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_30 <- value ~
-  schools + place_of_worship + pop_dens + office +
+schools + place_of_worship + pop_dens + office +
   bakeries + entertainment + platform + kindergarten + nursing_home +
   sport +
   # specify the model with neighborhood matrix
@@ -1032,8 +1116,10 @@ perf <- list(
     res_29$waic$waic, res_30$waic$waic
   ),
   cpo = c(
-    sum(log(res_27$cpo$cpo), na.rm = TRUE), sum(log(res_28$cpo$cpo), na.rm = TRUE),
-    sum(log(res_29$cpo$cpo), na.rm = TRUE), sum(log(res_30$cpo$cpo), na.rm = TRUE)
+    sum(log(res_27$cpo$cpo), na.rm = TRUE),
+    sum(log(res_28$cpo$cpo), na.rm = TRUE),
+    sum(log(res_29$cpo$cpo), na.rm = TRUE),
+    sum(log(res_30$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_8 = perf))
@@ -1060,15 +1146,24 @@ for (i in seq_len(nrow(germany))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test]- test_value)),
-  mean(abs(predicted_2[test]- test_value)),
-  mean(abs(predicted_3[test]- test_value)),
-  mean(abs(predicted_4[test]- test_value))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
-rm(list = setdiff(ls(), c("germany", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "germany", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
 formula_31 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
   Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners + entertainment +
   sport + clinic + shops + place_of_worship + retail + nursing_home +
@@ -1079,7 +1174,7 @@ formula_31 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_32 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
   Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners + entertainment +
   sport + clinic + shops + place_of_worship + retail + nursing_home +
@@ -1090,7 +1185,7 @@ formula_32 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_33 <- value ~
-  schools + afd + die_linke + pop_dens + place_of_worship +
+schools + afd + die_linke + pop_dens + place_of_worship +
   entertainment + bakeries + SPD + platform + sport + nursing_home +
   welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix
@@ -1098,7 +1193,7 @@ formula_33 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_34 <- value ~
-  schools + afd + die_linke + pop_dens + place_of_worship +
+schools + afd + die_linke + pop_dens + place_of_worship +
   entertainment + bakeries + SPD + platform + sport + nursing_home +
   welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix
@@ -1173,8 +1268,10 @@ perf <- list(
     res_33$waic$waic, res_34$waic$waic
   ),
   cpo = c(
-    sum(log(res_31$cpo$cpo), na.rm = TRUE), sum(log(res_32$cpo$cpo), na.rm = TRUE),
-    sum(log(res_33$cpo$cpo), na.rm = TRUE), sum(log(res_34$cpo$cpo), na.rm = TRUE)
+    sum(log(res_31$cpo$cpo), na.rm = TRUE),
+    sum(log(res_32$cpo$cpo), na.rm = TRUE),
+    sum(log(res_33$cpo$cpo), na.rm = TRUE),
+    sum(log(res_34$cpo$cpo), na.rm = TRUE)
   )
 )
 results <- c(results, list(res_9 = perf))
@@ -1201,13 +1298,22 @@ for (i in seq_len(nrow(germany))) {
   )
 }
 mae <- c(mae, list(
-  mean(abs(predicted_1[test]- test_value)),
-  mean(abs(predicted_2[test]- test_value)),
-  mean(abs(predicted_3[test]- test_value)),
-  mean(abs(predicted_4[test]- test_value))
+  mean(abs(predicted_1[test] - test_value)),
+  mean(abs(predicted_2[test] - test_value)),
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test] - test_value))
 ))
 
-rm(list = setdiff(ls(), c("germany", "prior_1", "prior_2", "C", "models", "results", "test", "test_value", "link", "mae")))
-# now models with all the variables
+
+rm(
+  list = setdiff(
+    ls(),
+    c(
+      "germany", "prior_1", "prior_2", "C", "models", "results",
+      "test", "test_value", "link", "mae"
+    )
+  )
+)
+
 models_final <- list(models, results, mae)
 save(models_final, file = "models/leroux_germany_temporal.Rda")

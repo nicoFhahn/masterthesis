@@ -23,7 +23,6 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
   } else {
     func <- lapply
   }
-  start_time <- Sys.time()
   current_download <- func(
     seq_len(length(cities)), function(y, key, ...) {
       x <- cities[y]
@@ -43,9 +42,6 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
             osmdata::add_osm_feature(key = key, value = value),
           silent = TRUE
           )
-          # if (format(Sys.time() - start_time, units = "secs") > "120 secs") {
-          #   return(NULL)
-          # }
         }
       }
       httr::set_config(httr::config(http_version = 2))
@@ -58,9 +54,6 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
         if (str_detect(points, "Timeout")) {
           while (str_detect(points, "Timeout")) {
             points <- try(osmdata::osmdata_sf(query), silent = TRUE)
-            # if (format(Sys.time() - start_time, units = "secs") > "120 secs") {
-            #   return(NULL)
-            # }
           }
         } else {
           # throw a warning if no data is available
@@ -94,7 +87,7 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
         }
       } else {
         if (!is.null(osm_polygons)) {
-          inter <- unlist(suppressWarnings(st_intersects(osm_polygons, osm_points)))
+          inter <- unlist(st_intersects(osm_polygons, osm_points))
           if (length(inter) > 0) {
             osm_points <- osm_points[-inter, ]
           }
@@ -103,7 +96,7 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
           osm_polygons$latitude <- st_coordinates(osm_polygons)[, 2]
         }
         if (!is.null(osm_multipolygons)) {
-          inter <- unlist(suppressWarnings(st_intersects(osm_multipolygons, osm_points)))
+          inter <- unlist(st_intersects(osm_multipolygons, osm_points))
           if (length(inter) > 0) {
             osm_points <- osm_points[-inter, ]
           }
