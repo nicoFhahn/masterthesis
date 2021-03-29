@@ -354,15 +354,16 @@ formula <- value ~
 prior_1 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(1, 0.01)
+    param = c(0.5 / 0.31, 0.01)
   )
 )
 formula <- value ~
   schools + unemp_tot + restaurant + sex + 
-  median_age + pop_dens + construction_ft + clinic +
+  median_age + pop_dens + construction_pt_work +
+  workers_ft_work + higher_education + clinic +
   f(
     idarea_1, model = "besagproper",
-    graph = g, hyper = prior_1
+    graph = g, hyper = prior_2
   )
 \end{lstlisting}
 \clearpage

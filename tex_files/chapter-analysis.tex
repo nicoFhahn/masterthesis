@@ -10,13 +10,13 @@ When looking at the standardised incidence ratio for Germany, it is noticeable t
 % \begin{figure}[H]
 %   \centering
 %   \includesvg[width = 1.2\textwidth]{sir_germany.svg}
-%   \caption{The standardised incidence ratio for Germany based on the data of the 18th of March 2021}
+%   \caption{The standardised incidence ratio for Germany based on the data of the 24th of March 2021}
 %   \label{sirgermany}
 % \end{figure}
 \begin{figure}[H]
   \centering
   \includegraphics[width = 1.2\textwidth]{sir_germany.png}
-  \caption{The standardised incidence ratio for Germany based on the data of the 18th of March 2021}
+  \caption{The standardised incidence ratio for Germany based on the data of the 24th of March 2021}
   \label{sirgermany}
 \end{figure}
 \subsection{Standardised Incidence Ratio for Norway}
@@ -327,9 +327,9 @@ The performance measures for all three models are shown in Table~\ref{demoNorway
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-Besag  & 2385 & 2397 & -3994 & 10161 \\
-BYM2 & 2212 & 2186 & -6241 & 10013\\
-Leroux & 2225  & 2182 & -7781 & 8876\\
+Besag  & 2396 & 2403 & -4369 & 10149 \\
+BYM2 & 2224 & 2202 & -6793 & 10002\\
+Leroux & 2225  & 2192 & -6810 & 8460\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -341,13 +341,13 @@ The effects of the covariates are shown in Table~\ref{fixedDemoNorway}.
 \toprule
 \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
-(Intercept) & -1.020 & 0.3611 & 0.3220 & 0.4029 \\
-unemp\_total & 0.3422 & 1.413 & 1.192 & 1.662 \\
-unemp\_immg & 0.02598 & 1.030 & 0.8646 & 1.218 \\
+(Intercept) & -1.040 & 0.3540 & 0.3173 & 0.3929 \\
+unemp\_total & 0.3371 & 1.406 & 1.192 & 1.645 \\
+unemp\_immg & 0.03737 & 1.042 & 0.8788 & 1.226 \\
 \bottomrule
 \end{tabular}
 \end{table}
-The posterior mean of the section implies a risk rate of -63.9\%, which does not say much except for the fact that there is a very low risk of getting Covid-19 in Norway. According to this model, the risk depends on only two factors, namely total unemployment and immigrant unemployment. A 1 standard deviation increase in total unemployment leads to a 41.3\% increase in risk and a 1 standard deviation increase in immigrant unemployment leads to a 3.0\% increase in risk. A possible explanation for this could be that the unemployed spend less time at home and instead move around more and thus have more contact with people, but this should be taken with a grain of salt.
+The posterior mean of the section implies a risk rate of -64.6\%, which does not say much except for the fact that there is a very low risk of getting Covid-19 in Norway. According to this model, the risk depends on only two factors, namely total unemployment and immigrant unemployment. A 1 standard deviation increase in total unemployment leads to a 40.6\% increase in risk and a 1 standard deviation increase in immigrant unemployment leads to a 4.2\% increase in risk. A possible explanation for this could be that the unemployed spend less time at home and instead move around more and thus have more contact with people, but this should be taken with a grain of salt.
 \subsubsection{Infrastructure Models}
 For the models based on the infrastructural variables, the best predictive performance was observed for a Besag model. The formula is shown in Listing~\ref{codeInfraNorway}. \\
 The performance measure for the models are shown in Table~\ref{infraNorway}.
@@ -357,9 +357,9 @@ The performance measure for the models are shown in Table~\ref{infraNorway}.
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
 \midrule
-Besag  & 2303 & 2310 & -8209 & 11841 \\
-BYM2 & 2206 & 2167 & -6823 & 12000\\
-Leroux &  2219 & 2177 & -7396 & 13025\\
+Besag  & 2326 & 2335 & -8405 & 11694 \\
+BYM2 & 2218 & 2187 & -6532 & 11866\\
+Leroux &  2230 & 2167 & -7128 & 12943\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -370,19 +370,19 @@ The effect of the covariates are shown in Table~\ref{fixedInfraNorway}.
 \toprule
 \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
-(Intercept) & -1.052 & 0.3545 & 0.2507 & 0.4909 \\
-schools & 0.3240 & 1.406 & 0.9815 & 1.971 \\
-kindergarten & 0.2531 & 1.3000 & 0.9906 & 1.688 \\
-pop\_dens & 0.1547 & 1.173 &  0.9726  & 1.411\\
-place\_of\_worship & 0.01973 & 1.029 & 0.7936 & 1.324 \\
-nursing\_home & 0.003313 & 1.004 & 0.9270 & 1.089\\
-restaurant & 0.001640 & 1.0323 & 0.6275 & 1.615 \\
-office & -0.07977 & 0.9263 &  0.7932 & 1.080 \\
-shops & -0.5000 &0.6584 & 0.2820 & 1.339 \\
+(Intercept) & -1.061 & 0.3518 & 0.2437 & 0.4965 \\
+schools & 0.3253 & 1.407 & 0.9864 & 1.966 \\
+kindergarten & 0.2418 & 1.285 & 0.9825 & 1.663 \\
+pop\_dens & 0.1531 & 1.171 &  0.9733  & 1.406\\
+place\_of\_worship & 0.03138 & 1.041 & 0.8053 & 1.335 \\
+restaurant & 0.01374 & 1.044 & 0.6384 & 1.626 \\
+nursing\_home & 0.001030 & 1.002 & 0.9258 & 1.085\\
+office & -0.07424 & 0.9263 &  0.7991 & 1.084 \\
+shops & -0.5186 &0.6451 & 0.2793 & 1.303 \\
 \bottomrule
 \end{tabular}
 \end{table}
-According to this model, schools, kindergartens, places of worship and nursing homes are infrastructural features that increase the risk of infection. In addition, higher population density also increases the risk of infection. Schools and kindergartens are the two biggest driving factors, as a 1 standard deviation increase in schools leads to a 40.6\% increase in risk and a 1 standard deviation increase in kindergartens leads to a 30.0\% increase in risk. The risk of schools and kindergartens is reflected in the Corona outbreak that occurred in Tromsø in early March 2021, where several infections have been linked to school classes and kindergartens \cite{tromsokorona}. A 1 standard deviation increase in population density leads to a 17.3\% increase in risk, and for places of worship and nursing homes, a 1 standard deviation increase leads to a 2.9\% and 0.4\% increase in risk, respectively. Finally, for restaurants, a 1 standard deviation increase leads to a 3.2\% increase in risk. Why restaurants do not have a large impact on the risk of infection has already been discussed in Section~\ref{sssec:infraGermany}
+According to this model, schools, kindergartens, places of worship and nursing homes are infrastructural features that increase the risk of infection. In addition, higher population density also increases the risk of infection. Schools and kindergartens are the two biggest driving factors, as a 1 standard deviation increase in schools leads to a 40.7\% increase in risk and a 1 standard deviation increase in kindergartens leads to a 28.5\% increase in risk. The risk of schools and kindergartens is reflected in the Corona outbreak that occurred in Tromsø in early March 2021, where several infections have been linked to school classes and kindergartens \cite{tromsokorona}. A 1 standard deviation increase in population density leads to a 17.1\% increase in risk, and for places of worship and nursing homes, a 1 standard deviation increase leads to a 4.1\% and 0.2\% increase in risk, respectively. Finally, for restaurants, a 1 standard deviation increase leads to a 4.4\% increase in risk. Why restaurants do not have a large impact on the risk of infection has already been discussed in Section~\ref{sssec:infraGermany}
 \\
 For offices and shops, on the other hand, there is no increased risk of infection. For offices, one reason why they do not increase the risk could be that more and more people work from home and therefore there is less contact between people at office locations and thus no increased risk of infection. Finally, shops do not increase the risk of infection here, whereas in Germany they were one of the driving factors, as can be seen in Table~\ref{fixedInfraGermany}. Why this is so is difficult to say. Because of the lower infection numbers, there is of course less risk when people congregate in supermarkets, which may be an explanation, even if these are not driving factors of the pandemic in Norway. It could also mean that Norwegians are more likely to be careful to keep enough distance from each other. \\
 Looking at the posterior mean relative risk, it can be seen that the region in and around the capital Oslo is most at risk, as the posterior mean of the relative risk can be as high as 6, with a posterior probability between 0.75 and 1. In addition, some municipalities around Bergen and Ulvik are also more at risk, with a relative risk of up to 3.4 and a posterior probability between 0.75 and 1. \\
@@ -421,9 +421,9 @@ The performance measures for the models are shown in Table~\ref{bothNorway}
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
 \midrule
-Besag  & 2409 & 2424 & -3977 & 12431 \\
-BYM2 & 2369 & 2383 & -4439 & 13144\\
-Leroux &  2322 & 2328 & -8020 & 12769\\
+Besag  & 2352 & 2355 & -6939 & 13036 \\
+BYM2 & 2215 & 2184 & -6406 & 13932\\
+Leroux &  2229 & 2193 & -7677 & 14841\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -434,20 +434,23 @@ The fixed effects are shown in Table~\ref{fixedAllNorway}.
 \toprule
 \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
 \midrule
-(Intercept) & -1.050 & 0.3544 & 0.2529 & 0.4796\\
-unemp\_tot & 0.1491 & 1.162 & 1.048 & 1.286 \\
-pop\_dens & 0.1417 & 1.157 & 0.9626 & 1.381 \\
-schools & 0.0900 & 1.108 & 0.8044 & 1.489 \\
-clinic & 0.06723 & 1.113 & 0.6157 & 1.859 \\
-sex & 0.04342 & 1.046 & 0.9420 & 1.157 \\
-restaurant & -0.02083 & 1.008 & 0.6095 & 1.568 \\
-median\_age & -0.1042 & 0.9023 & 0.8100 & 1.001 \\
-construction\_ft & -0.1772 & 0.8446 & 0.6495 & 1.078 \\
+(Intercept) & -1.068 & 0.3484 & 0.2478 & 0.4736\\
+construction\_pt\_work & 0.1873 & 1.234 & 0.7946 & 1.834 \\
+clinic & 0.1855 & 1.266 & 0.6488 & 2.241 \\
+pop\_dens & 0.1717 & 1.194 & 0.9703 & 1.455 \\
+unemp\_tot & 0.1559 & 1.170 & 1.057 & 1.292 \\
+schools & 0.0978 & 1.117 & 0.8074 & 1.507 \\
+sex & 0.04402 & 1.046 & 0.9426 & 1.158 \\
+restaurant & 0.03072 & 1.079 & 0.5717 & 1.855 \\
+higher\_education & -0.05942 & 0.9443 & 0.8295 & 1.069 \\
+median\_age & -0.1147 & 0.8929 & 0.8015 & 0.9910 \\
+workers\_ft\_work & -0.5200 & 0.6403 & 0.2784 & 1.259 \\
 \bottomrule
 \end{tabular}
 \end{table}
-Most of these factors have already been discussed in the previous sections, so they will not be discussed in detail again. \\
-Total unemployment, population density, the number of schools and the number of clinics are the four biggest drivers of relative risk, as a 1 standard deviation increase in any of these factors leads to an increase in relative risk of 16.2\%, 15.7\%, 10.8\% and 11.3\% respectively. That clinics increase the relative risk could be due to the fact that when there are more clinics in a community, more people who have symptoms go to a clinic and get tested, which naturally leads to more detected cases. The other two factors that increase the risk are the proportion of women in a community and the number of restaurants. For the proportion of women, a 1 standard deviation increase leads to a 4.6\% increase in risk and for restaurants, a 1 standard deviation increase leads to a 0.8\% increase in risk. \\
+Some of these factors have already been discussed in the previous sections, so they will not be discussed in detail again. \\
+The number of clinics, the number of part-time construction workers, the population density, total unemployment and the number of schools are the five biggest drivers of relative risk, as a 1 standard deviation increase in any of these factors leads to an increase in relative risk of 26.6\%, 23.4\%, 19.4\%, 17.0\% and 11.7\% respectively. That clinics increase the relative risk could be due to the fact that when there are more clinics in a community, more people who have symptoms go to a clinic and get tested, which naturally leads to more detected cases. In Norway, there has been some discussion about whether the number of foreign construction workers coming from countries with higher infection rates, such as Poland, could contribute to the spread of Covid-19. Since most of these are classified as part-time workers, this model suggests that this may be the case. \\
+The other two factors that increase the risk are the proportion of women in a community and the number of restaurants. For the proportion of women, a 1 standard deviation increase leads to a 4.6\% increase in risk and for restaurants, a 1 standard deviation increase leads to a 0.8\% increase in risk. \\
 The median age lowers the risk of infection, as an increase of 1 standard deviation lowers the relative risk by 9.8\%. This in turn means that people living in communities with a lower median age have a higher risk than people living in "older" communities. This could be due to the fact that younger people tend to be more mobile and have more contact with other people as a result of this increased movement, which in turn helps the virus spread.
 \clearpage
 \section{Spatio-Temporal Models}

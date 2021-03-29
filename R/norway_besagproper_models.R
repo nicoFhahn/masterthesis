@@ -347,25 +347,25 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 formula_11 <- value ~
 pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
-  workers_ft + workers_pt +
-  construction_ft + construction_pt +
+  workers_ft_work + workers_pt_work +
+  construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_12 <- value ~
 pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
-  workers_ft + workers_pt +
-  construction_ft + construction_pt +
+  workers_ft_work + workers_pt_work +
+  construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_13 <- value ~
-workers_ft + workers_pt +
-  construction_ft + construction_pt +
+workers_ft_work + workers_pt_work +
+  construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_14 <- value ~
-workers_ft + workers_pt +
-  construction_ft + construction_pt +
+workers_ft_work + workers_pt_work +
+  construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 res_11 <- inla(
@@ -470,28 +470,28 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 formula_15 <- value ~
 pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
-  workers_ft + workers_pt +
-  construction_ft + construction_pt +
+  workers_ft_work + workers_pt_work +
+  construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_16 <- value ~
 pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
-  workers_ft + workers_pt +
-  construction_ft + construction_pt +
+  workers_ft_work + workers_pt_work +
+  construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_17 <- value ~
-workers_ft + workers_pt +
-  construction_ft + construction_pt +
+workers_ft_work + workers_pt_work +
+  construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_18 <- value ~
-workers_ft + workers_pt +
-  construction_ft + construction_pt +
+workers_ft_work + workers_pt_work +
+  construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
@@ -596,22 +596,22 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 formula_19 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_ft + 
-  construction_ft + construction_pt + immigrants_total + pop_dens + 
-  sex +
+  median_age + unemp_tot + unemp_immg + workers_ft_work + 
+  workers_pt_work + construction_pt_work + immigrants_total + 
+  pop_dens + urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_20 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_ft + 
-  construction_ft + construction_pt + immigrants_total + pop_dens + 
-  sex +
+  median_age + unemp_tot + unemp_immg + workers_ft_work + 
+  workers_pt_work + construction_pt_work + immigrants_total + 
+  pop_dens + urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_21 <- value ~
-  pop_dens + median_age + sex + unemp_tot + 
-  workers_ft + immigrants_total +
+  construction_pt_work + unemp_tot + sex + 
+  median_age + pop_dens +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_22 <- value ~
-  pop_dens + median_age + sex + unemp_tot + 
-  workers_ft + immigrants_total +
+  construction_pt_work + unemp_tot + sex + 
+  median_age + pop_dens +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 
 res_19 <- inla(
@@ -853,15 +853,17 @@ rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models",
 
 # now models with all the variables
 formula_27 <- value ~
-  marketplace + entertainment + sport + place_of_worship + 
-  nursing_home + restaurant + aerodrome + office + platform + 
-  kindergarten + schools + bakeries + higher_education + pop_dens +
+  marketplace + entertainment + sport + clinic + 
+  hairdresser + shops + place_of_worship + restaurant + aerodrome + 
+  office + platform + kindergarten + schools + bakeries + pop_dens + 
+  urb_dens +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_28 <- value ~
-  marketplace + entertainment + sport + place_of_worship + 
-  nursing_home + restaurant + aerodrome + office + platform + 
-  kindergarten + schools + bakeries + higher_education + pop_dens +
+  marketplace + entertainment + sport + clinic + 
+  hairdresser + shops + place_of_worship + restaurant + aerodrome + 
+  office + platform + kindergarten + schools + bakeries + pop_dens + 
+  urb_dens +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 # now models with all the variables
@@ -981,30 +983,34 @@ mae <- c(mae, list(
 rm(list = setdiff(ls(), c("newest_numbers", "prior_1", "prior_2", "g", "models", "results", "test", "test_value", "link", "mae")))
 # now models with all the variables
 formula_31 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_pt + 
-  construction_ft + construction_pt + immigrants_total + marketplace + 
-  entertainment + clinic + retail + nursing_home + restaurant + 
-  aerodrome + office + platform + kindergarten + schools + 
-  higher_education + pop_dens + urb_dens + sex +
+  median_age + unemp_tot + workers_ft_work + 
+  workers_pt_work + construction_pt_work + immigrants_total + 
+  marketplace + entertainment + clinic + hairdresser + shops + 
+  retail + nursing_home + restaurant + aerodrome + office + 
+  platform + kindergarten + schools + bakeries + higher_education + 
+  pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_32 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_pt + 
-  construction_ft + construction_pt + immigrants_total + marketplace + 
-  entertainment + clinic + retail + nursing_home + restaurant + 
-  aerodrome + office + platform + kindergarten + schools + 
-  higher_education + pop_dens + urb_dens + sex +
+  median_age + unemp_tot + workers_ft_work + 
+  workers_pt_work + construction_pt_work + immigrants_total + 
+  marketplace + entertainment + clinic + hairdresser + shops + 
+  retail + nursing_home + restaurant + aerodrome + office + 
+  platform + kindergarten + schools + bakeries + higher_education + 
+  pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 # now models with all the variables
 formula_33 <- value ~
   schools + unemp_tot + restaurant + sex + 
-  median_age + pop_dens + construction_ft + clinic +
+  median_age + pop_dens + construction_pt_work + workers_ft_work + 
+  higher_education + clinic +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_34 <- value ~
   schools + unemp_tot + restaurant + sex + 
-  median_age + pop_dens + construction_ft + clinic +
+  median_age + pop_dens + construction_pt_work + workers_ft_work + 
+  higher_education + clinic +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 

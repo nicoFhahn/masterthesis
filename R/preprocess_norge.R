@@ -620,7 +620,7 @@ newest_numbers$pop_dens <- newest_numbers$population / newest_numbers$area
 newest_numbers$urb_dens <- newest_numbers$residential / newest_numbers$area
 newest_numbers$sex <- newest_numbers$population_female / newest_numbers$population_total
 # keep only relevant variables
-newest_numbers <- newest_numbers[, c(1, 3, 6:8, 17:19, 28:33, 36:48, 51:65)]
+newest_numbers <- newest_numbers[, c(1, 3, 6:8, 17:19, 24:27, 32:33, 36:48, 51:65)]
 # impute
 cols_imputed <- lapply(
   c(7:34, 36:42),
@@ -641,8 +641,8 @@ newest_numbers <- st_as_sf(newest_numbers_imputed)
 newest_numbers$region <- NULL
 rownames(newest_numbers) <- NULL
 # scale the remaining variables
-newest_numbers$pop_dens <- scale(newest_numbers$pop_dens)
-newest_numbers$urb_dens <- scale(newest_numbers$urb_dens)
-newest_numbers$sex <- scale(newest_numbers$sex)
-newest_numbers$median_age <- scale(newest_numbers$median_age)
+newest_numbers$pop_dens <- as.numeric(scale(newest_numbers$pop_dens))
+newest_numbers$urb_dens <- as.numeric(scale(newest_numbers$urb_dens))
+newest_numbers$sex <- as.numeric(scale(newest_numbers$sex))
+newest_numbers$median_age <- as.numeric(scale(newest_numbers$median_age))
 rm(list = setdiff(ls(), c("newest_numbers")))

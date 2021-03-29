@@ -49,6 +49,7 @@ demo_cpo[id_bym2 + 22]
 mae_bym2[id_bym2]
 id_leroux <- which(unlist(mae_leroux[1:22]) %in% min(unlist(mae_leroux[1:22])))
 demo_dic[id_leroux + 44]
+sum(models_leroux[[id_leroux]]$dic$local.dic, na.rm = TRUE)
 demo_waic[id_leroux + 44]
 demo_cpo[id_leroux + 44]
 mae_leroux[id_leroux]
@@ -244,36 +245,36 @@ min(unlist(mae_besag[31:34]))
 min(unlist(mae_bym2[31:34]))
 min(unlist(mae_leroux[31:34]))
 id_besag <- which(unlist(mae_besag[31:34]) %in% min(unlist(mae_besag[31:34])))
-demo_dic[id_besag]
-demo_waic[id_besag]
-demo_cpo[id_besag]
+all_dic[id_besag]
+all_waic[id_besag]
+all_cpo[id_besag]
 mae_besag[id_besag + 30]
 id_bym2 <- which(unlist(mae_bym2[31:34]) %in% min(unlist(mae_bym2[31:34])))
-demo_dic[id_bym2 + 4]
-demo_waic[id_bym2 + 4]
-demo_cpo[id_bym2 + 4]
+all_dic[id_bym2 + 4]
+all_waic[id_bym2 + 4]
+all_cpo[id_bym2 + 4]
 mae_bym2[id_bym2 + 30]
 id_leroux <- which(unlist(mae_leroux[31:34]) %in% min(unlist(mae_leroux[31:34])))
-demo_dic[id_leroux + 8]
-demo_waic[id_leroux + 8]
-demo_cpo[id_leroux + 8]
+all_dic[id_leroux + 8]
+all_waic[id_leroux + 8]
+all_cpo[id_leroux + 8]
 mae_leroux[id_leroux + 30]
 
 options(scipen = 10)
-models_besag[[33]]$summary.fixed[order(models_besag[[33]]$summary.fixed$mean), ]
+models_besag[[34]]$summary.fixed[order(models_besag[[34]]$summary.fixed$mean), ]
 sapply(
-  models_besag[[33]]$marginals.fixed[
-    rownames(models_besag[[33]]$summary.fixed[
-      order(models_besag[[33]]$summary.fixed$mean),
+  models_besag[[34]]$marginals.fixed[
+    rownames(models_besag[[34]]$summary.fixed[
+      order(models_besag[[34]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
   fun = exp
 )
 sapply(
-  models_besag[[33]]$marginals.fixed[
-    rownames(models_besag[[33]]$summary.fixed[
-      order(models_besag[[33]]$summary.fixed$mean),
+  models_besag[[34]]$marginals.fixed[
+    rownames(models_besag[[34]]$summary.fixed[
+      order(models_besag[[34]]$summary.fixed$mean),
     ])
   ],
   function(x) {
