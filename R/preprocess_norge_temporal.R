@@ -628,7 +628,7 @@ norge_split_e <- lapply(
     x$sex <- x$population_female / x$population_total
     x$idarea_1 <- seq_len(nrow(x))
     x$idarea_2 <- seq_len(nrow(x))
-    x <- x[, c(1:5, 14:16, 21:24, 30, 32:44, 47:53, 55:61)]
+    x <- x[, c(1:5, 14:16, 21:24, 29, 32:44, 47:53, 55:61)]
     cols_imputed <- lapply(
       c(6:40),
       function(y, ...) {

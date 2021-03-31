@@ -79,20 +79,7 @@ res_2 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-models <- c(models, list(res_1, res_2))
-perf <- list(
-  dic = c(
-    res_1$dic$dic, res_2$dic$dic
-  ),
-  waic = c(
-    res_1$waic$waic, res_2$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_1$cpo$cpo), na.rm = TRUE),
-    sum(log(res_2$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_1 = perf))
+
 predicted_1 <- c()
 predicted_2 <- c()
 for (i in seq_len(nrow(germany))) {
@@ -105,10 +92,31 @@ for (i in seq_len(nrow(germany))) {
     res_2$marginals.fitted.values[[i]]
   )
 }
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value))
-))
+mae_1 <- mean(abs(predicted_1[test] - test_value))
+mae_2 <- mean(abs(predicted_2[test] - test_value))
+if (mae_1 < mae_2) {
+  mae <- c(mae, list(mae_1))
+  models <- c(models, list(res_1))
+  results <- c(
+    results,
+    list(
+      dic = res_1$dic$dic,
+      waic = res_1$waic$waic,
+      cpo = sum(log(res_1$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else {
+  mae <- c(mae, list(mae_2))
+  models <- c(models, list(res_2))
+  results <- c(
+    results,
+    list(
+      dic = res_2$dic$dic,
+      waic = res_2$waic$waic,
+      cpo = sum(log(res_2$cpo$cpo), na.rm = TRUE)
+    )
+  )
+}
 
 
 rm(
@@ -207,27 +215,6 @@ res_6 <- inla(
   Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
-
-models <- c(models, list(res_3, res_4, res_5, res_6))
-
-perf <- list(
-  dic = c(
-    res_3$dic$dic, res_4$dic$dic,
-    res_5$dic$dic, res_6$dic$dic
-  ),
-  waic = c(
-    res_3$waic$waic, res_4$waic$waic,
-    res_5$waic$waic, res_6$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_3$cpo$cpo), na.rm = TRUE),
-    sum(log(res_4$cpo$cpo), na.rm = TRUE),
-    sum(log(res_5$cpo$cpo), na.rm = TRUE),
-    sum(log(res_6$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_2 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
@@ -250,13 +237,56 @@ for (i in seq_len(nrow(germany))) {
     res_6$marginals.fitted.values[[i]]
   )
 }
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value)),
-  mean(abs(predicted_4[test] - test_value))
-))
-
+mae_1 <- mean(abs(predicted_1[test] - test_value))
+mae_2 <- mean(abs(predicted_2[test] - test_value))
+mae_3 <- mean(abs(predicted_3[test] - test_value))
+mae_4 <- mean(abs(predicted_4[test] - test_value))
+maes <- c(mae_1, mae_2, mae_3, mae_4)
+if (mae_1 == min(maes)) {
+  mae <- c(mae, list(mae_1))
+  models <- c(models, list(res_3))
+  results <- c(
+    results,
+    list(
+      dic = res_3$dic$dic,
+      waic = res_3$waic$waic,
+      cpo = sum(log(res_3$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_2 == min(maes)) {
+  mae <- c(mae, list(mae_2))
+  models <- c(models, list(res_4))
+  results <- c(
+    results,
+    list(
+      dic = res_4$dic$dic,
+      waic = res_4$waic$waic,
+      cpo = sum(log(res_4$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_3 == min(maes)) {
+  mae <- c(mae, list(mae_3))
+  models <- c(models, list(res_5))
+  results <- c(
+    results,
+    list(
+      dic = res_5$dic$dic,
+      waic = res_5$waic$waic,
+      cpo = sum(log(res_5$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else {
+  mae <- c(mae, list(mae_4))
+  models <- c(models, list(res_6))
+  results <- c(
+    results,
+    list(
+      dic = res_6$dic$dic,
+      waic = res_6$waic$waic,
+      cpo = sum(log(res_6$cpo$cpo), na.rm = TRUE)
+    )
+  )
+}
 rm(
   list = setdiff(
     ls(),
@@ -351,25 +381,6 @@ res_10 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-models <- c(models, list(res_7, res_8, res_9, res_10))
-
-perf <- list(
-  dic = c(
-    res_7$dic$dic, res_8$dic$dic,
-    res_9$dic$dic, res_10$dic$dic
-  ),
-  waic = c(
-    res_7$waic$waic, res_8$waic$waic,
-    res_9$waic$waic, res_10$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_7$cpo$cpo), na.rm = TRUE),
-    sum(log(res_8$cpo$cpo), na.rm = TRUE),
-    sum(log(res_9$cpo$cpo), na.rm = TRUE),
-    sum(log(res_10$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_3 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
@@ -392,13 +403,56 @@ for (i in seq_len(nrow(germany))) {
     res_10$marginals.fitted.values[[i]]
   )
 }
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value)),
-  mean(abs(predicted_4[test] - test_value))
-))
-
+mae_1 <- mean(abs(predicted_1[test] - test_value))
+mae_2 <- mean(abs(predicted_2[test] - test_value))
+mae_3 <- mean(abs(predicted_3[test] - test_value))
+mae_4 <- mean(abs(predicted_4[test] - test_value))
+maes <- c(mae_1, mae_2, mae_3, mae_4)
+if (mae_1 == min(maes)) {
+  mae <- c(mae, list(mae_1))
+  models <- c(models, list(res_7))
+  results <- c(
+    results,
+    list(
+      dic = res_7$dic$dic,
+      waic = res_7$waic$waic,
+      cpo = sum(log(res_7$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_2 == min(maes)) {
+  mae <- c(mae, list(mae_2))
+  models <- c(models, list(res_8))
+  results <- c(
+    results,
+    list(
+      dic = res_8$dic$dic,
+      waic = res_8$waic$waic,
+      cpo = sum(log(res_8$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_3 == min(maes)) {
+  mae <- c(mae, list(mae_3))
+  models <- c(models, list(res_9))
+  results <- c(
+    results,
+    list(
+      dic = res_9$dic$dic,
+      waic = res_9$waic$waic,
+      cpo = sum(log(res_9$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else {
+  mae <- c(mae, list(mae_4))
+  models <- c(models, list(res_10))
+  results <- c(
+    results,
+    list(
+      dic = res_10$dic$dic,
+      waic = res_10$waic$waic,
+      cpo = sum(log(res_10$cpo$cpo), na.rm = TRUE)
+    )
+  )
+}
 rm(
   list = setdiff(
     ls(),
@@ -492,24 +546,7 @@ res_14 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-models <- c(models, list(res_11, res_12, res_13, res_14))
-perf <- list(
-  dic = c(
-    res_11$dic$dic, res_12$dic$dic,
-    res_13$dic$dic, res_14$dic$dic
-  ),
-  waic = c(
-    res_11$waic$waic, res_12$waic$waic,
-    res_13$waic$waic, res_14$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_11$cpo$cpo), na.rm = TRUE),
-    sum(log(res_12$cpo$cpo), na.rm = TRUE),
-    sum(log(res_13$cpo$cpo), na.rm = TRUE),
-    sum(log(res_14$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_4 = perf))
+
 predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
@@ -532,12 +569,56 @@ for (i in seq_len(nrow(germany))) {
     res_14$marginals.fitted.values[[i]]
   )
 }
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value)),
-  mean(abs(predicted_4[test] - test_value))
-))
+mae_1 <- mean(abs(predicted_1[test] - test_value))
+mae_2 <- mean(abs(predicted_2[test] - test_value))
+mae_3 <- mean(abs(predicted_3[test] - test_value))
+mae_4 <- mean(abs(predicted_4[test] - test_value))
+maes <- c(mae_1, mae_2, mae_3, mae_4)
+if (mae_1 == min(maes)) {
+  mae <- c(mae, list(mae_1))
+  models <- c(models, list(res_11))
+  results <- c(
+    results,
+    list(
+      dic = res_11$dic$dic,
+      waic = res_11$waic$waic,
+      cpo = sum(log(res_11$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_2 == min(maes)) {
+  mae <- c(mae, list(mae_2))
+  models <- c(models, list(res_12))
+  results <- c(
+    results,
+    list(
+      dic = res_12$dic$dic,
+      waic = res_12$waic$waic,
+      cpo = sum(log(res_12$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_3 == min(maes)) {
+  mae <- c(mae, list(mae_3))
+  models <- c(models, list(res_13))
+  results <- c(
+    results,
+    list(
+      dic = res_13$dic$dic,
+      waic = res_13$waic$waic,
+      cpo = sum(log(res_13$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else {
+  mae <- c(mae, list(mae_4))
+  models <- c(models, list(res_14))
+  results <- c(
+    results,
+    list(
+      dic = res_14$dic$dic,
+      waic = res_14$waic$waic,
+      cpo = sum(log(res_14$cpo$cpo), na.rm = TRUE)
+    )
+  )
+}
 
 rm(
   list = setdiff(
@@ -640,26 +721,6 @@ res_18 <- inla(
   Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
-models <- c(models, list(res_15, res_16, res_17, res_18))
-
-perf <- list(
-  dic = c(
-    res_15$dic$dic, res_16$dic$dic,
-    res_17$dic$dic, res_18$dic$dic
-  ),
-  waic = c(
-    res_15$waic$waic, res_16$waic$waic,
-    res_17$waic$waic, res_18$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_15$cpo$cpo), na.rm = TRUE),
-    sum(log(res_16$cpo$cpo), na.rm = TRUE),
-    sum(log(res_17$cpo$cpo), na.rm = TRUE),
-    sum(log(res_18$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_5 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
@@ -682,12 +743,57 @@ for (i in seq_len(nrow(germany))) {
     res_18$marginals.fitted.values[[i]]
   )
 }
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value)),
-  mean(abs(predicted_4[test] - test_value))
-))
+mae_1 <- mean(abs(predicted_1[test] - test_value))
+mae_2 <- mean(abs(predicted_2[test] - test_value))
+mae_3 <- mean(abs(predicted_3[test] - test_value))
+mae_4 <- mean(abs(predicted_4[test] - test_value))
+maes <- c(mae_1, mae_2, mae_3, mae_4)
+if (mae_1 == min(maes)) {
+  mae <- c(mae, list(mae_1))
+  models <- c(models, list(res_15))
+  results <- c(
+    results,
+    list(
+      dic = res_15$dic$dic,
+      waic = res_15$waic$waic,
+      cpo = sum(log(res_15$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_2 == min(maes)) {
+  mae <- c(mae, list(mae_2))
+  models <- c(models, list(res_16))
+  results <- c(
+    results,
+    list(
+      dic = res_16$dic$dic,
+      waic = res_16$waic$waic,
+      cpo = sum(log(res_16$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_3 == min(maes)) {
+  mae <- c(mae, list(mae_3))
+  models <- c(models, list(res_17))
+  results <- c(
+    results,
+    list(
+      dic = res_17$dic$dic,
+      waic = res_17$waic$waic,
+      cpo = sum(log(res_17$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else {
+  mae <- c(mae, list(mae_4))
+  models <- c(models, list(res_18))
+  results <- c(
+    results,
+    list(
+      dic = res_18$dic$dic,
+      waic = res_18$waic$waic,
+      cpo = sum(log(res_18$cpo$cpo), na.rm = TRUE)
+    )
+  )
+}
+
 
 rm(
   list = setdiff(
@@ -785,28 +891,6 @@ res_22 <- inla(
   Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
-
-
-models <- c(models, list(res_19, res_20, res_21, res_22))
-
-perf <- list(
-  dic = c(
-    res_19$dic$dic, res_20$dic$dic,
-    res_21$dic$dic, res_22$dic$dic
-  ),
-  waic = c(
-    res_19$waic$waic, res_20$waic$waic,
-    res_21$waic$waic, res_22$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_19$cpo$cpo), na.rm = TRUE),
-    sum(log(res_20$cpo$cpo), na.rm = TRUE),
-    sum(log(res_21$cpo$cpo), na.rm = TRUE),
-    sum(log(res_22$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_6 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
@@ -829,12 +913,63 @@ for (i in seq_len(nrow(germany))) {
     res_22$marginals.fitted.values[[i]]
   )
 }
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value)),
-  mean(abs(predicted_4[test] - test_value))
-))
+mae_1 <- mean(abs(predicted_1[test] - test_value))
+mae_2 <- mean(abs(predicted_2[test] - test_value))
+mae_3 <- mean(abs(predicted_3[test] - test_value))
+mae_4 <- mean(abs(predicted_4[test] - test_value))
+maes <- c(mae_1, mae_2, mae_3, mae_4)
+if (mae_1 == min(maes)) {
+  mae <- c(mae, list(mae_1))
+  models <- c(models, list(res_19))
+  results <- c(
+    results,
+    list(
+      dic = res_19$dic$dic,
+      waic = res_19$waic$waic,
+      cpo = sum(log(res_19$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_2 == min(maes)) {
+  mae <- c(mae, list(mae_2))
+  models <- c(models, list(res_20))
+  results <- c(
+    results,
+    list(
+      dic = res_20$dic$dic,
+      waic = res_20$waic$waic,
+      cpo = sum(log(res_20$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_3 == min(maes)) {
+  mae <- c(mae, list(mae_3))
+  models <- c(models, list(res_21))
+  results <- c(
+    results,
+    list(
+      dic = res_21$dic$dic,
+      waic = res_21$waic$waic,
+      cpo = sum(log(res_21$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else {
+  mae <- c(mae, list(mae_4))
+  models <- c(models, list(res_22))
+  results <- c(
+    results,
+    list(
+      dic = res_22$dic$dic,
+      waic = res_22$waic$waic,
+      cpo = sum(log(res_22$cpo$cpo), na.rm = TRUE)
+    )
+  )
+}
+models <- models[which(unlist(mae) %in% min(unlist(mae)))]
+results <- results[
+  seq(
+    1 + (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3,
+    (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3 + 3)
+]
+mae <- mae[which(unlist(mae) %in% min(unlist(mae)))]
 
 
 rm(
@@ -940,25 +1075,6 @@ res_26 <- inla(
 )
 
 
-models <- c(models, list(res_23, res_24, res_25, res_26))
-
-perf <- list(
-  dic = c(
-    res_23$dic$dic, res_24$dic$dic,
-    res_25$dic$dic, res_26$dic$dic
-  ),
-  waic = c(
-    res_23$waic$waic, res_24$waic$waic,
-    res_25$waic$waic, res_26$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_23$cpo$cpo), na.rm = TRUE),
-    sum(log(res_24$cpo$cpo), na.rm = TRUE),
-    sum(log(res_25$cpo$cpo), na.rm = TRUE),
-    sum(log(res_26$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_7 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
@@ -981,13 +1097,56 @@ for (i in seq_len(nrow(germany))) {
     res_26$marginals.fitted.values[[i]]
   )
 }
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value)),
-  mean(abs(predicted_4[test] - test_value))
-))
-
+mae_1 <- mean(abs(predicted_1[test] - test_value))
+mae_2 <- mean(abs(predicted_2[test] - test_value))
+mae_3 <- mean(abs(predicted_3[test] - test_value))
+mae_4 <- mean(abs(predicted_4[test] - test_value))
+maes <- c(mae_1, mae_2, mae_3, mae_4)
+if (mae_1 == min(maes)) {
+  mae <- c(mae, list(mae_1))
+  models <- c(models, list(res_23))
+  results <- c(
+    results,
+    list(
+      dic = res_23$dic$dic,
+      waic = res_23$waic$waic,
+      cpo = sum(log(res_23$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_2 == min(maes)) {
+  mae <- c(mae, list(mae_2))
+  models <- c(models, list(res_24))
+  results <- c(
+    results,
+    list(
+      dic = res_24$dic$dic,
+      waic = res_24$waic$waic,
+      cpo = sum(log(res_24$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_3 == min(maes)) {
+  mae <- c(mae, list(mae_3))
+  models <- c(models, list(res_25))
+  results <- c(
+    results,
+    list(
+      dic = res_25$dic$dic,
+      waic = res_25$waic$waic,
+      cpo = sum(log(res_25$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else {
+  mae <- c(mae, list(mae_4))
+  models <- c(models, list(res_26))
+  results <- c(
+    results,
+    list(
+      dic = res_26$dic$dic,
+      waic = res_26$waic$waic,
+      cpo = sum(log(res_26$cpo$cpo), na.rm = TRUE)
+    )
+  )
+}
 
 rm(
   list = setdiff(
@@ -1086,26 +1245,6 @@ res_30 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-
-models <- c(models, list(res_27, res_28, res_29, res_30))
-
-perf <- list(
-  dic = c(
-    res_27$dic$dic, res_28$dic$dic,
-    res_29$dic$dic, res_30$dic$dic
-  ),
-  waic = c(
-    res_27$waic$waic, res_28$waic$waic,
-    res_29$waic$waic, res_30$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_27$cpo$cpo), na.rm = TRUE),
-    sum(log(res_28$cpo$cpo), na.rm = TRUE),
-    sum(log(res_29$cpo$cpo), na.rm = TRUE),
-    sum(log(res_30$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_8 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
@@ -1128,12 +1267,65 @@ for (i in seq_len(nrow(germany))) {
     res_30$marginals.fitted.values[[i]]
   )
 }
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value)),
-  mean(abs(predicted_4[test] - test_value))
-))
+mae_1 <- mean(abs(predicted_1[test] - test_value))
+mae_2 <- mean(abs(predicted_2[test] - test_value))
+mae_3 <- mean(abs(predicted_3[test] - test_value))
+mae_4 <- mean(abs(predicted_4[test] - test_value))
+maes <- c(mae_1, mae_2, mae_3, mae_4)
+if (mae_1 == min(maes)) {
+  mae <- c(mae, list(mae_1))
+  models <- c(models, list(res_27))
+  results <- c(
+    results,
+    list(
+      dic = res_27$dic$dic,
+      waic = res_27$waic$waic,
+      cpo = sum(log(res_27$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_2 == min(maes)) {
+  mae <- c(mae, list(mae_2))
+  models <- c(models, list(res_28))
+  results <- c(
+    results,
+    list(
+      dic = res_28$dic$dic,
+      waic = res_28$waic$waic,
+      cpo = sum(log(res_28$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_3 == min(maes)) {
+  mae <- c(mae, list(mae_3))
+  models <- c(models, list(res_29))
+  results <- c(
+    results,
+    list(
+      dic = res_29$dic$dic,
+      waic = res_29$waic$waic,
+      cpo = sum(log(res_29$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else {
+  mae <- c(mae, list(mae_4))
+  models <- c(models, list(res_30))
+  results <- c(
+    results,
+    list(
+      dic = res_30$dic$dic,
+      waic = res_30$waic$waic,
+      cpo = sum(log(res_30$cpo$cpo), na.rm = TRUE)
+    )
+  )
+}
+models <- models[c(1, which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) + 1)]
+results <- results[
+  c(
+    seq_len(3),
+    seq(1 + (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3,
+        (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3 + 3) + 3
+  )
+]
+mae <- mae[c(1, which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) + 1)]
 
 
 rm(
@@ -1237,27 +1429,6 @@ res_34 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 
-
-
-models <- c(models, list(res_31, res_32, res_33, res_34))
-
-perf <- list(
-  dic = c(
-    res_31$dic$dic, res_32$dic$dic,
-    res_33$dic$dic, res_34$dic$dic
-  ),
-  waic = c(
-    res_31$waic$waic, res_32$waic$waic,
-    res_33$waic$waic, res_34$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_31$cpo$cpo), na.rm = TRUE),
-    sum(log(res_32$cpo$cpo), na.rm = TRUE),
-    sum(log(res_33$cpo$cpo), na.rm = TRUE),
-    sum(log(res_34$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_9 = perf))
 predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
@@ -1280,13 +1451,56 @@ for (i in seq_len(nrow(germany))) {
     res_34$marginals.fitted.values[[i]]
   )
 }
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value)),
-  mean(abs(predicted_4[test] - test_value))
-))
-
+mae_1 <- mean(abs(predicted_1[test] - test_value))
+mae_2 <- mean(abs(predicted_2[test] - test_value))
+mae_3 <- mean(abs(predicted_3[test] - test_value))
+mae_4 <- mean(abs(predicted_4[test] - test_value))
+maes <- c(mae_1, mae_2, mae_3, mae_4)
+if (mae_1 == min(maes)) {
+  mae <- c(mae, list(mae_1))
+  models <- c(models, list(res_31))
+  results <- c(
+    results,
+    list(
+      dic = res_31$dic$dic,
+      waic = res_31$waic$waic,
+      cpo = sum(log(res_31$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_2 == min(maes)) {
+  mae <- c(mae, list(mae_2))
+  models <- c(models, list(res_32))
+  results <- c(
+    results,
+    list(
+      dic = res_32$dic$dic,
+      waic = res_32$waic$waic,
+      cpo = sum(log(res_32$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else if (mae_3 == min(maes)) {
+  mae <- c(mae, list(mae_3))
+  models <- c(models, list(res_33))
+  results <- c(
+    results,
+    list(
+      dic = res_33$dic$dic,
+      waic = res_33$waic$waic,
+      cpo = sum(log(res_33$cpo$cpo), na.rm = TRUE)
+    )
+  )
+} else {
+  mae <- c(mae, list(mae_4))
+  models <- c(models, list(res_34))
+  results <- c(
+    results,
+    list(
+      dic = res_34$dic$dic,
+      waic = res_34$waic$waic,
+      cpo = sum(log(res_34$cpo$cpo), na.rm = TRUE)
+    )
+  )
+}
 
 rm(
   list = setdiff(
