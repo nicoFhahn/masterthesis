@@ -176,22 +176,22 @@ Leroux & 4728  & 4753 & -3005 & 191965\\
 The summary of the fixed effects is shown in Table~\ref{fixedDemoGermany}. To compute the posterior mean of the coefficients, the code shown in Listing~\ref{codePosteriorMean} can be used. \\
 To obtain a credibility interval of the fixed effects on the transformed scale, the code in Listing~\ref{codeCredibility} can be used. \\
 \begin{table}[H] 
-\caption{The fixed effects for the Leroux model. Values are rounded. \label{fixedDemoGermany}}
-\begin{tabular}{l r r r r}
+\caption{The fixed effects for the Leroux model. Values are rounded. A $^*$ denotes a significant effect.\label{fixedDemoGermany}}
+\begin{tabular}{l r r r r c}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -0.07468 & 0.9282 & 0.8976 & 0.9594 \\
-afd & 0.1230 & 1.134& 0.9820 & 1.302 \\
-FDP & -0.01211 & 0.9881& 0.9515 & 1.026 \\
-Gruene & -0.1363 & 0.8750& 0.7555 & 1.008 \\
-SPD & -0.1702 & 0.8443 & 0.7749 & 0.9179 \\
-Union & -0.1714 & 0.8453& 0.7175 & 0.9889 \\
-die\_linke & -0.2159 & 0.8067 & 0.7353 & 0.8830 \\
+(Intercept) & -0.07468 & 0.9282 & 0.8976 & 0.9594 &\\
+afd & 0.1230 & 1.134& 0.9820 & 1.302 &$^*$\\
+FDP & -0.01211 & 0.9881& 0.9515 & 1.026 &$^*$\\
+Gruene & -0.1363 & 0.8750& 0.7555 & 1.008 6$^*$\\
+SPD & -0.1702 & 0.8443 & 0.7749 & 0.9179 &\\
+Union & -0.1714 & 0.8453& 0.7175 & 0.9889 &\\
+die\_linke & -0.2159 & 0.8067 & 0.7353 & 0.8830 &\\
 \bottomrule
 \end{tabular}
 \end{table}
-The posterior mean of the exponentiated intercept implies a -7.2\% risk rate across Germany with a credibility interval ranging from -10.2\% to 4.1\%.  \\
+The posterior mean of the exponentiated intercept implies a -7.2\% risk rate across Germany with a credibility interval ranging from -10.2\% to -4.1\%. However, this coefficient is not significant. \\
 This summary shows that especially people who come from regions where the AfD gets a higher share of the vote have a higher risk of contracting Covid-19. In Figure~\ref{sirgermany}, regions in eastern Germany often had a higher SIR. These are also the regions where the AfD tends to perform better in elections. The connection between the two can be attributed to the fact that the AfD is a right-wing party that openly criticises the measures taken to prevent the spread of the coronavirus. As a result, a large proportion of people who vote for the AfD do not take the measures seriously either and refuse to keep a safe distance or wear a mask in public spaces. \\
 A one standard deviation increase for the AfD leads to a risk increase of about 13.4\%. The only other party with a posterior mean close to 1 is the liberal FDP, which is known for its capitalist views. However, it is still below 1. An increase of 1 standard deviation leads to a risk reduction of 1.8\%. \\
 As for the rest of the parties, they are either the leading party in Germany (Union) or left-wing oriented (SPD, the Greens and the Left). People who vote for left-wing parties may respect the Corona rules more and show more consideration for other people.
@@ -208,6 +208,7 @@ As this was the overall best-performing spatial model for Germany, a look is tak
 %     \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
 %     \label{nb_norge}
 % \end{figure}
+Compared to the standardised incidence rate in Germany, shown in Figure~\ref{sirgermany}, it can be seen that the parts of Germany with the lowest SIR, Northern Germany, are also the parts of Germany with the lowest relative risk. Saxony had the highest SIR and also has an increased relative risk. Most parts of Germany that had an SIR of around 1 have a relative risk between 1 and 1.4.
 \subsubsection{Infrastructure Models}\label{sssec:infraGermany}
 When it comes to the models based on the infrastructural variables, a BYM2 model performed the best. It was computed using formula in Listing~\ref{codeInfraGermany}. \\
 The performance measures of this model and the best-performing Besag proper and Leroux model are shown in Table~\ref{infraGermany}
@@ -225,29 +226,31 @@ Leroux & 4785 & 4823 & -3444 & 1947560\\
 \end{table}
 The values of the covariates are shown in Table~\ref{fixedInfraGermany}.
 \begin{table}[H] 
-\caption{The fixed effects for the BYM2 model. Values are rounded. \label{fixedInfraGermany}}
-\begin{tabular}{l r r r r}
+\caption{The fixed effects for the BYM2 model. Values are rounded. A $^*$ denotes a significant effect.\label{fixedInfraGermany}}
+\begin{tabular}{l r r r r c}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -0.07373 & 0.9289 & 0.9159 & 0.9421 \\
-shops & 0.3860 & 1.479 & 1.197 & 1.808 \\
-hairdresser & 0.1123 & 1.122 & 0.9655 & 1.296 \\
-marketplace & 0.04187 & 1.043 & 0.9846 & 1.104 \\
-schools & 0.02157 & 1.023 & 0.9199 & 1.135 \\
-nursing\_home & 0.01399 & 1.014 & 0.9879 & 1.042 \\
-aerodrome & 0.01273 & 1.013 & 0.9648 & 1.063 \\
-bakeries & 0.008426 & 1.011 & 0.8684 & 1.171 \\
-sport & 0.007894 & 1.009 & 0.9374 & 1.084 \\
-office & 0.005687 & 1.006 & 0.9533 & 1.061 \\
-retail & -0.0028888 & 0.9977 & 0.9317 & 1.067 \\
-place\_of\_worship & -0.005710 & 0.9945 & 0.9562 & 1.034 \\
-higher\_education & -0.03179 & 0.9689 & 0.9324 & 1.006 \\
-clinic & -0.03258 & 0.9683 & 0.9154 & 1.023 \\
-entertainment & -0.03454 & 0.9676 & 0.8656 & 1.078 \\
-platform & -0.05867 & 0.9434 & 0.8913 & 0.9976 \\
-restaurant & -0.1990 & 0.8213 & 0.7206 & 0.9316 \\
-kindergarten & -0.2268 & 0.7993 & 0.6871 & 0.9243 \\
+(Intercept) & -0.07373 & 0.9289 & 0.9159 & 0.9421 &\\
+shops & 0.3860 & 1.479 & 1.197 & 1.808 &$^*$\\
+hairdresser & 0.1123 & 1.122 & 0.9655 & 1.296 &$^*$\\
+marketplace & 0.04187 & 1.043 & 0.9846 & 1.104 &$^*$\\
+schools & 0.02157 & 1.023 & 0.9199 & 1.135 &$^*$\\
+nursing\_home & 0.01399 & 1.014 & 0.9879 & 1.042 &$^*$\\
+aerodrome & 0.01273 & 1.013 & 0.9648 & 1.063 &$^*$\\
+bakeries & 0.008426 & 1.011 & 0.8684 & 1.171 &$^*$\\
+sport & 0.007894 & 1.009 & 0.9374 & 1.084& $^*$\\
+office & 0.005687 & 1.006 & 0.9533 & 1.061 &$^*$\\
+retail & -0.0028888 & 0.9977 & 0.9317 & 1.067 &$^*$\\
+place\_of\_ & \multirow{2}{*}{-0.005710} & \multirow{2}{*}{0.9945} & \multirow{2}{*}{0.9562} & \multirow{2}{*}{1.034} &\multirow{2}{*}{$^*$}\\
+worship &  \\
+higher\_ & \multirow{2}{*}{-0.03179} & \multirow{2}{*}{0.9689} & \multirow{2}{*}{0.9324} & \multirow{2}{*}{1.006} &\multirow{2}{*}{$^*$}\\
+education \\
+clinic & -0.03258 & 0.9683 & 0.9154 & 1.023 &$^*$\\
+entertainment & -0.03454 & 0.9676 & 0.8656 & 1.078 &$^*$\\
+platform & -0.05867 & 0.9434 & 0.8913 & 0.9976 &\\
+restaurant & -0.1990 & 0.8213 & 0.7206 & 0.9316 &\\
+kindergarten & -0.2268 & 0.7993 & 0.6871 & 0.9243 &\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -276,27 +279,29 @@ Leroux & 4847 & 4818 & -2684 & 204102 \\
 The fixed effects are shown in Table~\ref{fixedAllGermany}.
 
 \begin{table}[H] 
-\caption{The fixed effects for the BYM2 model. Values are rounded. \label{fixedAllGermany}}
-\begin{tabular}{l r r r r}
+\caption{The fixed effects for the BYM2 model. Values are rounded. A $^*$ denotes a significant effect.\label{fixedAllGermany}}
+\begin{tabular}{l r r r r c}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -0.0716 & 0.9309 & 0.9168 & 0.9450 \\
-afd & 0.2528 & 1.288 & 1.222 & 1.357 \\
-pop\_dens & 0.09614 & 1.101 & 1.055 & 1.148 \\
-welfare\_recipients & 0.07515 & 1.079 & 1.004 & 1.157 \\
-sport & 0.05575 & 1.058 & 0.9945 & 1.124 \\
-schools & 0.03926 & 1.041 & 0.9485 & 1.140 \\
-nursing\_home & 0.008492 & 1.009 & 0.9856 & 1.032 \\
-office & -0.007482 & 0.9928 & 0.9510 & 1.036 \\
-log(trade\_tax) & -0.007660 & 0.9924 & 0.9695 & 1.016 \\
-place\_of\_worship & -0.01141 & 0.9888 & 0.9557 & 1.023 \\
-platform & -0.02052 & 0.9800 & 0.9322 & 1.029 \\
-kindergarten & -0.02174 &  0.9799 & 0.8812 & 1.087 \\
-FDP & -0.03154 & 0.9691 & 0.9340 & 1.005 \\
-SPD & -0.03197 & 0.9688 & 0.9288 & 1.010 \\
-entertainment & -0.03963 & 0.9619 & 0.8891 & 1.039 \\
-bakeries & -0.06149 & 0.9419 & 0.8412 & 1.051 \\
+(Intercept) & -0.0716 & 0.9309 & 0.9168 & 0.9450 &\\
+afd & 0.2528 & 1.288 & 1.222 & 1.357 &$^*$\\
+pop\_dens & 0.09614 & 1.101 & 1.055 & 1.148 &$^*$\\
+welfare\_ & \multirow{2}{*}{0.07515} & \multirow{2}{*}{1.079} & \multirow{2}{*}{1.004} & \multirow{2}{*}{1.157}&\multirow{2}{*}{$^*$} \\
+recipients\\
+sport & 0.05575 & 1.058 & 0.9945 & 1.124 &$^*$\\
+schools & 0.03926 & 1.041 & 0.9485 & 1.140 &$^*$\\
+nursing\_home & 0.008492 & 1.009 & 0.9856 & 1.032&$^*$ \\
+office & -0.007482 & 0.9928 & 0.9510 & 1.036 &$^*$\\
+log(trade\_tax) & -0.007660 & 0.9924 & 0.9695 & 1.016&$^*$ \\
+place\_of\_ & \multirow{2}{*}{-0.01141} & \multirow{2}{*}{0.9888} & \multirow{2}{*}{0.9557} & \multirow{2}{*}{1.023} &\multirow{2}{*}{$^*$}\\
+worship\\
+platform & -0.02052 & 0.9800 & 0.9322 & 1.029 &$^*$\\
+kindergarten & -0.02174 &  0.9799 & 0.8812 & 1.087 &$^*$\\
+FDP & -0.03154 & 0.9691 & 0.9340 & 1.005 &$^*$\\
+SPD & -0.03197 & 0.9688 & 0.9288 & 1.010 &$^*$\\
+entertainment & -0.03963 & 0.9619 & 0.8891 & 1.039 &$^*$\\
+bakeries & -0.06149 & 0.9419 & 0.8412 & 1.051 &$^*$\\
 die\_linke & -0.08336 &  0.9204 & 0.8697 & 0.9734\\
 \bottomrule
 \end{tabular}
@@ -336,18 +341,18 @@ Leroux & 2225  & 2192 & -6810 & 8460\\
 All other performance measures for these models are also lower than for the models computed for Germany. \\
 The effects of the covariates are shown in Table~\ref{fixedDemoNorway}.
 \begin{table}[H] 
-\caption{The fixed effects for the Leroux model. Values are rounded. \label{fixedDemoNorway}}
-\begin{tabular}{l r r r r}
+\caption{The fixed effects for the Leroux model. Values are rounded. A $^*$ denotes a significant effect.\label{fixedDemoNorway}}
+\begin{tabular}{l r r r r c}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -1.040 & 0.3540 & 0.3173 & 0.3929 \\
-unemp\_total & 0.3371 & 1.406 & 1.192 & 1.645 \\
-unemp\_immg & 0.03737 & 1.042 & 0.8788 & 1.226 \\
+(Intercept) & -1.040 & 0.3540 & 0.3173 & 0.3929 & \\
+unemp\_total & 0.3371 & 1.406 & 1.192 & 1.645 & $^*$\\
+unemp\_immg & 0.03737 & 1.042 & 0.8788 & 1.226 & $^*$\\
 \bottomrule
 \end{tabular}
 \end{table}
-The posterior mean of the section implies a risk rate of -64.6\%, which does not say much except for the fact that there is a very low risk of getting Covid-19 in Norway. According to this model, the risk depends on only two factors, namely total unemployment and immigrant unemployment. A 1 standard deviation increase in total unemployment leads to a 40.6\% increase in risk and a 1 standard deviation increase in immigrant unemployment leads to a 4.2\% increase in risk. A possible explanation for this could be that the unemployed spend less time at home and instead move around more and thus have more contact with people, but this should be taken with a grain of salt.
+The posterior mean of the section implies a risk rate of -64.6\%, however this effect is not significant. According to this model, the risk depends on only two factors, namely total unemployment and immigrant unemployment. A 1 standard deviation increase in total unemployment leads to a 40.6\% increase in risk and a 1 standard deviation increase in immigrant unemployment leads to a 4.2\% increase in risk. A possible explanation for this could be that the unemployed spend less time at home and instead move around more and thus have more contact with people, but this should be taken with a grain of salt.
 \subsubsection{Infrastructure Models}
 For the models based on the infrastructural variables, the best predictive performance was observed for a Besag model. The formula is shown in Listing~\ref{codeInfraNorway}. \\
 The performance measure for the models are shown in Table~\ref{infraNorway}.
@@ -365,20 +370,21 @@ Leroux &  2230 & 2167 & -7128 & 12943\\
 \end{table}
 The effect of the covariates are shown in Table~\ref{fixedInfraNorway}.
 \begin{table}[H] 
-\caption{The fixed effects for the Besag model. Values are rounded. \label{fixedInfraNorway}}
-\begin{tabular}{l r r r r}
+\caption{The fixed effects for the Besag model. Values are rounded. A $^*$ denotes a significant effect.\label{fixedInfraNorway}}
+\begin{tabular}{l r r r r c}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -1.061 & 0.3518 & 0.2437 & 0.4965 \\
-schools & 0.3253 & 1.407 & 0.9864 & 1.966 \\
-kindergarten & 0.2418 & 1.285 & 0.9825 & 1.663 \\
-pop\_dens & 0.1531 & 1.171 &  0.9733  & 1.406\\
-place\_of\_worship & 0.03138 & 1.041 & 0.8053 & 1.335 \\
-restaurant & 0.01374 & 1.044 & 0.6384 & 1.626 \\
-nursing\_home & 0.001030 & 1.002 & 0.9258 & 1.085\\
-office & -0.07424 & 0.9263 &  0.7991 & 1.084 \\
-shops & -0.5186 &0.6451 & 0.2793 & 1.303 \\
+(Intercept) & -1.061 & 0.3518 & 0.2437 & 0.4965 &\\
+schools & 0.3253 & 1.407 & 0.9864 & 1.966 & $^*$\\
+kindergarten & 0.2418 & 1.285 & 0.9825 & 1.663 & $^*$\\
+pop\_dens & 0.1531 & 1.171 &  0.9733  & 1.406& $^*$\\
+place\_of\_ & \multirow{2}{*}{0.03138} & \multirow{2}{*}{1.041} & \multirow{2}{*}{0.8053} & \multirow{2}{*}{1.335} & \multirow{2}{*}{$^*$}\\
+worship\\
+restaurant & 0.01374 & 1.044 & 0.6384 & 1.626 & $^*$\\
+nursing\_home & 0.001030 & 1.002 & 0.9258 & 1.085& $^*$\\
+office & -0.07424 & 0.9263 &  0.7991 & 1.084 & $^*$\\
+shops & -0.5186 &0.6451 & 0.2793 & 1.303 & $^*$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -412,6 +418,7 @@ For better interpretability, the logarithmic posterior mean is shown in Figure~\
 %    \caption{Logarithmic posterior mean of the area-specific risk.}
 %     \label{posteriorNorwayLog}
 % \end{figure}
+Comparing the log relative risk with the log standardised incidence ratio in Figure~\ref{sirnorwaylog}, these two are quite similar. For most parts of Norway, the risk is at or below 0, while there is an increased risk in the Oslo region. However, there are a few municipalities that have a log-standardised incidence ratio of about 0, but a higher log-relative risk than this. Most of these are located in southern Norway, but a few are scattered throughout the rest of the country.
 \subsubsection{Combined Models}
 For the models containing variables related to the demographic of Norway and the infrastructure, again a Besag model performed the best. Its formula can be seen in Listing~\ref{codeBothNorway}. \\
 The performance measures for the models are shown in Table~\ref{bothNorway}
@@ -429,22 +436,25 @@ Leroux &  2229 & 2193 & -7677 & 14841\\
 \end{table}
 The fixed effects are shown in Table~\ref{fixedAllNorway}.
 \begin{table}[H] 
-\caption{The fixed effects for the Besag model. Values are rounded. \label{fixedAllNorway}}
-\begin{tabular}{l r r r r}
+\caption{The fixed effects for the Besag model. Values are rounded. A $^*$ denotes a significant effect.\label{fixedAllNorway}}
+\begin{tabular}{l r r r r c}
 \toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} \\
+\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -1.068 & 0.3484 & 0.2478 & 0.4736\\
-construction\_pt\_work & 0.1873 & 1.234 & 0.7946 & 1.834 \\
-clinic & 0.1855 & 1.266 & 0.6488 & 2.241 \\
-pop\_dens & 0.1717 & 1.194 & 0.9703 & 1.455 \\
-unemp\_tot & 0.1559 & 1.170 & 1.057 & 1.292 \\
-schools & 0.0978 & 1.117 & 0.8074 & 1.507 \\
-sex & 0.04402 & 1.046 & 0.9426 & 1.158 \\
-restaurant & 0.03072 & 1.079 & 0.5717 & 1.855 \\
-higher\_education & -0.05942 & 0.9443 & 0.8295 & 1.069 \\
-median\_age & -0.1147 & 0.8929 & 0.8015 & 0.9910 \\
-workers\_ft\_work & -0.5200 & 0.6403 & 0.2784 & 1.259 \\
+(Intercept) & -1.068 & 0.3484 & 0.2478 & 0.4736 &\\
+construction\_ & \multirow{2}{*}{0.1873} & \multirow{2}{*}{1.234} & \multirow{2}{*}{0.7946} & \multirow{2}{*}{1.834} & \multirow{2}{*}{$^*$} \\
+pt\_work \\
+clinic & 0.1855 & 1.266 & 0.6488 & 2.241 & $^*$\\
+pop\_dens & 0.1717 & 1.194 & 0.9703 & 1.455 & $^*$\\
+unemp\_tot & 0.1559 & 1.170 & 1.057 & 1.292 & $^*$\\
+schools & 0.0978 & 1.117 & 0.8074 & 1.507 & $^*$\\
+sex & 0.04402 & 1.046 & 0.9426 & 1.158 & $^*$\\
+restaurant & 0.03072 & 1.079 & 0.5717 & 1.855 & $^*$\\
+higher\_& \multirow{2}{*}{-0.05942} & \multirow{2}{*}{0.9443} & \multirow{2}{*}{0.8295} & \multirow{2}{*}{1.069} & \multirow{2}{*}{$^*$}\\
+education\\
+median\_age & -0.1147 & 0.8929 & 0.8015 & 0.9910 & \\
+workers\_ft\_ & \multirow{2}{*}{-0.5200} & \multirow{2}{*}{0.6403} & \multirow{2}{*}{0.2784} & \multirow{2}{*}{1.259} & \multirow{2}{*}{$^*$}\\
+work\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -457,6 +467,5 @@ The median age lowers the risk of infection, as an increase of 1 standard deviat
 \subsection{Spatio-Temporal Models for Germany}
 \subsection{Spatio-Temporal Models for Norway}
 \section{Predictive Models}
-\clearpage
 \subsection{Predictive Models for Germany}
 \subsection{Predictive Models for Norway}
