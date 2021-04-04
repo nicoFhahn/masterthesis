@@ -1,6 +1,6 @@
 library(INLA)
 library(spdep)
-source("R/preprocess_norge.R")
+source("R/preprocess_norge_15k.R")
 set.seed(7918)
 test <- sample(
   seq_len(nrow(newest_numbers)),
@@ -738,4 +738,4 @@ rm(
 )
 # now models with all the variables
 models_final <- list(models, results, mae)
-save(models_final, file = "models/bym2_norway.Rda")
+save(models_final, file = "models/bym2_15k_norway.Rda")

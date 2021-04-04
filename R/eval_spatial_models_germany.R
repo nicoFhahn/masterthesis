@@ -4,6 +4,7 @@ library(INLA)
 source("R/germany_leroux_models.R")
 source("R/germany_besagproper_models.R")
 source("R/germany_bym2_models.R")
+source("R/germany_nospatial_models.R")
 newest_numbers <- read_csv("eval_data/newest_numbers_germany_march24.csv")
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 newest_numbers <- merge(
@@ -19,59 +20,73 @@ load("models/besagproper_germany.Rda")
 models_final_besag <- models_final
 load("models/bym2_germany.Rda")
 models_final_bym2 <- models_final
+load("models/nospatial_germany.Rda")
+models_final_nospatial <- models_final
 rm(models_final)
 models_leroux <- models_final_leroux[[1]]
 models_besag <- models_final_besag[[1]]
 models_bym2 <- models_final_bym2[[1]]
+models_nospatial <- models_final_nospatial[[1]]
 results_leroux <- models_final_leroux[[2]]
 results_besag <- models_final_besag[[2]]
 results_bym2 <- models_final_bym2[[2]]
+results_nospatial <- models_final_nospatial[[2]]
 mae_leroux <- models_final_leroux[[3]]
 mae_besag <- models_final_besag[[3]]
 mae_bym2 <- models_final_bym2[[3]]
+mae_nospatial <- models_final_nospatial[[3]]
 newest_numbers[
   order(newest_numbers$value, decreasing = TRUE),
 ][1:5, c("municipality", "population", "value")]
 ####################### DEMOGRAPHIC MODELS
-demo_results <- c(results_besag[1:6], results_bym2[1:6], results_leroux[1:6])
+demo_results <- c(
+  results_besag[1:6], results_bym2[1:6],
+  results_leroux[1:6], results_nospatial[1:6]
+)
 demo_dic <- unlist(lapply(demo_results, function(x) x$dic))
 demo_waic <- unlist(lapply(demo_results, function(x) x$waic))
 demo_cpo <- unlist(lapply(demo_results, function(x) x$cpo))
-min(unlist(mae_besag[1:22]))
-min(unlist(mae_bym2[1:22]))
-min(unlist(mae_leroux[1:22]))
-id_besag <- which(unlist(mae_besag[1:22]) %in% min(unlist(mae_besag[1:22])))
+min(unlist(mae_besag[1:11]))
+min(unlist(mae_bym2[1:11]))
+min(unlist(mae_leroux[1:11]))
+min(unlist(mae_nospatial[1:11]))
+id_besag <- which(unlist(mae_besag[1:11]) %in% min(unlist(mae_besag[1:11])))
 demo_dic[id_besag]
 demo_waic[id_besag]
 demo_cpo[id_besag]
 mae_besag[id_besag]
-id_bym2 <- which(unlist(mae_bym2[1:22]) %in% min(unlist(mae_bym2[1:22])))
-demo_dic[id_bym2 + 22]
-demo_waic[id_bym2 + 22]
-demo_cpo[id_bym2 + 22]
+id_bym2 <- which(unlist(mae_bym2[1:11]) %in% min(unlist(mae_bym2[1:11])))
+demo_dic[id_bym2 + 11]
+demo_waic[id_bym2 + 11]
+demo_cpo[id_bym2 + 11]
 mae_bym2[id_bym2]
-id_leroux <- which(unlist(mae_leroux[1:22]) %in% min(unlist(mae_leroux[1:22])))
-demo_dic[id_leroux + 44]
-demo_waic[id_leroux + 44]
-demo_cpo[id_leroux + 44]
+id_leroux <- which(unlist(mae_leroux[1:11]) %in% min(unlist(mae_leroux[1:11])))
+demo_dic[id_leroux + 22]
+demo_waic[id_leroux + 22]
+demo_cpo[id_leroux + 22]
 mae_leroux[id_leroux]
+id_nospatial <- which(unlist(mae_nospatial[1:11]) %in% min(unlist(mae_nospatial[1:11])))
+demo_dic[id_nospatial + 33]
+demo_waic[id_nospatial + 33]
+demo_cpo[id_nospatial + 33]
+mae_nospatial[id_nospatial]
 options(scipen = 10)
-models_leroux[[14]]$summary.fixed[
-  order(models_leroux[[14]]$summary.fixed$mean),
+models_leroux[[7]]$summary.fixed[
+  order(models_leroux[[7]]$summary.fixed$mean),
 ]
 sapply(
-  models_leroux[[14]]$marginals.fixed[
-    rownames(models_leroux[[14]]$summary.fixed[
-      order(models_leroux[[14]]$summary.fixed$mean),
+  models_leroux[[7]]$marginals.fixed[
+    rownames(models_leroux[[7]]$summary.fixed[
+      order(models_leroux[[7]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
   fun = exp
 )
 sapply(
-  models_leroux[[14]]$marginals.fixed[
-    rownames(models_leroux[[14]]$summary.fixed[
-      order(models_leroux[[14]]$summary.fixed$mean),
+  models_leroux[[7]]$marginals.fixed[
+    rownames(models_leroux[[7]]$summary.fixed[
+      order(models_leroux[[7]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -83,8 +98,8 @@ sapply(
     )
   }
 )
-newest_numbers$rr <- models_leroux[[14]]$summary.fitted.values$mean
-csi <- models_leroux[[14]]$marginals.random$idarea_1[
+newest_numbers$rr <- models_leroux[[7]]$summary.fitted.values$mean
+csi <- models_leroux[[7]]$marginals.random$idarea_1[
   seq_len(nrow(newest_numbers))
 ]
 a <- 0
@@ -107,7 +122,7 @@ cat_zeta <- cut(
 newest_numbers$cat_zeta <- cat_zeta
 newest_numbers$prob_csi <- cat_csi
 mat_marg <- matrix(NA, nrow = nrow(newest_numbers), ncol = 100000)
-m <- models_leroux[[14]]$marginals.random$idarea_1
+m <- models_leroux[[7]]$marginals.random$idarea_1
 for (i in seq_len(nrow(newest_numbers))) {
   u <- m[[i]]
   mat_marg[i, ] <- inla.rmarginal(100000, u)
@@ -117,7 +132,7 @@ var_v <- inla.rmarginal(
   100000,
   inla.tmarginal(
     function(x) 1 / x,
-    models_leroux[[14]]$marginals.hyperpar$`Precision for idarea_1`
+    models_leroux[[7]]$marginals.hyperpar$`Precision for idarea_1`
   )
 )
 perc_var_u <- mean(var_u / (var_u + var_v))
@@ -171,45 +186,58 @@ plot_3
 library(patchwork)
 plot_2 + plot_3
 ################## INFRASTRUCTURAL MODELS
-infra_results <- c(results_besag[7:8], results_bym2[7:8], results_leroux[7:8])
+infra_results <- c(
+  results_besag[7:8], results_bym2[7:8],
+  results_leroux[7:8], results_nospatial[7:8]
+)
 infra_dic <- unlist(lapply(infra_results, function(x) x$dic))
 infra_waic <- unlist(lapply(infra_results, function(x) x$waic))
 infra_cpo <- unlist(lapply(infra_results, function(x) x$cpo))
-min(unlist(mae_besag[23:30]))
-min(unlist(mae_bym2[23:30]))
-min(unlist(mae_leroux[23:30]))
-id_besag <- which(unlist(mae_besag[23:30]) %in% min(unlist(mae_besag[23:30])))
+min(unlist(mae_besag[12:15]))
+min(unlist(mae_bym2[12:15]))
+min(unlist(mae_leroux[12:15]))
+min(unlist(mae_nospatial[12:15]))
+id_besag <- which(unlist(mae_besag[12:15]) %in% min(unlist(mae_besag[12:15])))
 infra_dic[id_besag]
 infra_waic[id_besag]
 infra_cpo[id_besag]
-mae_besag[id_besag + 22]
-id_bym2 <- which(unlist(mae_bym2[23:30]) %in% min(unlist(mae_bym2[23:30])))
-infra_dic[id_bym2 + 8]
-infra_waic[id_bym2 + 8]
-infra_cpo[id_bym2 + 8]
-mae_bym2[id_bym2 + 22]
+mae_besag[id_besag + 11]
+id_bym2 <- which(unlist(mae_bym2[12:15]) %in% min(unlist(mae_bym2[12:15])))
+infra_dic[id_bym2 + 4]
+infra_waic[id_bym2 + 4]
+infra_cpo[id_bym2 + 4]
+mae_bym2[id_bym2 + 11]
 id_leroux <- which(
-  unlist(mae_leroux[23:30]) %in% min(unlist(mae_leroux[23:30]))
+  unlist(mae_leroux[12:15]) %in% min(unlist(mae_leroux[12:15]))
 )
-infra_dic[id_leroux + 16]
-infra_waic[id_leroux + 16]
-infra_cpo[id_leroux + 16]
-mae_leroux[id_leroux + 22]
+infra_dic[id_leroux + 8]
+infra_waic[id_leroux + 8]
+infra_cpo[id_leroux + 8]
+mae_leroux[id_leroux + 11]
+id_nospatial <- which(
+  unlist(mae_nospatial[12:15]) %in% min(unlist(mae_nospatial[12:15]))
+)
+infra_dic[id_nospatial + 12]
+infra_waic[id_nospatial + 12]
+infra_cpo[id_nospatial + 12]
+mae_nospatial[id_nospatial + 11]
 options(scipen = 10)
-models_bym2[[25]]$summary.fixed[order(models_bym2[[25]]$summary.fixed$mean), ]
+models_nospatial[[14]]$summary.fixed[
+  order(models_nospatial[[14]]$summary.fixed$mean),
+]
 sapply(
-  models_bym2[[25]]$marginals.fixed[
-    rownames(models_bym2[[25]]$summary.fixed[
-      order(models_bym2[[25]]$summary.fixed$mean),
+  models_nospatial[[14]]$marginals.fixed[
+    rownames(models_nospatial[[14]]$summary.fixed[
+      order(models_nospatial[[14]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
   fun = exp
 )
 sapply(
-  models_bym2[[25]]$marginals.fixed[
-    rownames(models_bym2[[25]]$summary.fixed[
-      order(models_bym2[[25]]$summary.fixed$mean),
+  models_nospatial[[14]]$marginals.fixed[
+    rownames(models_nospatial[[14]]$summary.fixed[
+      order(models_nospatial[[14]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -221,47 +249,57 @@ sapply(
     )
   }
 )
-######################################### ALL MODELS
-all_results <- c(results_besag[9], results_bym2[9], results_leroux[9])
+  ######################################### ALL MODELS
+all_results <- c(results_besag[9], results_bym2[9], results_leroux[9], results_nospatial[9])
 all_dic <- unlist(lapply(all_results, function(x) x$dic))
 all_waic <- unlist(lapply(all_results, function(x) x$waic))
 all_cpo <- unlist(lapply(all_results, function(x) x$cpo))
-min(unlist(mae_besag[31:34]))
-min(unlist(mae_bym2[31:34]))
-min(unlist(mae_leroux[31:34]))
-id_besag <- which(unlist(mae_besag[31:34]) %in% min(unlist(mae_besag[31:34])))
-demo_dic[id_besag]
-demo_waic[id_besag]
-demo_cpo[id_besag]
-mae_besag[id_besag + 30]
-id_bym2 <- which(unlist(mae_bym2[31:34]) %in% min(unlist(mae_bym2[31:34])))
-demo_dic[id_bym2 + 4]
-demo_waic[id_bym2 + 4]
-demo_cpo[id_bym2 + 4]
-mae_bym2[id_bym2 + 30]
+min(unlist(mae_besag[16:17]))
+min(unlist(mae_bym2[16:17]))
+min(unlist(mae_leroux[16:17]))
+min(unlist(mae_nospatial[16:17]))
+id_besag <- which(unlist(mae_besag[16:17]) %in% min(unlist(mae_besag[16:17])))
+all_dic[id_besag]
+all_waic[id_besag]
+all_cpo[id_besag]
+mae_besag[id_besag + 15]
+id_bym2 <- which(unlist(mae_bym2[16:17]) %in% min(unlist(mae_bym2[16:17])))
+all_dic[id_bym2 + 2]
+all_waic[id_bym2 + 2]
+all_cpo[id_bym2 + 2]
+mae_bym2[id_bym2 + 15]
 id_leroux <- which(
-  unlist(mae_leroux[31:34]) %in% min(unlist(mae_leroux[31:34]))
+  unlist(mae_leroux[16:17]) %in% min(unlist(mae_leroux[16:17]))
 )
-demo_dic[id_leroux + 8]
-demo_waic[id_leroux + 8]
-demo_cpo[id_leroux + 8]
-mae_leroux[id_leroux + 30]
+all_dic[id_leroux + 4]
+all_waic[id_leroux + 4]
+all_cpo[id_leroux + 4]
+mae_leroux[id_leroux + 15]
+id_nospatial <- which(
+  unlist(mae_nospatial[16:17]) %in% min(unlist(mae_nospatial[16:17]))
+)
+all_dic[id_nospatial + 6]
+all_waic[id_nospatial + 6]
+all_cpo[id_nospatial + 6]
+mae_nospatial[id_nospatial + 15]
 
 options(scipen = 10)
-models_bym2[[33]]$summary.fixed[order(models_bym2[[33]]$summary.fixed$mean), ]
+models_nospatial[[16]]$summary.fixed[
+  order(models_nospatial[[16]]$summary.fixed$mean),
+]
 sapply(
-  models_bym2[[33]]$marginals.fixed[
-    rownames(models_bym2[[33]]$summary.fixed[
-      order(models_bym2[[33]]$summary.fixed$mean),
+  models_nospatial[[16]]$marginals.fixed[
+    rownames(models_nospatial[[16]]$summary.fixed[
+      order(models_nospatial[[16]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
   fun = exp
 )
 sapply(
-  models_bym2[[33]]$marginals.fixed[
-    rownames(models_bym2[[33]]$summary.fixed[
-      order(models_bym2[[33]]$summary.fixed$mean),
+  models_nospatial[[16]]$marginals.fixed[
+    rownames(models_nospatial[[16]]$summary.fixed[
+      order(models_nospatial[[16]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -273,7 +311,7 @@ sapply(
     )
   }
 )
-pal <- colorFactor(
+  pal <- colorFactor(
   viridis(6, direction = -1, option = "B"),
   domain = newest_numbers$cat_zeta
 )

@@ -31,9 +31,7 @@ g <- inla.read.graph(filename = "maps/map_1.adj")
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
   # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  pop_dens + urb_dens + sex 
 
 res_1 <- inla(
   formula_1,
@@ -83,15 +81,11 @@ rm(
 ) # now models with the mobility variables
 formula_2 <- value ~
   # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  pop_dens + urb_dens + sex + unemp_tot + unemp_immg 
 # now models with the mobility variables
 formula_3 <- value ~
   # add the demographic vars and pop density
-  unemp_tot + unemp_immg +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  unemp_tot + unemp_immg 
 
 
 res_2 <- inla(
@@ -165,13 +159,9 @@ rm(
 ) # now models with the infrastructure variables
 formula_4 <- value ~
   # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + immigrants_total +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  pop_dens + urb_dens + sex + immigrants_total 
 formula_5 <- value ~
-  immigrants_total +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  immigrants_total 
 
 res_4 <- inla(
   formula_4,
@@ -245,14 +235,10 @@ formula_6 <- value ~
   pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  construction_ft_work + construction_pt_work 
 formula_7 <- value ~
   workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  construction_ft_work + construction_pt_work 
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
@@ -325,15 +311,11 @@ formula_8 <- value ~
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  median_age + unemp_tot + unemp_immg + immigrants_total 
 formula_9 <- value ~
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  median_age + unemp_tot + unemp_immg + immigrants_total 
 
 res_8 <- inla(
   formula_8,
@@ -406,12 +388,10 @@ rm(
 formula_10 <- value ~
   median_age + unemp_tot + unemp_immg + workers_ft_work +
   workers_pt_work + construction_pt_work + immigrants_total +
-  pop_dens + urb_dens + sex +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  pop_dens + urb_dens + sex 
 formula_11 <- value ~
   construction_pt_work + unemp_tot + sex +
-  median_age + pop_dens +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  median_age + pop_dens 
 
 res_10 <- inla(
   formula_10,
@@ -486,16 +466,12 @@ formula_12 <- value ~
   pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  kindergarten + bakeries 
 formula_13 <- value ~
   marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  kindergarten + bakeries 
 
 
 res_12 <- inla(
@@ -573,15 +549,11 @@ formula_14 <- value ~
   marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + restaurant + aerodrome +
   office + platform + kindergarten + schools + bakeries + pop_dens +
-  urb_dens +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  urb_dens 
 # now models with all the variables
 formula_15 <- value ~
   pop_dens + shops + place_of_worship + office +
-  schools + nursing_home + kindergarten + restaurant +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  schools + nursing_home + kindergarten + restaurant 
 
 res_14 <- inla(
   formula_14,
@@ -657,16 +629,12 @@ formula_16 <- value ~
   marketplace + entertainment + clinic + hairdresser + shops +
   retail + nursing_home + restaurant + aerodrome + office +
   platform + kindergarten + schools + bakeries + higher_education +
-  pop_dens + urb_dens + sex +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  pop_dens + urb_dens + sex 
 # now models with all the variables
 formula_17 <- value ~
   schools + unemp_tot + restaurant + sex +
   median_age + pop_dens + construction_pt_work + workers_ft_work +
-  higher_education + clinic +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  higher_education + clinic 
 
 res_16 <- inla(
   formula_16,
@@ -738,4 +706,4 @@ rm(
 )
 # now models with all the variables
 models_final <- list(models, results, mae)
-save(models_final, file = "models/bym2_norway.Rda")
+save(models_final, file = "models/nospatial_norway.Rda")

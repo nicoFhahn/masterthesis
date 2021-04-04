@@ -1,6 +1,6 @@
 library(INLA)
 library(spdep)
-source("R/preprocess_norge.R")
+source("R/preprocess_norge_15k.R")
 set.seed(7918)
 test <- sample(
   seq_len(nrow(newest_numbers)),
@@ -33,7 +33,7 @@ formula_1 <- value ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 res_1 <- inla(
   formula_1,
@@ -85,13 +85,13 @@ formula_2 <- value ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 # now models with the mobility variables
 formula_3 <- value ~
   # add the demographic vars and pop density
   unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 
 res_2 <- inla(
@@ -167,11 +167,11 @@ formula_4 <- value ~
   # add the demographic vars and pop density
   pop_dens + urb_dens + sex + immigrants_total +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_5 <- value ~
   immigrants_total +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 res_4 <- inla(
   formula_4,
@@ -247,12 +247,12 @@ formula_6 <- value ~
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_7 <- value ~
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
@@ -327,13 +327,13 @@ formula_8 <- value ~
   construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_9 <- value ~
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 res_8 <- inla(
   formula_8,
@@ -407,11 +407,11 @@ formula_10 <- value ~
   median_age + unemp_tot + unemp_immg + workers_ft_work +
   workers_pt_work + construction_pt_work + immigrants_total +
   pop_dens + urb_dens + sex +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_11 <- value ~
   construction_pt_work + unemp_tot + sex +
   median_age + pop_dens +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 res_10 <- inla(
   formula_10,
@@ -488,14 +488,14 @@ formula_12 <- value ~
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_13 <- value ~
   marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 
 res_12 <- inla(
@@ -575,13 +575,13 @@ formula_14 <- value ~
   office + platform + kindergarten + schools + bakeries + pop_dens +
   urb_dens +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 # now models with all the variables
 formula_15 <- value ~
   pop_dens + shops + place_of_worship + office +
   schools + nursing_home + kindergarten + restaurant +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 res_14 <- inla(
   formula_14,
@@ -659,14 +659,14 @@ formula_16 <- value ~
   platform + kindergarten + schools + bakeries + higher_education +
   pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 # now models with all the variables
 formula_17 <- value ~
   schools + unemp_tot + restaurant + sex +
   median_age + pop_dens + construction_pt_work + workers_ft_work +
   higher_education + clinic +
   # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
+  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 res_16 <- inla(
   formula_16,
@@ -738,4 +738,4 @@ rm(
 )
 # now models with all the variables
 models_final <- list(models, results, mae)
-save(models_final, file = "models/bym2_norway.Rda")
+save(models_final, file = "models/besagproper_15k_norway.Rda")
