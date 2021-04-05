@@ -237,7 +237,7 @@ The derivation of the PC prior is based on a system of constant rate penalisatio
 $r\in\left(0,1\right)$ represents the constant decay rate and thus implies that the relative change in the priority distribution for $d\left(\xi\right)$ is independent of the actual distance. Therefore, $d\left(\xi\right)$ is exponentially distributed with density $\pi\left(d\left(\xi\right)\right)=\lambda\exp\left(-\lambda d\left(\xi\right)\right)$ and rate $\lambda = -\ln\left(r\right)$. By a standard variable change transformation, the corresponding PC prior for $\xi$ is given \autocite[][]{simpson2017penalising}.
 \subsubsection*{User-Defined Scaling}
 Since $\lambda$ characterises the shrinkage properties of the prior, it is important that the rate can be chosen in an intuitive and interpretable way. One possibility is to determine $\lambda$ by including a probability statement of tail events, for example
-\begin{equation}
+\begin{equation}\label{eq:pcprior}
     \mathbb{P}\left(Q\left(\xi\right) > U\right)=\alpha,
 \end{equation}
 where $U$ represents an assumed upper bound for an interpretable transformation $Q\left(\xi\right)$ and $\alpha$ denotes a small probability \autocite[][]{simpson2017penalising}.
@@ -783,8 +783,8 @@ where the term represents the variance of the individual terms in the LLPD over 
 The conditional predictive ordinate (CPO) is a Bayesian diagnostic that can be used to detect surprising observations. It is often used in the context of univariate sampling, the multivariate normal distribution and regression models. \\
 The conditional predictive ordinate is given by
 \begin{equation}
-    \hbox{CPO} = p\left(y_i|y_{-i}\right)
+    \hbox{CPO} = p\left(y_i|\pmb{y}_{-i}\right)
 \end{equation}
-with $\pmb{y}$ the data, $y_{-i}$ the data without the $i$-th observation, and $p\left(\cdot|y_{-i}\right)$ the predictive distribution of a new observation at $y_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
+with $\pmb{y}$ the data, $\pmb{y}_{-i}$ the data without the $i$-th observation, and $p\left(\cdot|y_{-i}\right)$ the predictive distribution of a new observation at $\pmb{y}_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
 %https://arxiv.org/pdf/1708.02723.pdf \\
 %http://www.leg.ufpr.br/~elias/cursos/br2019/slides1.pdf

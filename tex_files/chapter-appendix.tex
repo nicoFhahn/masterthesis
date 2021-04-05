@@ -283,71 +283,34 @@ formula <- value ~
 \end{lstlisting}
 \subsubsection{Best Spatial Model using Infrastructural Variables}
 \begin{lstlisting}[caption={The code for the infrastructure model.}, label={codeInfraGermany}, language=R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
 formula <- value ~
-  marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools +
-  higher_education + kindergarten + bakeries + 
-  f(
-    idarea_1, model = "bym2", graph = G,
-    scale.model = TRUE, hyper = prior_1
-  )
+  # add the demographic vars and pop density
+  entertainment + sport + hairdresser + place_of_worship +
+  retail + nursing_home + restaurant + aerodrome + platform +
+  kindergarten + schools + bakeries + pop_dens + higher_education 
 \end{lstlisting}
 \subsubsection{Best Spatial Model using Both Types of Variables}
 \begin{lstlisting}[caption={The code for the demographic + infrastructure model.}, label={codeBothGermany}, language=R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
 formula <- value ~
-  schools + afd + die_linke + pop_dens +
-  place_of_worship + entertainment + bakeries + SPD +
-  platform + sport + nursing_home + welfare_recipients +
-  FDP + kindergarten + log(trade_tax) + office +
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  )
+  log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+  Gruene + FDP + die_linke + afd + protection_seekers +
+  welfare_recipients + unemployed_total + unemployed_foreigners +
+  entertainment + sport + clinic + shops + place_of_worship +
+  retail + nursing_home + restaurant + aerodrome + office +
+  platform + kindergarten + schools + bakeries + pop_dens +
+  sex + higher_education 
 \end{lstlisting}
 \subsection{Best Spatial Models For Norway}
 \subsubsection{Best Spatial Model using Demographic Variables}
 \begin{lstlisting}[caption={The code for the demographic model.}, label={codeDemoNorway}, language = R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
 formula <- value ~
   unemp_immg + unemp_tot
-  f(
-    idarea_1, model = "generic1",
-    Cmatrix = C, hyper = prior_1
-  )
 \end{lstlisting}
 \subsubsection{Best Spatial Model using Infrastructural Variables}
 \begin{lstlisting}[caption={The code for the infrastructural model.}, label={codeInfraNorway}, language = R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
 formula <- value ~
-  schools + shops + place_of_worship + office +
-  schools + nursing_home + kindergarten + restaurant +
-  f(
-    idarea_1, model = "besagproper",
-    graph = g, hyper = prior_1
-  )
+  pop_dens + shops + place_of_worship + office +
+  schools + nursing_home + kindergarten + restaurant 
 \end{lstlisting}
 \subsubsection{Best Spatial Model using Both Types of Variables}
 \begin{lstlisting}[caption={The code for the demographic + infrastructure model.}, label={codeBothNorway}, language=R]
@@ -358,7 +321,7 @@ prior_1 <- list(
   )
 )
 formula <- value ~
-  schools + unemp_tot + restaurant + sex + 
+schools + unemp_tot + restaurant + sex +
   median_age + pop_dens + construction_pt_work +
   workers_ft_work + higher_education + clinic +
   f(
