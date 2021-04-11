@@ -601,9 +601,11 @@ norway_municipality_confirmed_long$date <- as.Date(
   as.character(norway_municipality_confirmed_long$date)
 )
 max_date <- max(norway_municipality_confirmed_long$date)
+date_diff <- as.numeric(max_date - as.Date("2021-03-24"))
+date_seq <- seq(0, date_diff, 7)
 numbers <- norway_municipality_confirmed_long[
   norway_municipality_confirmed_long$date %in% c(
-    max_date - 28, max_date - 21, max_date - 14, max_date - 7, max_date
+    as.Date("2021-03-24") + date_seq[date_seq <= 28]
   ),
 ]
 # remove needless variables
@@ -616,7 +618,7 @@ numbers$kommune_name <- NULL
 # merge all together
 norge <- norge[
   norge$date %in% c(
-    max_date - 28, max_date - 21, max_date - 14, max_date - 7, max_date
+    as.Date("2021-03-24") + date_seq[date_seq <= 28]
   ),
 ]
 norge <- norge[order(norge$date, norge$kommune_no), ]#
@@ -666,6 +668,7 @@ numbers_21 <- numbers[numbers$date == max(numbers$date) - 21, ]
 numbers_14 <- numbers[numbers$date == max(numbers$date) - 14, ]
 numbers_7 <- numbers[numbers$date == max(numbers$date) - 7, ]
 numbers_0 <- numbers[numbers$date == max(numbers$date), ]
+numbers_0$geometry <- NULL
 rm(
   list = setdiff(
     ls(),
