@@ -210,11 +210,11 @@ as a non-informative prior for $\phi$. The desired "invariance" is then given by
 \autocite[][42--43]{box2011bayesian}. While Jeffreys' priors work well for single parameter models, they struggle when it comes to models with multidimensional parameters as these priors can have poor convergence properties \autocite[][]{jordan2010}.
 \subsection{Penalised Complexity Priors}
 One issue when selecting the prior distribution of a particular parameter is that it is not always intuitive when it comes to understanding and interpreting this distribution, something that is essential to ensure that it behaves as intended by the user. This problem can be addressed by using \textit{penalised complexity priors}, which is a methodology that penalises the complexity of model components in relation to deviation from simple base model formulations.\\
-PC priors provide a systematic and unified approach to calculating priority distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterised by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalising the deviation from the flexible model to the fixed base model, the PC prior is calculated \autocite[][]{simpson2017penalising}.
+PC priors provide a systematic and unified approach to calculating priority distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterised by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalising the deviation from the flexible model to the fixed base model, the PC prior is calculated \autocite[][]{martins2014penalising}.
 \subsubsection{The Principles Behind PC Priors}
 Four main principles should be followed to calculate priors in a consistent way and to understand their properties.
 \subsubsection*{Support to Occam's Razor} 
-Let $\pi\left(x|\xi\right)$ denote the density of a model component $x$ and $\xi$ the parameter to which a prior distribution is to be assigned. The base model is characterised by a density $\pi\left(x|\xi=\xi_0\right)$, where $\xi_0$ is a fixed value. The prior for $\xi$ should be such that proper shrinkage is given to $\xi_0$. The simplicity of the model is therefore prioritised over the complexity of the model, preventing overfitting \autocite[][]{simpson2017penalising}.
+Let $\pi\left(x|\xi\right)$ denote the density of a model component $x$ and $\xi$ the parameter to which a prior distribution is to be assigned. The base model is characterised by a density $\pi\left(x|\xi=\xi_0\right)$, where $\xi_0$ is a fixed value. The prior for $\xi$ should be such that proper shrinkage is given to $\xi_0$. The simplicity of the model is therefore prioritised over the complexity of the model, preventing overfitting \autocite[][]{martins2014penalising}.
 \subsubsection*{Penalisation of Model Complexity} 
 Let $f_1=\pi\left(x|\xi\right)$ and $f_0\left(x|\xi=\xi_0\right)$ denote the flexible model and the base model respectively. The complexity of $f_1$ compared to $f_0$ is characterised using the Kullback-Leibler divergence \autocite[][]{kullback1951information} to calculate a measure of complexity between the two models,
 \begin{equation}
@@ -228,19 +228,19 @@ where $f_i\sim\mathcal{N}\left(0,\pmb{\Sigma}_i\right), i=0,1$, while $n$ repres
 \begin{equation}
     d\left(\xi\right) = d\left(f_1||f_0\right)=\sqrt{2\hbox{KLD}\left(f_1||f_0\right)}
 \end{equation}
-which can be interpreted as a measure of distance from $f_1$ to $f_0$ \autocite[][]{simpson2017penalising}.
+which can be interpreted as a measure of distance from $f_1$ to $f_0$ \autocite[][]{martins2014penalising}.
 \subsubsection*{Constant Rate Penalisation}
 The derivation of the PC prior is based on a system of constant rate penalisation, given by
 \begin{equation}
     \frac{\pi_d\left(d\left(\xi\right)+\delta\right)}{\pi_d\left(d\left(\xi\right)\right)}=r^{\delta}, \hspace{20pt} d\left(\xi\right),\delta\geq0.
 \end{equation}
-$r\in\left(0,1\right)$ represents the constant decay rate and thus implies that the relative change in the priority distribution for $d\left(\xi\right)$ is independent of the actual distance. Therefore, $d\left(\xi\right)$ is exponentially distributed with density $\pi\left(d\left(\xi\right)\right)=\lambda\exp\left(-\lambda d\left(\xi\right)\right)$ and rate $\lambda = -\ln\left(r\right)$. By a standard variable change transformation, the corresponding PC prior for $\xi$ is given \autocite[][]{simpson2017penalising}.
+$r\in\left(0,1\right)$ represents the constant decay rate and thus implies that the relative change in the priority distribution for $d\left(\xi\right)$ is independent of the actual distance. Therefore, $d\left(\xi\right)$ is exponentially distributed with density $\pi\left(d\left(\xi\right)\right)=\lambda\exp\left(-\lambda d\left(\xi\right)\right)$ and rate $\lambda = -\ln\left(r\right)$. By a standard variable change transformation, the corresponding PC prior for $\xi$ is given \autocite[][]{martins2014penalising}.
 \subsubsection*{User-Defined Scaling}
 Since $\lambda$ characterises the shrinkage properties of the prior, it is important that the rate can be chosen in an intuitive and interpretable way. One possibility is to determine $\lambda$ by including a probability statement of tail events, for example
 \begin{equation}\label{eq:pcprior}
     \mathbb{P}\left(Q\left(\xi\right) > U\right)=\alpha,
 \end{equation}
-where $U$ represents an assumed upper bound for an interpretable transformation $Q\left(\xi\right)$ and $\alpha$ denotes a small probability \autocite[][]{simpson2017penalising}.
+where $U$ represents an assumed upper bound for an interpretable transformation $Q\left(\xi\right)$ and $\alpha$ denotes a small probability \autocite[][]{martins2014penalising}.
 % \subsubsection{PC Priors for AR(1)}
 % The first-order AR process is given by
 % \begin{equation}
@@ -250,7 +250,7 @@ where $U$ represents an assumed upper bound for an interpretable transformation 
 % \begin{equation*}
 %    \pi\left(\tau\right)=\frac{\lambda}{2}\tau^{-3/2}\exp\left(-\lambda\tau^{-1/2}\right), \hspace{10pt}\lambda>0.
 % \end{equation*}
-% This prior is derived using infinite precision as the base model, following Simpson et. al (2017) \autocite[][]{simpson2017penalising}. The rate $\lambda$ is inferred through $\mathbb{P}\left(1/\sqrt{\tau} > U\right)=\alpha$, with $\alpha$ denoting a small probability \autocite[][]{sorbye2017penalised}.
+% This prior is derived using infinite precision as the base model, following Simpson et. al (2017) \autocite[][]{martins2014penalising}. The rate $\lambda$ is inferred through $\mathbb{P}\left(1/\sqrt{\tau} > U\right)=\alpha$, with $\alpha$ denoting a small probability \autocite[][]{sorbye2017penalised}.
 % \subsubsection*{Base Model: No Dependency in Time} 
 % The correlation matrix of an AR(1) is generally defined as $\pmb{\Sigma}_1=\left(\phi^{\left|i-j\right]}\right)$. In the case of no autocorrelation, white noise results and the correlation matrix is equal to the identity matrix, $\pmb{\Sigma}_0=\pmb{I}$. The distance function is defined as $d\left(\phi\right)=\sqrt{\left(1-n\right)\log\left(1-\phi^2\right)}$. According to the constant rate penalty principle, $d\left(\phi\right)$ is assigned an exponential prior with rate $\theta/\sqrt{n-1}$. This leads to a prior distribution that is invariant to $n$, and the PC for the one-lag autocorrelation is given by
 % \begin{equation}
@@ -726,14 +726,89 @@ with $\Delta_k$ and $\Delta_l^*$ representing the area weights corresponding to 
 To obtain the approximations for the posterior marginals for the $x_i$'s conditioned on selected values of $\theta_k$ and $\widetilde{\pi}\left(x_i|\theta_k,\pmb{y}\right)$, a Gaussian, Laplace or simplified Laplace approximation can be used. Using a Gaussian approximation derived from $\widetilde{\pi}_G\left(\pmb{x}|\pmb{\theta},\pmb{y}\right)$ is the simplest and fastest solution, but in some situations it produces errors in the location and is unable to capture skewness behaviour. Therefore, the Laplace approximation is favoured over the Gaussian approximation, although it is relatively expensive. The simplified Laplace approximation is associated with lower costs and addresses inaccuracies of the Gaussian approximation in terms of location and skewness in a satisfactory manner \autocite[][]{moraga2019geospatial}.
 \clearpage
 \section{Bayesian Spatial Models}
-\subsection{The Besag-York-Mollie Model}
-\autocite[][]{besag1991bayesian}
-\subsubsection{The BYM2 Model}
-\autocite[][]{simpson2017penalising}
-\subsection{Besags' Proper Spatial Model}
-\autocite[][]{besag1974spatial}
+In general, it can be assumed that areas in close proximity to each other have a more frequent burden of disease than areas that are further away from each other. By setting up a neighbourhood structure, this "proximity" can be defined. It is assumed that $i$ and $j$ are neighbours if they share a common boundary, denoted $i\sim j$. The set of neighbours of region $i$ is denoted by $\delta_i$ and its size is given by $n_{\delta_i}$.
+\subsection{Besag Spatial Models}
+\subsubsection{Besags' Improper Spatial Model}
+A commonly used approach to modelling spatial correlation is the Besag model, also known as an intrinsic GMRF model. The conditional distribution for a random vector $\pmb{x}=\left(x_1,...,x_n\right)^T$ is given by
+\begin{equation}
+    x_i|\pmb{x}_{-i},\tau_x\sim\mathcal{N}\left(\frac{1}{n_{\delta_i}}\sum_{j\in\delta_i}x_j,\frac{1}{n_{\delta_i}\tau_x}\right),
+\end{equation}
+with $\tau_x$ as a precision parameter. The mean of the effects over all neighbours is given by the mean of $x_i$, while the precision is proportional to the number of neighbours. The joint distribution for $\pmb{x}$ is given by
+\begin{equation}
+    \pi\left(\pmb{x}|\tau_x\right)\propto\exp\left(-\frac{\tau_x}{2}\sum_{i\sim j}\left(x_i-x_j\right)^2\right)\propto\exp\left(-\frac{\tau_x}{2}\pmb{x}^T\pmb{Q}\pmb{x}\right).
+\end{equation}
+The precision matrix $\pmb{Q}$ is given by
+\begin{equation}
+    Q_{ij}=\begin{cases}
+    n_{\delta_i}&i=j,\\
+    -1&i\sim j,\\
+    0&\hbox{else.}
+    \end{cases}
+\end{equation}
+\pmb{Q} is a singular matrix, i.e. it has a non-empty null space $\pmb{V}$, hence the model is called intrinsic or Besags' improper spatial model. \\
+The Besag model for spatial effects has one hyperparameter, the precision $\tau_x$, which is represented as
+\begin{equation}
+    \theta_1 = \log\tau_x.
+\end{equation}
+The prior is defined on $\theta_1$ \autocite[][]{besag1974spatial, riebler2016intuitive}.
+\subsubsection{Besags' Proper Spatial Model}
+To overcome this impropriety, the precision matrix has to be redefined as follows,
+\begin{equation}
+    Q_{ij} = \begin{cases}
+    \tau_x\left(n_{\delta_i}+d\right) & i=j,\\
+    -\tau &\hbox{else.}
+    \end{cases}
+\end{equation}
+$d > 0$  is an additional term added to the diagonal to control the "properness". The conditional distribution for the proper version of the Besag model is then given by
+\begin{equation}
+    x_i|\pmb{x}_{-i},\tau_x,d\sim\mathcal{N}\left(\frac{1}{d+n_{\delta_i}}\sum_{i\sim j}x_j\frac{1}{\tau_x\left(d+n_{\delta_i}\right)}\right).
+\end{equation}
+The proper version of the Besag model for spatial effects has two hyperparameters, the precision $\tau_x$, which is represented as
+\begin{equation}
+    \theta_1 = \log\tau_x
+\end{equation}
+and the diagonal parameter $d$, which is represented as
+\begin{equation}
+    \theta_2 = \log d.
+\end{equation}
+The priors are defined on $\theta_1$ and $\theta_2$, respectively \autocite[][]{besag1974spatial, riebler2016intuitive}.
+\subsection{The Besag-York-Mollié Model}
+The Besag-York-Mollié (BYM) model is a lognormal Poisson model that is a combination of a Besag model $u$ and an ordinary random effect component $v$ for non-spatial heterogeneity. It combines the regional spatial effect $\pmb{x}$ into the sum of an unstructured and a structured spatial component, so that $\pmb{x}=\pmb{v}+\pmb{u}$.\\
+$\pmb{v}\sim\mathcal{N}\left(0,\tau_v^{-1}\pmb{I}\right)$ accounts for pure overdispersion, while $\pmb{u}\sim\mathcal{N}\left(\pmb{0}, \tau_u^{-1}\pmb{Q}^{-}\right)$ is the Besag model. \\
+By using a spatial and a non-spatial error term, the overdispersion that is not modelled by the Poisson variables is taken into account. Thus, if the observed variance is not fully explained by the spatial structure of the data, the error terms explain the rest of the variance. \\
+The resulting covariance matrix of $\pmb{x}$ is given by
+\begin{equation}
+    \hbox{Var}\left(\pmb{x}|\tau_u,\tau_v\right)=\tau_v^{-1}\pmb{I}+\tau_u^{-1}\pmb{Q}^{-},
+\end{equation}
+where $\pmb{Q}^{-}$ denotes the generalised inverse of \pmb{Q}. \\
+The hyperparameters of the model are the precision $\tau_u$ of the Besag model $u$ and the precision $\tau_v$ of the iid model $v$. They are represented as
+\begin{equation}
+    \pmb{\theta}=\left(\theta_1, \theta_2\right)=\left(\log\tau_v,\log\tau_u\right)
+\end{equation}
+and the prior is defined on $\pmb{\theta}$ \autocite[][]{besag1991bayesian, riebler2016intuitive}.
 \subsection{The Leroux Model}
-\autocite[][]{leroux2000estimation}
+One problem with the BYM model is that the structured and unstructured components are not identifiable because they cannot be considered independently. Moreover, $\tau_v$ and $\tau_u$ do not represent variability at the same level, which makes the choice of hyperpriorities difficult. The Leroux model is formulated in such a way that the compromise between the two variations is made more explicit. It is assumed that $\pmb{x}$ follows a normal distribution with zero mean and covariance matrix
+\begin{equation}
+    \hbox{Var}\left(\pmb{x}|\tau_x,\phi\right)=\tau_x^{-1}\left(\left(1-\phi\right)\pmb{I}+\phi\pmb{Q}\right)^{-1},
+\end{equation}
+with $\phi\in\left[0,1\right]$ as mixing parameter. For $\phi=0$ the model reduces to pure overdispersion and for $\phi=1$ to the Besag model. The conditional expected value of $x_i$ for all other random effects is the weighted mean of the unstructured model with zero mean and the mean of the Besag model, while the conditional variance is the weighted mean of $\tau_x^{-1}$ and $\left(\tau_x\cdot\ n_{\delta_i}\right)^{-1}$ \autocite[][]{leroux2000estimation, riebler2016intuitive}.
+\subsection{The BYM2 Model}
+One problem that all the aforementioned models have is the lack of scaling of the spatially structured component. Scaling facilitates the assignment of hyperpriorities and ensures that the interpretation of hyperpriorities remains the same across different areas. \\
+Since the Besag model penalises a local deviation from its null space, the hyperprior will control this local deviation and thus affect the smoothness of the estimated spatial effects. If the estimate of the field is too smooth, the precision will be large and the spatial variation may be blurred. On the other hand, if the precision is too small, the model could overfit due to the large local variability. \\
+The marginal variances $\tau_x^{-1}\left[\pmb{Q}^{-}\right]_{ii}$ depend on the structure of the graph, which is reflected in the structure matrix $\pmb{Q}$. A generalised variance can be calculated as the geometric mean of the marginal variance as follows
+\begin{equation}\label{eq:bym_scale}
+    \sigma_{\hbox{GV}}^2\left(\pmb{u}\right)=\exp\left(\frac{1}{n}\sum_{i=1}^n\log\left(\frac{1}{\tau_x}\left[\pmb{Q}^{-}\right]_{ii}\right)\right)=\frac{1}{\tau_x}\exp\left(\frac{1}{n}\sum_{i=1}^n\log\left(\left[\pmb{Q}^{-}\right]_{ii}\right)\right).
+\end{equation}
+In order to unify the interpretation of a chosen prior for $\tau_x$ and make it transferable across domains, the structured effect must be scaled such that $\sigma_{\hbox{GV}}^2\left(\pmb{x}\right)=\tau_x^{-1}$. This implies that $\tau_x$ denotes the accuracy of the (marginal) deviation from a constant level, independent of the underlying graph. \\
+A modification of the BYM model that addresses this scaling problem is the BYM2 model. It uses a scaled structured component $\pmb{u}_{*}$, where $\pmb{Q}_{*}$ denotes the precision matrix of the Besag model, scaled with the marginal variance $\sigma_{\hbox{GV}}^2$ as a factor. The random effect is then given by
+\begin{equation}\label{eq:bym2_1}
+    \pmb{x}=\frac{1}{\tau_x}\left(\sqrt{1-\phi}\pmb{v}+\sqrt{\phi}\pmb{u}_{*}\right),
+\end{equation}
+with covariance matrix
+\begin{equation}
+    \hbox{Var}\left(\pmb{x}|\tau_x,\phi\right)=\frac{1}{\tau_x}\left(\left(1-\phi\right)\pmb{I}+\phi\pmb{Q}_{*}^{-}\right).
+\end{equation}
+Equation~\ref{eq:bym2_1} emphasises the trade-off between pure overdispersion and spatially structured correlation, where $0\leq\phi\leq1$ measures the fraction of the marginal variance explained by the structured effect. For $\phi=0$ the model reduces to pure overdispersion, while for $\phi=1$ it becomes a Besag model \autocite[][]{martins2014penalising, riebler2016intuitive}.
 \clearpage
 \section{Goodness-of-Fit indicators}
 The goodness of fit indicates "how well" an estimated model can explain a set of observations. Measures of goodness of fit allow a statement to be made about the discrepancy between the theoretical values of the random variables under investigation, which are expected or predicted on the basis of the model, and the values actually measured. \\

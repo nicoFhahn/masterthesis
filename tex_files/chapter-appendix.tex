@@ -98,7 +98,56 @@ For large values of $r$, the negative binomial distribution can be approximated 
     \label{fitPoissonNorway}
 \end{figure}
 \clearpage
-\section{Code examples}
+\section{Prior Sensitivity for Germany}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{comparison_1_germany.png}
+    \caption{Value of the DIC and WAIC when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+    \label{comparison_germany_1}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = \textwidth]{comparison_1_germany.svg}
+%     \caption{Value of the DIC and WAIC when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+%     \label{comparison_germany_1}
+% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{comparison_2_germany.png}
+    \caption{Value of the CPO and MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+    \label{comparison_germany_2}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = \textwidth]{comparison_2_germany.svg}
+%     \caption{Value of the CPO and MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+%     \label{comparison_germany_2}
+% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{comparison_3_germany.png}
+    \caption{Value of the DIC and WAIC when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
+    \label{comparison_germany_3}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = \textwidth]{comparison_3_germany.svg}
+%     \caption{Value of the DIC and WAIC when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
+%     \label{comparison_germany_3}
+% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{comparison_4_germany.png}
+    \caption{Value of the CPO and MAE when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
+    \label{comparison_germany_4}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = \textwidth]{comparison_4_germany.svg}
+%     \caption{Value of the CPO and MAE when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
+%     \label{comparison_germany_4}
+% \end{figure}
+\section{Code Examples}
 \subsection{Specifying the Different Types of Models}
 \begin{lstlisting}[caption={Specifying different models in INLA.}, label={codeModels}, language=R]
 # set the seed

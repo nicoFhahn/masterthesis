@@ -69,7 +69,16 @@ For all countries, the models were computed with
         \item[3.2] With variable selection
     \end{itemize}
 \end{itemize}
-All the models were computed with a penalised complexity prior for the precision. For the parameter $\alpha$ in Equation~\ref{eq:pcprior}, the value 1 was chosen. \\
+In addition to specifying what type of spatial model to use, if any, there is also the option of specifying a prior. In this case, a penalised complexity prior is used for the precision $\tau$. For $\tau$, the penalised complexity prior is defined by the parameter $\sigma_0$. The equation~\ref{eq:pcprior} therefore looks like this,
+\begin{equation}\label{pcprec}
+    \mathbb{P}\left(\sigma > \sigma_0\right)=\alpha.
+\end{equation}
+The actual expression of the prior is given by
+\begin{equation}
+    \pi\left(\tau\right)=\frac{\lambda}{2}\tau^{-3/2}\exp\left(-\lambda\tau^{-1/2}\right),\hspace{10pt}\tau>0.
+\end{equation}
+Here, $\lambda=\frac{-\log\left(\alpha\right)}{U}$ \cite{simpson2017penalising}.
+For the parameters $\sigma_0$ and $\alpha$, the values 1 and 0.01 were chosen. \\
 The models were compared using the mean absolute error. For this, 20\% of the observations were removed from the training and used for testing instead. The predicted number of infections for these municipalities was then compared to the actual numbers.
 \\
 Finally, due to the amount of covariates, forwards and backwards stepwise variable selection was performed with the intention of obtaining a model that fits the data well and at the same time is relatively easy to interpret. This can be done with the R package \texttt{INLAutils} \cite{inlautils}, as shown in Listing~\ref{codeSelection}. Backwards as well forwards variable selection was performed.\\
@@ -263,7 +272,8 @@ restaurant & -0.1757 & 0.8425 & 0.6995 & 1.008 &\\
 \end{table}
 Findings from these results are that bakeries, places of worship and population density increase the risk of infection. For bakeries, an increase of 1 standard deviation leads to a risk increase of 68.3\%. Bakeries are relatively widespread in Germany and many people go there several times a week to get fresh bread or other baked goods. When many people congregate in bakeries, viruses can spread more easily. \\
 A 1 standard deviation increase in population density leads to an 11.6\% increase in relative risk, which should not be too surprising since in communities with higher population density, people come into contact with more people, which in turn helps the virus move from host to host. \\
-Finally, places of worship were not closed for a long time in Germany due to freedom of religion and therefore people gathered in churches, mosques and the like. A 1 standard deviation increase in these places of worship therefore leads to a 9.5\% increase in the risk of contracting Covid-19.
+Finally, places of worship were not closed for a long time in Germany due to freedom of religion and therefore people gathered in churches, mosques and the like. A 1 standard deviation increase in these places of worship therefore leads to a 9.5\% increase in the risk of contracting Covid-19. \\
+Yezli and Khan's paper argues for the closure of these places of worshipon the grounds that they pose a risk of transmitting COVID-19 to potentially large numbers of people through a single case. Gatherings at these places often involve dense mixing of many people in a confined space, sometimes for long periods of time \cite{yezli2020covid}.
 \subsubsection{Combined Models}
 Finally, models are considered that include both the infrastructural and demographic covariates. Due to the amount of variables, all models run are based on variable selection. \\
 The best performing model was again a model with no spatial component, computed with the formula shown in Listing~\ref{codeBothGermany}. \\
@@ -304,7 +314,8 @@ entertainment & 0.04197 & 1.046 & 0.9073 & 1.120 \\
 clinic & 0.03603&  1.037 & 0.9609 & 1.120 \\
 sport & 0.03435& 1.036 & 0.9478 & 1.130 \\
 platform & 0.01969 &  1.020 & 0.9581 & 1.086 \\
-log(income\_total) & 0.01426& 1.015 & 0.9776 & 1.051 \\
+log & \multirow{2}{*}{0.01426} & \multirow{2}{*}{1.015} & \multirow{2}{*}{0.9776} & \multirow{2}{*}{1.051} \\
+income\_total\\
 place\_of\_ & \multirow{2}{*}{0.01288} & \multirow{2}{*}{1.013} & \multirow{2}{*}{0.9646} & \multirow{2}{*}{1.064} \\
 worship\\
 protection\_ & \multirow{2}{*}{0.01186} & \multirow{2}{*}{1.015} & \multirow{2}{*}{0.8636} & \multirow{2}{*}{1.185} \\
@@ -313,8 +324,10 @@ aerodrome & 0.0004896 & 1.006 & 0.9766 & 1.027 \\
 nursing\_home & -0.002786 & 0.9974 & 0.9636 & 1.032 \\ 
 FDP & -0.01863 & 0.9817 & 0.9464 & 1.018 \\
 retail & -0.01983 & 0.9809 & 0.9179 & 1.048 \\
-log(trade\_tax) & -0.03577 & 0.9650 & 0.9362 & 0.9940 \\
-log(income\_tax) & -0.4560 & 0.9557 & 0.9152 & 0.9973 \\
+log & \multirow{2}{*}{-0.03577} & \multirow{2}{*}{0.9650} & \multirow{2}{*}{0.9362} & \multirow{2}{*}{0.9940} \\
+trade\_tax \\
+log & \multirow{2}{*}{-0.4560} & \multirow{2}{*}{0.9557} & \multirow{2}{*}{0.9152} & \multirow{2}{*}{0.9973} \\
+income\_tax \\
 welfare\_ & \multirow{2}{*}{-0.07744} & \multirow{2}{*}{0.9277} & \multirow{2}{*}{0.8096} & \multirow{2}{*}{1.058} \\
 recipients &  \\
 bakeries & -0.07973 & 0.9273 & 0.7711 & 1.105 \\
@@ -485,10 +498,69 @@ For better interpretability, the logarithmic posterior mean is shown in Figure~\
 % \end{figure}
 Comparing the log relative risk with the log standardised incidence ratio in Figure~\ref{sirnorwaylog}, these two are quite similar. For most parts of Norway, the risk is at or below 0, while there is an increased risk in the Oslo region. However, there are a few municipalities that have a log-standardised incidence ratio of about 0, but a higher log-relative risk than this. Most of these are located in southern Norway, but a few are scattered throughout the rest of the country.
 \clearpage
-\subsubsection{Choice of Prior Sensitivity}
+\subsection{Choice of Prior Sensitivity}
+As can be seen in equation~\ref{pcprec}, there is flexibility when it comes to choosing the values for the standard deviation $\sigma_0$ as well as the probability $\alpha$. Therefore, an upper bound for the standard deviation can be chosen as well as the weight placed on this "tail event", describing how informative the resulting prior is. In the following, an assessment is made of how the performance of a Besag model, a BYM2 model and a Leroux model changes when playing around with these two values.
+\subsubsection{Changing the Value for the Standard Deviation}
+By allowing the precision to be greater, the variance is forced to be smaller. Hence, choosing a higher value for the precision leads to lower values for the DIC, WAIC and CPO, as can be seen in Figure~\ref{comparison_norway_1} and Figure~\ref{comparison_norway_2}. While this indicates a better fit to the training data, Figure~\ref{comparison_norway_2} also shows that the MAE increases when a higher value for $U=\sigma_0$ is chosen, as the models overfit on the training data and therefore make worse predictions. \\
+The corresponding figures for Germany are shown in Figure~\ref{comparison_germany_1} and Figure~\ref{comparison_germany_2} in the Appendix.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{comparison_1_norway.png}
+    \caption{Value of the DIC and WAIC when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+    \label{comparison_norway_1}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = \textwidth]{comparison_1_norway.svg}
+%     \caption{Value of the DIC and WAIC when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+%     \label{comparison_norway_1}
+% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{comparison_2_norway.png}
+    \caption{Value of the CPO and MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+    \label{comparison_norway_2}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = \textwidth]{comparison_2_norway.svg}
+%     \caption{Value of the CPO and MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+%     \label{comparison_norway_2}
+% \end{figure}
+
+\subsubsection{Changing the Value for the Probability}
+By allowing the probability to be greater, the certainty with which the accuracy is 1 becomes less and it could therefore actually be greater than 1. Therefore, a trend similar to that seen in Figure~\ref{comparison_norway_1} and Figure~\ref{comparison_norway_2} can be seen. Choosing a higher value for the probability leads to lower values for the DIC, WAIC and CPO and a higher value for MAE, as can be seen in Figure~\ref{comparison_norway_3} and Figure~\ref{comparison_norway_4}. \\
+The corresponding figures for Germany are shown in Figure~\ref{comparison_germany_3} and Figure~\ref{comparison_germany_4} in the Appendix.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{comparison_3_norway.png}
+    \caption{Value of the DIC and WAIC when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
+    \label{comparison_norway_3}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = \textwidth]{comparison_3_norway.svg}
+%     \caption{Value of the DIC and WAIC when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
+%     \label{comparison_norway_3}
+% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{comparison_4_norway.png}
+    \caption{Value of the CPO and MAE when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
+    \label{comparison_norway_4}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = \textwidth]{comparison_4_norway.svg}
+%     \caption{Value of the CPO and MAE when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
+%     \label{comparison_norway_4}
+% \end{figure}
+
+\clearpage
 \section{Spatio-Temporal Models}
 \subsection{Spatio-Temporal Models for Germany}
 \subsection{Spatio-Temporal Models for Norway}
+\clearpage
 \section{Predictive Models}
 \subsection{Predictive Models for Germany}
 \subsection{Predictive Models for Norway}
