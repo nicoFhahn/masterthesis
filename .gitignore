@@ -50,3 +50,5 @@ norge_complete.shx
 
 germany_residential.Rda
 html_plots/
+models/
+*.Rproj
