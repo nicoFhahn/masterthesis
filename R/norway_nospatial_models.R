@@ -30,8 +30,8 @@ g <- inla.read.graph(filename = "maps/map_1.adj")
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex 
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex
 
 res_1 <- inla(
   formula_1,
@@ -80,12 +80,12 @@ rm(
   )
 ) # now models with the mobility variables
 formula_2 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + unemp_tot + unemp_immg 
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + unemp_tot + unemp_immg
 # now models with the mobility variables
 formula_3 <- value ~
-  # add the demographic vars and pop density
-  unemp_tot + unemp_immg 
+# add the demographic vars and pop density
+unemp_tot + unemp_immg
 
 
 res_2 <- inla(
@@ -158,10 +158,10 @@ rm(
   )
 ) # now models with the infrastructure variables
 formula_4 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + immigrants_total 
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + immigrants_total
 formula_5 <- value ~
-  immigrants_total 
+immigrants_total
 
 res_4 <- inla(
   formula_4,
@@ -232,13 +232,13 @@ rm(
   )
 ) # now models with all the variables
 formula_6 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work 
+  construction_ft_work + construction_pt_work
 formula_7 <- value ~
-  workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work 
+workers_ft_work + workers_pt_work +
+  construction_ft_work + construction_pt_work
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
@@ -307,15 +307,15 @@ rm(
 ) ########################################################
 # Now with variable selection
 formula_8 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total 
+  median_age + unemp_tot + unemp_immg + immigrants_total
 formula_9 <- value ~
-  workers_ft_work + workers_pt_work +
+workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total 
+  median_age + unemp_tot + unemp_immg + immigrants_total
 
 res_8 <- inla(
   formula_8,
@@ -386,12 +386,12 @@ rm(
   )
 ) # now models with all the variables
 formula_10 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_ft_work +
+median_age + unemp_tot + unemp_immg + workers_ft_work +
   workers_pt_work + construction_pt_work + immigrants_total +
-  pop_dens + urb_dens + sex 
+  pop_dens + urb_dens + sex
 formula_11 <- value ~
-  construction_pt_work + unemp_tot + sex +
-  median_age + pop_dens 
+construction_pt_work + unemp_tot + sex +
+  median_age + pop_dens
 
 res_10 <- inla(
   formula_10,
@@ -463,15 +463,15 @@ rm(
 )
 # now models with all the variables
 formula_12 <- value ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries 
+  kindergarten + bakeries
 formula_13 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries 
+  kindergarten + bakeries
 
 
 res_12 <- inla(
@@ -546,14 +546,14 @@ rm(
 )
 # now models with all the variables
 formula_14 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + restaurant + aerodrome +
   office + platform + kindergarten + schools + bakeries + pop_dens +
-  urb_dens 
+  urb_dens
 # now models with all the variables
 formula_15 <- value ~
-  pop_dens + shops + place_of_worship + office +
-  schools + nursing_home + kindergarten + restaurant 
+pop_dens + shops + place_of_worship + office +
+  schools + nursing_home + kindergarten + restaurant
 
 res_14 <- inla(
   formula_14,
@@ -624,17 +624,17 @@ rm(
   )
 ) # now models with all the variables
 formula_16 <- value ~
-  median_age + unemp_tot + workers_ft_work +
+median_age + unemp_tot + workers_ft_work +
   workers_pt_work + construction_pt_work + immigrants_total +
   marketplace + entertainment + clinic + hairdresser + shops +
   retail + nursing_home + restaurant + aerodrome + office +
   platform + kindergarten + schools + bakeries + higher_education +
-  pop_dens + urb_dens + sex 
+  pop_dens + urb_dens + sex
 # now models with all the variables
 formula_17 <- value ~
-  schools + unemp_tot + restaurant + sex +
+schools + unemp_tot + restaurant + sex +
   median_age + pop_dens + construction_pt_work + workers_ft_work +
-  higher_education + clinic 
+  higher_education + clinic
 
 res_16 <- inla(
   formula_16,

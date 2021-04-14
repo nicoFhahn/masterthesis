@@ -140,166 +140,166 @@ prior_18 <- list(
   )
 )
 formula_besag_1 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_bym2_1 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_leroux_1 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_besag_2 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_bym2_2 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_leroux_2 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 formula_besag_3 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_3)
 formula_bym2_3 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_3)
 formula_leroux_3 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_3)
 formula_besag_4 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_4)
 formula_bym2_4 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_4)
 formula_leroux_4 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_4)
 formula_besag_5 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_5)
 formula_bym2_5 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_5)
 formula_leroux_5 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_5)
 formula_besag_6 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_6)
 formula_bym2_6 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_6)
 formula_leroux_6 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_6)
 formula_besag_7 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_7)
 formula_bym2_7 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_7)
 formula_leroux_7 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_7)
 formula_besag_8 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_8)
 formula_bym2_8 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_8)
 formula_leroux_8 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_8)
 formula_besag_9 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_9)
 formula_bym2_9 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_9)
 formula_leroux_9 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_9)
 formula_besag_10 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_10)
 formula_bym2_10 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_10)
 formula_leroux_10 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_10)
 formula_besag_11 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_11)
 formula_bym2_11 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_11)
 formula_leroux_11 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_11)
 formula_besag_12 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_12)
 formula_bym2_12 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_12)
 formula_leroux_12 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_12)
 formula_besag_13 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_13)
 formula_bym2_13 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_13)
 formula_leroux_13 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_13)
 formula_besag_14 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_14)
 formula_bym2_14 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_14)
 formula_leroux_14 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_14)
 formula_besag_15 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_15)
 formula_bym2_15 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_15)
 formula_leroux_15 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_15)
 formula_besag_16 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_16)
 formula_bym2_16 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_16)
 formula_leroux_16 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_16)
 formula_besag_17 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_17)
 formula_bym2_17 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_17)
 formula_leroux_17 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_17)
 formula_besag_18 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_18)
 formula_bym2_18 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_18)
 formula_leroux_18 <- value ~
-  unemp_tot + unemp_immg +
+unemp_tot + unemp_immg +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_18)
 
 res_besag_1 <- inla(
@@ -1281,7 +1281,7 @@ mae <- c(list(
   mean(abs(predicted_leroux_18[test] - test_value))
 ))
 
-dic <-c(list(
+dic <- c(list(
   res_besag_1$dic$dic,
   res_bym2_1$dic$dic,
   res_leroux_1$dic$dic,
@@ -1338,7 +1338,7 @@ dic <-c(list(
   res_leroux_18$dic$dic
 ))
 
-waic <-c(list(
+waic <- c(list(
   res_besag_1$waic$waic,
   res_bym2_1$waic$waic,
   res_leroux_1$waic$waic,
@@ -1492,7 +1492,7 @@ plot_1 <- ggplot(
     x = U,
     y = dic,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -1520,7 +1520,7 @@ plot_2 <- ggplot(
     x = U,
     y = waic,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -1545,7 +1545,7 @@ plot_3 <- ggplot(
     x = U,
     y = cpo,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -1573,7 +1573,7 @@ plot_4 <- ggplot(
     x = U,
     y = mae,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -1600,7 +1600,7 @@ plot_5 <- ggplot(
     x = alpha,
     y = dic,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -1628,7 +1628,7 @@ plot_6 <- ggplot(
     x = alpha,
     y = waic,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -1653,7 +1653,7 @@ plot_7 <- ggplot(
     x = alpha,
     y = cpo,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -1681,7 +1681,7 @@ plot_8 <- ggplot(
     x = alpha,
     y = mae,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -1844,166 +1844,166 @@ prior_18 <- list(
   )
 )
 formula_besag_1 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_bym2_1 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_leroux_1 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_besag_2 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_bym2_2 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_leroux_2 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 formula_besag_3 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_3)
 formula_bym2_3 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_3)
 formula_leroux_3 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_3)
 formula_besag_4 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_4)
 formula_bym2_4 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_4)
 formula_leroux_4 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_4)
 formula_besag_5 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_5)
 formula_bym2_5 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_5)
 formula_leroux_5 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_5)
 formula_besag_6 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_6)
 formula_bym2_6 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_6)
 formula_leroux_6 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_6)
 formula_besag_7 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_7)
 formula_bym2_7 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_7)
 formula_leroux_7 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_7)
 formula_besag_8 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_8)
 formula_bym2_8 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_8)
 formula_leroux_8 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_8)
 formula_besag_9 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_9)
 formula_bym2_9 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_9)
 formula_leroux_9 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_9)
 formula_besag_10 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_10)
 formula_bym2_10 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_10)
 formula_leroux_10 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_10)
 formula_besag_11 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_11)
 formula_bym2_11 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_11)
 formula_leroux_11 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_11)
 formula_besag_12 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_12)
 formula_bym2_12 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_12)
 formula_leroux_12 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_12)
 formula_besag_13 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_13)
 formula_bym2_13 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_13)
 formula_leroux_13 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_13)
 formula_besag_14 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_14)
 formula_bym2_14 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_14)
 formula_leroux_14 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_14)
 formula_besag_15 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_15)
 formula_bym2_15 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_15)
 formula_leroux_15 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_15)
 formula_besag_16 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_16)
 formula_bym2_16 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_16)
 formula_leroux_16 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_16)
 formula_besag_17 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_17)
 formula_bym2_17 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_17)
 formula_leroux_17 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_17)
 formula_besag_18 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_18)
 formula_bym2_18 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_18)
 formula_leroux_18 <- value ~
-  Union + SPD + Gruene + FDP + die_linke + afd +
+Union + SPD + Gruene + FDP + die_linke + afd +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_18)
 
 res_besag_1 <- inla(
@@ -2985,7 +2985,7 @@ mae <- c(list(
   mean(abs(predicted_leroux_18[test] - test_value))
 ))
 
-dic <-c(list(
+dic <- c(list(
   res_besag_1$dic$dic,
   res_bym2_1$dic$dic,
   res_leroux_1$dic$dic,
@@ -3042,7 +3042,7 @@ dic <-c(list(
   res_leroux_18$dic$dic
 ))
 
-waic <-c(list(
+waic <- c(list(
   res_besag_1$waic$waic,
   res_bym2_1$waic$waic,
   res_leroux_1$waic$waic,
@@ -3193,7 +3193,7 @@ plot_1 <- ggplot(
     x = U,
     y = dic,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -3221,7 +3221,7 @@ plot_2 <- ggplot(
     x = U,
     y = waic,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -3246,7 +3246,7 @@ plot_3 <- ggplot(
     x = U,
     y = cpo,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -3274,7 +3274,7 @@ plot_4 <- ggplot(
     x = U,
     y = mae,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -3301,7 +3301,7 @@ plot_5 <- ggplot(
     x = alpha,
     y = dic,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -3329,7 +3329,7 @@ plot_6 <- ggplot(
     x = alpha,
     y = waic,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -3354,7 +3354,7 @@ plot_7 <- ggplot(
     x = alpha,
     y = cpo,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -3382,7 +3382,7 @@ plot_8 <- ggplot(
     x = alpha,
     y = mae,
     colour = model
-  ) 
+  )
 ) +
   geom_step(size = 1) +
   geom_point(size = 3) +
@@ -3403,4 +3403,3 @@ plot_8 <- ggplot(
   )
 plot_5 + plot_6
 plot_7 + plot_8
-

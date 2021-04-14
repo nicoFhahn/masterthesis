@@ -40,15 +40,15 @@ g <- inla.read.graph(filename = "maps/map_4.adj")
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_2 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -127,16 +127,16 @@ rm(
   )
 )
 formula_3 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_4 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
@@ -144,16 +144,16 @@ formula_4 <- value ~
   f(id_date_2, model = "iid")
 # now models with the mobility variables
 formula_5 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_6 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
@@ -295,31 +295,31 @@ rm(
   )
 )
 formula_7 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + log(trade_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + log(trade_tax) +
   log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_8 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + log(trade_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + log(trade_tax) +
   log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_9 <- value ~
-  # add the demographic vars and pop density
-  log(trade_tax) + log(income_total) + log(income_tax) +
+# add the demographic vars and pop density
+log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_10 <- value ~
-  # add the demographic vars and pop density
-  log(trade_tax) + log(income_total) + log(income_tax) +
+# add the demographic vars and pop density
+log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -461,32 +461,32 @@ rm(
   )
 )
 formula_11 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_12 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_13 <- value ~
-  # add the demographic vars and pop density
-  Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_14 <- value ~
-  # add the demographic vars and pop density
-  Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
@@ -628,8 +628,8 @@ rm(
   )
 )
 formula_15 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
@@ -638,8 +638,8 @@ formula_15 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_16 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
@@ -648,8 +648,8 @@ formula_16 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_17 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
@@ -658,8 +658,8 @@ formula_17 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_18 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
@@ -802,7 +802,7 @@ rm(
   )
 )
 formula_19 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + Union +
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
   SPD + Gruene + FDP + die_linke + afd + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   pop_dens + urb_dens + sex +
@@ -811,7 +811,7 @@ formula_19 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_20 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + Union +
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
   SPD + Gruene + FDP + die_linke + afd + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   pop_dens + urb_dens + sex +
@@ -821,14 +821,14 @@ formula_20 <- value ~
   f(id_date_2, model = "iid")
 
 formula_21 <- value ~
-  log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
+log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
   unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_22 <- value ~
-  log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
+log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
   unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
@@ -964,7 +964,8 @@ models <- models[which(unlist(mae) %in% min(unlist(mae)))]
 results <- results[
   seq(
     1 + (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3,
-    (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3 + 3)
+    (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3 + 3
+  )
 ]
 mae <- mae[which(unlist(mae) %in% min(unlist(mae)))]
 
@@ -978,7 +979,7 @@ rm(
   )
 )
 formula_23 <- value ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -987,8 +988,8 @@ formula_23 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_24 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -997,7 +998,7 @@ formula_24 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_25 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -1006,8 +1007,8 @@ formula_25 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_26 <- value ~
-  # add the demographic vars and pop density
-  marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -1153,8 +1154,8 @@ rm(
   )
 )
 formula_27 <- value ~
-  # add the demographic vars and pop density
-  entertainment + sport + hairdresser + place_of_worship +
+# add the demographic vars and pop density
+entertainment + sport + hairdresser + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + platform +
   kindergarten + schools + bakeries + pop_dens + higher_education +
   # specify the model with neighborhood matrix
@@ -1162,8 +1163,8 @@ formula_27 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_28 <- value ~
-  # add the demographic vars and pop density
-  entertainment + sport + hairdresser + place_of_worship +
+# add the demographic vars and pop density
+entertainment + sport + hairdresser + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + platform +
   kindergarten + schools + bakeries + pop_dens + higher_education +
   # specify the model with neighborhood matrix
@@ -1172,7 +1173,7 @@ formula_28 <- value ~
   f(id_date_2, model = "iid")
 # now models with all the variables
 formula_29 <- value ~
-  schools + place_of_worship + pop_dens + office +
+schools + place_of_worship + pop_dens + office +
   bakeries + entertainment + platform + kindergarten + nursing_home +
   sport +
   # specify the model with neighborhood matrix
@@ -1180,7 +1181,7 @@ formula_29 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_30 <- value ~
-  schools + place_of_worship + pop_dens + office +
+schools + place_of_worship + pop_dens + office +
   bakeries + entertainment + platform + kindergarten + nursing_home +
   sport +
   # specify the model with neighborhood matrix
@@ -1316,8 +1317,10 @@ models <- models[c(1, which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) + 1)]
 results <- results[
   c(
     seq_len(3),
-    seq(1 + (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3,
-        (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3 + 3) + 3
+    seq(
+      1 + (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3,
+      (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3 + 3
+    ) + 3
   )
 ]
 mae <- mae[c(1, which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) + 1)]
@@ -1333,7 +1336,7 @@ rm(
   )
 )
 formula_31 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
   Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners + entertainment +
   sport + clinic + shops + place_of_worship + retail + nursing_home +
@@ -1344,7 +1347,7 @@ formula_31 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_32 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
   Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners + entertainment +
   sport + clinic + shops + place_of_worship + retail + nursing_home +
@@ -1355,7 +1358,7 @@ formula_32 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_33 <- value ~
-  schools + afd + die_linke + pop_dens + place_of_worship +
+schools + afd + die_linke + pop_dens + place_of_worship +
   entertainment + bakeries + SPD + platform + sport + nursing_home +
   welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix
@@ -1363,7 +1366,7 @@ formula_33 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_34 <- value ~
-  schools + afd + die_linke + pop_dens + place_of_worship +
+schools + afd + die_linke + pop_dens + place_of_worship +
   entertainment + bakeries + SPD + platform + sport + nursing_home +
   welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix

@@ -723,7 +723,7 @@ germany <- germany[
     max_date - 28, max_date - 21, max_date - 14, max_date - 7, max_date
   ),
 ]
-numbers <- germany[order(germany$Date, germany$Kreis), ]#
+numbers <- germany[order(germany$Date, germany$Kreis), ] #
 numbers <- st_as_sf(numbers)
 st_crs(numbers) <- 4326
 # add the area, densities and sex proportion

@@ -42,15 +42,15 @@ C <- Diagonal(x = 1, n = length(nb)) - Q
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_2 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -131,30 +131,30 @@ rm(
 
 # now models with the mobility variables
 formula_3 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_4 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + +unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + +unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 # now models with the mobility variables
 formula_5 <- value ~
-  # add the demographic vars and pop density
-  unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_6 <- value ~
-  # add the demographic vars and pop density
-  unemp_tot + unemp_immg +
+# add the demographic vars and pop density
+unemp_tot + unemp_immg +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -299,27 +299,27 @@ rm(
 )
 # now models with the infrastructure variables
 formula_7 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + immigrants_total +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_8 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + immigrants_total +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_9 <- value ~
-  immigrants_total +
+immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_10 <- value ~
-  immigrants_total +
+immigrants_total +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -462,7 +462,7 @@ rm(
 )
 # now models with all the variables
 formula_11 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
@@ -471,7 +471,7 @@ formula_11 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_12 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
@@ -480,14 +480,14 @@ formula_12 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_13 <- value ~
-  workers_ft_work + workers_pt_work +
+workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_14 <- value ~
-  workers_ft_work + workers_pt_work +
+workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -631,7 +631,7 @@ rm(
 ########################################################
 # Now with variable selection
 formula_15 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
@@ -641,7 +641,7 @@ formula_15 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_16 <- value ~
-  pop_dens + urb_dens + sex +
+pop_dens + urb_dens + sex +
   # add the demographic vars and pop density
   workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
@@ -651,7 +651,7 @@ formula_16 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_17 <- value ~
-  workers_ft_work + workers_pt_work +
+workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
@@ -659,7 +659,7 @@ formula_17 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_18 <- value ~
-  workers_ft_work + workers_pt_work +
+workers_ft_work + workers_pt_work +
   construction_ft_work + construction_pt_work +
   median_age + unemp_tot + unemp_immg + immigrants_total +
   # specify the model with neighborhood matrix
@@ -803,27 +803,27 @@ rm(
 )
 # now models with all the variables
 formula_19 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_ft_work +
+median_age + unemp_tot + unemp_immg + workers_ft_work +
   workers_pt_work + construction_pt_work + immigrants_total +
   pop_dens + urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_20 <- value ~
-  median_age + unemp_tot + unemp_immg + workers_ft_work +
+median_age + unemp_tot + unemp_immg + workers_ft_work +
   workers_pt_work + construction_pt_work + immigrants_total +
   pop_dens + urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_21 <- value ~
-  construction_pt_work + unemp_tot + sex +
+construction_pt_work + unemp_tot + sex +
   median_age + pop_dens +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_22 <- value ~
-  construction_pt_work + unemp_tot + sex +
+construction_pt_work + unemp_tot + sex +
   median_age + pop_dens +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
   f(id_date_1, model = "rw2") +
@@ -956,7 +956,8 @@ models <- models[which(unlist(mae) %in% min(unlist(mae)))]
 results <- results[
   seq(
     1 + (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3,
-    (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3 + 3)
+    (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3 + 3
+  )
 ]
 mae <- mae[which(unlist(mae) %in% min(unlist(mae)))]
 
@@ -973,7 +974,7 @@ rm(
 
 # now models with all the variables
 formula_23 <- value ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -982,8 +983,8 @@ formula_23 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_24 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -992,7 +993,7 @@ formula_24 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_25 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -1001,8 +1002,8 @@ formula_25 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_26 <- value ~
-  # add the demographic vars and pop density
-  marketplace + entertainment + sport + clinic +
+# add the demographic vars and pop density
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -1150,7 +1151,7 @@ rm(
 
 # now models with all the variables
 formula_27 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + restaurant + aerodrome +
   office + platform + kindergarten + schools + bakeries + pop_dens +
   urb_dens +
@@ -1159,7 +1160,7 @@ formula_27 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_28 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + restaurant + aerodrome +
   office + platform + kindergarten + schools + bakeries + pop_dens +
   urb_dens +
@@ -1169,15 +1170,15 @@ formula_28 <- value ~
   f(id_date_2, model = "iid")
 # now models with all the variables
 formula_29 <- value ~
-  pop_dens + shops + place_of_worship + office +
+pop_dens + shops + place_of_worship + office +
   schools + nursing_home + kindergarten + restaurant +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_30 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + shops + place_of_worship + office +
+# add the demographic vars and pop density
+pop_dens + shops + place_of_worship + office +
   schools + nursing_home + kindergarten + restaurant +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2) +
@@ -1313,8 +1314,10 @@ models <- models[c(1, which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) + 1)]
 results <- results[
   c(
     seq_len(3),
-    seq(1 + (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3,
-        (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3 + 3) + 3
+    seq(
+      1 + (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3,
+      (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3 + 3
+    ) + 3
   )
 ]
 mae <- mae[c(1, which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) + 1)]
@@ -1331,7 +1334,7 @@ rm(
 )
 # now models with all the variables
 formula_31 <- value ~
-  median_age + unemp_tot + workers_ft_work +
+median_age + unemp_tot + workers_ft_work +
   workers_pt_work + construction_pt_work + immigrants_total +
   marketplace + entertainment + clinic + hairdresser + shops +
   retail + nursing_home + restaurant + aerodrome + office +
@@ -1342,7 +1345,7 @@ formula_31 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_32 <- value ~
-  median_age + unemp_tot + workers_ft_work +
+median_age + unemp_tot + workers_ft_work +
   workers_pt_work + construction_pt_work + immigrants_total +
   marketplace + entertainment + clinic + hairdresser + shops +
   retail + nursing_home + restaurant + aerodrome + office +
@@ -1354,7 +1357,7 @@ formula_32 <- value ~
   f(id_date_2, model = "iid")
 # now models with all the variables
 formula_33 <- value ~
-  schools + unemp_tot + restaurant + sex +
+schools + unemp_tot + restaurant + sex +
   median_age + pop_dens + construction_pt_work + workers_ft_work +
   higher_education + clinic +
   # specify the model with neighborhood matrix
@@ -1362,7 +1365,7 @@ formula_33 <- value ~
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
 formula_34 <- value ~
-  schools + unemp_tot + restaurant + sex +
+schools + unemp_tot + restaurant + sex +
   median_age + pop_dens + construction_pt_work + workers_ft_work +
   higher_education + clinic +
   # specify the model with neighborhood matrix

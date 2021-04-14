@@ -949,7 +949,8 @@ models <- models[which(unlist(mae) %in% min(unlist(mae)))]
 results <- results[
   seq(
     1 + (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3,
-    (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3 + 3)
+    (which(unlist(mae) %in% min(unlist(mae))) - 1) * 3 + 3
+  )
 ]
 mae <- mae[which(unlist(mae) %in% min(unlist(mae)))]
 
@@ -1306,8 +1307,10 @@ models <- models[c(1, which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) + 1)]
 results <- results[
   c(
     seq_len(3),
-    seq(1 + (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3,
-        (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3 + 3) + 3
+    seq(
+      1 + (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3,
+      (which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) - 1) * 3 + 3
+    ) + 3
   )
 ]
 mae <- mae[c(1, which(unlist(mae[2:3]) %in% min(unlist(mae[2:3]))) + 1)]

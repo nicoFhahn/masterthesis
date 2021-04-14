@@ -740,7 +740,7 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) 
+)
 # now models with all the variables
 models_final <- list(models, results, mae)
 save(models_final, file = "models/bym2_germany.Rda")

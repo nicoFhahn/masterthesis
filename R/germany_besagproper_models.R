@@ -30,8 +30,8 @@ g <- inla.read.graph(filename = "maps/map_2.adj")
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
@@ -82,15 +82,15 @@ rm(
   )
 ) # now models with the mobility variables
 formula_2 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 # now models with the mobility variables
 formula_3 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
@@ -164,14 +164,14 @@ rm(
   )
 ) # now models with the infrastructure variables
 formula_4 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + log(trade_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + log(trade_tax) +
   log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_5 <- value ~
-  # add the demographic vars and pop density
-  log(trade_tax) + log(income_total) + log(income_tax) +
+# add the demographic vars and pop density
+log(trade_tax) + log(income_total) + log(income_tax) +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
@@ -243,14 +243,14 @@ rm(
   )
 ) # now models with all the variables
 formula_6 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_7 <- value ~
-  # add the demographic vars and pop density
-  Union + SPD + Gruene + FDP +
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
   die_linke + afd +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
@@ -322,16 +322,16 @@ rm(
 ) ########################################################
 # Now with variable selection
 formula_8 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_9 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners +
@@ -406,7 +406,7 @@ rm(
   )
 ) # now models with all the variables
 formula_10 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + Union +
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
   SPD + Gruene + FDP + die_linke + afd + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
   pop_dens + urb_dens + sex +
@@ -414,7 +414,7 @@ formula_10 <- value ~
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 formula_11 <- value ~
-  log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
+log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
   unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
@@ -490,14 +490,14 @@ rm(
 )
 # now models with all the variables
 formula_12 <- value ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_13 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries +
@@ -575,15 +575,15 @@ rm(
 )
 # now models with all the variables
 formula_14 <- value ~
-  # add the demographic vars and pop density
-  entertainment + sport + hairdresser + place_of_worship +
+# add the demographic vars and pop density
+entertainment + sport + hairdresser + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + platform +
   kindergarten + schools + bakeries + pop_dens + higher_education +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 # now models with all the variables
 formula_15 <- value ~
-  schools + place_of_worship + pop_dens + office +
+schools + place_of_worship + pop_dens + office +
   bakeries + entertainment + platform + kindergarten + nursing_home +
   sport +
   # specify the model with neighborhood matrix
@@ -658,7 +658,7 @@ rm(
   )
 )
 formula_16 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
   Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners + entertainment +
   sport + clinic + shops + place_of_worship + retail + nursing_home +
@@ -667,7 +667,7 @@ formula_16 <- value ~
   # specify the model with neighborhood matrix
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_17 <- value ~
-  schools + afd + die_linke + pop_dens + place_of_worship +
+schools + afd + die_linke + pop_dens + place_of_worship +
   entertainment + bakeries + SPD + platform + sport + nursing_home +
   welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
   # specify the model with neighborhood matrix

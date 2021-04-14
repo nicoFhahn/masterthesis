@@ -605,9 +605,34 @@ date_diff <- as.numeric(max_date - as.Date("2021-03-24"))
 date_seq <- seq(0, date_diff, 7)
 numbers <- norway_municipality_confirmed_long[
   norway_municipality_confirmed_long$date %in% c(
+    seq(
+      min(as.Date("2021-03-24") + date_seq[date_seq <= 28]) - 28,
+      max(as.Date("2021-03-24") + date_seq[date_seq <= 28]),
+      1
+    )
+  ),
+]
+numbers_interest <- norway_municipality_confirmed_long[
+  norway_municipality_confirmed_long$date %in% c(
     as.Date("2021-03-24") + date_seq[date_seq <= 28]
   ),
 ]
+numbers_interest_split <- split(numbers_interest, numbers_interest$date)
+numbers_interest_split <- lapply(
+  numbers_interest_split,
+  function(x, ...) {
+    x$last_28 <- x$value - numbers[numbers$date == x$date - 28, ]$value
+    x$last_21 <- x$value - numbers[numbers$date == x$date - 21, ]$value
+    x$last_14 <- x$value - numbers[numbers$date == x$date - 14, ]$value
+    x$last_7 <- x$value - numbers[numbers$date == x$date - 7, ]$value
+    x$inc_28 <- 100000 * x$last_28 / x$population
+    x$inc_21 <- 100000 * x$last_21 / x$population
+    x$inc_14 <- 100000 * x$last_14 / x$population
+    x$inc_7 <- 100000 * x$last_7 / x$population
+    x
+  }
+)
+numbers <- do.call(rbind, numbers_interest_split)
 # remove needless variables
 numbers$value <- NULL
 numbers$time <- NULL
@@ -621,7 +646,7 @@ norge <- norge[
     as.Date("2021-03-24") + date_seq[date_seq <= 28]
   ),
 ]
-norge <- norge[order(norge$date, norge$kommune_no), ]#
+norge <- norge[order(norge$date, norge$kommune_no), ] 
 numbers <- numbers[order(numbers$date, numbers$kommune_no), ]
 numbers <- numbers[numbers$kommune_no %in% norge$kommune_no, ]
 norge$date <- NULL
@@ -638,11 +663,11 @@ numbers$sex <- numbers$population_female /
   numbers$population_total
 # keep only relevant variables
 numbers <- numbers[
-  , c(1, 2, 5, 8:9, 18:20, 25:28, 34, 37:49, 52:61)
+  , c(1:10, 13, 16:17, 26:28, 33:36, 42, 45:57, 60:69)
 ]
 # impute
 cols_imputed <- lapply(
-  c(6:31, 33:36),
+  c(3:39, 41:44),
   function(x, ...) {
     vals <- numbers[, x]
     vals$geometry <- NULL
@@ -653,8 +678,8 @@ cols_imputed <- lapply(
 )
 # bind everything together again
 numbers_imputed <- Reduce(cbind, cols_imputed)
-colnames(numbers_imputed) <- colnames(numbers)[c(6:31, 33:36)]
-numbers_imputed <- cbind(numbers[, 1:5], numbers_imputed)
+colnames(numbers_imputed) <- colnames(numbers)[c(3:39, 41:44)]
+numbers_imputed <- cbind(numbers[, 1:2], numbers_imputed)
 # turn it into a spatial frame
 numbers <- st_as_sf(numbers_imputed)
 rownames(numbers) <- NULL

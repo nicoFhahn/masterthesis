@@ -249,7 +249,7 @@ sapply(
     )
   }
 )
-  ######################################### ALL MODELS
+######################################### ALL MODELS
 all_results <- c(results_besag[9], results_bym2[9], results_leroux[9], results_nospatial[9])
 all_dic <- unlist(lapply(all_results, function(x) x$dic))
 all_waic <- unlist(lapply(all_results, function(x) x$waic))
@@ -311,7 +311,7 @@ sapply(
     )
   }
 )
-  pal <- colorFactor(
+pal <- colorFactor(
   viridis(6, direction = -1, option = "B"),
   domain = newest_numbers$cat_zeta
 )

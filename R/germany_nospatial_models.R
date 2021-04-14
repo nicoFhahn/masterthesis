@@ -16,8 +16,8 @@ results <- list()
 mae <- list()
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex
 
 res_1 <- inla(
   formula_1,
@@ -66,13 +66,13 @@ rm(
   )
 ) # now models with the mobility variables
 formula_2 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners
 # now models with the mobility variables
 formula_3 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + protection_seekers +
+# add the demographic vars and pop density
+asyl_benefits + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners
 
 
@@ -144,12 +144,12 @@ rm(
   )
 ) # now models with the infrastructure variables
 formula_4 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + log(trade_tax) +
-  log(income_total) + log(income_tax) 
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + log(trade_tax) +
+  log(income_total) + log(income_tax)
 formula_5 <- value ~
-  # add the demographic vars and pop density
-  log(trade_tax) + log(income_total) + log(income_tax) 
+# add the demographic vars and pop density
+log(trade_tax) + log(income_total) + log(income_tax)
 
 res_4 <- inla(
   formula_4,
@@ -219,13 +219,13 @@ rm(
   )
 ) # now models with all the variables
 formula_6 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
-  die_linke + afd 
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
+  die_linke + afd
 formula_7 <- value ~
-  # add the demographic vars and pop density
-  Union + SPD + Gruene + FDP +
-  die_linke + afd 
+# add the demographic vars and pop density
+Union + SPD + Gruene + FDP +
+  die_linke + afd
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
@@ -294,17 +294,17 @@ rm(
 ) ########################################################
 # Now with variable selection
 formula_8 <- value ~
-  # add the demographic vars and pop density
-  pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
-  unemployed_total + unemployed_foreigners 
+  unemployed_total + unemployed_foreigners
 formula_9 <- value ~
-  # add the demographic vars and pop density
-  asyl_benefits + log(trade_tax) +
+# add the demographic vars and pop density
+asyl_benefits + log(trade_tax) +
   log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
   die_linke + afd + protection_seekers + welfare_recipients +
-  unemployed_total + unemployed_foreigners 
+  unemployed_total + unemployed_foreigners
 
 res_8 <- inla(
   formula_8,
@@ -374,14 +374,14 @@ rm(
   )
 ) # now models with all the variables
 formula_10 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + Union +
+log(trade_tax) + log(income_total) + log(income_tax) + Union +
   SPD + Gruene + FDP + die_linke + afd + protection_seekers +
   welfare_recipients + unemployed_total + unemployed_foreigners +
-  pop_dens + urb_dens + sex 
+  pop_dens + urb_dens + sex
 
 formula_11 <- value ~
-  log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
-  unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers 
+log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
+  unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers
 
 
 res_10 <- inla(
@@ -454,12 +454,12 @@ rm(
 )
 # now models with all the variables
 formula_12 <- value ~
-  pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
+pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries 
+  kindergarten + bakeries
 formula_13 <- value ~
-  marketplace + entertainment + sport + clinic +
+marketplace + entertainment + sport + clinic +
   hairdresser + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + schools + higher_education +
   kindergarten + bakeries
@@ -535,13 +535,13 @@ rm(
 )
 # now models with all the variables
 formula_14 <- value ~
-  # add the demographic vars and pop density
-  entertainment + sport + hairdresser + place_of_worship +
+# add the demographic vars and pop density
+entertainment + sport + hairdresser + place_of_worship +
   retail + nursing_home + restaurant + aerodrome + platform +
-  kindergarten + schools + bakeries + pop_dens + higher_education 
+  kindergarten + schools + bakeries + pop_dens + higher_education
 # now models with all the variables
 formula_15 <- value ~
-  schools + place_of_worship + pop_dens + office +
+schools + place_of_worship + pop_dens + office +
   bakeries + entertainment + platform + kindergarten + nursing_home +
   sport
 
@@ -614,16 +614,16 @@ rm(
   )
 )
 formula_16 <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + SPD +
+log(trade_tax) + log(income_total) + log(income_tax) + SPD +
   Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
   unemployed_total + unemployed_foreigners + entertainment +
   sport + clinic + shops + place_of_worship + retail + nursing_home +
   restaurant + aerodrome + office + platform + kindergarten +
-  schools + bakeries + pop_dens + sex + higher_education 
+  schools + bakeries + pop_dens + sex + higher_education
 formula_17 <- value ~
-  schools + afd + die_linke + pop_dens + place_of_worship +
+schools + afd + die_linke + pop_dens + place_of_worship +
   entertainment + bakeries + SPD + platform + sport + nursing_home +
-  welfare_recipients + FDP + kindergarten + log(trade_tax) + office 
+  welfare_recipients + FDP + kindergarten + log(trade_tax) + office
 
 res_16 <- inla(
   formula_16,
