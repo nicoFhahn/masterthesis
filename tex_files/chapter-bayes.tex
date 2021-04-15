@@ -7,7 +7,7 @@ Characteristic for Bayesian statistics is the consistent use of probability dist
 The Bayesian concept of probability does not presuppose infinitely repeatable random experiments, so that Bayesian methods can be used even with small data sets. A small amount of data leads to a broad probability distribution, which is not strongly localised. \\ 
 In the Bayesian approach, the parameters of interest are treated as random variables that are governed by their parameters, for instance the mean and standard deviation, and distributions. \\
 Bayesian inference is an essential technique in mathematical statistics and the polar opposite of the frequentist approach, in which a hypothesis is tested without being assigned a probability. \\
-In the Bayesian approach a \textit{prior} distribution $\pi\left(\pmb{\theta}, \sigma^2\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\pmb{\theta}$ and $\sigma^2$ prior to obtaining the data. Using the prior distribution, the likelihood function $\pi\left(\pmb{x}|\pmb{\theta},\sigma^2\right)$, and the observed data $\pmb{x}$, it is possible to calculate the probability distribution $\pi\left(\pmb{\theta},\sigma^2\right|\pmb{x})$ of $\pmb{\theta}$ and $\sigma^2$ given the data $\pmb{x}$. This distribution is called the \textit{posterior} distribution of $\pmb{\theta}$ and $\sigma^2$ and is used to make inferences about the parameters \autocite[][6]{box2011bayesian}.
+In the Bayesian approach a \textit{prior} distribution $\pi\left(\pmb{\theta}, \sigma^2\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\pmb{\theta}$ and $\sigma^2$ prior to obtaining the data. Using the prior distribution, the likelihood function $\pi\left(\pmb{y}|\pmb{\theta},\sigma^2\right)$, and the observed data $\pmb{y}$, it is possible to calculate the probability distribution $\pi\left(\pmb{\theta},\sigma^2\right|\pmb{y})$ of $\pmb{\theta}$ and $\sigma^2$ given the data $\pmb{y}$. This distribution is called the \textit{posterior} distribution of $\pmb{\theta}$ and $\sigma^2$ and is used to make inferences about the parameters \autocite[][6]{box2011bayesian}.
 \clearpage
 \section{Preliminaries}
 This work follows strict notation rules to easily represent different elements such as matrices or graphs and contains frequently used abbreviations. These and some other basic concepts used in this work are introduced below. The notation follows the one used by Rue and Held \autocite[][14--19]{rue2005gaussian}.
@@ -25,8 +25,8 @@ The identity matrix is denoted by $\pmb{I}$. \\
 If $A_{ij}=0$ for $i<j$ or $A_{ij} = 0$ where $i>j$, then $\pmb{A}$ is called \textit{upper triangular} and \textit{lower triangular} respectively. The \textit{bandwidth} of a matrix $\pmb{A}$ is defined as $\max\left\lbrace|i-j|:A_{ij}\neq0\right\rbrace$. The \textit{lower bandwidth} is given by $\max\lbrace|i-j|:A_{ij}\neq $ $0\hbox{ and } i > j\rbrace$. $|\pmb{A}|$ denotes the \textit{determinant} of a $n\times n$ matrix $\pmb{A}$ and is equal to the product of the eigenvalues of $\pmb{A}$. The \textit{rank} of $\pmb{A}$, referenced by $\hbox{rank}\left(\pmb{A}\right)$, is the number of linearly independent rows or columns of $\pmb{A}$. The sum of the diagonal elements is called \textit{trace} of $\pmb{A}$, $\hbox{trace}\left(\pmb{A}\right)=\sum_{i}A_{ii}$.\\
 Finally, '$\odot$' denotes the element-wise multiplication of two matrices of size $n\times m$, '$\oslash$' denotes the element-wise division and raising each element of a matrix $\pmb{A}$ to a scalar power uses the symbol '$\owedge$'  \autocite[][14--15]{rue2005gaussian}.
 \subsection{Lattice and Torus}
-$\mathcal{I}_{\pmb{n}}$ denotes a (regular) \textbf{lattice} (or grid) of size $\pmb{n}=\left(n_1, n_2\right)$ (in the two-dimensional case). $\pmb{x}$ can take values on $\mathcal{I}_{\pmb{n}}$ and $x_{i,j}$ denotes the value of $\pmb{x}$ at location $ij$, for $i=1,...,n_1$ and $j=1,...,n_2$. For easier reading this will be shortened to $x_{ij}$. On an \textit{infinite lattice} $\mathcal{I}_{\pmb{\infty}}$, $ij$ are numbered as $i=0,\pm1,\pm2,...,$ and $j=0,\pm1,\pm2,...$. \\
-A lattice with cyclic or toroidal boundary conditions is referred to as \textit{torus} and is denoted by $\mathcal{I}_{\pmb{\infty}}$. The dimension is $\pmb{n}=\left(n_1,n_2\right)$ (in the two-dimensional case) and all indices are modulus $\pmb{n}$ and run from 0 to $n_1-1$ or $n_2-1$. If a GMRF $\pmb{x}$ is defined on $\mathcal{I}_{\pmb{n}}$, the toroidal boundary conditions imply that $x_{-2,n_2}$ is equal to $x_{n_1-2,0}$ since $-2\mod n_1$ is equal to $n_1-2$ and $n_2\mod n_2$ is equal to 0.\\
+$\mathcal{I}_{\pmb{n}}$ denotes a (regular) \textbf{lattice} (or grid) of size $\pmb{n}=\left(n_1, n_2\right)$ (in the two-dimensional case). $\pmb{y}$ can take values on $\mathcal{I}_{\pmb{n}}$ and $y_{i,j}$ denotes the value of $\pmb{y}$ at location $ij$, for $i=1,...,n_1$ and $j=1,...,n_2$. For easier reading this will be shortened to $y_{ij}$. On an \textit{infinite lattice} $\mathcal{I}_{\pmb{\infty}}$, $ij$ are numbered as $i=0,\pm1,\pm2,...,$ and $j=0,\pm1,\pm2,...$. \\
+A lattice with cyclic or toroidal boundary conditions is referred to as \textit{torus} and is denoted by $\mathcal{I}_{\pmb{\infty}}$. The dimension is $\pmb{n}=\left(n_1,n_2\right)$ (in the two-dimensional case) and all indices are modulus $\pmb{n}$ and run from 0 to $n_1-1$ or $n_2-1$. If a GMRF $\pmb{y}$ is defined on $\mathcal{I}_{\pmb{n}}$, the toroidal boundary conditions imply that $y_{-2,n_2}$ is equal to $y_{n_1-2,0}$ since $-2\mod n_1$ is equal to $n_1-2$ and $n_2\mod n_2$ is equal to 0.\\
 An \textit{irregular lattice} refers to a spatial configuration of regions $i=1,...,n$ where the regions (mostly) have common boundaries, for instance the states of a nation \autocite[][15--16]{rue2005gaussian}. An example of an irregular lattice is shown in Figure~\ref{fig:lattice}.
 \begin{figure}[H]
    \centering
@@ -35,9 +35,8 @@ An \textit{irregular lattice} refers to a spatial configuration of regions $i=1,
  \label{fig:lattice}
 \end{figure}
 \subsection{General Notation and Abbreviations}
-For $C\in\mathcal{I}=\left\lbrace1,...,n\right\rbrace$ let $\pmb{x}_C=\left\lbrace x_i:i\in C\right\rbrace$. $-C$ denotes the set $\mathcal{I-C}$ such that $\pmb{x}_{-C}=\left\lbrace x_i:i\notin C\right\rbrace$. For two sets $A$ and $B$, $A\setminus B=\left\lbrace i:i\in A \hbox{ and } i \notin B\right\rbrace$. \\
-$\pi\left(\cdot\right)$ denotes the density of its arguments, for example $\pi\left(\pmb{x}\right)$ for the density of $\pmb{x}$ and $\pi\left(\pmb{x}_A|\pmb{x}_{-A}\right)$ for the conditional density of $\pmb{x}_A$, given $\pmb{x}_{-A}$. '$\sim$' is used when a variable is 'distributed' according to the law $l$.  \\
-The expected value is denoted by $\mathbb{E}\left[\cdot\right]$, the variance by $\hbox{Var}\left(\cdot\right)$, the covariance by $\hbox{Cov}\left(\cdot\right)$, the precision by $\hbox{Prec}\left(\cdot\right)=\hbox{Cov}\left(\cdot\right)^{-1}$, the correlation by $\hbox{Corr}\left(\cdot,\cdot\right)$ and a probability by $\mathbb{P}\left(\cdot\right)$  \autocite[][16]{rue2005gaussian}.
+For $C\in\mathcal{I}=\left\lbrace1,...,n\right\rbrace$ let $\pmb{y}_C=\left\lbrace y_i:i\in C\right\rbrace$. $-C$ denotes the set $\mathcal{I-C}$ such that $\pmb{y}_{-C}=\left\lbrace y_i:i\notin C\right\rbrace$. For two sets $A$ and $B$, $A\setminus B=\left\lbrace i:i\in A \hbox{ and } i \notin B\right\rbrace$. \\
+$\pi\left(\cdot\right)$ denotes the density of its arguments, for example $\pi\left(\pmb{y}\right)$ for the density of $\pmb{y}$ and $\pi\left(\pmb{y}_A|\pmb{y}_{-A}\right)$ for the conditional density of $\pmb{y}_A$, given $\pmb{y}_{-A}$. '$\sim$' is used when a variable is 'distributed' according to the law $l$ \autocite[][16]{rue2005gaussian}.
 \subsection{Symmetric Positive Definite Matrices}
 An $n \times n$ matrix $\pmb{A}$ is \textit{positive definite} exactly if
 \begin{equation*}
@@ -71,24 +70,24 @@ A sufficient, but not necessary condition for a (symmetrical) matrix to be SPD i
 \section{Basic Concepts of Bayesian Theory}
 \subsection{Bayes' Theorem}
 At the heart of Bayesian inference is \textit{Bayes' theorem}, which describes the probability of an event given prior knowledge of factors that might influence the event. \\
-Let $\pmb{x}^T=\left(x_1,...,x_n\right)$ be a vector of $n$ observations whose probability distribution $\pi\left(\pmb{x}|\pmb{\theta}\right)$ depends on the values of $k$ parameters $\pmb{\theta}^T=\left(\theta_1,...,\theta_k\right)$. Let $\pi\left(\pmb{\theta}\right)$ be the probability distribution of $\pmb{\pmb{\theta}}$. Then 
+Let $\pmb{y}^T=\left(y_1,...,y_n\right)$ be a vector of $n$ observations whose probability distribution $\pi\left(\pmb{y}|\pmb{\theta}\right)$ depends on the values of $k$ parameters $\pmb{\theta}^T=\left(\theta_1,...,\theta_k\right)$. Let $\pi\left(\pmb{\theta}\right)$ be the probability distribution of $\pmb{\pmb{\theta}}$. Then 
 \begin{equation}
-    \pi\left(\pmb{x}|\pmb{\theta}\right)\pi\left(\pmb{\theta}\right)=\pi\left(\pmb{x},\pmb{\theta}\right) = \pi\left(\pmb{\theta}|\pmb{x}\right)\pi\left(\pmb{x}\right).
+    \pi\left(\pmb{y}|\pmb{\theta}\right)\pi\left(\pmb{\theta}\right)=\pi\left(\pmb{y},\pmb{\theta}\right) = \pi\left(\pmb{\theta}|\pmb{y}\right)\pi\left(\pmb{y}\right).
 \end{equation}
-Given the observed data $\pmb{x}$, the conditional distribution of $\pmb{\theta}$ is
+Given the observed data $\pmb{y}$, the conditional distribution of $\pmb{\theta}$ is
 \begin{equation}
-    \pi\left(\pmb{\theta}|\pmb{x}\right)=\frac{p\left(\pmb{x}|\pmb{\theta}\right)\pi\left(\pmb{\theta}\right)}{\pi\left(\pmb{x}\right)}.
+    \pi\left(\pmb{\theta}|\pmb{y}\right)=\frac{p\left(\pmb{y}|\pmb{\theta}\right)\pi\left(\pmb{\theta}\right)}{\pi\left(\pmb{y}\right)}.
 \end{equation}
-This last statement is known as Bayes' theorem \autocite[][]{bayes1763lii}. The \textit{prior} distribution $\pi\left(\pmb{\theta}\right)$ contains knowledge about $\pmb{\theta}$ without knowledge of the data. $\pi\left(\pmb{\theta}|\pmb{x}\right)$ contains what is known about $\pmb{\theta}$ given knowledge of the data and is the \textit{posterior} distribution of $\pmb{\theta}$ given $\pmb{x}$. \\
-If $\pi\left(\pmb{x}|\pmb{\theta}\right)$ is considered as a function of $\pmb{\theta}$ instead of $\pmb{x}$, it is called the \textit{likelihood function} of $\pmb{\theta}$ given $\pmb{x}$ and can be written as $l\left(\pmb{\theta}|\pmb{x}\right)$. Thus Bayes' theorem can be written as
+This last statement is known as Bayes' theorem \autocite[][]{bayes1763lii}. The \textit{prior} distribution $\pi\left(\pmb{\theta}\right)$ contains knowledge about $\pmb{\theta}$ without knowledge of the data. $\pi\left(\pmb{\theta}|\pmb{y}\right)$ contains what is known about $\pmb{\theta}$ given knowledge of the data and is the \textit{posterior} distribution of $\pmb{\theta}$ given $\pmb{y}$. \\
+If $\pi\left(\pmb{y}|\pmb{\theta}\right)$ is considered as a function of $\pmb{\theta}$ instead of $\pmb{y}$, it is called the \textit{likelihood function} of $\pmb{\theta}$ given $\pmb{y}$ and can be written as $l\left(\pmb{\theta}|\pmb{y}\right)$. Thus Bayes' theorem can be written as
 \begin{equation}
-    \pi\left(\pmb{\theta}|\pmb{x}\right)\propto l\left(\pmb{\theta}|\pmb{x}\right)\pi\left(\pmb{\theta}\right).
+    \pi\left(\pmb{\theta}|\pmb{y}\right)\propto l\left(\pmb{\theta}|\pmb{y}\right)\pi\left(\pmb{\theta}\right).
 \end{equation}
-It is evident that the posterior distribution of $\pmb{\theta}$ given the data $\pmb{x}$ is proportional to the product of the distribution of $\pmb{\theta}$ prior to observing the data and the likelihood function of $\pmb{\theta}$ given $\pmb{x}$. Therefore,
+It is evident that the posterior distribution of $\pmb{\theta}$ given the data $\pmb{y}$ is proportional to the product of the distribution of $\pmb{\theta}$ prior to observing the data and the likelihood function of $\pmb{\theta}$ given $\pmb{y}$. Therefore,
 \begin{equation*}
     \hbox{posterior distribution} \propto  \hbox{likelihood}\times\hbox{prior distribution}.
 \end{equation*}
-The data $\pmb{x}$ modifies the prior knowledge of $\pmb{\theta}$ through the likelihood function, and thus can be be regarded as a representation of the information about  $\pmb{\theta}$ derived from the data \autocite[][]{box2011bayesian}.
+The data $\pmb{y}$ modifies the prior knowledge of $\pmb{\theta}$ through the likelihood function, and thus can be be regarded as a representation of the information about  $\pmb{\theta}$ derived from the data \autocite[][]{box2011bayesian}.
 \subsection{Conditional Independence}
 In probability theory, two random variables $x$ and $y$ are \textit{independent} given a third variable $z$ if and only if the occurrence of $x$ and $y$ in their conditional probability distribution given $z$ are independent events. To calculate the conditional density of $\pmb{x}_A$, given $\pmb{x}_{-A}$, the following statement will repeatedly be used,
 \begin{equation}
@@ -140,7 +139,7 @@ $\pmb{\theta}\in\Theta\subset\mathbb{R}^q$ is the \textit{natural} or \textit{ca
     \mathbb{E}_{\pmb{\theta}}(\pmb{y}) &= \mu(\pmb{\theta}) =& \frac{\partial b(\pmb{\theta})}{\partial\pmb{\theta}} \\
     \hbox{Cov}_{\pmb{\theta}}(\pmb{y}) &= \pmb{\Sigma}(\pmb{\theta}) =& \lambda\frac{\partial^2b(\pmb{\theta})}{\partial\pmb{\theta}\partial\pmb{\theta}^T}.
 \end{alignat}
-The covariance matrix $\pmb{\Sigma}(\pmb{\theta})$ is positive definite in $\Theta^0$, therefore $\mu:\Theta^0\rightarrow  M = \mu\left(\Theta^0\right)$ is injective. By substituting the inverse function $\pmb{theta}(\mu)$ into $\frac{\partial^2b(\pmb{\theta})}{\partial\pmb{\theta}\partial\pmb{\theta}^T}$, the variance function 
+The covariance matrix $\pmb{\Sigma}(\pmb{\theta})$ is positive definite in $\Theta^0$, therefore $\mu:\Theta^0\rightarrow  M = \mu\left(\Theta^0\right)$ is injective. By substituting the inverse function $\pmb{\theta}(\mu)$ into $\frac{\partial^2b(\pmb{\theta})}{\partial\pmb{\theta}\partial\pmb{\theta}^T}$, the variance function 
 \begin{equation}
     v(\mu)=\frac{\partial^2b(\pmb{\theta}(\mu))}{\partial\pmb{\theta}\partial\pmb{\theta}^T}
 \end{equation}
@@ -150,26 +149,26 @@ is given and the covariance can be written as
 \end{equation}
 Important members of the exponential family are the normal, binomial, Poisson, gamma and multivariate normal distribution \autocite[][433]{fahrmeir2013multivariate}.
 \subsection{The Multivariate Normal Distribution}
-The density of a normally distributed random variable $\pmb{x}=\left(x_1,...,x_n\right)^T, n<\infty$ with mean vector $\pmb{\mu}$ ($n\times1$) and SPD covariance matrix $\pmb{\Sigma}$ ($n\times n$) is
+The density of a normally distributed random variable $\pmb{y}=\left(y_1,...,y_n\right)^T, n<\infty$ with mean vector $\pmb{\mu}$ ($n\times1$) and SPD covariance matrix $\pmb{\Sigma}$ ($n\times n$) is
 \begin{equation}
-    \pi\left(\pmb{x}\right)=\left(2\pi\right)^{-n/2}|\pmb{\Sigma}|^{-1/2}\exp\left(-\frac{1}{2}\left(\pmb{x}-\pmb{\mu}\right)^T\pmb{\Sigma}^{-1}\left(\pmb{x}-\pmb{\mu}\right)\right),\hspace{5pt}\pmb{x}\in\mathbb{R}^n
+    \pi\left(\pmb{y}\right)=\left(2\pi\right)^{-n/2}|\pmb{\Sigma}|^{-1/2}\exp\left(-\frac{1}{2}\left(\pmb{y}-\pmb{\mu}\right)^T\pmb{\Sigma}^{-1}\left(\pmb{y}-\pmb{\mu}\right)\right),\hspace{5pt}\pmb{y}\in\mathbb{R}^n
 \end{equation}
-Here, $\mu_i=\mathbb{E}\left[x_i\right]$, $ \Sigma_{ij}=\hbox{Cov}\left(x_i,x_j\right)$, $ \Sigma_{ii}=\hbox{Var}\left(x_i\right) > 0$ and $\hbox{Corr}\left(x_i,x_j\right)=\Sigma_{ij}/\left(\Sigma_{ii}\Sigma_{jj}\right)^{1/2}$. This is written as $\pmb{x}\sim\mathcal{N}\left(\pmb{\mu},\pmb{\Sigma}\right)$. For $n=1$, $\mu=0$ and $\Sigma_{11}=1$ the standard normal distribution is obtained. \\
-$\pmb{x}$ is now split up into $\pmb{x}=\left(\pmb{x}_{\pmb{A}}^T,\pmb{x}_{\pmb{B}}^T\right)$ and $\pmb{\mu}$ and $\pmb{\Sigma}$ are divided accordingly:
+Here, $\mu_i=\mathbb{E}\left[y_i\right]$, $ \Sigma_{ij}=\hbox{Cov}\left(y_i,y_j\right)$, $ \Sigma_{ii}=\hbox{Var}\left(y_i\right) > 0$ and $\hbox{Corr}\left(y_i,y_j\right)=\Sigma_{ij}/\left(\Sigma_{ii}\Sigma_{jj}\right)^{1/2}$. This is written as $\pmb{y}\sim\mathcal{N}\left(\pmb{\mu},\pmb{\Sigma}\right)$. For $n=1$, $\mu=0$ and $\Sigma_{11}=1$ the standard normal distribution is obtained. \\
+$\pmb{y}$ is now split up into $\pmb{y}=\left(\pmb{y}_{\pmb{A}}^T,\pmb{y}_{\pmb{B}}^T\right)$ and $\pmb{\mu}$ and $\pmb{\Sigma}$ are divided accordingly:
 \begin{equation*}
     \pmb{\mu} = \begin{pmatrix}\pmb{\mu}_{\pmb{A}} \\ \pmb{\mu}_{\pmb{B}}\end{pmatrix} \hspace{10pt}\hbox{ and }\hspace{10pt} \pmb{\Sigma}=\begin{pmatrix}\pmb{\Sigma}_{\pmb{AA}} & \pmb{\Sigma}_{\pmb{AB}}\\\pmb{\Sigma}_{\pmb{BA}} & \pmb{\Sigma}_{\pmb{BB}}\end{pmatrix}.
 \end{equation*}
 Some basic properties of the multivariate normal distribution are the following.
 \begin{itemize}
-    \item[1.] $\pmb{x}_{\pmb{A}}\sim\mathcal{N}\left(\pmb{\mu}_{\pmb{A}}, \pmb{\Sigma}_{\pmb{AA}}\right)$.
-    \item[2.] $\pmb{\Sigma}_{\pmb{AB}}=\pmb{0}$ precisely when $\pmb{x}_{\pmb{A}}$ and $\pmb{x}_{\pmb{B}}$ are independent.
-    \item[3.] The conditional distribution $\pi\left(\pmb{x}_{\pmb{A}}|\pmb{x}_{\pmb{B}}\right)$ is $\mathcal{N}\left(\pmb{\mu}_{\pmb{A}|\pmb{B}}, \pmb{\Sigma}_{\pmb{A}|\pmb{B}}\right)$, where
+    \item[1.] $\pmb{y}_{\pmb{A}}\sim\mathcal{N}\left(\pmb{\mu}_{\pmb{A}}, \pmb{\Sigma}_{\pmb{AA}}\right)$.
+    \item[2.] $\pmb{\Sigma}_{\pmb{AB}}=\pmb{0}$ precisely when $\pmb{y}_{\pmb{A}}$ and $\pmb{y}_{\pmb{B}}$ are independent.
+    \item[3.] The conditional distribution $\pi\left(\pmb{y}_{\pmb{A}}|\pmb{y}_{\pmb{B}}\right)$ is $\mathcal{N}\left(\pmb{\mu}_{\pmb{A}|\pmb{B}}, \pmb{\Sigma}_{\pmb{A}|\pmb{B}}\right)$, where
     \begin{align*}
-        \pmb{\mu}_{\pmb{A}|\pmb{B}} &= \pmb{\mu}_{\pmb{A}}+\pmb{\Sigma}_{\pmb{AB}}\pmb{\Sigma}_{\pmb{BB}}^{-1}\left(\pmb{x}_{\pmb{B}}-\pmb{\mu}_{\pmb{B}}\right) \hbox{ and} \\
+        \pmb{\mu}_{\pmb{A}|\pmb{B}} &= \pmb{\mu}_{\pmb{A}}+\pmb{\Sigma}_{\pmb{AB}}\pmb{\Sigma}_{\pmb{BB}}^{-1}\left(\pmb{y}_{\pmb{B}}-\pmb{\mu}_{\pmb{B}}\right) \hbox{ and} \\
         \pmb{\Sigma}_{\pmb{A}|\pmb{B}} &= \pmb{\Sigma}_{\pmb{AA}}-\pmb{\Sigma}_{\pmb{AB}}\pmb{\Sigma}_{\pmb{BB}}^{-1}\pmb{\Sigma}_{\pmb{BA}}.
     \end{align*}
-    \item[4.] If $\pmb{x}\sim\mathcal{N}\left(\pmb{\mu}, \pmb{\Sigma}\right)$ and $\pmb{x}'\sim\mathcal{N}\left(\pmb{\mu'}, \pmb{\Sigma'}\right)$ are independent, 
-    \item[]then $\pmb{x}+\pmb{x'}\sim\mathcal{N}\left(\pmb{\mu}+ \pmb{\mu'}, \pmb{\Sigma}+ \pmb{\Sigma'}\right)$ \autocite[][19--20]{rue2005gaussian}.
+    \item[4.] If $\pmb{y}\sim\mathcal{N}\left(\pmb{\mu}, \pmb{\Sigma}\right)$ and $\pmb{y}'\sim\mathcal{N}\left(\pmb{\mu'}, \pmb{\Sigma'}\right)$ are independent, 
+    \item[]then $\pmb{y}+\pmb{y'}\sim\mathcal{N}\left(\pmb{\mu}+ \pmb{\mu'}, \pmb{\Sigma}+ \pmb{\Sigma'}\right)$ \autocite[][19--20]{rue2005gaussian}.
 \end{itemize}
 \clearpage
 \subsection{Skewness}
@@ -189,25 +188,26 @@ with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \auto
 \clearpage
 \section{Prior Selection}
 \subsection{Conjugate Priors}
-One property of exponential families is that they have conjugate priors \autocite[][]{diaconis1979conjugate}, which is an important property in Bayesian statistics. If the posterior distribution $\pi\left(\pmb{\theta}|\pmb{x}\right)$ and the prior distribution $\pi\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $\pi\left(\pmb{x}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. These priors were first discussed and formalised by Raifa and Schlaifer in 1961 \autocite[][]{raiffaapplied}. \\
-The construction of a conjugate prior is done by factorising the likelihood function into two parts. One part must be independent of the parameter(s) of interest but can be dependent on the data, while the other factor is a function that depends on the parameter(s) of interest and is dependent on the data only through the sufficient statistics. The family of conjugate priors is by definition proportional to the second factor. The posterior distribution resulting from the conjugate prior is itself a member of the same family as the conjugate prior \autocite[][]{raiffaapplied}. In cases where the prior and posterior distributions are part of the same family, the prior is said to be closed under sampling. Furthermore, since the data are only incorporated into the posterior distribution through the sufficient statistics, there exist relatively simple formulas for updating the prior into the posterior \autocite[][]{fink1997compendium}. An example of the construction of a conjugated prior is provided in the appendix. \\
+One property of exponential families is that they have conjugate priors \autocite[][]{diaconis1979conjugate}, which is an important property in Bayesian statistics. If the posterior distribution $\pi\left(\pmb{\theta}|\pmb{y}\right)$ and the prior distribution $\pi\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $\pi\left(\pmb{y}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. These priors were first discussed and formalised by Raifa and Schlaifer in 1961 \autocite[][]{raiffaapplied}. \\
+The construction of a conjugate prior is done by factorising the likelihood function into two parts. One part must be independent of the parameter(s) of interest but can be dependent on the data, while the other factor is a function that depends on the parameter(s) of interest and is dependent on the data only through the sufficient statistics. The family of conjugate priors is by definition proportional to the second factor. The posterior distribution resulting from the conjugate prior is itself a member of the same family as the conjugate prior \autocite[][]{raiffaapplied}. In cases where the prior and posterior distributions are part of the same family, the prior is said to be closed under sampling. Furthermore, since the data are only incorporated into the posterior distribution through the sufficient statistics, there exist relatively simple formulas for updating the prior into the posterior.\\
+For an example of the construction of a conjugated prior, see Fink 1997 \autocite[][]{fink1997compendium}.\\
 A drawback of conjugated priors is that the a priori known information about $\mu$ may be insufficient for determining both parameters or may be inconsistent with the structure imposed by conjugacy \autocite[][]{robert2010bayesian}. Moreover, these priorities can be too restrictive and not every belief about the priori can be described \autocite[][]{irwin2005prior}. \\
 Thus, although conjugate priors are easy to handle both mathematically and computationally \autocite[][]{irwin2005prior}, they are not often used in practice because of these drawbacks.
-\subsection{Jeffreys' Prior}
-As conjugate priors depend on information from the data, they are so-called \textit{informative priors}. \textit{Jeffreys' prior} \autocite[][]{jeffreys1946invariant} is characterised in comparison to other a priori distributions by the fact that it is invariant to a reparametrisation of the model parameters. Due to this invariance, the Jeffreys' a priori distribution is also called \textit{non-informative}. \\
-Let $\phi=\phi\left({\theta}\right)$ be a one-to-one transformation of ${\theta}$ and $I\left(\cdot\right)$ be the Fisher information, then
-\begin{equation}
-    I_{\phi}\left(\phi\right)=I_{\theta}\left({\theta}\right)\left(\frac{\partial{\theta}}{\partial\phi}\right)^2.
-\end{equation}
-If some principle of choice led to $\pi\left(\theta\right)$ as a non-informative prior for $\theta$, the same principle should lead to
-\begin{equation}
-    \pi_{\phi}\left(\phi\right)=\pi_{\theta}\left(\theta\right)\left|\frac{\partial\theta}{\partial\phi}\right|
-\end{equation}
-as a non-informative prior for $\phi$. The desired "invariance" is then given by
-\begin{equation}
-    \pi_{\phi}\left(\phi\right)\propto \sqrt{I_{\phi}\left(\phi\right)}=\sqrt{I_{\theta}\left(\theta\right)}\left|\frac{\partial\theta}{\partial\phi}\right|\propto \pi_{\theta}\left(\theta\right)\left|\frac{\partial\theta}{\partial\phi}\right|
-\end{equation}
-\autocite[][42--43]{box2011bayesian}. While Jeffreys' priors work well for single parameter models, they struggle when it comes to models with multidimensional parameters as these priors can have poor convergence properties \autocite[][]{jordan2010}.
+% \subsection{Jeffreys' Prior}
+% As conjugate priors depend on information from the data, they are so-called \textit{informative priors}. \textit{Jeffreys' prior} \autocite[][]{jeffreys1946invariant} is characterised in comparison to other a priori distributions by the fact that it is invariant to a reparametrisation of the model parameters. Due to this invariance, the Jeffreys' a priori distribution is also called \textit{non-informative}. \\
+% Let $\phi=\phi\left({\theta}\right)$ be a one-to-one transformation of ${\theta}$ and $I\left(\cdot\right)$ be the Fisher information, then
+% \begin{equation}
+%     I_{\phi}\left(\phi\right)=I_{\theta}\left({\theta}\right)\left(\frac{\partial{\theta}}{\partial\phi}\right)^2.
+% \end{equation}
+% If some principle of choice led to $\pi\left(\theta\right)$ as a non-informative prior for $\theta$, the same principle should lead to
+% \begin{equation}
+%     \pi_{\phi}\left(\phi\right)=\pi_{\theta}\left(\theta\right)\left|\frac{\partial\theta}{\partial\phi}\right|
+% \end{equation}
+% as a non-informative prior for $\phi$. The desired "invariance" is then given by
+% \begin{equation}
+%     \pi_{\phi}\left(\phi\right)\propto \sqrt{I_{\phi}\left(\phi\right)}=\sqrt{I_{\theta}\left(\theta\right)}\left|\frac{\partial\theta}{\partial\phi}\right|\propto \pi_{\theta}\left(\theta\right)\left|\frac{\partial\theta}{\partial\phi}\right|
+% \end{equation}
+% \autocite[][42--43]{box2011bayesian}. While Jeffreys' priors work well for single parameter models, they struggle when it comes to models with multidimensional parameters as these priors can have poor convergence properties \autocite[][]{jordan2010}.
 \subsection{Penalised Complexity Priors}
 One issue when selecting the prior distribution of a particular parameter is that it is not always intuitive when it comes to understanding and interpreting this distribution, something that is essential to ensure that it behaves as intended by the user. This problem can be addressed by using \textit{penalised complexity priors}, which is a methodology that penalises the complexity of model components in relation to deviation from simple base model formulations.\\
 PC priors provide a systematic and unified approach to calculating priority distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterised by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalising the deviation from the flexible model to the fixed base model, the PC prior is calculated \autocite[][]{martins2014penalising}.
@@ -222,7 +222,7 @@ Let $f_1=\pi\left(x|\xi\right)$ and $f_0\left(x|\xi=\xi_0\right)$ denote the fle
 \end{equation}
 This can be used to measure the information that is lost when $f_1$ is approximated by the simpler model $f_0$. For multinormal densities with zero mean, the calculation simplifies to
 \begin{equation}
-    \hbox{KLD}\left(f_1||f_0\right) = \frac{1}{2}\left(\hbox{trace}\left(\pmb{\Sigma}_0^{-1}\pmb{\Sigma}_1\right)-n-\ln\left(\frac{\left|\pmb{\Sigma}_1\right|}{\left|\pmb{\Sigma}_0\right|}\right)\right),
+    \hbox{KLD}\left(f_1||f_0\right) = \frac{1}{2}\left(\hbox{trace}\left(\pmb{\Sigma}_0^{-1}\pmb{\Sigma}_1\right)-n-\log\left(\frac{\left|\pmb{\Sigma}_1\right|}{\left|\pmb{\Sigma}_0\right|}\right)\right),
 \end{equation}
 where $f_i\sim\mathcal{N}\left(0,\pmb{\Sigma}_i\right), i=0,1$, while $n$ represents the dimension. For easier interpretation, the Kullback-Leibler divergence is transformed into a unidirectional distance measure
 \begin{equation}
@@ -846,20 +846,20 @@ The WAIC is given by
 \end{equation}
 with the log pointwise predictive density (LLPD) given by
 \begin{equation}
-    \hbox{LLPD} = \sum_{i=1}^n\log\left(\int p\left(y_i|\pmb{\theta}\right)p_{\hbox{post}}\left(\pmb{\theta}\right)\right)d\pmb{\theta}.
+    \hbox{LLPD} = \sum_{i=1}^n\log\left(\int \pi\left(y_i|\pmb{\theta}\right)\pi_{\hbox{post}}\left(\pmb{\theta}\right)\right)d\pmb{\theta}.
 \end{equation}
 LLPD can be seen as the Bayesian analogue of $l\left(\widehat{\pmb{\theta}}_{ML}\right)$ in the calculation of the AIC.\\
 The penalty term of the WAIC is also fully Bayesian and given by
 \begin{equation}
-    p_{\hbox{WAIC}}=\sum_{i=1}^n\hbox{Var}_{\hbox{post}}\left(\log\left(p\left(y_i|\pmb{\theta}\right)\right)\right),
+    p_{\hbox{WAIC}}=\sum_{i=1}^n\hbox{Var}_{\hbox{post}}\left(\log\left(\pi\left(y_i|\pmb{\theta}\right)\right)\right),
 \end{equation}
 where the term represents the variance of the individual terms in the LLPD over all data points \autocite[][]{watanabe2010asymptotic, yong2018loo}.
 \subsection{The Conditional Predictive Ordinate}
 The conditional predictive ordinate (CPO) is a Bayesian diagnostic that can be used to detect surprising observations. It is often used in the context of univariate sampling, the multivariate normal distribution and regression models. \\
 The conditional predictive ordinate is given by
 \begin{equation}
-    \hbox{CPO} = p\left(y_i|\pmb{y}_{-i}\right)
+    \hbox{CPO} = \pi\left(y_i|\pmb{y}_{-i}\right)
 \end{equation}
-with $\pmb{y}$ the data, $\pmb{y}_{-i}$ the data without the $i$-th observation, and $p\left(\cdot|y_{-i}\right)$ the predictive distribution of a new observation at $\pmb{y}_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
+with $\pmb{y}$ the data, $\pmb{y}_{-i}$ the data without the $i$-th observation, and $\pi\left(\cdot|y_{-i}\right)$ the predictive distribution of a new observation at $\pmb{y}_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
 %https://arxiv.org/pdf/1708.02723.pdf \\
 %http://www.leg.ufpr.br/~elias/cursos/br2019/slides1.pdf

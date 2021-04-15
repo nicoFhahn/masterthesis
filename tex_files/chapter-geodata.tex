@@ -161,22 +161,21 @@ The overall risk in the region of study is represented by $\alpha$, $u_i$ is a r
     \log\left(\theta_i\right)=\pmb{d}_i\pmb{\beta}+u_i+v_i,
 \end{equation*}
 with $\pmb{d}_i = \left(1,d_{i1},...,d_{ip}\right)$ a vector of the intercept and $p$ covariates corresponding to the area $i$ and $\pmb{\beta}=\left(\beta_0,...,\beta_p\right)^T$ the vector of coefficients. An increase in $d_j\,\left(j = 1,...,p\right)$ by one unit, leads to an increase in the relative risk by a factor of $\exp\left(\beta_j\right)$, provided that all other covariates remain constant. \\
-In the Besag-York-Mollié (BYM) \autocite[][]{besag1991bayesian} model, this spatial random effect $u_i$ is assigned a conditional autoregressive (CAR) distribution that smooths the data according to a given neighbourhood structure that defines two areas as neighbours if they share a common boundary. Specifically,
-\begin{equation}
-    u_i|\pmb{u}_{-i}\sim\mathcal{N}\left(\overline{u}_{\delta_i}, \frac{\sigma_u^2}{n_{\delta_i}}\right),
-\end{equation}
-where $\overline{u}_{\delta_i}^{-1}=n_{\delta_i}^{-1}\sum_{j\in\delta_i} u_j$, while $\delta_i$ and $n_{\delta_i}$ represent the set and the amount of neighbours of the area $i$, respectively. The unstructured component $v_i$ is modeled as an independent and identically distributed (i.i.d.) normal variable with zero mean and variance $\sigma_v^2$. \\
-In 2017, Simpson et al. proposed BYM2 \autocite[][]{simpson2017penalising}, a new parameterisation of the BYM model that yields interpretable parameters and facilitates the assignment of meaningful penalised complexity priors. It uses a scaled, spatially structured component $\pmb{u_*}$ and an unstructured component $\pmb{v_*}$,
-\begin{equation}
-    \pmb{b}=\frac{1}{\sqrt{\tau_b}}\left(\sqrt{1-\phi}\pmb{v_*}+\sqrt{\phi}\pmb{u_*}\right).
-\end{equation}
-The precision parameter $\tau_b > 0$ controls the marginal variance contribution of the weighted sum of $\pmb{u_*}$ and $\pmb{v_*}$. The mixing parameter $0\leq\phi\leq1$ captures the proportion of the marginal variance explained by the structured effect $\pmb{u}_*$. Therefore, the BYM2 model is equal to a pure spatial model for $\phi=1$ and equal to unstructured spatial noise for $\phi=0$ \autocite[][]{riebler2016intuitive}. To define the prior for the marginal accuracy $\tau_b$, the following probability statement is used:
-\begin{align}
-    \mathbb{P}\left(\frac{1}{\sqrt{\tau_b}}>U\right)&=\alpha\nonumber\\
-    \Longleftrightarrow\mathbb{P}\left(\phi <U\right)&=\alpha
-\end{align}
-\autocite[][]{moraga2019geospatial}. \\
-DEFINE U AND ALPHA AND CONNECT IT TO PC PRIORS. ALSO ADD THE LEROUX AND BESAG MODEL
+In the Besag-York-Mollié (BYM) \autocite[][]{besag1991bayesian} model, this spatial random effect $u_i$ is assigned a conditional autoregressive (CAR) distribution that smooths the data according to a given neighbourhood structure that defines two areas as neighbours if they share a common boundary \autocite[][]{moraga2019geospatial}.
+%Specifically,
+% \begin{equation}
+%     u_i|\pmb{u}_{-i}\sim\mathcal{N}\left(\overline{u}_{\delta_i}, \frac{\sigma_u^2}{n_{\delta_i}}\right),
+% \end{equation}
+% where $\overline{u}_{\delta_i}^{-1}=n_{\delta_i}^{-1}\sum_{j\in\delta_i} u_j$, while $\delta_i$ and $n_{\delta_i}$ represent the set and the amount of neighbours of the area $i$, respectively. The unstructured component $v_i$ is modeled as an independent and identically distributed (i.i.d.) normal variable with zero mean and variance $\sigma_v^2$. \\
+% In 2014, Simpson et al. proposed BYM2 \autocite[][]{martins2014penalising}, a new parameterisation of the BYM model that yields interpretable parameters and facilitates the assignment of meaningful penalised complexity priors. It uses a scaled, spatially structured component $\pmb{u_*}$ and an unstructured component $\pmb{v_*}$,
+% \begin{equation}
+%     \pmb{b}=\frac{1}{\sqrt{\tau_b}}\left(\sqrt{1-\phi}\pmb{v_*}+\sqrt{\phi}\pmb{u_*}\right).
+% \end{equation}
+% The precision parameter $\tau_b > 0$ controls the marginal variance contribution of the weighted sum of $\pmb{u_*}$ and $\pmb{v_*}$. The mixing parameter $0\leq\phi\leq1$ captures the proportion of the marginal variance explained by the structured effect $\pmb{u}_*$. Therefore, the BYM2 model is equal to a pure spatial model for $\phi=1$ and equal to unstructured spatial noise for $\phi=0$ \autocite[][]{riebler2016intuitive}. To define the prior for the marginal accuracy $\tau_b$, the following probability statement is used:
+% \begin{align}
+%     \mathbb{P}\left(\frac{1}{\sqrt{\tau_b}}>U\right)&=\alpha\nonumber\\
+%     \Longleftrightarrow\mathbb{P}\left(\phi <U\right)&=\alpha
+% \end{align}
 \subsubsection{Spatio-Temporal Small Area Disease Risk Estimation}
 When disease counts are monitored over time, spatio-temporal models are useful as they take into account not only the spatial structure but also temporal correlations and spatio-temporal interactions \autocite[][]{martinez2008autoregressive}. Let $Y_{ij}$ be the counts observed in area $i$ and at time $j$, $\theta_{ij}$ be the relative risk, $E_{ij}$ be the expected number of cases in area $i$ and at time $j$, then
 \begin{equation}

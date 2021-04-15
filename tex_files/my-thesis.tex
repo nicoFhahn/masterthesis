@@ -36,6 +36,7 @@
 \usepackage{booktabs}
 \usepackage{svg}
 \usepackage{multirow}
+\usepackage[symbols,nogroupskip,sort=none]{glossaries-extra}
 \input{tikz.tikzstyles}
 
 
@@ -44,7 +45,25 @@
 % **************************************************
 \input{my-thesis-setup}
 
-
+\glsxtrnewsymbol[description={Density of its arguments}]{pi}{\ensuremath{\pi(\cdot)}}
+\glsxtrnewsymbol[description={Standard deviation}]{sigma}{\ensuremath{\sigma}}
+\glsxtrnewsymbol[description={Variance}]{variance}{\ensuremath{\hbox{Var}}}
+\glsxtrnewsymbol[description={Covariance}]{covariance}{\ensuremath{\hbox{Cov}}}
+\glsxtrnewsymbol[description={Precision}]{precision}{\ensuremath{\hbox{Prec}}}
+\glsxtrnewsymbol[description={Correlation}]{correlation}{\ensuremath{\hbox{Corr}}}
+\glsxtrnewsymbol[description={Expected value}]{expected}{\ensuremath{\mathbb{E}}}
+\glsxtrnewsymbol[description={Probability}]{probability}{\ensuremath{\mathbb{P}}}
+\glsxtrnewsymbol[description={Integral of its arguments}]{integral}{\ensuremath{\int}}
+\glsxtrnewsymbol[description={Sum of its arguments}]{sum}{\ensuremath{\sum}}
+\glsxtrnewsymbol[description={Product of its arguments}]{prod}{\ensuremath{\prod}}
+\glsxtrnewsymbol[description={Exponential function}]{exp}{\ensuremath{\exp}}
+\glsxtrnewsymbol[description={Logarithmic function}]{log}{\ensuremath{\log}}
+\glsxtrnewsymbol[description={The derivative}]{deriv}{\ensuremath{\partial}}
+\glsxtrnewsymbol[description={Proportional to}]{propto}{\ensuremath{\propto}}
+\glsxtrnewsymbol[description={Real numbers}]{real}{\ensuremath{\mathbb{R}}}
+\glsxtrnewsymbol[description={Natural numbers}]{natural}{\ensuremath{\mathbb{N}}}
+\glsxtrnewsymbol[description={Natural numbers including 0}]{natural_0}{\ensuremath{\mathbb{N}_0}}
+\glsxtrnewsymbol[description={Identity matrix}]{I}{\ensuremath{\pmb{I}}}
 % **************************************************
 % Document CONTENT
 % **************************************************
@@ -81,6 +100,7 @@
 \setcounter{tocdepth}{2}		% define depth of toc
 \tableofcontents				% display table of contents
 \cleardoublepage
+\printunsrtglossary[type=symbols,style=long]
 
 % --------------------------
 % Body matter
@@ -89,12 +109,12 @@
 \setcounter{page}{1}			% set page counter
 \pagestyle{scrheadings}			% header and footer style
 
-\input{chapter-introduction}   
+\input{chapter-introduction}
 \input{chapter-coronavirus}  
 \input{chapter-bayes}
-%\input{chapter-geodata}
-%\input{chapter-datacollection}
-%\input{chapter-analysis}
+\input{chapter-geodata}
+\input{chapter-datacollection}
+\input{chapter-analysis}
 \input{chapter-appendix}
 %\input{chapter-discussion}
 
