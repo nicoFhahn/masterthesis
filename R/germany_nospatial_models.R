@@ -1,7 +1,7 @@
 library(INLA)
 library(spdep)
 source("R/preprocess_germany.R")
-set.seed(145)
+set.seed(14523)
 test <- sample(
   seq_len(nrow(newest_numbers)),
   size = floor(0.2 * nrow(newest_numbers))
@@ -14,10 +14,8 @@ link[which(is.na(newest_numbers$value))] <- 1
 models <- list()
 results <- list()
 mae <- list()
-# we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex
+  pop_dens + urb_dens
 
 res_1 <- inla(
   formula_1,
@@ -60,20 +58,15 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "g", "models", "results",
+      "newest_numbers", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with the mobility variables
+)
 formula_2 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
-  welfare_recipients + unemployed_total + unemployed_foreigners
-# now models with the mobility variables
+  pop_dens + urb_dens + sex
 formula_3 <- value ~
-# add the demographic vars and pop density
-asyl_benefits + protection_seekers +
-  welfare_recipients + unemployed_total + unemployed_foreigners
+  sex
 
 
 res_2 <- inla(
@@ -138,18 +131,15 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "g", "models", "results",
+      "newest_numbers", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with the infrastructure variables
+)
 formula_4 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + log(trade_tax) +
-  log(income_total) + log(income_tax)
+  pop_dens + urb_dens + log(trade_tax)
 formula_5 <- value ~
-# add the demographic vars and pop density
-log(trade_tax) + log(income_total) + log(income_tax)
+  log(trade_tax)
 
 res_4 <- inla(
   formula_4,
@@ -213,19 +203,14 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "g", "models", "results",
+      "newest_numbers", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
+)
 formula_6 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
-  die_linke + afd
-formula_7 <- value ~
-# add the demographic vars and pop density
-Union + SPD + Gruene + FDP +
-  die_linke + afd
+  pop_dens + urb_dens + SPD + Gruene + FDP + die_linke
+formula_7 <- value ~ SPD + Gruene + FDP + die_linke
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
@@ -251,7 +236,6 @@ res_7 <- inla(
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 models <- c(models, list(res_6, res_7))
 perf <- list(
   dic = c(
@@ -287,24 +271,17 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "g", "models", "results",
+      "newest_numbers", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) ########################################################
-# Now with variable selection
+)
 formula_8 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
-  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
-  die_linke + afd + protection_seekers + welfare_recipients +
-  unemployed_total + unemployed_foreigners
+  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP +
+  die_linke
 formula_9 <- value ~
-# add the demographic vars and pop density
-asyl_benefits + log(trade_tax) +
-  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
-  die_linke + afd + protection_seekers + welfare_recipients +
-  unemployed_total + unemployed_foreigners
+  sex + log(trade_tax) + SPD + Gruene + FDP +
+  die_linke
 
 res_8 <- inla(
   formula_8,
@@ -368,20 +345,17 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "g", "models", "results",
+      "newest_numbers", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
+)
 formula_10 <- value ~
-log(trade_tax) + log(income_total) + log(income_tax) + Union +
-  SPD + Gruene + FDP + die_linke + afd + protection_seekers +
-  welfare_recipients + unemployed_total + unemployed_foreigners +
-  pop_dens + urb_dens + sex
-
+  pop_dens + urb_dens + clinic + place_of_worship + retail + nursing_home +
+  aerodrome + platform + higher_education
 formula_11 <- value ~
-log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
-  unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers
+  clinic + place_of_worship + retail + nursing_home +
+  aerodrome + platform + higher_education
 
 
 res_10 <- inla(
@@ -447,22 +421,19 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "g", "models", "results",
+      "newest_numbers", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
 )
-# now models with all the variables
 formula_12 <- value ~
-pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries
+  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
+  higher_education
 formula_13 <- value ~
-marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries
+  sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
+  higher_education
 
 
 res_12 <- inla(
@@ -528,170 +499,10 @@ rm(
   list = setdiff(
     ls(),
     c(
-      "newest_numbers", "prior_1", "g", "models", "results",
+      "newest_numbers", "models", "results",
       "test", "test_value", "link", "mae"
     )
   )
 )
-# now models with all the variables
-formula_14 <- value ~
-# add the demographic vars and pop density
-entertainment + sport + hairdresser + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + platform +
-  kindergarten + schools + bakeries + pop_dens + higher_education
-# now models with all the variables
-formula_15 <- value ~
-schools + place_of_worship + pop_dens + office +
-  bakeries + entertainment + platform + kindergarten + nursing_home +
-  sport
-
-res_14 <- inla(
-  formula_14,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-res_15 <- inla(
-  formula_15,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-models <- c(models, list(res_14, res_15))
-
-perf <- list(
-  dic = c(
-    res_14$dic$dic, res_15$dic$dic
-  ),
-  waic = c(
-    res_14$waic$waic, res_15$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_14$cpo$cpo), na.rm = TRUE),
-    sum(log(res_15$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_8 = perf))
-predicted_1 <- c()
-predicted_2 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
-  predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_14$marginals.fitted.values[[i]]
-  )
-  predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_15$marginals.fitted.values[[i]]
-  )
-}
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value))
-))
-
-
-rm(
-  list = setdiff(
-    ls(),
-    c(
-      "newest_numbers", "prior_1", "g", "models", "results",
-      "test", "test_value", "link", "mae"
-    )
-  )
-)
-formula_16 <- value ~
-log(trade_tax) + log(income_total) + log(income_tax) + SPD +
-  Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
-  unemployed_total + unemployed_foreigners + entertainment +
-  sport + clinic + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + kindergarten +
-  schools + bakeries + pop_dens + sex + higher_education
-formula_17 <- value ~
-schools + afd + die_linke + pop_dens + place_of_worship +
-  entertainment + bakeries + SPD + platform + sport + nursing_home +
-  welfare_recipients + FDP + kindergarten + log(trade_tax) + office
-
-res_16 <- inla(
-  formula_16,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-res_17 <- inla(
-  formula_17,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-models <- c(models, list(res_16, res_17))
-
-perf <- list(
-  dic = c(
-    res_16$dic$dic, res_17$dic$dic
-  ),
-  waic = c(
-    res_16$waic$waic, res_17$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_16$cpo$cpo), na.rm = TRUE),
-    sum(log(res_17$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_9 = perf))
-predicted_1 <- c()
-predicted_2 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
-  predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_16$marginals.fitted.values[[i]]
-  )
-  predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_17$marginals.fitted.values[[i]]
-  )
-}
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value))
-))
-
-
-rm(
-  list = setdiff(
-    ls(),
-    c(
-      "newest_numbers", "prior_1", "g", "models", "results",
-      "test", "test_value", "link", "mae"
-    )
-  )
-) # now models with all the variables
 models_final <- list(models, results, mae)
 save(models_final, file = "models/nospatial_germany.Rda")

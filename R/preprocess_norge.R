@@ -600,11 +600,17 @@ norge <- merge(
 norway_municipality_confirmed_long$date <- as.Date(
   as.character(norway_municipality_confirmed_long$date)
 )
+# newest_numbers <- norway_municipality_confirmed_long[
+#   norway_municipality_confirmed_long$date == max(
+#     norway_municipality_confirmed_long$date
+#   ),
+# ]
 newest_numbers <- norway_municipality_confirmed_long[
-  norway_municipality_confirmed_long$date == max(
-    norway_municipality_confirmed_long$date
+  norway_municipality_confirmed_long$date == as.Date(
+    "2021-03-24"
   ),
 ]
+
 # remove needless variables
 newest_numbers$value <- NULL
 newest_numbers$time <- NULL
@@ -670,4 +676,22 @@ newest_numbers$pop_dens <- as.numeric(scale(newest_numbers$pop_dens))
 newest_numbers$urb_dens <- as.numeric(scale(newest_numbers$urb_dens))
 newest_numbers$sex <- as.numeric(scale(newest_numbers$sex))
 newest_numbers$median_age <- as.numeric(scale(newest_numbers$median_age))
+b <- newest_numbers
+b$geometry <- NULL
+b <- b[, c(5:29, 31, 38:40)]
+sign <- TRUE
+while(sign) {
+  mod <- lm(
+    value ~ .,
+    data = b
+  )
+  if (!any(VIF(mod) > 5)) {
+    sign <- FALSE
+  } else {
+    b[, names(VIF(mod))[VIF(mod) == max(VIF(mod))]] <- NULL
+  }
+}
+newest_numbers[, c(5:29, 31, 38:40)] <- NULL
+newest_numbers <- st_as_sf(cbind(b, newest_numbers))
+
 rm(list = setdiff(ls(), c("newest_numbers")))

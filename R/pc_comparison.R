@@ -34,274 +34,153 @@ C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 prior_1 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(0.1, 0.01)
+    param = c(0.01, 0.01)
   )
 )
 prior_2 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(0.5, 0.01)
+    param = c(0.1, 0.01)
   )
 )
 prior_3 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(1, 0.01)
+    param = c(0.2, 0.01)
   )
 )
 prior_4 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(1.5, 0.01)
+    param = c(0.4, 0.01)
   )
 )
 prior_5 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(2, 0.01)
+    param = c(0.6, 0.01)
   )
 )
 prior_6 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(2.5, 0.01)
+    param = c(0.8, 0.01)
   )
 )
 prior_7 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(3, 0.01)
+    param = c(1, 0.01)
   )
 )
 prior_8 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(5, 0.01)
+    param = c(1.5, 0.01)
   )
 )
 prior_9 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(10, 0.01)
+    param = c(2.5, 0.01)
   )
 )
 prior_10 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(50, 0.01)
-  )
-)
-prior_11 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.025)
-  )
-)
-prior_12 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.05)
-  )
-)
-prior_13 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.1)
-  )
-)
-prior_14 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.25)
-  )
-)
-prior_15 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.5)
-  )
-)
-prior_16 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.75)
-  )
-)
-prior_17 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.99)
-  )
-)
-prior_18 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.001)
+    param = c(5, 0.01)
   )
 )
 formula_besag_1 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_bym2_1 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_leroux_1 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_besag_2 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_bym2_2 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_leroux_2 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 formula_besag_3 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_3)
 formula_bym2_3 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_3)
 formula_leroux_3 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_3)
 formula_besag_4 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_4)
 formula_bym2_4 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_4)
 formula_leroux_4 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_4)
 formula_besag_5 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_5)
 formula_bym2_5 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_5)
 formula_leroux_5 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_5)
 formula_besag_6 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_6)
 formula_bym2_6 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_6)
 formula_leroux_6 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_6)
 formula_besag_7 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_7)
 formula_bym2_7 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_7)
 formula_leroux_7 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_7)
 formula_besag_8 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_8)
 formula_bym2_8 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_8)
 formula_leroux_8 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_8)
 formula_besag_9 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_9)
 formula_bym2_9 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_9)
 formula_leroux_9 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_9)
 formula_besag_10 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_10)
 formula_bym2_10 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_10)
 formula_leroux_10 <- value ~
-unemp_tot + unemp_immg +
+urb_dens + sex +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_10)
-formula_besag_11 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_11)
-formula_bym2_11 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_11)
-formula_leroux_11 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_11)
-formula_besag_12 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_12)
-formula_bym2_12 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_12)
-formula_leroux_12 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_12)
-formula_besag_13 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_13)
-formula_bym2_13 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_13)
-formula_leroux_13 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_13)
-formula_besag_14 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_14)
-formula_bym2_14 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_14)
-formula_leroux_14 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_14)
-formula_besag_15 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_15)
-formula_bym2_15 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_15)
-formula_leroux_15 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_15)
-formula_besag_16 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_16)
-formula_bym2_16 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_16)
-formula_leroux_16 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_16)
-formula_besag_17 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_17)
-formula_bym2_17 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_17)
-formula_leroux_17 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_17)
-formula_besag_18 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_18)
-formula_bym2_18 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_18)
-formula_leroux_18 <- value ~
-unemp_tot + unemp_immg +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_18)
-
 res_besag_1 <- inla(
   formula_besag_1,
   family = "nbinomial",
@@ -662,295 +541,6 @@ res_leroux_10 <- inla(
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-res_besag_11 <- inla(
-  formula_besag_11,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_11 <- inla(
-  formula_bym2_11,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_11 <- inla(
-  formula_leroux_11,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_12 <- inla(
-  formula_besag_12,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_12 <- inla(
-  formula_bym2_12,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_12 <- inla(
-  formula_leroux_12,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_13 <- inla(
-  formula_besag_13,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_13 <- inla(
-  formula_bym2_13,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_13 <- inla(
-  formula_leroux_13,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_14 <- inla(
-  formula_besag_14,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_14 <- inla(
-  formula_bym2_14,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_14 <- inla(
-  formula_leroux_14,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_15 <- inla(
-  formula_besag_15,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_15 <- inla(
-  formula_bym2_15,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_15 <- inla(
-  formula_leroux_15,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_16 <- inla(
-  formula_besag_16,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_16 <- inla(
-  formula_bym2_16,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_16 <- inla(
-  formula_leroux_16,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_17 <- inla(
-  formula_besag_17,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_17 <- inla(
-  formula_bym2_17,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_17 <- inla(
-  formula_leroux_17,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_18 <- inla(
-  formula_besag_18,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_18 <- inla(
-  formula_bym2_18,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_18 <- inla(
-  formula_leroux_18,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
 predicted_besag_1 <- c()
 predicted_bym2_1 <- c()
 predicted_leroux_1 <- c()
@@ -981,30 +571,6 @@ predicted_leroux_9 <- c()
 predicted_besag_10 <- c()
 predicted_bym2_10 <- c()
 predicted_leroux_10 <- c()
-predicted_besag_11 <- c()
-predicted_bym2_11 <- c()
-predicted_leroux_11 <- c()
-predicted_besag_12 <- c()
-predicted_bym2_12 <- c()
-predicted_leroux_12 <- c()
-predicted_besag_13 <- c()
-predicted_bym2_13 <- c()
-predicted_leroux_13 <- c()
-predicted_besag_14 <- c()
-predicted_bym2_14 <- c()
-predicted_leroux_14 <- c()
-predicted_besag_15 <- c()
-predicted_bym2_15 <- c()
-predicted_leroux_15 <- c()
-predicted_besag_16 <- c()
-predicted_bym2_16 <- c()
-predicted_leroux_16 <- c()
-predicted_besag_17 <- c()
-predicted_bym2_17 <- c()
-predicted_leroux_17 <- c()
-predicted_besag_18 <- c()
-predicted_bym2_18 <- c()
-predicted_leroux_18 <- c()
 for (i in seq_len(nrow(newest_numbers))) {
   predicted_besag_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
@@ -1126,102 +692,6 @@ for (i in seq_len(nrow(newest_numbers))) {
     function(x) x * newest_numbers$population[i],
     res_leroux_10$marginals.fitted.values[[i]]
   )
-  predicted_besag_11[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_11$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_11[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_11$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_11[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_11$marginals.fitted.values[[i]]
-  )
-  predicted_besag_12[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_12$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_12[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_12$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_12[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_12$marginals.fitted.values[[i]]
-  )
-  predicted_besag_13[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_13$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_13[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_13$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_13[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_13$marginals.fitted.values[[i]]
-  )
-  predicted_besag_14[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_14$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_14[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_14$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_14[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_14$marginals.fitted.values[[i]]
-  )
-  predicted_besag_15[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_15$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_15[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_15$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_15[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_15$marginals.fitted.values[[i]]
-  )
-  predicted_besag_16[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_16$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_16[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_16$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_16[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_16$marginals.fitted.values[[i]]
-  )
-  predicted_besag_17[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_17$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_17[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_17$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_17[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_17$marginals.fitted.values[[i]]
-  )
-  predicted_besag_18[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_18$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_18[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_18$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_18[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_18$marginals.fitted.values[[i]]
-  )
 }
 
 mae <- c(list(
@@ -1254,31 +724,7 @@ mae <- c(list(
   mean(abs(predicted_leroux_9[test] - test_value)),
   mean(abs(predicted_besag_10[test] - test_value)),
   mean(abs(predicted_bym2_10[test] - test_value)),
-  mean(abs(predicted_leroux_10[test] - test_value)),
-  mean(abs(predicted_besag_11[test] - test_value)),
-  mean(abs(predicted_bym2_11[test] - test_value)),
-  mean(abs(predicted_leroux_11[test] - test_value)),
-  mean(abs(predicted_besag_12[test] - test_value)),
-  mean(abs(predicted_bym2_12[test] - test_value)),
-  mean(abs(predicted_leroux_12[test] - test_value)),
-  mean(abs(predicted_besag_13[test] - test_value)),
-  mean(abs(predicted_bym2_13[test] - test_value)),
-  mean(abs(predicted_leroux_13[test] - test_value)),
-  mean(abs(predicted_besag_14[test] - test_value)),
-  mean(abs(predicted_bym2_14[test] - test_value)),
-  mean(abs(predicted_leroux_14[test] - test_value)),
-  mean(abs(predicted_besag_15[test] - test_value)),
-  mean(abs(predicted_bym2_15[test] - test_value)),
-  mean(abs(predicted_leroux_15[test] - test_value)),
-  mean(abs(predicted_besag_16[test] - test_value)),
-  mean(abs(predicted_bym2_16[test] - test_value)),
-  mean(abs(predicted_leroux_16[test] - test_value)),
-  mean(abs(predicted_besag_17[test] - test_value)),
-  mean(abs(predicted_bym2_17[test] - test_value)),
-  mean(abs(predicted_leroux_17[test] - test_value)),
-  mean(abs(predicted_besag_18[test] - test_value)),
-  mean(abs(predicted_bym2_18[test] - test_value)),
-  mean(abs(predicted_leroux_18[test] - test_value))
+  mean(abs(predicted_leroux_10[test] - test_value))
 ))
 
 dic <- c(list(
@@ -1311,31 +757,7 @@ dic <- c(list(
   res_leroux_9$dic$dic,
   res_besag_10$dic$dic,
   res_bym2_10$dic$dic,
-  res_leroux_10$dic$dic,
-  res_besag_11$dic$dic,
-  res_bym2_11$dic$dic,
-  res_leroux_11$dic$dic,
-  res_besag_12$dic$dic,
-  res_bym2_12$dic$dic,
-  res_leroux_12$dic$dic,
-  res_besag_13$dic$dic,
-  res_bym2_13$dic$dic,
-  res_leroux_13$dic$dic,
-  res_besag_14$dic$dic,
-  res_bym2_14$dic$dic,
-  res_leroux_14$dic$dic,
-  res_besag_15$dic$dic,
-  res_bym2_15$dic$dic,
-  res_leroux_15$dic$dic,
-  res_besag_16$dic$dic,
-  res_bym2_16$dic$dic,
-  res_leroux_16$dic$dic,
-  res_besag_17$dic$dic,
-  res_bym2_17$dic$dic,
-  res_leroux_17$dic$dic,
-  res_besag_18$dic$dic,
-  res_bym2_18$dic$dic,
-  res_leroux_18$dic$dic
+  res_leroux_10$dic$dic
 ))
 
 waic <- c(list(
@@ -1368,31 +790,7 @@ waic <- c(list(
   res_leroux_9$waic$waic,
   res_besag_10$waic$waic,
   res_bym2_10$waic$waic,
-  res_leroux_10$waic$waic,
-  res_besag_11$waic$waic,
-  res_bym2_11$waic$waic,
-  res_leroux_11$waic$waic,
-  res_besag_12$waic$waic,
-  res_bym2_12$waic$waic,
-  res_leroux_12$waic$waic,
-  res_besag_13$waic$waic,
-  res_bym2_13$waic$waic,
-  res_leroux_13$waic$waic,
-  res_besag_14$waic$waic,
-  res_bym2_14$waic$waic,
-  res_leroux_14$waic$waic,
-  res_besag_15$waic$waic,
-  res_bym2_15$waic$waic,
-  res_leroux_15$waic$waic,
-  res_besag_16$waic$waic,
-  res_bym2_16$waic$waic,
-  res_leroux_16$waic$waic,
-  res_besag_17$waic$waic,
-  res_bym2_17$waic$waic,
-  res_leroux_17$waic$waic,
-  res_besag_18$waic$waic,
-  res_bym2_18$waic$waic,
-  res_leroux_18$waic$waic
+  res_leroux_10$waic$waic
 ))
 
 cpo <- c(list(
@@ -1425,31 +823,7 @@ cpo <- c(list(
   sum(log(res_leroux_9$cpo$cpo), na.rm = TRUE),
   sum(log(res_besag_10$cpo$cpo), na.rm = TRUE),
   sum(log(res_bym2_10$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_10$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_11$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_11$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_11$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_12$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_12$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_12$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_13$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_13$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_13$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_14$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_14$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_14$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_15$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_15$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_15$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_16$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_16$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_16$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_17$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_17$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_17$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_18$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_18$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_18$cpo$cpo), na.rm = TRUE)
+  sum(log(res_leroux_10$cpo$cpo), na.rm = TRUE)
 ))
 
 results <- tibble(
@@ -1457,33 +831,23 @@ results <- tibble(
   waic = unlist(waic),
   cpo = unlist(cpo),
   mae = unlist(mae),
-  model = rep(c("Besag", "Bym2", "Leroux"), 18),
+  model = rep(c("Besag", "Bym2", "Leroux"), 10),
   U = c(
+    rep(0.01, 3),
     rep(0.1, 3),
-    rep(0.5, 3),
+    rep(0.2, 3),
+    rep(0.4, 3),
+    rep(0.6, 3),
+    rep(0.8, 3),
     rep(1, 3),
     rep(1.5, 3),
-    rep(2, 3),
     rep(2.5, 3),
-    rep(3, 3),
-    rep(5, 3),
-    rep(10, 3),
-    rep(50, 3),
-    rep(1, 24)
+    rep(5, 3)
   ),
   alpha = c(
-    rep(0.01, 30),
-    rep(0.025, 3),
-    rep(0.05, 3),
-    rep(0.1, 3),
-    rep(0.25, 3),
-    rep(0.5, 3),
-    rep(0.75, 3),
-    rep(0.99, 3),
-    rep(0.001, 3)
+    rep(0.01, 30)
   )
 )
-results[9, 1] <- sum(res_leroux_3$dic$local.dic, na.rm = TRUE)
 library(ggplot2)
 library(patchwork)
 plot_1 <- ggplot(
@@ -1594,114 +958,6 @@ plot_4 <- ggplot(
   )
 plot_1 + plot_2
 plot_3 + plot_4
-plot_5 <- ggplot(
-  data = results[c(1:3, 31:54), ],
-  aes(
-    x = alpha,
-    y = dic,
-    colour = model
-  )
-) +
-  geom_step(size = 1) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.01) +
-  theme_minimal() +
-  guides(
-    colour = guide_legend(
-      title = "Model"
-    )
-  ) +
-  ggtitle(
-    label = "Comparison of performance measures",
-    subtitle = "DIC, U = 1, country = Norway"
-  ) +
-  labs(
-    x = expression(alpha),
-    y = "DIC"
-  ) +
-  theme(
-    legend.position = "none"
-  )
-plot_6 <- ggplot(
-  data = results[c(1:3, 31:54), ],
-  aes(
-    x = alpha,
-    y = waic,
-    colour = model
-  )
-) +
-  geom_step(size = 1) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.01) +
-  theme_minimal() +
-  guides(
-    colour = guide_legend(
-      title = "Model"
-    )
-  ) +
-  ggtitle(
-    label = "Comparison of performance measures",
-    subtitle = "WAIC, U = 1, country = Norway"
-  ) +
-  labs(
-    x = expression(alpha),
-    y = "WAIC"
-  )
-plot_7 <- ggplot(
-  data = results[c(1:3, 31:54), ],
-  aes(
-    x = alpha,
-    y = cpo,
-    colour = model
-  )
-) +
-  geom_step(size = 1) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.01) +
-  theme_minimal() +
-  guides(
-    colour = guide_legend(
-      title = "Model"
-    )
-  ) +
-  ggtitle(
-    label = "Comparison of performance measures",
-    subtitle = "CPO, U = 1, country = Norway"
-  ) +
-  labs(
-    x = expression(alpha),
-    y = "CPO"
-  ) +
-  theme(
-    legend.position = "none"
-  )
-plot_8 <- ggplot(
-  data = results[c(1:3, 31:54), ],
-  aes(
-    x = alpha,
-    y = mae,
-    colour = model
-  )
-) +
-  geom_step(size = 1) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.01) +
-  theme_minimal() +
-  guides(
-    colour = guide_legend(
-      title = "Model"
-    )
-  ) +
-  ggtitle(
-    label = "Comparison of performance measures",
-    subtitle = "MAE, U = 1, country = Norway"
-  ) +
-  labs(
-    x = expression(alpha),
-    y = "MAE"
-  )
-plot_5 + plot_6
-plot_7 + plot_8
 library(readr)
 library(sf)
 library(spdep)
@@ -1735,276 +991,96 @@ for (i in 2:nrow(newest_numbers)) {
 }
 
 C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(0.1, 0.01)
-  )
-)
-prior_2 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(0.5, 0.01)
-  )
-)
-prior_3 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
-prior_4 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1.5, 0.01)
-  )
-)
-prior_5 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(2, 0.01)
-  )
-)
-prior_6 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(2.5, 0.01)
-  )
-)
-prior_7 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(3, 0.01)
-  )
-)
-prior_8 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(5, 0.01)
-  )
-)
-prior_9 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(10, 0.01)
-  )
-)
-prior_10 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(50, 0.01)
-  )
-)
-prior_11 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.025)
-  )
-)
-prior_12 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.05)
-  )
-)
-prior_13 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.1)
-  )
-)
-prior_14 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.25)
-  )
-)
-prior_15 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.5)
-  )
-)
-prior_16 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.75)
-  )
-)
-prior_17 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.99)
-  )
-)
-prior_18 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.001)
-  )
-)
 formula_besag_1 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_bym2_1 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_leroux_1 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_besag_2 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_bym2_2 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_leroux_2 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 formula_besag_3 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_3)
 formula_bym2_3 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_3)
 formula_leroux_3 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_3)
 formula_besag_4 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_4)
 formula_bym2_4 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_4)
 formula_leroux_4 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_4)
 formula_besag_5 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_5)
 formula_bym2_5 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_5)
 formula_leroux_5 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_5)
 formula_besag_6 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_6)
 formula_bym2_6 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_6)
 formula_leroux_6 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_6)
 formula_besag_7 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_7)
 formula_bym2_7 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_7)
 formula_leroux_7 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_7)
 formula_besag_8 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_8)
 formula_bym2_8 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_8)
 formula_leroux_8 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_8)
 formula_besag_9 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_9)
 formula_bym2_9 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_9)
 formula_leroux_9 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_9)
 formula_besag_10 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_10)
 formula_bym2_10 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_10)
 formula_leroux_10 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
+pop_dens + urb_dens + Gruene + FDP + die_linke + SPD +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_10)
-formula_besag_11 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_11)
-formula_bym2_11 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_11)
-formula_leroux_11 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_11)
-formula_besag_12 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_12)
-formula_bym2_12 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_12)
-formula_leroux_12 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_12)
-formula_besag_13 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_13)
-formula_bym2_13 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_13)
-formula_leroux_13 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_13)
-formula_besag_14 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_14)
-formula_bym2_14 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_14)
-formula_leroux_14 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_14)
-formula_besag_15 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_15)
-formula_bym2_15 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_15)
-formula_leroux_15 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_15)
-formula_besag_16 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_16)
-formula_bym2_16 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_16)
-formula_leroux_16 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_16)
-formula_besag_17 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_17)
-formula_bym2_17 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_17)
-formula_leroux_17 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_17)
-formula_besag_18 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_18)
-formula_bym2_18 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_18)
-formula_leroux_18 <- value ~
-Union + SPD + Gruene + FDP + die_linke + afd +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_18)
 
 res_besag_1 <- inla(
   formula_besag_1,
@@ -2366,294 +1442,6 @@ res_leroux_10 <- inla(
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-res_besag_11 <- inla(
-  formula_besag_11,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_11 <- inla(
-  formula_bym2_11,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_11 <- inla(
-  formula_leroux_11,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_12 <- inla(
-  formula_besag_12,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_12 <- inla(
-  formula_bym2_12,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_12 <- inla(
-  formula_leroux_12,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_13 <- inla(
-  formula_besag_13,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_13 <- inla(
-  formula_bym2_13,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_13 <- inla(
-  formula_leroux_13,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_14 <- inla(
-  formula_besag_14,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_14 <- inla(
-  formula_bym2_14,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_14 <- inla(
-  formula_leroux_14,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_15 <- inla(
-  formula_besag_15,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_15 <- inla(
-  formula_bym2_15,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_15 <- inla(
-  formula_leroux_15,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_16 <- inla(
-  formula_besag_16,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_16 <- inla(
-  formula_bym2_16,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_16 <- inla(
-  formula_leroux_16,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_17 <- inla(
-  formula_besag_17,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_17 <- inla(
-  formula_bym2_17,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_17 <- inla(
-  formula_leroux_17,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_besag_18 <- inla(
-  formula_besag_18,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_bym2_18 <- inla(
-  formula_bym2_18,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux_18 <- inla(
-  formula_leroux_18,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
 
 predicted_besag_1 <- c()
 predicted_bym2_1 <- c()
@@ -2685,30 +1473,7 @@ predicted_leroux_9 <- c()
 predicted_besag_10 <- c()
 predicted_bym2_10 <- c()
 predicted_leroux_10 <- c()
-predicted_besag_11 <- c()
-predicted_bym2_11 <- c()
-predicted_leroux_11 <- c()
-predicted_besag_12 <- c()
-predicted_bym2_12 <- c()
-predicted_leroux_12 <- c()
-predicted_besag_13 <- c()
-predicted_bym2_13 <- c()
-predicted_leroux_13 <- c()
-predicted_besag_14 <- c()
-predicted_bym2_14 <- c()
-predicted_leroux_14 <- c()
-predicted_besag_15 <- c()
-predicted_bym2_15 <- c()
-predicted_leroux_15 <- c()
-predicted_besag_16 <- c()
-predicted_bym2_16 <- c()
-predicted_leroux_16 <- c()
-predicted_besag_17 <- c()
-predicted_bym2_17 <- c()
-predicted_leroux_17 <- c()
-predicted_besag_18 <- c()
-predicted_bym2_18 <- c()
-predicted_leroux_18 <- c()
+
 for (i in seq_len(nrow(newest_numbers))) {
   predicted_besag_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
@@ -2830,102 +1595,6 @@ for (i in seq_len(nrow(newest_numbers))) {
     function(x) x * newest_numbers$population[i],
     res_leroux_10$marginals.fitted.values[[i]]
   )
-  predicted_besag_11[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_11$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_11[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_11$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_11[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_11$marginals.fitted.values[[i]]
-  )
-  predicted_besag_12[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_12$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_12[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_12$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_12[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_12$marginals.fitted.values[[i]]
-  )
-  predicted_besag_13[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_13$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_13[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_13$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_13[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_13$marginals.fitted.values[[i]]
-  )
-  predicted_besag_14[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_14$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_14[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_14$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_14[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_14$marginals.fitted.values[[i]]
-  )
-  predicted_besag_15[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_15$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_15[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_15$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_15[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_15$marginals.fitted.values[[i]]
-  )
-  predicted_besag_16[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_16$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_16[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_16$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_16[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_16$marginals.fitted.values[[i]]
-  )
-  predicted_besag_17[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_17$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_17[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_17$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_17[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_17$marginals.fitted.values[[i]]
-  )
-  predicted_besag_18[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_besag_18$marginals.fitted.values[[i]]
-  )
-  predicted_bym2_18[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_bym2_18$marginals.fitted.values[[i]]
-  )
-  predicted_leroux_18[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_leroux_18$marginals.fitted.values[[i]]
-  )
 }
 
 mae <- c(list(
@@ -2958,31 +1627,7 @@ mae <- c(list(
   mean(abs(predicted_leroux_9[test] - test_value)),
   mean(abs(predicted_besag_10[test] - test_value)),
   mean(abs(predicted_bym2_10[test] - test_value)),
-  mean(abs(predicted_leroux_10[test] - test_value)),
-  mean(abs(predicted_besag_11[test] - test_value)),
-  mean(abs(predicted_bym2_11[test] - test_value)),
-  mean(abs(predicted_leroux_11[test] - test_value)),
-  mean(abs(predicted_besag_12[test] - test_value)),
-  mean(abs(predicted_bym2_12[test] - test_value)),
-  mean(abs(predicted_leroux_12[test] - test_value)),
-  mean(abs(predicted_besag_13[test] - test_value)),
-  mean(abs(predicted_bym2_13[test] - test_value)),
-  mean(abs(predicted_leroux_13[test] - test_value)),
-  mean(abs(predicted_besag_14[test] - test_value)),
-  mean(abs(predicted_bym2_14[test] - test_value)),
-  mean(abs(predicted_leroux_14[test] - test_value)),
-  mean(abs(predicted_besag_15[test] - test_value)),
-  mean(abs(predicted_bym2_15[test] - test_value)),
-  mean(abs(predicted_leroux_15[test] - test_value)),
-  mean(abs(predicted_besag_16[test] - test_value)),
-  mean(abs(predicted_bym2_16[test] - test_value)),
-  mean(abs(predicted_leroux_16[test] - test_value)),
-  mean(abs(predicted_besag_17[test] - test_value)),
-  mean(abs(predicted_bym2_17[test] - test_value)),
-  mean(abs(predicted_leroux_17[test] - test_value)),
-  mean(abs(predicted_besag_18[test] - test_value)),
-  mean(abs(predicted_bym2_18[test] - test_value)),
-  mean(abs(predicted_leroux_18[test] - test_value))
+  mean(abs(predicted_leroux_10[test] - test_value))
 ))
 
 dic <- c(list(
@@ -3015,31 +1660,7 @@ dic <- c(list(
   res_leroux_9$dic$dic,
   res_besag_10$dic$dic,
   res_bym2_10$dic$dic,
-  res_leroux_10$dic$dic,
-  res_besag_11$dic$dic,
-  res_bym2_11$dic$dic,
-  res_leroux_11$dic$dic,
-  res_besag_12$dic$dic,
-  res_bym2_12$dic$dic,
-  res_leroux_12$dic$dic,
-  res_besag_13$dic$dic,
-  res_bym2_13$dic$dic,
-  res_leroux_13$dic$dic,
-  res_besag_14$dic$dic,
-  res_bym2_14$dic$dic,
-  res_leroux_14$dic$dic,
-  res_besag_15$dic$dic,
-  res_bym2_15$dic$dic,
-  res_leroux_15$dic$dic,
-  res_besag_16$dic$dic,
-  res_bym2_16$dic$dic,
-  res_leroux_16$dic$dic,
-  res_besag_17$dic$dic,
-  res_bym2_17$dic$dic,
-  res_leroux_17$dic$dic,
-  res_besag_18$dic$dic,
-  res_bym2_18$dic$dic,
-  res_leroux_18$dic$dic
+  res_leroux_10$dic$dic
 ))
 
 waic <- c(list(
@@ -3072,31 +1693,7 @@ waic <- c(list(
   res_leroux_9$waic$waic,
   res_besag_10$waic$waic,
   res_bym2_10$waic$waic,
-  res_leroux_10$waic$waic,
-  res_besag_11$waic$waic,
-  res_bym2_11$waic$waic,
-  res_leroux_11$waic$waic,
-  res_besag_12$waic$waic,
-  res_bym2_12$waic$waic,
-  res_leroux_12$waic$waic,
-  res_besag_13$waic$waic,
-  res_bym2_13$waic$waic,
-  res_leroux_13$waic$waic,
-  res_besag_14$waic$waic,
-  res_bym2_14$waic$waic,
-  res_leroux_14$waic$waic,
-  res_besag_15$waic$waic,
-  res_bym2_15$waic$waic,
-  res_leroux_15$waic$waic,
-  res_besag_16$waic$waic,
-  res_bym2_16$waic$waic,
-  res_leroux_16$waic$waic,
-  res_besag_17$waic$waic,
-  res_bym2_17$waic$waic,
-  res_leroux_17$waic$waic,
-  res_besag_18$waic$waic,
-  res_bym2_18$waic$waic,
-  res_leroux_18$waic$waic
+  res_leroux_10$waic$waic
 ))
 
 cpo <- c(list(
@@ -3129,31 +1726,7 @@ cpo <- c(list(
   sum(log(res_leroux_9$cpo$cpo), na.rm = TRUE),
   sum(log(res_besag_10$cpo$cpo), na.rm = TRUE),
   sum(log(res_bym2_10$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_10$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_11$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_11$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_11$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_12$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_12$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_12$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_13$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_13$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_13$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_14$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_14$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_14$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_15$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_15$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_15$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_16$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_16$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_16$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_17$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_17$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_17$cpo$cpo), na.rm = TRUE),
-  sum(log(res_besag_18$cpo$cpo), na.rm = TRUE),
-  sum(log(res_bym2_18$cpo$cpo), na.rm = TRUE),
-  sum(log(res_leroux_18$cpo$cpo), na.rm = TRUE)
+  sum(log(res_leroux_10$cpo$cpo), na.rm = TRUE)
 ))
 
 results <- tibble(
@@ -3161,30 +1734,21 @@ results <- tibble(
   waic = unlist(waic),
   cpo = unlist(cpo),
   mae = unlist(mae),
-  model = rep(c("Besag", "Bym2", "Leroux"), 18),
+  model = rep(c("Besag", "Bym2", "Leroux"), 10),
   U = c(
+    rep(0.01, 3),
     rep(0.1, 3),
-    rep(0.5, 3),
+    rep(0.2, 3),
+    rep(0.4, 3),
+    rep(0.6, 3),
+    rep(0.8, 3),
     rep(1, 3),
     rep(1.5, 3),
-    rep(2, 3),
     rep(2.5, 3),
-    rep(3, 3),
-    rep(5, 3),
-    rep(10, 3),
-    rep(50, 3),
-    rep(1, 24)
+    rep(5, 3)
   ),
   alpha = c(
-    rep(0.01, 30),
-    rep(0.025, 3),
-    rep(0.05, 3),
-    rep(0.1, 3),
-    rep(0.25, 3),
-    rep(0.5, 3),
-    rep(0.75, 3),
-    rep(0.99, 3),
-    rep(0.001, 3)
+    rep(0.01, 30)
   )
 )
 plot_1 <- ggplot(
@@ -3295,111 +1859,3 @@ plot_4 <- ggplot(
   )
 plot_1 + plot_2
 plot_3 + plot_4
-plot_5 <- ggplot(
-  data = results[c(1:3, 31:54), ],
-  aes(
-    x = alpha,
-    y = dic,
-    colour = model
-  )
-) +
-  geom_step(size = 1) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.01) +
-  theme_minimal() +
-  guides(
-    colour = guide_legend(
-      title = "Model"
-    )
-  ) +
-  ggtitle(
-    label = "Comparison of performance measures",
-    subtitle = "DIC, U = 1, country = Germany"
-  ) +
-  labs(
-    x = expression(alpha),
-    y = "DIC"
-  ) +
-  theme(
-    legend.position = "none"
-  )
-plot_6 <- ggplot(
-  data = results[c(1:3, 31:54), ],
-  aes(
-    x = alpha,
-    y = waic,
-    colour = model
-  )
-) +
-  geom_step(size = 1) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.01) +
-  theme_minimal() +
-  guides(
-    colour = guide_legend(
-      title = "Model"
-    )
-  ) +
-  ggtitle(
-    label = "Comparison of performance measures",
-    subtitle = "WAIC, U = 1, country = Germany"
-  ) +
-  labs(
-    x = expression(alpha),
-    y = "WAIC"
-  )
-plot_7 <- ggplot(
-  data = results[c(1:3, 31:54), ],
-  aes(
-    x = alpha,
-    y = cpo,
-    colour = model
-  )
-) +
-  geom_step(size = 1) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.01) +
-  theme_minimal() +
-  guides(
-    colour = guide_legend(
-      title = "Model"
-    )
-  ) +
-  ggtitle(
-    label = "Comparison of performance measures",
-    subtitle = "CPO, U = 1, country = Germany"
-  ) +
-  labs(
-    x = expression(alpha),
-    y = "CPO"
-  ) +
-  theme(
-    legend.position = "none"
-  )
-plot_8 <- ggplot(
-  data = results[c(1:3, 31:54), ],
-  aes(
-    x = alpha,
-    y = mae,
-    colour = model
-  )
-) +
-  geom_step(size = 1) +
-  geom_point(size = 3) +
-  geom_vline(xintercept = 0.01) +
-  theme_minimal() +
-  guides(
-    colour = guide_legend(
-      title = "Model"
-    )
-  ) +
-  ggtitle(
-    label = "Comparison of performance measures",
-    subtitle = "MAE, U = 1, country = Germany"
-  ) +
-  labs(
-    x = expression(alpha),
-    y = "MAE"
-  )
-plot_5 + plot_6
-plot_7 + plot_8

@@ -1,7 +1,7 @@
 library(INLA)
 library(spdep)
 source("R/preprocess_germany.R")
-set.seed(145)
+set.seed(14523)
 test <- sample(
   seq_len(nrow(newest_numbers)),
   size = floor(0.2 * nrow(newest_numbers))
@@ -28,11 +28,8 @@ nb <- poly2nb(newest_numbers)
 nb2INLA("maps/map_2.adj", nb)
 g <- inla.read.graph(filename = "maps/map_2.adj")
 # specify the model formula
-# we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex +
-  # specify the model with neighborhood matrix
+  pop_dens + urb_dens +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 res_1 <- inla(
@@ -80,19 +77,12 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with the mobility variables
+)
 formula_2 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + asyl_benefits + protection_seekers +
-  welfare_recipients + unemployed_total + unemployed_foreigners +
-  # specify the model with neighborhood matrix
+  pop_dens + urb_dens + sex +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
-# now models with the mobility variables
 formula_3 <- value ~
-# add the demographic vars and pop density
-asyl_benefits + protection_seekers +
-  welfare_recipients + unemployed_total + unemployed_foreigners +
-  # specify the model with neighborhood matrix
+  sex + 
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 
@@ -162,17 +152,12 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with the infrastructure variables
+)
 formula_4 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + log(trade_tax) +
-  log(income_total) + log(income_tax) +
-  # specify the model with neighborhood matrix
+  pop_dens + urb_dens + log(trade_tax) +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_5 <- value ~
-# add the demographic vars and pop density
-log(trade_tax) + log(income_total) + log(income_tax) +
-  # specify the model with neighborhood matrix
+  log(trade_tax) +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 res_4 <- inla(
@@ -241,18 +226,12 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
+)
 formula_6 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + Union + SPD + Gruene + FDP +
-  die_linke + afd +
-  # specify the model with neighborhood matrix
+  pop_dens + urb_dens + SPD + Gruene + FDP + die_linke +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_7 <- value ~
-# add the demographic vars and pop density
-Union + SPD + Gruene + FDP +
-  die_linke + afd +
-  # specify the model with neighborhood matrix
+  SPD + Gruene + FDP + die_linke +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 res_6 <- inla(
   formula_6,
@@ -319,23 +298,14 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) ########################################################
-# Now with variable selection
+)
 formula_8 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + asyl_benefits + log(trade_tax) +
-  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
-  die_linke + afd + protection_seekers + welfare_recipients +
-  unemployed_total + unemployed_foreigners +
-  # specify the model with neighborhood matrix
+  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP +
+  die_linke +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_9 <- value ~
-# add the demographic vars and pop density
-asyl_benefits + log(trade_tax) +
-  log(income_total) + log(income_tax) + Union + SPD + Gruene + FDP +
-  die_linke + afd + protection_seekers + welfare_recipients +
-  unemployed_total + unemployed_foreigners +
-  # specify the model with neighborhood matrix
+  sex + log(trade_tax) + SPD + Gruene + FDP +
+  die_linke +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 res_8 <- inla(
@@ -404,19 +374,14 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
+)
 formula_10 <- value ~
-log(trade_tax) + log(income_total) + log(income_tax) + Union +
-  SPD + Gruene + FDP + die_linke + afd + protection_seekers +
-  welfare_recipients + unemployed_total + unemployed_foreigners +
-  pop_dens + urb_dens + sex +
-  # specify the model with neighborhood matrix
+  pop_dens + urb_dens + clinic + place_of_worship + retail + nursing_home +
+  aerodrome + platform + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
-
 formula_11 <- value ~
-log(income_total) + log(income_tax) + afd + die_linke + pop_dens +
-  unemployed_total + log(trade_tax) + SPD + FDP + protection_seekers +
-  # specify the model with neighborhood matrix
+  clinic + place_of_worship + retail + nursing_home +
+  aerodrome + platform + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 
@@ -488,20 +453,15 @@ rm(
     )
   )
 )
-# now models with all the variables
 formula_12 <- value ~
-pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries +
-  # specify the model with neighborhood matrix
+  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
+  higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_13 <- value ~
-marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries +
-  # specify the model with neighborhood matrix
+  sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
+  higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 
 
@@ -573,173 +533,5 @@ rm(
     )
   )
 )
-# now models with all the variables
-formula_14 <- value ~
-# add the demographic vars and pop density
-entertainment + sport + hairdresser + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + platform +
-  kindergarten + schools + bakeries + pop_dens + higher_education +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
-# now models with all the variables
-formula_15 <- value ~
-schools + place_of_worship + pop_dens + office +
-  bakeries + entertainment + platform + kindergarten + nursing_home +
-  sport +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
-
-res_14 <- inla(
-  formula_14,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-res_15 <- inla(
-  formula_15,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-models <- c(models, list(res_14, res_15))
-
-perf <- list(
-  dic = c(
-    res_14$dic$dic, res_15$dic$dic
-  ),
-  waic = c(
-    res_14$waic$waic, res_15$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_14$cpo$cpo), na.rm = TRUE),
-    sum(log(res_15$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_8 = perf))
-predicted_1 <- c()
-predicted_2 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
-  predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_14$marginals.fitted.values[[i]]
-  )
-  predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_15$marginals.fitted.values[[i]]
-  )
-}
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value))
-))
-
-
-rm(
-  list = setdiff(
-    ls(),
-    c(
-      "newest_numbers", "prior_1", "g", "models", "results",
-      "test", "test_value", "link", "mae"
-    )
-  )
-)
-formula_16 <- value ~
-log(trade_tax) + log(income_total) + log(income_tax) + SPD +
-  Gruene + FDP + die_linke + afd + protection_seekers + welfare_recipients +
-  unemployed_total + unemployed_foreigners + entertainment +
-  sport + clinic + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + kindergarten +
-  schools + bakeries + pop_dens + sex + higher_education +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
-formula_17 <- value ~
-schools + afd + die_linke + pop_dens + place_of_worship +
-  entertainment + bakeries + SPD + platform + sport + nursing_home +
-  welfare_recipients + FDP + kindergarten + log(trade_tax) + office +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
-
-res_16 <- inla(
-  formula_16,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-res_17 <- inla(
-  formula_17,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-models <- c(models, list(res_16, res_17))
-
-perf <- list(
-  dic = c(
-    res_16$dic$dic, res_17$dic$dic
-  ),
-  waic = c(
-    res_16$waic$waic, res_17$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_16$cpo$cpo), na.rm = TRUE),
-    sum(log(res_17$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_9 = perf))
-predicted_1 <- c()
-predicted_2 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
-  predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_16$marginals.fitted.values[[i]]
-  )
-  predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_17$marginals.fitted.values[[i]]
-  )
-}
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value))
-))
-
-
-rm(
-  list = setdiff(
-    ls(),
-    c(
-      "newest_numbers", "prior_1", "g", "models", "results",
-      "test", "test_value", "link", "mae"
-    )
-  )
-) # now models with all the variables
 models_final <- list(models, results, mae)
 save(models_final, file = "models/besagproper_germany.Rda")

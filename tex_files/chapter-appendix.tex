@@ -123,30 +123,6 @@ For large values of $r$, the negative binomial distribution can be approximated 
 %     \caption{Value of the CPO and MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
 %     \label{comparison_germany_2}
 % \end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{comparison_3_germany.png}
-    \caption{Value of the DIC and WAIC when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
-    \label{comparison_germany_3}
-\end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = \textwidth]{comparison_3_germany.svg}
-%     \caption{Value of the DIC and WAIC when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
-%     \label{comparison_germany_3}
-% \end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{comparison_4_germany.png}
-    \caption{Value of the CPO and MAE when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
-    \label{comparison_germany_4}
-\end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = \textwidth]{comparison_4_germany.svg}
-%     \caption{Value of the CPO and MAE when changing the value for $\alpha$. The black line highlights the values for $\alpha$ = 0.01.}
-%     \label{comparison_germany_4}
-% \end{figure}
 \section{Code Examples}
 \subsection{Specifying the Different Types of Models}
 \begin{lstlisting}[caption={Specifying different models in INLA.}, label={codeModels}, language=R]
@@ -252,50 +228,50 @@ for(i in seq_len(nrow(newest_numbers))) {
 mean(abs(predicted[test] - test))
 
 \end{lstlisting}
-\subsection{Variable Selection using INLA}
-\begin{lstlisting}[caption={The code for variable selection in INLA.}, label={codeSelection}, language=R]
-# define the stack
-stack_all <- inla.stack(
-  data = list(value = newest_numbers$value),
-  A = list(1),
-  effects = list(
-    data.frame(
-      Intercept = 1,
-      newest_numbers[, c(2:15, 20:35, 43:46)]
-    )
-  )
-)
-# run backwards varaible selection
-result_all_backwards <- INLAstep(
-  fam1 = "nbinomial",
-  newest_numbers,
-  in_stack = stack_all,
-  invariant = "Intercept",
-  direction = "backwards",
-  include = c(2:15, 20:35, 43:46),
-  y = "value",
-  y2 = "value",
-  powerl = 1,
-  inter = 1,
-  thresh = 2,
-  num.threads = 7
-)
-# run forwards variable selection
-result_all_forwards <- INLAstep(
-  fam1 = "nbinomial",
-  newest_numbers,
-  in_stack = stack_all,
-  invariant = "Intercept",
-  direction = "forwards",
-  include = c(2:15, 20:35, 43:46),
-  y = "value",
-  y2 = "value",
-  powerl = 1,
-  inter = 1,
-  thresh = 2,
-  num.threads = 7
-)
-\end{lstlisting}
+% \subsection{Variable Selection using INLA}
+% \begin{lstlisting}[caption={The code for variable selection in INLA.}, label={codeSelection}, language=R]
+% # define the stack
+% stack_all <- inla.stack(
+%   data = list(value = newest_numbers$value),
+%   A = list(1),
+%   effects = list(
+%     data.frame(
+%       Intercept = 1,
+%       newest_numbers[, c(2:15, 20:35, 43:46)]
+%     )
+%   )
+% )
+% # run backwards varaible selection
+% result_all_backwards <- INLAstep(
+%   fam1 = "nbinomial",
+%   newest_numbers,
+%   in_stack = stack_all,
+%   invariant = "Intercept",
+%   direction = "backwards",
+%   include = c(2:15, 20:35, 43:46),
+%   y = "value",
+%   y2 = "value",
+%   powerl = 1,
+%   inter = 1,
+%   thresh = 2,
+%   num.threads = 7
+% )
+% # run forwards variable selection
+% result_all_forwards <- INLAstep(
+%   fam1 = "nbinomial",
+%   newest_numbers,
+%   in_stack = stack_all,
+%   invariant = "Intercept",
+%   direction = "forwards",
+%   include = c(2:15, 20:35, 43:46),
+%   y = "value",
+%   y2 = "value",
+%   powerl = 1,
+%   inter = 1,
+%   thresh = 2,
+%   num.threads = 7
+% )
+% \end{lstlisting}
 \subsection{Calculating the Posterior Mean}
 \begin{lstlisting}[caption={Calculating the posterior mean of a coefficent.}, label={codePosteriorMean}, language=R]
 inla.emarginal(exp, model_leroux$marginals.fixed$trade_tax)
@@ -319,47 +295,85 @@ inla.qmarginal(
 \subsection{Best Spatial Models For Germany}
 \subsubsection{Best Spatial Model using Demographic Variables}
 \begin{lstlisting}[caption={The code for the demographic model.}, label={codeDemoGermany}, language=R]
-prior_2 <- list(
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
+  )
+)
+formula <- value ~
+  pop_dens + urb_dens + SPD + Gruene + FDP + die_linke +
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  )
+\end{lstlisting}
+\subsubsection{Best Spatial Model using Infrastructural Variables}
+\begin{lstlisting}[caption={The code for the infrastructure model.}, label={codeInfraGermany}, language=R]
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
+  )
+)
+formula <- value ~
+  pop_dens + urb_dens + clinic + place_of_worship + retail +
+  nursing_home + aerodrome + platform + higher_education +
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  )
+\end{lstlisting}
+\subsubsection{Best Spatial Model using Both Types of Variables}
+\begin{lstlisting}[caption={The code for the demographic + infrastructure model.}, label={codeBothGermany}, language=R]
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
+  )
+)
+formula <- value ~
+  pop_dens + urb_dens + sex + log(trade_tax) + SPD +
+  Gruene + FDP + die_linke + clinic + place_of_worship +
+  retail + nursing_home + aerodrome + platform +
+  higher_education +
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  )
+\end{lstlisting}
+\subsection{Best Spatial Models For Norway}
+\subsubsection{Best Spatial Model using Demographic Variables}
+\begin{lstlisting}[caption={The code for the demographic model.}, label={codeDemoNorway}, language = R]
+prior_1 <- list(
   prec = list(
     prior = "pc.prec",
     param = c(0.5 / 0.31, 0.01)
   )
 )
 formula <- value ~
-  Union + SPD + Gruene + FDP +
-  die_linke + afd + 
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
-\end{lstlisting}
-\subsubsection{Best Spatial Model using Infrastructural Variables}
-\begin{lstlisting}[caption={The code for the infrastructure model.}, label={codeInfraGermany}, language=R]
-formula <- value ~
-  # add the demographic vars and pop density
-  entertainment + sport + hairdresser + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + platform +
-  kindergarten + schools + bakeries + pop_dens + higher_education 
-\end{lstlisting}
-\subsubsection{Best Spatial Model using Both Types of Variables}
-\begin{lstlisting}[caption={The code for the demographic + infrastructure model.}, label={codeBothGermany}, language=R]
-formula <- value ~
-  log(trade_tax) + log(income_total) + log(income_tax) + SPD +
-  Gruene + FDP + die_linke + afd + protection_seekers +
-  welfare_recipients + unemployed_total + unemployed_foreigners +
-  entertainment + sport + clinic + shops + place_of_worship +
-  retail + nursing_home + restaurant + aerodrome + office +
-  platform + kindergarten + schools + bakeries + pop_dens +
-  sex + higher_education 
-\end{lstlisting}
-\subsection{Best Spatial Models For Norway}
-\subsubsection{Best Spatial Model using Demographic Variables}
-\begin{lstlisting}[caption={The code for the demographic model.}, label={codeDemoNorway}, language = R]
-formula <- value ~
-  unemp_immg + unemp_tot
+  urb_dens + sex +
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  )
 \end{lstlisting}
 \subsubsection{Best Spatial Model using Infrastructural Variables}
 \begin{lstlisting}[caption={The code for the infrastructural model.}, label={codeInfraNorway}, language = R]
+prior_1 <- list(
+  prec = list(
+    prior = "pc.prec",
+    param = c(0.5 / 0.31, 0.01)
+  )
+)
 formula <- value ~
-  pop_dens + shops + place_of_worship + office +
-  schools + nursing_home + kindergarten + restaurant 
+  urb_dens + marketplace + place_of_worship +
+  nursing_home + aerodrome + office + platform +
+  higher_education +
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  )
 \end{lstlisting}
 \subsubsection{Best Spatial Model using Both Types of Variables}
 \begin{lstlisting}[caption={The code for the demographic + infrastructure model.}, label={codeBothNorway}, language=R]
@@ -370,12 +384,13 @@ prior_1 <- list(
   )
 )
 formula <- value ~
-schools + unemp_tot + restaurant + sex +
-  median_age + pop_dens + construction_pt_work +
-  workers_ft_work + higher_education + clinic +
+  urb_dens + median_age + unemp_tot + unemp_immg +
+  immigrants_total + sex + marketplace + place_of_worship + 
+  nursing_home + aerodrome + office + platform +
+  higher_education +
   f(
-    idarea_1, model = "besagproper",
-    graph = g, hyper = prior_2
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
   )
 \end{lstlisting}
 \clearpage

@@ -20,7 +20,6 @@
     resetnumbers=true,
     defernumbers=true
 ]{scrreprt}%
-\setcounter{secnumdepth}{3}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{algorithm}
@@ -67,6 +66,9 @@
 % **************************************************
 % Document CONTENT
 % **************************************************
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
 \begin{document}
 
 % uncomment the following command to fill up pages with

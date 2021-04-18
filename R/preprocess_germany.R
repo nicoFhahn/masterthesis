@@ -24,6 +24,12 @@ date_2 <- rev(
 if (date_1 != date_2) {
   # get the population of the municipalities
   germany_population <- ew_kreise
+  germany_confirmed$MovingCorrectionDead <- NULL
+  germany_confirmed$MovingCorrectionRecovered <- NULL
+  germany_confirmed$MovingCorrectionTestedIll <- NULL
+  germany_confirmed$CumMovingCorrectionDead <- NULL
+  germany_confirmed$CumMovingCorrectionRecovered <- NULL
+  germany_confirmed$CumMovingCorrectionTestedIll <- NULL
   # the data for berlin needs to be manually grouped
   # change the municipality name and ID to the same for all berlin cases
   germany_confirmed[
@@ -660,10 +666,13 @@ germany <- merge(
 # turn the date into an actual date
 germany$Date <- as.Date(germany$Date)
 # get the newest numbers
+# newest_numbers <- germany[
+#   germany$Date == rev(
+#     names(table(germany$Date)[table(germany$Date) > 395])
+#   )[1],
+# ]
 newest_numbers <- germany[
-  germany$Date == rev(
-    names(table(germany$Date)[table(germany$Date) > 395])
-  )[1],
+  germany$Date == as.Date("2021-03-24"),
 ]
 # calculate the expected count for the newest numbers
 expected_count <- expected(
@@ -742,6 +751,21 @@ newest_numbers$geometry <- NULL
 newest_numbers[, c(2:15, 20:35, 43:46)] <- scale(
   newest_numbers[, c(2:15, 20:35, 43:46)]
 )
+b <- newest_numbers[, c(2:15, 18, 20:35, 43:46)]
+sign <- TRUE
+while(sign) {
+  mod <- lm(
+    value ~ .,
+    data = b
+  )
+  if (!any(VIF(mod) > 5)) {
+    sign <- FALSE
+  } else {
+    b[, names(VIF(mod))[VIF(mod) == max(VIF(mod))]] <- NULL
+  }
+}
+newest_numbers[, c(2:15, 18, 20:35, 43:46)] <- NULL
+newest_numbers <- st_as_sf(cbind(b, newest_numbers, geom))
 # add the geometry again
 newest_numbers$geometry <- geom
 newest_numbers <- st_as_sf(newest_numbers)

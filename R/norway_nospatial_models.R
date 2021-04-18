@@ -11,27 +11,8 @@ newest_numbers$value[test] <- NA
 link <- rep(NA, nrow(newest_numbers))
 link[which(is.na(newest_numbers$value))] <- 1
 #####################################################
-# specify penalized prior
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
-models <- list()
-results <- list()
-mae <- list()
-#
-# create the neighbordhood matrix
-nb <- poly2nb(newest_numbers)
-# save the matrix
-nb2INLA("maps/map_1.adj", nb)
-g <- inla.read.graph(filename = "maps/map_1.adj")
-# specify the model formula
-# we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex
+  urb_dens
 
 res_1 <- inla(
   formula_1,
@@ -78,14 +59,11 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with the mobility variables
+)
 formula_2 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + unemp_tot + unemp_immg
-# now models with the mobility variables
+  urb_dens + sex
 formula_3 <- value ~
-# add the demographic vars and pop density
-unemp_tot + unemp_immg
+  sex
 
 
 res_2 <- inla(
@@ -113,8 +91,6 @@ res_3 <- inla(
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
-
 
 models <- c(models, list(res_2, res_3))
 
@@ -156,12 +132,11 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with the infrastructure variables
+)
 formula_4 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex + immigrants_total
+  urb_dens + median_age
 formula_5 <- value ~
-immigrants_total
+  median_age
 
 res_4 <- inla(
   formula_4,
@@ -188,7 +163,6 @@ res_5 <- inla(
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
 
 models <- c(models, list(res_4, res_5))
 
@@ -230,15 +204,12 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
+)
+
 formula_6 <- value ~
-pop_dens + urb_dens + sex +
-  # add the demographic vars and pop density
-  workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work
+  urb_dens + unemp_tot + unemp_immg 
 formula_7 <- value ~
-workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work
+  unemp_tot + unemp_immg
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
@@ -304,18 +275,11 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) ########################################################
-# Now with variable selection
+)
 formula_8 <- value ~
-pop_dens + urb_dens + sex +
-  # add the demographic vars and pop density
-  workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total
+  urb_dens + immigrants_total
 formula_9 <- value ~
-workers_ft_work + workers_pt_work +
-  construction_ft_work + construction_pt_work +
-  median_age + unemp_tot + unemp_immg + immigrants_total
+  immigrants_total
 
 res_8 <- inla(
   formula_8,
@@ -384,14 +348,11 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
+)
 formula_10 <- value ~
-median_age + unemp_tot + unemp_immg + workers_ft_work +
-  workers_pt_work + construction_pt_work + immigrants_total +
-  pop_dens + urb_dens + sex
+  urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex
 formula_11 <- value ~
-construction_pt_work + unemp_tot + sex +
-  median_age + pop_dens
+  median_age + unemp_tot + unemp_immg + immigrants_total + sex
 
 res_10 <- inla(
   formula_10,
@@ -461,17 +422,12 @@ rm(
     )
   )
 )
-# now models with all the variables
 formula_12 <- value ~
-pop_dens + urb_dens + marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries
+  urb_dens + marketplace + place_of_worship + nursing_home + aerodrome +
+  office + platform + higher_education 
 formula_13 <- value ~
-marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + retail + nursing_home +
-  restaurant + aerodrome + office + platform + schools + higher_education +
-  kindergarten + bakeries
+  marketplace + place_of_worship + nursing_home + aerodrome +
+  office + platform + higher_education 
 
 
 res_12 <- inla(
@@ -533,8 +489,6 @@ mae <- c(mae, list(
   mean(abs(predicted_2[test] - test_value))
 ))
 
-
-
 rm(
   list = setdiff(
     ls(),
@@ -544,16 +498,15 @@ rm(
     )
   )
 )
-# now models with all the variables
+
 formula_14 <- value ~
-marketplace + entertainment + sport + clinic +
-  hairdresser + shops + place_of_worship + restaurant + aerodrome +
-  office + platform + kindergarten + schools + bakeries + pop_dens +
-  urb_dens
-# now models with all the variables
+  urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
+  marketplace + place_of_worship + nursing_home + aerodrome +
+  office + platform + higher_education
 formula_15 <- value ~
-pop_dens + shops + place_of_worship + office +
-  schools + nursing_home + kindergarten + restaurant
+  median_age + unemp_tot + unemp_immg + immigrants_total + sex +
+  marketplace + place_of_worship + nursing_home + aerodrome +
+  office + platform + higher_education
 
 res_14 <- inla(
   formula_14,
@@ -622,88 +575,6 @@ rm(
       "test", "test_value", "link", "mae"
     )
   )
-) # now models with all the variables
-formula_16 <- value ~
-median_age + unemp_tot + workers_ft_work +
-  workers_pt_work + construction_pt_work + immigrants_total +
-  marketplace + entertainment + clinic + hairdresser + shops +
-  retail + nursing_home + restaurant + aerodrome + office +
-  platform + kindergarten + schools + bakeries + higher_education +
-  pop_dens + urb_dens + sex
-# now models with all the variables
-formula_17 <- value ~
-schools + unemp_tot + restaurant + sex +
-  median_age + pop_dens + construction_pt_work + workers_ft_work +
-  higher_education + clinic
-
-res_16 <- inla(
-  formula_16,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-res_17 <- inla(
-  formula_17,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-
-models <- c(models, list(res_16, res_17))
-
-perf <- list(
-  dic = c(
-    res_16$dic$dic, res_17$dic$dic
-  ),
-  waic = c(
-    res_16$waic$waic, res_17$waic$waic
-  ),
-  cpo = c(
-    sum(log(res_16$cpo$cpo), na.rm = TRUE),
-    sum(log(res_17$cpo$cpo), na.rm = TRUE)
-  )
-)
-results <- c(results, list(res_9 = perf))
-predicted_1 <- c()
-predicted_2 <- c()
-for (i in seq_len(nrow(newest_numbers))) {
-  predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_16$marginals.fitted.values[[i]]
-  )
-  predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_17$marginals.fitted.values[[i]]
-  )
-}
-mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value))
-))
-
-
-rm(
-  list = setdiff(
-    ls(),
-    c(
-      "newest_numbers", "prior_1", "g", "models", "results",
-      "test", "test_value", "link", "mae"
-    )
-  )
-)
-# now models with all the variables
+) 
 models_final <- list(models, results, mae)
 save(models_final, file = "models/nospatial_norway.Rda")
