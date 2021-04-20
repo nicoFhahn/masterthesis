@@ -56,10 +56,10 @@ After looking at the standardised incidence rates for the countries of interest,
     \item[3.] The Leroux-Model
     \item[4.] A model without a spatial component
 \end{itemize}
-All of these models were computed using the INLA \cite{rinla} R package. \\
+All of these models are computed using the INLA \cite{rinla} R package. \\
 To specify each type of model, the code shown in Listing~\ref{codeModels} can be used. \\
 Four measures are used to compare the models, the DIC, the WAIC, the CPO and the mean absolute error (MAE).\\
-For all countries, the models were computed with
+For all countries, the models are computed with
 \begin{itemize}
     \item[1.] only the demographic variables as covariates
     \item[2.] only the infrastructural variables as covariates
@@ -71,11 +71,11 @@ In addition to specifying what type of spatial model to use, if any, there is al
 \end{equation}
 The actual expression of the prior is given by
 \begin{equation}
-    \pi\left(\tau\right)=\frac{\lambda}{2}\tau^{-3/2}\exp\left(-\lambda\tau^{-1/2}\right),\hspace{10pt}\tau>0.
+    \pi\left(\tau\right)=\frac{\lambda}{2}\tau^{-3/2}\exp\left(-\lambda\tau^{-1/2}\right),\hspace{20pt}\tau>0.
 \end{equation}
 Here, $\lambda=\frac{-\log\left(\alpha\right)}{\sigma_0}$ \cite{martins2014penalising}.
-For the parameters $\sigma_0$ and $\alpha$, the values 1 and 0.01 were chosen. \\
-The models were compared using the mean absolute error. For this, 20\% of the observations were removed from the training and used for testing instead. The predicted number of infections for these municipalities was then compared to the actual numbers.
+For the parameters $\sigma_0$ and $\alpha$, the values 1 and 0.01 are chosen. \\
+The models are compared using the mean absolute error. For this, 20\% of the observations are removed from the training and used for testing instead. The predicted number of infections for these municipalities is then compared to the actual numbers.
 \\
 % Finally, due to the amount of covariates, forwards and backwards stepwise variable selection was performed with the intention of obtaining a model that fits the data well and at the same time is relatively easy to interpret. This can be done with the R package \texttt{INLAutils} \cite{inlautils}, as shown in Listing~\ref{codeSelection}. Backwards as well forwards variable selection was performed.\\
 A list of all calculated models along with their performance measures is provided in the appendix.
@@ -132,7 +132,7 @@ The QQ-plot for Germany and Norway looks quite similar, as there appears to be a
     \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
     \label{fitNegbinomNorway}
 \end{figure}
-Lastly, the AIC was calculated for fitting a normal distribution to the data, a Poisson distribution to the data and a negative binomial distribution to the data. The values can be seen in Table~\ref{aic}. Afterwards, the negative binomial distribution was chosen as the distribution of the target variable in both cases. \\
+Lastly, the AIC is calculated for fitting a normal distribution to the data, a Poisson distribution to the data and a negative binomial distribution to the data. The values can be seen in Table~\ref{aic}. Afterwards, the negative binomial distribution is chosen as the distribution of the target variable in both cases. \\
 \begin{table}[H] 
 \caption{The AIC for different distributions for Germany and Norway \label{aic}}
 \begin{tabular}{l l r}
@@ -149,10 +149,18 @@ Norway & Negative Binomial & 4086 \\
 \end{tabular}
 \end{table} 
 The poor fit for the Poisson distribution can be explained by looking at the range of the number of confirmed cases in a given municipality. For Germany, this number ranges from 508 to 137634 (as of March 18, 2021), while for Norway, the number ranges from 0 to 24905 (as of March 20, 2021). This results in a mean and standard deviation for Germany of 6617 and 9014, respectively. For Norway, the values for these metrics are 236 and 1389.
+\subsection{Variable Selection}
+Finally, to avoid multicollinearity, the variance inflation factor ($\hbox{VIF}$) is calculated.  The $\hbox{VIF}$ quantifies the severity of multicollinearity in an ordinary least squares regression analysis. It provides an index that measures the extent to which the variance of an estimated regression coefficient is increased due to collinearity. \\
+For $p-1$ independent variables, 
+\begin{equation}
+    \hbox{VIF}_i = \frac{1}{1-R^2},\hspace{20pt}i=1,...,p-1,
+\end{equation}
+with $R^2$ the coefficient of determination. In most literature, a value of at least 5 is suggested as too high and is therefore used as the threshold in this work \autocite[][]{craney2002model}. \\
+Here, an OLS regression is first run on all variables, followed by the calculation of the $\hbox{VIF}$. Next, the variable with the highest value is removed before running the regression model again with all remaining variables. This process is repeated until only variables with a $\hbox{VIF}$ of less than 5 remain.
 \clearpage
 \section{Models without a Spatial Component}
-To establish a baseline, we first look at models that do not include a spatial variable. To see how the values and significance of different variables change when a spatial effect is added, the models in this chapter are calculated using the same model formula that was used for the respective best performing BYM2 models in chapter~\ref{ch:spatial}. Further discussion of this is provided in the latter parts of this work. \\
-For the calculated models, both the posterior mean and the credibility intervals of the coefficients were calculated to allow a better interpretation of the results. \\
+To establish a baseline, we first look at models that do not include a spatial variable. To see how the values and significance of different variables change when a spatial effect is added, the models in this chapter are calculated using the same model formula that is used for the respective best performing BYM2 models in chapter~\ref{ch:spatial}. Further discussion of this is provided in the latter parts of this work. \\
+For the calculated models, both the posterior mean and the credibility intervals of the coefficients are calculated to allow a better interpretation of the results. \\
 To compute the posterior mean of the coefficients, the code shown in Listing~\ref{codePosteriorMean} can be used. \\
 To get the expected value given a marginal function $\pi\left(x\right)$, the expected value of a function $f\left(x\right)$ is calculated, i.e.
 \begin{equation*}
@@ -357,7 +365,7 @@ Region Hannover & 1157624 & 36241   \\
 \end{tabular}
 \end{table}
 \subsubsection{Demographic Models}\label{sssec:demoGermany}
-The model with the best performance based on the demographic variables was a Leroux model computed using the formula in Listing~\ref{codeDemoGermany}. The variables used for this model were the percentages of the vote for the six biggest German political parties. \\
+The model with the best performance based on the demographic variables is a Leroux model computed using the formula in Listing~\ref{codeDemoGermany}. The variables used for this model are the percentages of the vote for multiple German political parties. \\
 The performance measures of this model and the best-performing BYM2 and Besag proper models are shown in Table~\ref{demoGermany}. 
 \begin{table}[H] 
 \caption{The performance measures for the best performing demographic model of each type. \label{demoGermany}}
@@ -388,11 +396,8 @@ Gruene & -0.1654 & 0.8478 & 0.8119 & 0.8848 & $^*$\\
 \bottomrule
 \end{tabular}
 \end{table}
-% Wondreys and Mudde took a look at right-wing parties' responses to the pandemic, pointing out that while these parties were quick to warn about the virus, once cases spiked they criticised the measures taken to contain the spread of the virus. They also noted that right-wing parties supported demonstrations against these measures. However, they also stressed that these parties often rejected the measures proposed by the leading parties because they themselves were part of the opposition, as is the case with the AfD in Germany \cite{wondreys2020victims}.  \\
-% Farias and Pilati also conducted a study in Brazil to predict social distancing violation intention and past non-compliance during the COVID-19 pandemic, controlling for the effects of intolerance of uncertainty and sociodemographic variables. Their results included that individuals who support right-wing parties are more likely to violate social distancing measures \cite{farias2020violating}. \\
-% An increase by one standard deviation for the AfD leads to a risk increase of about 16.7\%. No significant effects were observed for all other parties. \\
 \subsubsection{Infrastructure Models}\label{sssec:infraGermany}
-When it comes to the models based on the infrastructural variables, a BYM2 model performed the best. It was computed using formula in Listing~\ref{codeInfraGermany}. \\
+When it comes to the models based on the infrastructural variables, a BYM2 model performed the best. It is computed using formula in Listing~\ref{codeInfraGermany}. \\
 The performance measures of this model and the best-performing other models are shown in Table~\ref{infraGermany}
 \begin{table}[H] 
 \caption{The performance measures for the best performing infrastructure model of each type. \label{infraGermany}}
@@ -429,13 +434,9 @@ education\\
 \bottomrule
 \end{tabular}
 \end{table}
-% Findings from these results are that bakeries, places of worship and population density increase the risk of infection. For bakeries, an increase of 1 standard deviation leads to a risk increase of 68.3\%. Bakeries are relatively widespread in Germany and many people go there several times a week to get fresh bread or other baked goods. When many people congregate in bakeries, viruses can spread more easily. \\
-% A 1 standard deviation increase in population density leads to an 11.6\% increase in relative risk, which should not be too surprising since in communities with higher population density, people come into contact with more people, which in turn helps the virus move from host to host. \\
-% Finally, places of worship were not closed for a long time in Germany due to freedom of religion and therefore people gathered in churches, mosques and the like. A 1 standard deviation increase in these places of worship therefore leads to a 9.5\% increase in the risk of contracting Covid-19. \\
-% Yezli and Khan's paper argues for the closure of these places of worshipon the grounds that they pose a risk of transmitting COVID-19 to potentially large numbers of people through a single case. Gatherings at these places often involve dense mixing of many people in a confined space, sometimes for long periods of time \cite{yezli2020covid}.
 \subsubsection{Demographic + Infrastructure Models}
 Finally, models are considered that include both the infrastructural and demographic covariates. \\
-The best performing model was again a BYM2 model, computed with the formula shown in Listing~\ref{codeBothGermany}. \\
+The best performing model is again a BYM2 model, computed with the formula shown in Listing~\ref{codeBothGermany}. \\
 The performance measures of the computed models are shown in Table~\ref{allGermany}.
 \begin{table}[H] 
 \caption{The performance measures for the best performing demographic + infrastructure model of each type. \label{allGermany}}
@@ -479,9 +480,6 @@ Gruene & -0.1570 & 0.8550 & 0.8122 & 0.8994 & $^*$\\
 \bottomrule
 \end{tabular}
 \end{table}
-According to this model, the three biggest driving factors for the number of infections are the amount of unemployed foreigners, the share of the vote for the AfD and the population density. The influence of the AfD was already discussed in Section~\ref{sssec:demoGermany}, only in this case an increase of 1 standard deviation leads to a risk increase of 22.5\%. In Section~\ref{sssec:infraGermany} population density was discussed. Here, a 1 standard deviation increase leads to a 13.3\% increase in relative risk. For unemployed foreigners, a 1 standard deviation increase leads to a 95.4\% increase in risk. \\
-Other factors that positively influence the risk of infection are the number of schools, the proportion of women in the population and the number of higher educational institutions. A 1 standard deviation increase in the number of schools leads to a 12.7\% increase in risk, which could be an indicator that schools should remain closed because so many children from different households meet there, providing a good place for a virus to spread. Schools in Germany actually closed relatively late, and did reopen at the beginning of 2021.\\
-A 1 standard deviation increase in the proportion of women leads to a 6.7\% increase in risk and for higher education buildings a 1 standard deviation increase leads to a 6.5\% increase in risk. 
 \subsection{Spatial Models for Norway}
 Next, the same types of models are evaluated for Norway. These models are based on data from 24 March 2021, when 87537 people in Norway were confirmed infected with Covid-19. The five municipalities with the most infections are shown in Table~\ref{top5norway}.
 \begin{table}[H] 
@@ -499,7 +497,7 @@ Lillestrøm & 85983 & 2779 \\
 \end{tabular}
 \end{table}
 \subsubsection{Demographic Models}\label{sssec:demoNorway}
-The best demographic model was a Leroux model calculated using the formula shown in Listing~\ref{codeDemoNorway}. \\
+The best demographic model is a Leroux model calculated using the formula shown in Listing~\ref{codeDemoNorway}. \\
 The performance measures for all models are shown in Table~\ref{demoNorway}. It is noticeable that the mean error in Norway is significantly smaller, suggesting that the models for Germany have greatly overestimated or underestimated the number of infections.
 \begin{table}[H] 
 \caption{The performance measures for the best performing demographic model of each type. \label{demoNorway}}
@@ -529,7 +527,7 @@ sex & 0.01448 & 1.016 & 0.9214 & 1.117 \\
 \end{table}
 % The only significant influence on the number of infections is the total number of unemployed people in a municipality. A 1 standard deviation increase in total unemployment leads to a 46.6\% increase in the risk. A possible explanation for this could be that the unemployed spend less time at home and instead move around more and thus have more contact with people, but this should be taken with a grain of salt.
 \subsubsection{Infrastructure Models}
-For the models based on the infrastructure variables, the best predictive performance was observed for a Besag model. The formula is shown in Listing~\ref{codeInfraNorway}. \\
+For the models based on the infrastructure variables, the best predictive performance is observed for a Besag model. The formula is shown in Listing~\ref{codeInfraNorway}. \\
 The performance measure for the models is shown in Table~\ref{infraNorway}.
 \begin{table}[H] 
 \caption{The performance measures for the best performing infrastructure model of each type. \label{infraNorway}}
@@ -618,9 +616,9 @@ In the model without the spatial component, all variables except urban density h
 The posterior mean of the intercept implies a -7.6\% risk rate across Germany with a credibility interval ranging from -8.8\% to -6.4\%. \\
 An increase in the population density by 1 standard deviation leads to an increase in the relative risk of infection by 11.2\%  which should not be too surprising since in communities with higher population density, people come into contact with more people, which in turn helps the virus move from host to host. Several studies have also linked higher population density to a variety of other factors, e.g. cities with higher population density tend to have outbreaks earlier than smaller cities, and crowding can also affect the spread of the virus \autocite[][]{carozzi2020urban}. In general, however, several papers have found a correlation between higher population density and a higher risk of contracting covid-19 \autocite[][]{pequeno2020air, cocskun2021spread, kadi2020population}.
 \\
-A 1 standard deviation increase in the percentage of the vote for the Greens reduces the relative risk of infection by around 15.2\%. In Germany, the Greens are on the left of the political spectrum, as are the SPD and the party "Die Linke", the latter being on the far left. A 2021 study by Gadarian et. al. examined the US population's health behaviours, attitudes and political opinions on COVID-19 in the first weeks of the national health crisis. Their findings included that people who identified more with the Democrat party were more likely to follow the guidelines than people who identified with the more right-wing Republican party \autocite[][]{gadarian2021partisanship}. This supports the theory that areas where the left-leaning Greens get more votes are also areas where the risk of infection is lower.
+A 1 standard deviation increase in the percentage of the vote for the Greens reduces the relative risk of infection by around 15.2\%. In Germany, the Greens are on the left of the political spectrum, as are the SPD and the party "Die Linke", the latter being on the far left. A 2021 study by Gadarian et. al. examined the US population's health behaviours, attitudes and political opinions on COVID-19 in the first weeks of the national health crisis. Their findings included that people who identified more with the Democrat party are more likely to follow the guidelines than people who identified with the more right-wing Republican party \autocite[][]{gadarian2021partisanship}. This supports the theory that areas where the left-leaning Greens get more votes are also areas where the risk of infection is lower.
 \\
-In Figure~\ref{posteriorGermanyDemo} it can be seen that the relative risk for large parts of Germany is above 1, except for most of northern Germany and some parts in the southwest of the country. The posterior probability is highest for parts of North Rhine-Westphalia, Germany's most populous conurbation, the Ruhr region, Saxony and Thuringia, and parts of Bavaria and Baden-Württemberg. The higher numbers in Bavaria can be explained by the large common borders with Austria and the Czech Republic, two countries that were more affected by the pandemic. Many people cross these borders because of tourism and many guest workers come from the Czech Republic to work on agricultural land in Bavaria, which led to several Covid 19 outbreaks.
+In Figure~\ref{posteriorGermanyDemo} it can be seen that the relative risk for large parts of Germany is above 1, except for most of northern Germany and some parts in the southwest of the country. The posterior probability is highest for parts of North Rhine-Westphalia, Germany's most populous conurbation, the Ruhr region, Saxony and Thuringia, and parts of Bavaria and Baden-Württemberg. The higher numbers in Bavaria can be explained by the large common borders with Austria and the Czech Republic, two countries that are more affected by the pandemic. Many people cross these borders because of tourism and many guest workers come from the Czech Republic to work on agricultural land in Bavaria, which led to several Covid 19 outbreaks.
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{posterior_germany_demo.png}

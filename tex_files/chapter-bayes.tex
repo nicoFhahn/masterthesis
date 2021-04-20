@@ -156,7 +156,7 @@ The density of a normally distributed random variable $\pmb{y}=\left(y_1,...,y_n
 Here, $\mu_i=\mathbb{E}\left[y_i\right]$, $ \Sigma_{ij}=\hbox{Cov}\left(y_i,y_j\right)$, $ \Sigma_{ii}=\hbox{Var}\left(y_i\right) > 0$ and $\hbox{Corr}\left(y_i,y_j\right)=\Sigma_{ij}/\left(\Sigma_{ii}\Sigma_{jj}\right)^{1/2}$. This is written as $\pmb{y}\sim\mathcal{N}\left(\pmb{\mu},\pmb{\Sigma}\right)$. For $n=1$, $\mu=0$ and $\Sigma_{11}=1$ the standard normal distribution is obtained. \\
 $\pmb{y}$ is now split up into $\pmb{y}=\left(\pmb{y}_{\pmb{A}}^T,\pmb{y}_{\pmb{B}}^T\right)$ and $\pmb{\mu}$ and $\pmb{\Sigma}$ are divided accordingly:
 \begin{equation*}
-    \pmb{\mu} = \begin{pmatrix}\pmb{\mu}_{\pmb{A}} \\ \pmb{\mu}_{\pmb{B}}\end{pmatrix} \hspace{10pt}\hbox{ and }\hspace{10pt} \pmb{\Sigma}=\begin{pmatrix}\pmb{\Sigma}_{\pmb{AA}} & \pmb{\Sigma}_{\pmb{AB}}\\\pmb{\Sigma}_{\pmb{BA}} & \pmb{\Sigma}_{\pmb{BB}}\end{pmatrix}.
+    \pmb{\mu} = \begin{pmatrix}\pmb{\mu}_{\pmb{A}} \\ \pmb{\mu}_{\pmb{B}}\end{pmatrix} \hspace{20pt}\hbox{ and }\hspace{20pt} \pmb{\Sigma}=\begin{pmatrix}\pmb{\Sigma}_{\pmb{AA}} & \pmb{\Sigma}_{\pmb{AB}}\\\pmb{\Sigma}_{\pmb{BA}} & \pmb{\Sigma}_{\pmb{BB}}\end{pmatrix}.
 \end{equation*}
 Some basic properties of the multivariate normal distribution are the following.
 \begin{itemize}
@@ -547,7 +547,7 @@ Therefore, the non-zero pattern of $\pmb{Q}$ determines $\mathcal{G}$, i.e. whet
 The elements of $\pmb{Q}$ are used for conditional interpretations. For any GMRF with respect to $\mathcal{G}=\left(\mathcal{V}, \mathcal{E}\right)$ with mean $\pmb{\mu}$ and precision matrix $\pmb{Q} > 0$,
 \begin{align}
     \mathbb{E}\left[x_i|\pmb{x}_{-i}\right] &= \mu_i-\frac{1}{Q_{ii}}\sum_{j:j\sim i}Q_{ij}\left(x_j-\mu_j\right), \label{eq:mean_gmrf}\\
-    \hbox{Prec}\left(x_i|\pmb{x}_{-i}\right) &= Q_{ii} \hspace{10pt}\hbox{ and }\label{eq:prec_gmrf}\\
+    \hbox{Prec}\left(x_i|\pmb{x}_{-i}\right) &= Q_{ii} \hspace{20pt}\hbox{ and }\label{eq:prec_gmrf}\\
     \hbox{Corr}\left(x_i,x_j|\pmb{x}_{ij}\right) &= -\frac{Q_{ij}}{\sqrt{Q_{ii}Q_{jj}}},\hspace{20pt} i\neq j
 \end{align}
 \autocite[][21]{rue2005gaussian}. \\
@@ -593,7 +593,7 @@ By splitting the indices into the non-empty sets A and B, of which the latter is
 \end{equation}
 The mean and the precision are divided accordingly,
 \begin{equation}\label{eq:partition_2}
-    \pmb{\mu}=\begin{pmatrix}\pmb{\mu}_A\\\pmb{\mu}_B\end{pmatrix},\hspace{10pt}\hbox{ and }\hspace{10pt}\pmb{Q}=\begin{pmatrix}\pmb{Q}_{AA} & \pmb{Q}_{AB} \\ \pmb{Q}_{BA} & \pmb{Q}_{BB}\end{pmatrix}.
+    \pmb{\mu}=\begin{pmatrix}\pmb{\mu}_A\\\pmb{\mu}_B\end{pmatrix},\hspace{20pt}\hbox{ and }\hspace{20pt}\pmb{Q}=\begin{pmatrix}\pmb{Q}_{AA} & \pmb{Q}_{AB} \\ \pmb{Q}_{BA} & \pmb{Q}_{BB}\end{pmatrix}.
 \end{equation}
 The conditional distribution of $\pmb{x}_A|\pmb{x}_B$ is then a GMRF with respect to the subgraph $\mathcal{G}^A$ with mean $\pmb{\mu}_{A|B}$ and precision matrix $\pmb{Q}_{A|B}>0$, where
 \begin{equation}
@@ -629,12 +629,12 @@ This allows the calculation of conditional densities with multiple sources of co
 \subsubsection{Specification Through Full Conditionals}
 Alternatively, a GMRF can be specified by the full conditionals $\left\lbrace\pi\left(x_i|\pmb{x}_{-i}\right)\right\rbrace$ in place of $\pmb{\mu}$ and $\pmb{Q}$. Suppose the full conditionals are given as normals with
 \begin{align}
-    \mathbb{E}\left[x_i|\pmb{x}_{-i}\right] &= \mu_i-\sum_{j:j\sim i}\beta_{ij}\left(x_j-\mu_j\right)\hspace{10pt}\hbox{ and}\\
+    \mathbb{E}\left[x_i|\pmb{x}_{-i}\right] &= \mu_i-\sum_{j:j\sim i}\beta_{ij}\left(x_j-\mu_j\right)\hspace{20pt}\hbox{ and}\\
     \hbox{Prec}\left(x_i|\pmb{x}_{-i}\right) &= \kappa_i>0
 \end{align}
 for $i=1,...,n$, for $\pmb{\mu}$, $\pmb{\kappa}$ and some $\left\lbrace\eta_{ij},i\neq j\right\rbrace$. Evidently, $\sim$ is implicitly defined by the non-zero terms of $\left\lbrace\beta_{ij}\right\rbrace$. For there to exist a joint density $\pi\left(\pmb{x}\right)$ leading to these full conditional distributions, these full conditionals must be consistent. Since $\sim$ is symmetric, it follows that if $\beta_{ij}\neq 0$, then $\beta_{ji}\neq0$. If the entries of the precision matrix are chosen such that
 \begin{equation*}
-    Q_{ii}=\kappa_i, \hspace{10pt}\hbox{ and }\hspace{10pt} Q_{ij}=\kappa_i\beta_{ij}
+    Q_{ii}=\kappa_i, \hspace{20pt}\hbox{ and }\hspace{20pt} Q_{ij}=\kappa_i\beta_{ij}
 \end{equation*}
 and $\pmb{Q}$ must be symmetrical, i.e.,
 \begin{equation*}
