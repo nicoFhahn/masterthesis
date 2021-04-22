@@ -1,6 +1,7 @@
 library(fitdistrplus)
 library(qqplotr)
 library(patchwork)
+library(tibble)
 source("R/preprocess_norge.R")
 # create the cullen and frey graph
 set.seed(420)
@@ -184,3 +185,104 @@ qqplot_poisson + cdf_plot_poisson
 fit_poisson$aic
 fit_nbinomial$aic
 fit_normal$aic
+x_nbinom <- rnbinom(
+  10 * nrow(newest_numbers),
+  size = fit_nbinomial$estimate[1],
+  mu = fit_nbinomial$estimate[2]
+)
+x_normal <- rnorm(
+  10 * nrow(newest_numbers),
+  mean = fit_normal$estimate[1],
+  sd = fit_normal$estimate[2]
+)
+x_poisson <- rpois(
+  10 * nrow(newest_numbers),
+  lambda = fit_poisson$estimate[1]
+)
+
+distr <- tibble(
+  value = c(x_nbinom, x_normal, x_poisson),
+  distribution = c(
+    rep("Negative binomial", 3560),
+    rep("Normal", 3560),
+    rep("Poisson", 3560)
+  )
+)
+distrplot_1 <- ggplot() +
+  geom_histogram(
+    data = newest_numbers,
+    aes(value, y = ..density..),
+    colour = "black",
+    fill = "white",
+    binwidth = 200
+  ) +
+  geom_density(
+    data = distr,
+    aes(
+      value,
+      colour = distribution
+    ),
+    fill = "#FF6666",
+    alpha = 0.1,
+    size = 1
+  ) +
+  theme_minimal() +
+  xlab(
+    "Number of infections"
+  ) +
+  ylab(
+    "Density"
+  ) +
+  scale_colour_manual(
+    values = c("#DA4167", "#19323C", "#85CB33")
+  ) +
+  guides(
+    colour = guide_legend(
+      title = "Distribution"
+    )
+  ) +
+  xlim(c(-5000, 10000))
+distrplot_2 <- ggplot() +
+  geom_histogram(
+    data = newest_numbers,
+    aes(value, y = ..density..),
+    colour = "black",
+    fill = "white",
+    binwidth = 200
+  ) +
+  geom_density(
+    data = distr[distr$distribution != "Poisson", ],
+    aes(
+      value,
+      colour = distribution
+    ),
+    fill = "#FF6666",
+    alpha = 0.1,
+    size = 1
+  ) +
+  theme_minimal() +
+  xlab(
+    "Number of infections"
+  ) +
+  ylab(
+    "Density"
+  ) +
+  scale_colour_manual(
+    values = c("#DA4167", "#19323C", "#85CB33")
+  ) +
+  guides(
+    colour = guide_legend(
+      title = "Distribution"
+    )
+  ) +
+  xlim(c(-5000, 10000)) +
+  theme(
+    legend.position = "none"
+  )
+
+distrplot_1 + distrplot_2 +
+  plot_layout(guides = "collect") +
+  plot_annotation(
+    title = "Distribution fits for the number of infections",
+    subtitle = "Norway"
+  )

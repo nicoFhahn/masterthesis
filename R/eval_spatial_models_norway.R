@@ -1,5 +1,8 @@
+library(ggplot2)
+library(patchwork)
 library(readr)
 library(sf)
+library(tibble)
 library(INLA)
 # source("R/norway_leroux_models.R")
 # source("R/norway_besagproper_models.R")
@@ -74,6 +77,186 @@ sapply(
     )
   }
 )
+marginal_frame <- tibble(
+  marginals = c(
+    models_nospatial[[id_nospatial]]$marginals.fixed$`(Intercept)`[, 1],
+    models_bym2[[id_nospatial]]$marginals.fixed$`(Intercept)`[, 1],
+    models_nospatial[[id_nospatial]]$marginals.fixed$urb_dens[, 1],
+    models_bym2[[id_nospatial]]$marginals.fixed$urb_dens[, 1],
+    models_nospatial[[id_nospatial]]$marginals.fixed$sex[, 1],
+    models_bym2[[id_nospatial]]$marginals.fixed$sex[, 1]
+  ),
+  variable = c(
+    rep("Intercept", 150),
+    rep("urb_dens", 150),
+    rep("sex", 150)
+  ),
+  model = rep(
+    c(
+      rep("No spatial", 75),
+      rep("BYM2", 75)
+    ),
+    3
+  )
+)
+marginal_frame <- tibble(
+  lower = c(
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_nospatial[[id_nospatial]]$marginals.fixed$`(Intercept)`
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_bym2[[id_nospatial]]$marginals.fixed$`(Intercept)`
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_nospatial[[id_nospatial]]$marginals.fixed$sex
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_bym2[[id_nospatial]]$marginals.fixed$sex
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_nospatial[[id_nospatial]]$marginals.fixed$urb_dens
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_bym2[[id_nospatial]]$marginals.fixed$urb_dens
+      )
+    )[1]
+  ),
+  mean = c(
+    inla.emarginal(
+      exp,
+      models_nospatial[[id_nospatial]]$marginals.fixed$`(Intercept)`
+    ),
+    inla.emarginal(
+      exp,
+      models_bym2[[id_nospatial]]$marginals.fixed$`(Intercept)`
+    ),
+    inla.emarginal(
+      exp,
+      models_nospatial[[id_nospatial]]$marginals.fixed$sex
+    ),
+    inla.emarginal(
+      exp,
+      models_bym2[[id_nospatial]]$marginals.fixed$sex
+    ),
+    inla.emarginal(
+      exp,
+      models_nospatial[[id_nospatial]]$marginals.fixed$urb_dens
+    ),
+    inla.emarginal(
+      exp,
+      models_bym2[[id_nospatial]]$marginals.fixed$urb_dens
+    )
+  ),
+  upper = c(
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_nospatial[[id_nospatial]]$marginals.fixed$`(Intercept)`
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_bym2[[id_nospatial]]$marginals.fixed$`(Intercept)`
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_nospatial[[id_nospatial]]$marginals.fixed$sex
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_bym2[[id_nospatial]]$marginals.fixed$sex
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_nospatial[[id_nospatial]]$marginals.fixed$urb_dens
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_bym2[[id_nospatial]]$marginals.fixed$urb_dens
+      )
+    )[2]
+  ),
+  variable = c(
+    "Intercept", "Intercept",
+    "sex", "sex",
+    "urb_dens", "urb_dens"
+  ),
+  model = rep(
+    c("No spatial", "BYM2"), 3
+  )
+)
+
+ggplot(
+  data = marginal_frame
+) +
+  geom_errorbar(
+    aes(
+      y = variable,
+      xmin = lower,
+      xmax = upper,
+      colour = model
+    ),
+    position = "dodge",
+    size = 0.5
+  ) +
+  geom_pointrange(
+    aes(
+      y = variable,
+      xmin = lower,
+      xmax = upper,
+      x = mean,
+      colour = model
+    ),
+    position = position_dodge2(width = 0.9, padding = 0),
+    size = 0.5
+  ) +
+  theme_minimal() +
+  xlab(
+    "Marginals"
+  ) +
+  ylab(
+    "Variable"
+  ) +
+  ggtitle(
+    "Credibility intervals of the coefficients"
+  ) +
+  scale_colour_manual(
+    values = c("#E1BE6A", "#40B0A6")
+  ) +
+  geom_vline(xintercept = 1) +
+  guides(
+    colour = guide_legend(
+      title = "Model"
+    )
+  )
+
+
 infra_results <- c(results_nospatial[7])
 infra_dic <- unlist(lapply(infra_results, function(x) x$dic))
 infra_waic <- unlist(lapply(infra_results, function(x) x$waic))
@@ -250,7 +433,7 @@ perc_var_u
 
 color_low <- "#002FA7"
 color_high <- "#F50039"
-library(ggplot2)
+
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = rr)) +
   ggtitle(
@@ -293,7 +476,7 @@ plot_3 <- ggplot(data = newest_numbers) +
     )
   )
 plot_3
-library(patchwork)
+
 plot_2 + plot_3
 plot_4 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = cat_zeta_log)) +
@@ -415,7 +598,7 @@ perc_var_u
 
 color_low <- "#002FA7"
 color_high <- "#F50039"
-library(ggplot2)
+
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = rr)) +
   ggtitle(
@@ -458,7 +641,7 @@ plot_3 <- ggplot(data = newest_numbers) +
     )
   )
 plot_3
-library(patchwork)
+
 plot_2 + plot_3
 plot_4 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = cat_zeta_log)) +
@@ -580,7 +763,7 @@ perc_var_u
 
 color_low <- "#002FA7"
 color_high <- "#F50039"
-library(ggplot2)
+
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = rr)) +
   ggtitle(
@@ -623,7 +806,7 @@ plot_3 <- ggplot(data = newest_numbers) +
     )
   )
 plot_3
-library(patchwork)
+
 plot_2 + plot_3
 plot_4 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = cat_zeta_log)) +

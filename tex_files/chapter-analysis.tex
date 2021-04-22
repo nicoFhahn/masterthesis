@@ -2,70 +2,69 @@
 %
 \chapter{Data Analysis}
 \label{sec:analysis}
-In this chapter the models calculated for each country are reviewed. First, a look at the standardised incidence rate for each country is taken, before spatial models, spatio-temporal models and finally predictive models are discussed.
-\section{Standardised Incidence Ratio}
-This section takes a brief look at the standardised incidence ratio for the countries of interest.
-\subsection{Standardised Incidence Ratio for Germany}
-When looking at the standardised incidence ratio for Germany, it is noticeable that the actual number of infections in the eastern parts of Germany, especially in Saxony, is considerably higher than the expected number of infections. Furthermore, parts of Bavaria have an increased standardised incidence ratio compared to the rest of Germany, excluding Saxony. This could be due to the fact that the regions share a border with the Czech Republic, a country that is substantially more affected by Covid-19 than Germany. The northern parts of Germany show the lowest SIR which is possibly due to the fact that this region is sparsely populated. For more information, see Figure~\ref{sirgermany}.
+In this chapter the models fitted for each country are reviewed. First, a look at the standardised incidence rate for each country is taken, before spatial models, spatio-temporal models and finally predictive models are discussed.
+\section{Standardised Incidence Ratio (SIR)}
+This section takes a brief look at the SIR for the countries of interest. Recall from Equation~\ref{eq:sir}, that the SIR is defined as the ratio of observed counts to expected counts.
+\subsection{SIR for Germany}
+When looking at the SIR for Germany in Figure~\ref{sirgermany}, it is noticeable that the actual number of infections in the eastern parts of Germany, especially in Saxony, is considerably higher than the expected number of infections. Furthermore, parts of Bavaria have an increased SIR compared to the rest of Germany, excluding Saxony. This could be due to the fact that the regions share a border with the Czech Republic, a country that is substantially more affected by Covid-19 than Germany. The northern parts of Germany show the lowest SIR which is possibly due to the fact that this region is sparsely populated.
 % \begin{figure}[H]
 %   \centering
 %   \includesvg[width = 1.2\textwidth]{sir_germany.svg}
-%   \caption{The standardised incidence ratio for Germany based on the data of the 24th of March 2021}
+%   \caption{The SIR for Germany based on the data of the 24th of March 2021}
 %   \label{sirgermany}
 % \end{figure}
 \begin{figure}[H]
   \centering
   \includegraphics[width = 1.2\textwidth]{sir_germany.png}
-  \caption{The standardised incidence ratio for Germany based on the data of the 24th of March 2021}
+  \caption{The SIR for Germany based on the data of the 24th of March 2021}
   \label{sirgermany}
 \end{figure}
-\subsection{Standardised Incidence Ratio for Norway}
-Looking at the standardised incidence rate for Norway, a standardised incidence rate of less than 1 can be seen for most municipalities north of Trondheim. In the southern parts of Norway there are several municipalities with a rate above 1, for example the standardised incidence rate around the capital Oslo is around 2. However, the two small municipalities, Hyllestad and Ulvik, have the highest standardised incidence rate in Norway. In Hyllestad, 95 of 1328 people have been infected with Covid-19 so far, while in Ulvik, 134 of 1080 people have been infected so far. \\
-The SIR in Hyllestad is around 4.5, following an outbreak in a shipyard in autumn 2020 \cite{newspaper1}, while Ulvik has a ratio of around 8, following an outbreak of the UK variant of Covid-19. According to the head of the municipality, Hans Petter Thorbjørnsen, the infections are thought to have spread through children \cite{newspaper2}. See Figure~\ref{sirnorway} for more information.
+\subsection{SIR for Norway}
+Looking at the standardised incidence rate for Norway in Figure~\ref{sirnorway}, a standardised incidence rate of less than 1 can be seen for most municipalities north of Trondheim. In the southern parts of Norway there are several municipalities with a rate above 1, for example the standardised incidence rate around the capital Oslo is around 2. However, the two small municipalities, Hyllestad and Ulvik, have the highest standardised incidence rate in Norway. In Hyllestad, 95 of 1328 people have been infected with Covid-19 so far, while in Ulvik, 134 of 1080 people have been infected so far. \\
+The SIR in Hyllestad is around 4.5, following an outbreak in a shipyard in autumn 2020 \cite{newspaper1}, while Ulvik has a ratio of around 8, following an outbreak of the UK variant of Covid-19. According to the head of the municipality, Hans Petter Thorbjørnsen, the infections are thought to have spread through children \cite{newspaper2}.
 % \begin{figure}[H]
 %   \centering
 %   \includesvg[width = 1.2\textwidth]{sir_norway.svg}
-%   \caption{The standardised incidence ratio for Norway based on the data of the 24th of March 2021}
+%   \caption{The SIR for Norway based on the data of the 24th of March 2021}
 %   \label{sirnorway}
 % \end{figure}
 \begin{figure}[H]
   \centering
   \includegraphics[width = 1.2\textwidth]{sir_norway.png}
-  \caption{The standardised incidence ratio for Norway based on the data of the 24th of March 2021}
+  \caption{The SIR for Norway based on the data of the 24th of March 2021}
   \label{sirnorway}
 \end{figure}
-Because the high numbers from two small municipalities complicate the interpretation of Figure~\ref{sirnorway}, Figure~\ref{sirnorwaylog} shows the SIR on a log10 scale. It is now clearer that the standardized incidence ratio is below 1 in most parts of Norway, but that there is a higher risk in the region around Oslo.
+Because the high numbers from two small municipalities complicate the interpretation of Figure~\ref{sirnorway}, Figure~\ref{sirnorwaylog} shows the SIR on a log10 scale. On this scale, a value of 0 means that the risk of infection in a given municipality is neither lower nor higher. Values below 0 mean that the risk of infection in a municipality is lower than average, while values above 1 mean that the risk of infection in a municipality is higher than average. It is now clearer that the standardized incidence ratio is below 1 in most parts of Norway, but that there is a higher risk in the region around Oslo.
 % \begin{figure}[H]
 %   \centering
 %   \includesvg[width = 1.2\textwidth]{sir_norway_log.svg}
-%   \caption{The log10 standardised incidence ratio for Norway based on the data of the 24th of March 2021}
+%   \caption{The log10 SIR for Norway based on the data of the 24th of March 2021}
 %   \label{sirnorway}
 % \end{figure}
 \begin{figure}[H]
   \centering
   \includegraphics[width = 1.2\textwidth]{sir_norway_log.png}
-  \caption{The log10 standardised incidence ratio for Norway based on the data of the 24th of March 2021}
+  \caption{The log10 SIR for Norway based on the data of the 24th of March 2021}
   \label{sirnorwaylog}
 \end{figure}
 \clearpage
 \section{Data Modelling}
-After looking at the standardised incidence rates for the countries of interest, the next step is to take a closer look at the current figures for the respective countries. Spatial models are used to try to extract the factors that cause some populations to be at higher risk than other populations. Four different types of models are used for each country:
+After looking at the standardised incidence rates for the countries of interest, the next step is to take a closer look at the current figures for the respective countries. Spatial models are used to try to extract the factors that cause some populations to be at higher risk than populations in other geographical regions. Three different types of models are used for each country:
 \begin{itemize}
-    \item[1.] The Besarg-Yollie-Mollie Model
-    \item[2.] Besags Proper Spatial Model
-    \item[3.] The Leroux-Model
-    \item[4.] A model without a spatial component
+    \item[1.] Besags Proper Spatial Model
+    \item[2.] A Leroux Model
+    \item[3.] A BYM2 Model
 \end{itemize}
 All of these models are computed using the INLA \cite{rinla} R package. \\
 To specify each type of model, the code shown in Listing~\ref{codeModels} can be used. \\
-Four measures are used to compare the models, the DIC, the WAIC, the CPO and the mean absolute error (MAE).\\
+The measures introduced in Section~\ref{sec:performance}, namely the DIC, the WAIC, the CPO and the mean absolute error (MAE), are used to compare the models.\\
 For all countries, the models are computed with
 \begin{itemize}
     \item[1.] only the demographic variables as covariates
     \item[2.] only the infrastructural variables as covariates
     \item[3.] both, demographic and infrastructural variables, as covariates
 \end{itemize}
-In addition to specifying what type of spatial model to use, if any, there is also the option of specifying a prior. In this case, a penalised complexity prior is used for the precision $\tau$. For $\tau$, the penalised complexity prior is defined by the parameter $\sigma_0$. The equation~\ref{eq:pcprior} therefore looks like this,
+In addition to specifying what type of spatial model to use, if any, there is also the option of specifying a prior. In this case, a penalised complexity prior is used for the precision $\tau$. This makes it possible to adjust the smoothness of the spatial field in intuitive way. For $\tau$, the penalised complexity prior is defined by the parameter $\sigma_0$. The equation~\ref{eq:pcprior} therefore looks like this,
 \begin{equation}\label{pcprec}
     \mathbb{P}\left(\sigma > \sigma_0\right)=\alpha.
 \end{equation}
@@ -75,13 +74,13 @@ The actual expression of the prior is given by
 \end{equation}
 Here, $\lambda=\frac{-\log\left(\alpha\right)}{\sigma_0}$ \cite{martins2014penalising}.
 For the parameters $\sigma_0$ and $\alpha$, the values 1 and 0.01 are chosen. \\
-The models are compared using the mean absolute error. For this, 20\% of the observations are removed from the training and used for testing instead. The predicted number of infections for these municipalities is then compared to the actual numbers.
+The models are compared using the mean absolute error. For this, 20\% of the observations are removed from the training set and used for testing instead. The predicted number of infections for these municipalities is then compared to the actual numbers.
 \\
 % Finally, due to the amount of covariates, forwards and backwards stepwise variable selection was performed with the intention of obtaining a model that fits the data well and at the same time is relatively easy to interpret. This can be done with the R package \texttt{INLAutils} \cite{inlautils}, as shown in Listing~\ref{codeSelection}. Backwards as well forwards variable selection was performed.\\
 A list of all calculated models along with their performance measures is provided in the appendix.
-\subsection{Model Selection}
-Before the models are computed, however, the distribution that fits the number of cases must first be found. For this, the function \texttt{descdist()} from the \texttt{fitdistrplus} R package is used. The Cullen and Frey graph can be used to give an initial idea of which distributions fit the data, in this case the number of infections, reasonably well depending on the kurtosis and the square of the skewness. \\
-The plots for Germany and Norway can be seen in Figure~\ref{cf_germany} and Figure~\ref{cf_norge}.
+\subsection{Choice of Likelihood}
+Before the models are computed, however, the distribution that fits the number of cases must first be found. One way to do this, the function \texttt{descdist()} from the \texttt{fitdistrplus} R package is used. The Cullen and Frey graph illustrates how "close" a sample is to a theoretical distribution based on the kurtosis and the square of the skewness, defined in equation~\ref{eq:kurtosis} and equation~\ref{eq:skewness}. It can be used to get a preliminary idea of which distributions fit the data, in this case the number of infections, reasonably well. \\
+The plots for Germany and Norway can be seen in Figure~\ref{cf_germany} and Figure~\ref{cf_norge}. The blue dot represents the data, the star a theoretical normal distribution, the dashed line a theoretical Poisson distribution and the grey area a theoretical negative binomial distribution. In both cases, the blue dot is relatively far from the star and lies in the region of a negative binomial distribution. For the Norwegian sample shown in Figure~\ref{cf_norge}, the sample is closer to a Poisson distribution than is the case for the German sample in Figure~\ref{cf_germany}.
 % \begin{figure}[H]
 %     \centering
 %     \includesvg[width = 0.8\textwidth]{cf_germany.svg}
@@ -107,7 +106,7 @@ The plots for Germany and Norway can be seen in Figure~\ref{cf_germany} and Figu
     \label{cf_norge}
 \end{figure}
 Next, a negative binomial distribution, a normal distribution, and a Poisson distribution are fitted to the data using the maximum likelihood method. The negative binomial fits for both countries can be seen in Figure~\ref{fitNegbinomGermany} and Figure~\ref{fitNegbinomNorway}. The fits for the normal and Poisson distribution for both countries, are shown in the Appendix in Figure~\ref{fitNormalGermany}, Figure~\ref{fitPoissonGermany}, Figure~\ref{fitNormalNorway} and Figure~\ref{fitPoissonNorway}. \\
-The QQ-plot for Germany and Norway looks quite similar, as there appears to be a linear relationship between the theoretical quantile and the sample quantiles, up to a certain point where the sample quantiles have a higher value than the theoretical quantiles, indicating that the distribution is right skewed. Since there are many municipalities with relatively few cases and few municipalities with a large number of cases, this is to be expected.
+The QQ-plot for Germany and Norway looks quite similar, as there appears to be a linear relationship between the theoretical quantile and the sample quantiles, up to a certain point where the sample quantiles have a higher value than the theoretical quantiles, indicating that the distribution is right skewed. Since there are many municipalities with relatively few cases and few municipalities with a large number of cases, this is to be expected. It can also be seen that the empirical cumulative density function closely follows the theoretical cumulative density function.
 % \begin{figure}[H]
 %     \centering
 %     \includesvg[width = 0.8\textwidth]{fit_nbinom_germany.svg}
@@ -148,84 +147,39 @@ Norway & Negative Binomial & 4086 \\
 \bottomrule
 \end{tabular}
 \end{table} 
-The poor fit for the Poisson distribution can be explained by looking at the range of the number of confirmed cases in a given municipality. For Germany, this number ranges from 508 to 137634 (as of March 18, 2021), while for Norway, the number ranges from 0 to 24905 (as of March 20, 2021). This results in a mean and standard deviation for Germany of 6617 and 9014, respectively. For Norway, the values for these metrics are 236 and 1389.
-\subsection{Variable Selection}
-Finally, to avoid multicollinearity, the variance inflation factor ($\hbox{VIF}$) is calculated.  The $\hbox{VIF}$ quantifies the severity of multicollinearity in an ordinary least squares regression analysis. It provides an index that measures the extent to which the variance of an estimated regression coefficient is increased due to collinearity. \\
-For $p-1$ independent variables, 
-\begin{equation}
-    \hbox{VIF}_i = \frac{1}{1-R^2},\hspace{20pt}i=1,...,p-1,
-\end{equation}
-with $R^2$ the coefficient of determination. In most literature, a value of at least 5 is suggested as too high and is therefore used as the threshold in this work \autocite[][]{craney2002model}. \\
-Here, an OLS regression is first run on all variables, followed by the calculation of the $\hbox{VIF}$. Next, the variable with the highest value is removed before running the regression model again with all remaining variables. This process is repeated until only variables with a $\hbox{VIF}$ of less than 5 remain.
+The poor fit for the Poisson distribution can be explained by looking at the range of the number of confirmed cases in a given municipality. For Germany, this number ranges from 508 to 137634 (as of March 18, 2021), while for Norway, the number ranges from 0 to 24905 (as of March 20, 2021). This results in a mean and standard deviation for Germany of 6617 and 9014, respectively. For Norway, the values for these metrics are 236 and 1389. This is problematic because, as shown in Equation~\ref{eq:poisson_exp} and Equation~\ref{eq:poisson_var}, for a Poisson distribution the expected value and the variance should be equal. \\
+Looking at a histogram for the confirmed number of cases and overlaying the densities of a normal, Poisson and a negative binomial distribution helps to confirm the choice of a negative binomial distribution as the distribution that the data most closely resembles. Figure~\ref{fitDistrGermany} and Figure~\ref{fitDistrNorway} both show that a Poisson distribution does not fit the data at all, while a negative binomial distribution is most similar to the data.
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = 0.8\textwidth]{distrfit_germany.svg}
+%     \caption{Histogram for the number of cases in German municipalities with a normal, negative binomial and Poisson distribution overlayed.}
+%     \label{fitDistrGermany}
+% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{distrfit_germany.png}    
+    \caption{Histogram for the number of cases in German municipalities with a normal, negative binomial and Poisson distribution overlayed.}
+    \label{fitDistrGermany}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includesvg[width = 0.8\textwidth]{distrfit_norway.svg}    
+%\caption{Histogram for the number of cases in Norwegian municipalities with a normal, negative binomial and Poisson distribution overlayed.}
+%     \label{fitDistrNorway}
+% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{distrfit_norway.png}
+    \caption{Histogram for the number of cases in Norwegian municipalities with a normal, negative binomial and Poisson distribution overlayed.}
+    \label{fitDistrNorway}
+\end{figure}
 \clearpage
 \section{Models without a Spatial Component}
-To establish a baseline, we first look at models that do not include a spatial variable. To see how the values and significance of different variables change when a spatial effect is added, the models in this chapter are calculated using the same model formula that is used for the respective best performing BYM2 models in chapter~\ref{ch:spatial}. Further discussion of this is provided in the latter parts of this work. \\
-For the calculated models, both the posterior mean and the credibility intervals of the coefficients are calculated to allow a better interpretation of the results. \\
-To compute the posterior mean of the coefficients, the code shown in Listing~\ref{codePosteriorMean} can be used. \\
-To get the expected value given a marginal function $\pi\left(x\right)$, the expected value of a function $f\left(x\right)$ is calculated, i.e.
-\begin{equation*}
-    \int f\left(x\right)\pi\left(x\right)dx.
-\end{equation*}
-To obtain a credibility interval of the fixed effects on the transformed scale, the code in Listing~\ref{codeCredibility} can be used. \\
+To establish a baseline, a look is first taken at models that do not include a spatial effect. This way, it can be observed how the means and credibility intervals of the covariates change when a spatial effect is added to a model and how the performance of the model changes with respect to the goodness-of-fit indicators introduced in chapter~\ref{sec:performance}. \\
+Before computing the models, using the $\hbox{VIF}$ introduced in chapter~\ref{sec:vif}, predictors are removed if their $\hbox{VIF}$ is above 5. To do this, an OLS regression is first run on all variables, followed by the calculation of $\hbox{VIF}$. Then the variable with the highest value is removed before running the regression model again with all remaining variables. This process is repeated until only variables with a $\hbox{VIF}$ of less than 5 remain. 
 \subsection{Models without a Spatial Component for Germany}
-\subsubsection{Demographic Models}
 \begin{table}[H] 
-\caption{The performance measures for the demographic model. \label{demoGermany_nospatial}}
-\begin{tabular}{r r r r}
-\toprule\textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
-\midrule
-5508 & 5509 & -2754 & 174892 \\
-\bottomrule
-\end{tabular}
-\end{table} 
-\begin{table}[H]
-\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedDemoGermany_nospatial}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -0.04595 & 0.9552 & 0.9285 & 0.9826 & $^*$\\
-pop\_dens & 0.1662 & 1.181& 1.134 & 1.231 &$^*$\\
-FDP & 0.05825 & 1.060& 1.024 & 1.097 &$^*$\\
-urb\_dens & 0.01592 & 1.016 & 0.9773& 1.057 &\\
-die\_linke & -0.05957 & 0.9423 & 0.9108 & 0.9748 & $^*$\\
-SPD & -0.1362 & 0.8728 & 0.8453 & 0.9010 & $^*$\\
-Gruene & -0.2391 & 0.7875 & 0.7553 & 0.8208 & $^*$\\
-\bottomrule
-\end{tabular}
-\end{table}
-\subsubsection{Infrastructure Models}
-\begin{table}[H] 
-\caption{The performance measures for the infrastructure model. \label{infraGermany_nospatial}}
-\begin{tabular}{r r r r}
-\toprule\textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
-\midrule
-5679 & 5680 & -2862 & 175480 \\
-\bottomrule
-\end{tabular}
-\end{table}
-\begin{table}[H]
-\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{FixedInfraGermany_nospatial}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -0.03036 & 0.9703 & 0.9355 & 1.006 & \\
-pop\_dens & 0.09421 & 1.099 & 1.037 & 1.165 & $^*$\\
-place\_of\_worship & 0.03847 & 1.040 & 0.9916 & 1.089\\
-clinic & 0.03075 & 1.032 & 0.9593 & 1.111  \\
-nursing\_home & 0.02336 & 1.024 & 0.9795 & 1.071 \\
-aerodrome & -0.01383 & 0.9864 & 0.9574 & 1.020 \\
-platform & -0.01583 & 0.9848 & 0.9235 & 1.050 \\
-higher\_education & -0.03884 & 0.9623 & 0.9140 & 1.015 \\
-retail & -0.04742 & 0.9542 & 0.8949 & 1.018 \\
-urb\_dens & -0.05078 & 0.9508 & 0.9050 & 0.9995 & $^*$\\
-\bottomrule
-\end{tabular}
-\end{table}
-\subsubsection{Models with Demographic and Infrastructure Variables}
-\begin{table}[H] 
-\caption{The performance measures for the demographic + infrastructure model. \label{allGermany_nospatial}}
+\caption{The performance measures for the model without a spatial component. \label{allGermany_nospatial}}
 \begin{tabular}{r r r r}
 \toprule
 \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
@@ -260,59 +214,8 @@ Gruene & -0.2698 & 0.7638 & 0.7285 & 0.8003 & $^*$\\
 \end{tabular}
 \end{table}
 \subsection{Models without a Spatial Component for Norway}
-\subsubsection{Demographic Models}
 \begin{table}[H] 
-\caption{The performance measures for the demographic model. \label{demoNorway_nospatial}}
-\begin{tabular}{r r r r}
-\toprule\textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
-\midrule
-2785 & 2792 & -1491 & 8210 \\
-\bottomrule
-\end{tabular}
-\end{table} 
-\begin{table}[H]
-\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedDemoNorway_nospatial}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -0.7715 & 0.4629 & 0.4189 & 0.5114 & $^*$ \\
-urb\_dens & 0.3323 & 1.399 & 1.192 & 1.674 & $^*$ \\
-sex & -0.09652 & 0.9095 & 0.8132 & 1.015 \\
-\bottomrule
-\end{tabular}
-\end{table}
-\subsubsection{Infrastructure Models}
-\begin{table}[H] 
-\caption{The performance measures for the infrastructure model. \label{infraNorway_nospatial}}
-\begin{tabular}{r r r r}
-\toprule\textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
-\midrule
-2786 & 2793 & -1670 & 13022 \\
-\bottomrule
-\end{tabular}
-\end{table} 
-\begin{table}[H]
-\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedInfraNorway_nospatial}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -0.7764 & 0.4607 & 0.4170 & 0.5088 & $^*$ \\
-urb\_dens & 0.3824 & 1.474 & 1.207 & 1.823 & $^*$ \\
-platform & 0.1625 & 1.183 & 0.9634 & 1.469 \\
-nursing\_home & 0.03350 & 1.035 & 0.9461 & 1.154\\
-place\_of\_worship & 0.01994 &1.024 & 0.8687 & 1.213 \\
-marketplace & 0.01059 & 1.014 & 0.8782 & 1.183 \\
-higher\_education & 0.004825 & 1.006 & 0.9139 & 1.126 \\
-aerodrome & -0.1419 & 0.8699 & 0.7437 & 0.9848 & $^*$ \\
-office & -0.2362 & 0.7930 & 0.6642 & 0.9530 & $^*$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-\subsubsection{Models with Demographic and Infrastructure Variables}
-\begin{table}[H] 
-\caption{The performance measures for the demographic + infrastructure model. \label{allNorway_nospatial}}
+\caption{The performance measures for the model without a spatial component. \label{allNorway_nospatial}}
 \begin{tabular}{r r r r}
 \toprule\textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
@@ -364,77 +267,77 @@ Region Hannover & 1157624 & 36241   \\
 \bottomrule
 \end{tabular}
 \end{table}
-\subsubsection{Demographic Models}\label{sssec:demoGermany}
-The model with the best performance based on the demographic variables is a Leroux model computed using the formula in Listing~\ref{codeDemoGermany}. The variables used for this model are the percentages of the vote for multiple German political parties. \\
-The performance measures of this model and the best-performing BYM2 and Besag proper models are shown in Table~\ref{demoGermany}. 
-\begin{table}[H] 
-\caption{The performance measures for the best performing demographic model of each type. \label{demoGermany}}
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
-\midrule
-Besag  & 4706 & 4749 & -2756 &  176861 \\
-BYM2 & 4624 & 4593  & -2702 &  176747\\
-Leroux & 4807  & 4830 & -3237 & 175780\\
-\bottomrule
-\end{tabular}
-\end{table}
-The summary of the fixed effects is shown in Table~\ref{fixedDemoGermany_spatial}.
-\begin{table}[H]
-\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedDemoGermany_spatial}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -0.07886 & 0.9242 & 0.9124 & 0.9362 & $^*$\\
-pop\_dens & 0.1061 & 1.112 & 1.076 & 1.149 &$^*$\\
-FDP & 0.02740 & 1.028 & 0.9873 & 1.070 &\\
-urb\_dens & 0.01133 & 1.012 & 0.9823 & 1.041 &\\
-die\_linke & 0.002600 & 1.003 & 0.9540 & 1.054 & \\
-SPD & -0.03264 & 0.9681 & 0.9253 & 1.012 &\\
-Gruene & -0.1654 & 0.8478 & 0.8119 & 0.8848 & $^*$\\
-\bottomrule
-\end{tabular}
-\end{table}
-\subsubsection{Infrastructure Models}\label{sssec:infraGermany}
-When it comes to the models based on the infrastructural variables, a BYM2 model performed the best. It is computed using formula in Listing~\ref{codeInfraGermany}. \\
-The performance measures of this model and the best-performing other models are shown in Table~\ref{infraGermany}
-\begin{table}[H] 
-\caption{The performance measures for the best performing infrastructure model of each type. \label{infraGermany}}
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
-\midrule
-Besag & 4688 & 4673 & -2762 & 176473\\
-BYM2 & 4633 & 4619 & -2760 & 176197\\
-Leroux & 4749 & 4772 & -3093 & 177001\\
-\bottomrule
-\end{tabular}
-\end{table}
-The values of the covariates are shown in Table~\ref{FixedInfraGermany_spatial}.
-\begin{table}[H]
-\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{FixedInfraGermany_spatial}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -0.07993 & 0.9232 & 0.9108 & 0.9358 & $^*$\\
-pop\_dens & 0.08988 & 1.094 & 1.049 & 1.140 & $^*$\\
-retail & 0.04115 & 1.042 & 1.002 & 1.084 & $^*$\\
-place\_of\_ & \multirow{2}{*}{0.02528} & \multirow{2}{*}{1.026} & \multirow{2}{*}{0.9916} & \multirow{2}{*}{1.061}\\
-worship\\
-nursing\_ & \multirow{2}{*}{0.01689} & \multirow{2}{*}{1.017} & \multirow{2}{*}{0.9907} & \multirow{2}{*}{1.044} \\
-home\\
-aerodrome & 0.007450 & 1.008 & 0.9893 & 1.026 \\
-platform & -0.01111 & 0.9892 & 0.9473 & 1.032 \\
-urb\_dens & -0.01248 & 0.9877 & 0.9544 & 1.022 \\
-clinic & -0.02707 & 0.9735 & 0.9319 & 1.016  \\
-higher\_ & \multirow{2}{*}{-0.05918} & \multirow{2}{*}{0.9427} & \multirow{2}{*}{0.9076} & \multirow{2}{*}{0.9788} & \multirow{2}{*}{$^*$} \\
-education\\
-\bottomrule
-\end{tabular}
-\end{table}
-\subsubsection{Demographic + Infrastructure Models}
+% \subsubsection{Demographic Models}\label{sssec:demoGermany}
+% The model with the best performance based on the demographic variables is a Leroux model computed using the formula in Listing~\ref{codeDemoGermany}. The variables used for this model are the percentages of the vote for multiple German political parties. \\
+% The performance measures of this model and the best-performing BYM2 and Besag proper models are shown in Table~\ref{demoGermany}. 
+% \begin{table}[H] 
+% \caption{The performance measures for the best performing demographic model of each type. \label{demoGermany}}
+% \begin{tabular}{l r r r r}
+% \toprule
+% \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
+% \midrule
+% Besag  & 4706 & 4749 & -2756 &  176861 \\
+% BYM2 & 4624 & 4593  & -2702 &  176747\\
+% Leroux & 4807  & 4830 & -3237 & 175780\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+% The summary of the fixed effects is shown in Table~\ref{fixedDemoGermany_spatial}.
+% \begin{table}[H]
+% \caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedDemoGermany_spatial}}
+% \begin{tabular}{l r r r r c}
+% \toprule
+% \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
+% \midrule
+% (Intercept) & -0.07886 & 0.9242 & 0.9124 & 0.9362 & $^*$\\
+% pop\_dens & 0.1061 & 1.112 & 1.076 & 1.149 &$^*$\\
+% FDP & 0.02740 & 1.028 & 0.9873 & 1.070 &\\
+% urb\_dens & 0.01133 & 1.012 & 0.9823 & 1.041 &\\
+% die\_linke & 0.002600 & 1.003 & 0.9540 & 1.054 & \\
+% SPD & -0.03264 & 0.9681 & 0.9253 & 1.012 &\\
+% Gruene & -0.1654 & 0.8478 & 0.8119 & 0.8848 & $^*$\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+% \subsubsection{Infrastructure Models}\label{sssec:infraGermany}
+% When it comes to the models based on the infrastructural variables, a BYM2 model performed the best. It is computed using formula in Listing~\ref{codeInfraGermany}. \\
+% The performance measures of this model and the best-performing other models are shown in Table~\ref{infraGermany}
+% \begin{table}[H] 
+% \caption{The performance measures for the best performing infrastructure model of each type. \label{infraGermany}}
+% \begin{tabular}{l r r r r}
+% \toprule
+% \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
+% \midrule
+% Besag & 4688 & 4673 & -2762 & 176473\\
+% BYM2 & 4633 & 4619 & -2760 & 176197\\
+% Leroux & 4749 & 4772 & -3093 & 177001\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+% The values of the covariates are shown in Table~\ref{FixedInfraGermany_spatial}.
+% \begin{table}[H]
+% \caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{FixedInfraGermany_spatial}}
+% \begin{tabular}{l r r r r c}
+% \toprule
+% \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
+% \midrule
+% (Intercept) & -0.07993 & 0.9232 & 0.9108 & 0.9358 & $^*$\\
+% pop\_dens & 0.08988 & 1.094 & 1.049 & 1.140 & $^*$\\
+% retail & 0.04115 & 1.042 & 1.002 & 1.084 & $^*$\\
+% place\_of\_ & \multirow{2}{*}{0.02528} & \multirow{2}{*}{1.026} & \multirow{2}{*}{0.9916} & \multirow{2}{*}{1.061}\\
+% worship\\
+% nursing\_ & \multirow{2}{*}{0.01689} & \multirow{2}{*}{1.017} & \multirow{2}{*}{0.9907} & \multirow{2}{*}{1.044} \\
+% home\\
+% aerodrome & 0.007450 & 1.008 & 0.9893 & 1.026 \\
+% platform & -0.01111 & 0.9892 & 0.9473 & 1.032 \\
+% urb\_dens & -0.01248 & 0.9877 & 0.9544 & 1.022 \\
+% clinic & -0.02707 & 0.9735 & 0.9319 & 1.016  \\
+% higher\_ & \multirow{2}{*}{-0.05918} & \multirow{2}{*}{0.9427} & \multirow{2}{*}{0.9076} & \multirow{2}{*}{0.9788} & \multirow{2}{*}{$^*$} \\
+% education\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+%\subsubsection{Demographic + Infrastructure Models}
 Finally, models are considered that include both the infrastructural and demographic covariates. \\
 The best performing model is again a BYM2 model, computed with the formula shown in Listing~\ref{codeBothGermany}. \\
 The performance measures of the computed models are shown in Table~\ref{allGermany}.
@@ -496,74 +399,74 @@ Lillestrøm & 85983 & 2779 \\
 \bottomrule
 \end{tabular}
 \end{table}
-\subsubsection{Demographic Models}\label{sssec:demoNorway}
-The best demographic model is a Leroux model calculated using the formula shown in Listing~\ref{codeDemoNorway}. \\
-The performance measures for all models are shown in Table~\ref{demoNorway}. It is noticeable that the mean error in Norway is significantly smaller, suggesting that the models for Germany have greatly overestimated or underestimated the number of infections.
-\begin{table}[H] 
-\caption{The performance measures for the best performing demographic model of each type. \label{demoNorway}}
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
-\midrule
-Besag  & 2321 & 2340 & -8261 & 9578 \\
-BYM2 & 2258 & 2225 & -7170 & 9393\\
-Leroux & 2263  & 2222 & -8083 & 7797\\
-\bottomrule
-\end{tabular}
-\end{table}
-All other performance measures for these models are also lower than for the models computed for Germany. \\
-The effects of the covariates are shown in Table~\ref{fixedDemoNorway_spatial}.
-\begin{table}[H] 
-\caption{The fixed effects for the model without a spatial component. Values are rounded. A $^*$ denotes a significant effect.\label{fixedDemoNorway_spatial}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -1.109 & 0.3299 & 0.3085 & 0.3519 & $^*$ \\
-urb\_dens & 0.07558 & 1.079 & 1.005 & 1.157 & $^*$ \\
-sex & 0.01448 & 1.016 & 0.9214 & 1.117 \\
-\bottomrule
-\end{tabular}
-\end{table}
-% The only significant influence on the number of infections is the total number of unemployed people in a municipality. A 1 standard deviation increase in total unemployment leads to a 46.6\% increase in the risk. A possible explanation for this could be that the unemployed spend less time at home and instead move around more and thus have more contact with people, but this should be taken with a grain of salt.
-\subsubsection{Infrastructure Models}
-For the models based on the infrastructure variables, the best predictive performance is observed for a Besag model. The formula is shown in Listing~\ref{codeInfraNorway}. \\
-The performance measure for the models is shown in Table~\ref{infraNorway}.
-\begin{table}[H] 
-\caption{The performance measures for the best performing infrastructure model of each type. \label{infraNorway}}
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
-\midrule
-Besag  & 2327 & 2334 & -8171 & 10581 \\
-BYM2 & 2258 & 2224 & -6978 & 10717\\
-Leroux &  2275 & 2228 & -9023 & 12244\\
-\bottomrule
-\end{tabular}
-\end{table}
-The effect of the covariates are shown in Table~\ref{fixedInfraNorway_spatial}.
-\begin{table}[H]
-\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedInfraNorway_spatial}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -1.115 & 0.3282 & 0.3062 & 0.3508 & $^*$ \\
-place\_of\_ & \multirow{2}{*}{0.1504} & \multirow{2}{*}{1.165} & \multirow{2}{*}{1.019} & \multirow{2}{*}{1.328} & \multirow{2}{*}{$^*$} \\
-worship\\
-urb\_dens & 0.05900 & 1.063 & 0.9386 & 1.201 &  \\
-nursing\_ & \multirow{2}{*}{0.02292} & \multirow{2}{*}{1.024} & \multirow{2}{*}{0.9434} & \multirow{2}{*}{1.110}\\
-home\\
-higher\_ & \multirow{2}{*}{0.008234} & \multirow{2}{*}{1.009} & \multirow{2}{*}{0.9344} & \multirow{2}{*}{1.087} \\
-education\\
-marketplace & -0.003012 & 0.9989 & 0.8838 & 1.113 \\
-platform & -0.01936 & 0.9838 & 0.8428 & 1.142 \\
-aerodrome & -0.05807 & 0.9456 & 0.8212 & 1.059  \\
-office & -0.0788 & 0.9273 & 0.7866 & 1.083  \\
-\bottomrule
-\end{tabular}
-\end{table}
-\subsubsection{Demographic + Infrastructure Models}
+% \subsubsection{Demographic Models}\label{sssec:demoNorway}
+% The best demographic model is a Leroux model calculated using the formula shown in Listing~\ref{codeDemoNorway}. \\
+% The performance measures for all models are shown in Table~\ref{demoNorway}. It is noticeable that the mean error in Norway is significantly smaller, suggesting that the models for Germany have greatly overestimated or underestimated the number of infections.
+% \begin{table}[H] 
+% \caption{The performance measures for the best performing demographic model of each type. \label{demoNorway}}
+% \begin{tabular}{l r r r r}
+% \toprule
+% \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
+% \midrule
+% Besag  & 2321 & 2340 & -8261 & 9578 \\
+% BYM2 & 2258 & 2225 & -7170 & 9393\\
+% Leroux & 2263  & 2222 & -8083 & 7797\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+% All other performance measures for these models are also lower than for the models computed for Germany. \\
+% The effects of the covariates are shown in Table~\ref{fixedDemoNorway_spatial}.
+% \begin{table}[H] 
+% \caption{The fixed effects for the model without a spatial component. Values are rounded. A $^*$ denotes a significant effect.\label{fixedDemoNorway_spatial}}
+% \begin{tabular}{l r r r r c}
+% \toprule
+% \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
+% \midrule
+% (Intercept) & -1.109 & 0.3299 & 0.3085 & 0.3519 & $^*$ \\
+% urb\_dens & 0.07558 & 1.079 & 1.005 & 1.157 & $^*$ \\
+% sex & 0.01448 & 1.016 & 0.9214 & 1.117 \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+% % The only significant influence on the number of infections is the total number of unemployed people in a municipality. A 1 standard deviation increase in total unemployment leads to a 46.6\% increase in the risk. A possible explanation for this could be that the unemployed spend less time at home and instead move around more and thus have more contact with people, but this should be taken with a grain of salt.
+% \subsubsection{Infrastructure Models}
+% For the models based on the infrastructure variables, the best predictive performance is observed for a Besag model. The formula is shown in Listing~\ref{codeInfraNorway}. \\
+% The performance measure for the models is shown in Table~\ref{infraNorway}.
+% \begin{table}[H] 
+% \caption{The performance measures for the best performing infrastructure model of each type. \label{infraNorway}}
+% \begin{tabular}{l r r r r}
+% \toprule
+% \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
+% \midrule
+% Besag  & 2327 & 2334 & -8171 & 10581 \\
+% BYM2 & 2258 & 2224 & -6978 & 10717\\
+% Leroux &  2275 & 2228 & -9023 & 12244\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+% The effect of the covariates are shown in Table~\ref{fixedInfraNorway_spatial}.
+% \begin{table}[H]
+% \caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedInfraNorway_spatial}}
+% \begin{tabular}{l r r r r c}
+% \toprule
+% \textbf{Variable}	& \textbf{Mean}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
+% \midrule
+% (Intercept) & -1.115 & 0.3282 & 0.3062 & 0.3508 & $^*$ \\
+% place\_of\_ & \multirow{2}{*}{0.1504} & \multirow{2}{*}{1.165} & \multirow{2}{*}{1.019} & \multirow{2}{*}{1.328} & \multirow{2}{*}{$^*$} \\
+% worship\\
+% urb\_dens & 0.05900 & 1.063 & 0.9386 & 1.201 &  \\
+% nursing\_ & \multirow{2}{*}{0.02292} & \multirow{2}{*}{1.024} & \multirow{2}{*}{0.9434} & \multirow{2}{*}{1.110}\\
+% home\\
+% higher\_ & \multirow{2}{*}{0.008234} & \multirow{2}{*}{1.009} & \multirow{2}{*}{0.9344} & \multirow{2}{*}{1.087} \\
+% education\\
+% marketplace & -0.003012 & 0.9989 & 0.8838 & 1.113 \\
+% platform & -0.01936 & 0.9838 & 0.8428 & 1.142 \\
+% aerodrome & -0.05807 & 0.9456 & 0.8212 & 1.059  \\
+% office & -0.0788 & 0.9273 & 0.7866 & 1.083  \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+% \subsubsection{Demographic + Infrastructure Models}
 For the models containing variables related to the demographic of Norway and the infrastructure, again a Besag model performed the best. Its formula can be seen in Listing~\ref{codeBothNorway}. \\
 The performance measures for the models are shown in Table~\ref{allNorway}
 \begin{table}[H] 
@@ -610,56 +513,57 @@ median\_age & -0.1151  & 0.8925 & 0.8052 & 0.9853 & $^*$ \\
 \subsection{Discussion of the Spatial Models}
 For the discussion of the results of this part of the analysis, a look is first taken at the differences between the models calculated without a spatial component and the models with such a component. For the latter, a more in-depth analysis of the results is also carried out.
 \subsubsection{Discussion of the Models for Germany}
-\paragraph{Demographic Models}\label{par:demoGermany} $\newline$
-Comparing Table~\ref{demoGermany_nospatial} and Table~\ref{demoGermany}, it can be seen that the model without spatial component performs slightly better in terms of the mean absolute error, equally well in terms of the CPO and worse in terms of the DIC and WAIC. \\
-In the model without the spatial component, all variables except urban density had a significant effect, whereas in the BYM2 model only the urban density and the percentage of the vote for the Greens had a significant effect. \\
-The posterior mean of the intercept implies a -7.6\% risk rate across Germany with a credibility interval ranging from -8.8\% to -6.4\%. \\
-An increase in the population density by 1 standard deviation leads to an increase in the relative risk of infection by 11.2\%  which should not be too surprising since in communities with higher population density, people come into contact with more people, which in turn helps the virus move from host to host. Several studies have also linked higher population density to a variety of other factors, e.g. cities with higher population density tend to have outbreaks earlier than smaller cities, and crowding can also affect the spread of the virus \autocite[][]{carozzi2020urban}. In general, however, several papers have found a correlation between higher population density and a higher risk of contracting covid-19 \autocite[][]{pequeno2020air, cocskun2021spread, kadi2020population}.
-\\
-A 1 standard deviation increase in the percentage of the vote for the Greens reduces the relative risk of infection by around 15.2\%. In Germany, the Greens are on the left of the political spectrum, as are the SPD and the party "Die Linke", the latter being on the far left. A 2021 study by Gadarian et. al. examined the US population's health behaviours, attitudes and political opinions on COVID-19 in the first weeks of the national health crisis. Their findings included that people who identified more with the Democrat party are more likely to follow the guidelines than people who identified with the more right-wing Republican party \autocite[][]{gadarian2021partisanship}. This supports the theory that areas where the left-leaning Greens get more votes are also areas where the risk of infection is lower.
-\\
-In Figure~\ref{posteriorGermanyDemo} it can be seen that the relative risk for large parts of Germany is above 1, except for most of northern Germany and some parts in the southwest of the country. The posterior probability is highest for parts of North Rhine-Westphalia, Germany's most populous conurbation, the Ruhr region, Saxony and Thuringia, and parts of Bavaria and Baden-Württemberg. The higher numbers in Bavaria can be explained by the large common borders with Austria and the Czech Republic, two countries that are more affected by the pandemic. Many people cross these borders because of tourism and many guest workers come from the Czech Republic to work on agricultural land in Bavaria, which led to several Covid 19 outbreaks.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{posterior_germany_demo.png}
-    \caption{Posterior mean of the area-specific risk and the posterior probability.}
-    \label{posteriorGermanyDemo}
-\end{figure}
+% \paragraph{Demographic Models}\label{par:demoGermany} $\newline$
+% Comparing Table~\ref{demoGermany_nospatial} and Table~\ref{demoGermany}, it can be seen that the model without spatial component performs slightly better in terms of the mean absolute error, equally well in terms of the CPO and worse in terms of the DIC and WAIC. \\
+% In the model without the spatial component, all variables except urban density had a significant effect, whereas in the BYM2 model only the urban density and the percentage of the vote for the Greens had a significant effect. \\
+% The posterior mean of the intercept implies a -7.6\% risk rate across Germany with a credibility interval ranging from -8.8\% to -6.4\%. \\
+% An increase in the population density by 1 standard deviation leads to an increase in the relative risk of infection by 11.2\%  which should not be too surprising since in communities with higher population density, people come into contact with more people, which in turn helps the virus move from host to host. Several studies have also linked higher population density to a variety of other factors, e.g. cities with higher population density tend to have outbreaks earlier than smaller cities, and crowding can also affect the spread of the virus \autocite[][]{carozzi2020urban}. In general, however, several papers have found a correlation between higher population density and a higher risk of contracting covid-19 \autocite[][]{pequeno2020air, cocskun2021spread, kadi2020population}.
+% \\
+% A 1 standard deviation increase in the percentage of the vote for the Greens reduces the relative risk of infection by around 15.2\%. In Germany, the Greens are on the left of the political spectrum, as are the SPD and the party "Die Linke", the latter being on the far left. A 2021 study by Gadarian et. al. examined the US population's health behaviours, attitudes and political opinions on COVID-19 in the first weeks of the national health crisis. Their findings included that people who identified more with the Democrat party are more likely to follow the guidelines than people who identified with the more right-wing Republican party \autocite[][]{gadarian2021partisanship}. This supports the theory that areas where the left-leaning Greens get more votes are also areas where the risk of infection is lower.
+% \\
+% In Figure~\ref{posteriorGermanyDemo} it can be seen that the relative risk for large parts of Germany is above 1, except for most of northern Germany and some parts in the southwest of the country. The posterior probability is highest for parts of North Rhine-Westphalia, Germany's most populous conurbation, the Ruhr region, Saxony and Thuringia, and parts of Bavaria and Baden-Württemberg. The higher numbers in Bavaria can be explained by the large common borders with Austria and the Czech Republic, two countries that are more affected by the pandemic. Many people cross these borders because of tourism and many guest workers come from the Czech Republic to work on agricultural land in Bavaria, which led to several Covid 19 outbreaks.
 % \begin{figure}[H]
 %     \centering
-%     \includesvg[width = textwidth]{posterior_germany_demo.svg}
-%    \caption{Posterior mean of the area-specific risk and the posterior probability.}
+%     \includegraphics[width = \textwidth]{posterior_germany_demo.png}
+%     \caption{Posterior mean of the area-specific risk and the posterior probability.}
 %     \label{posteriorGermanyDemo}
 % \end{figure}
-Compared to the standardised incidence rate in Germany, shown in Figure~\ref{sirgermany}, it can be seen that the parts of Germany with the lowest SIR, Northern Germany, are also the parts of Germany with the lowest relative risk. Saxony had the highest SIR and also has an increased relative risk. Most parts of Germany that had an SIR of around 1 have a relative risk between 1 and 1.4.
-\paragraph{Infrastructure Models}$\newline$
-Comparing Table~\ref{infraGermany_nospatial} and Table~\ref{infraGermany}, it can be seen that the model without spatial component performs slightly better in terms of the mean absolute error, equally well in terms of the CPO and worse in terms of the DIC and WAIC. \\
-In the model without the spatial component, only population density and urban density had a significant effect, while in the BYM2 model, population density, number of retail shops and number of higher education buildings had a significant effect. \\
-The posterior mean of the intercept implies a risk rate of -7.7\% for Germany with a credibility interval of -8.9\% to -6.4\%. \\
-A 1 standard deviation increase in population density leads to a 9.4\% increase in relative risk, which is lower than the demographic model where it led to an 11.2\% increase. \\
-The other significant effect associated with a higher risk of infection is the number of retail shops, as a 1 standard deviation increase in the number of retail shops leads to a 4.2\% increase in the risk of infection. A study by Barbieri et. al. analysed the content of Italian occupations working in about 600 sectors, with a focus on the dimensions that put workers at risk of infection during the Covid 19 pandemic. Their findings included that the retail sector appears to be at higher risk of infection
-due to physical proximity in the workplace \autocite[][]{barbieri2020italian}. \\
-The number of higher education buildings, i.e. colleges and universities, in a community reduces the risk of infection, as an increase of 1 standard deviation leads to a risk reduction of about 5.7\%. A possible explanation for this could be that in areas with more university buildings, the average education level of the population is higher. However, in a study by Plohl et. al. it was found that trust in science was positively correlated with compliance with COVID-19 prevention guidelines, but no relationship was found between trust in science and education level \autocite[][]{plohl2021modeling}.
-\\
-Figure~\ref{posteriorGermanyInfra} looks quite similar to Figure~\ref{posteriorGermanyDemo}, except for Saxony, where the relative risk is now above 2.2 for several municipalities, in addition to the one municipality that had such a risk level in Figure~\ref{posteriorGermanyDemo}. Furthermore, some other municipalities in Saxony and Thuringia also have higher relative risks compared to the demographic model.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{posterior_germany_infra.png}
-    \caption{Posterior mean of the area-specific risk and the posterior probability.}
-    \label{posteriorGermanyInfra}
-\end{figure}
+% % \begin{figure}[H]
+% %     \centering
+% %     \includesvg[width = textwidth]{posterior_germany_demo.svg}
+% %    \caption{Posterior mean of the area-specific risk and the posterior probability.}
+% %     \label{posteriorGermanyDemo}
+% % \end{figure}
+% Compared to the standardised incidence rate in Germany, shown in Figure~\ref{sirgermany}, it can be seen that the parts of Germany with the lowest SIR, Northern Germany, are also the parts of Germany with the lowest relative risk. Saxony had the highest SIR and also has an increased relative risk. Most parts of Germany that had an SIR of around 1 have a relative risk between 1 and 1.4.
+% \paragraph{Infrastructure Models}$\newline$
+% Comparing Table~\ref{infraGermany_nospatial} and Table~\ref{infraGermany}, it can be seen that the model without spatial component performs slightly better in terms of the mean absolute error, equally well in terms of the CPO and worse in terms of the DIC and WAIC. \\
+% In the model without the spatial component, only population density and urban density had a significant effect, while in the BYM2 model, population density, number of retail shops and number of higher education buildings had a significant effect. \\
+% The posterior mean of the intercept implies a risk rate of -7.7\% for Germany with a credibility interval of -8.9\% to -6.4\%. \\
+% A 1 standard deviation increase in population density leads to a 9.4\% increase in relative risk, which is lower than the demographic model where it led to an 11.2\% increase. \\
+% The other significant effect associated with a higher risk of infection is the number of retail shops, as a 1 standard deviation increase in the number of retail shops leads to a 4.2\% increase in the risk of infection. A study by Barbieri et. al. analysed the content of Italian occupations working in about 600 sectors, with a focus on the dimensions that put workers at risk of infection during the Covid 19 pandemic. Their findings included that the retail sector appears to be at higher risk of infection
+% due to physical proximity in the workplace \autocite[][]{barbieri2020italian}. \\
+% The number of higher education buildings, i.e. colleges and universities, in a community reduces the risk of infection, as an increase of 1 standard deviation leads to a risk reduction of about 5.7\%. A possible explanation for this could be that in areas with more university buildings, the average education level of the population is higher. However, in a study by Plohl et. al. it was found that trust in science was positively correlated with compliance with COVID-19 prevention guidelines, but no relationship was found between trust in science and education level \autocite[][]{plohl2021modeling}.
+% \\
+% Figure~\ref{posteriorGermanyInfra} looks quite similar to Figure~\ref{posteriorGermanyDemo}, except for Saxony, where the relative risk is now above 2.2 for several municipalities, in addition to the one municipality that had such a risk level in Figure~\ref{posteriorGermanyDemo}. Furthermore, some other municipalities in Saxony and Thuringia also have higher relative risks compared to the demographic model.
 % \begin{figure}[H]
 %     \centering
-%     \includesvg[width = \textwidth]{posterior_germany_infra.svg}
+%     \includegraphics[width = \textwidth]{posterior_germany_infra.png}
 %     \caption{Posterior mean of the area-specific risk and the posterior probability.}
 %     \label{posteriorGermanyInfra}
 % \end{figure}
+% % \begin{figure}[H]
+% %     \centering
+% %     \includesvg[width = \textwidth]{posterior_germany_infra.svg}
+% %     \caption{Posterior mean of the area-specific risk and the posterior probability.}
+% %     \label{posteriorGermanyInfra}
+% % \end{figure}
 \paragraph{Demographic + Infrastructure Models}$\newline$
 Comparing Table~\ref{allGermany_nospatial} and Table~\ref{allGermany}, it can be seen that the model without spatial component performs equally well in terms of the CPO but worse in terms of the DIC, WAIC and MAE. \\
 In the model without the spatial component, the significant effects include population density, the percentage of the vote for the FDP, the proportion of women, the logarithmic trade tax and the percentage of the vote for the SPD, die Linke and the Greens. For the BYM2 model, on the other hand, only population density and the percentage of the vote for the Greens are significant effects. \\
 The posterior mean of the intercept implies a risk rate of -8.2\% for Germany with a credibility interval of -9.6\% to -6.7\%. \\
-A 1 standard deviation increase in population density leads to a risk increase of 11.9\%, while a 1 standard deviation increase in the percentage of the vote for the Greens leads to a risk decrease of 14.5\%. What might cause these effects has already been discussed in section~\ref{par:demoGermany}. \\
-When looking at Figure~\ref{posteriorGermanyAll}, it is difficult to distinguish it from Figure~\ref{posteriorGermanyDemo} because, except for a few municipalities, the posterior mean and posterior probability are mostly identical.
+A 1 standard deviation increase in population density leads to a risk increase of 11.9\%, while a 1 standard deviation increase in the percentage of the vote for the Greens leads to a risk decrease of 14.5\%. What might cause these effects has already been discussed in section%~\ref{par:demoGermany}. \\
+When looking at Figure~\ref{posteriorGermanyAll}, it is difficult to distinguish it from Figure%~\ref{posteriorGermanyDemo}
+because, except for a few municipalities, the posterior mean and posterior probability are mostly identical.
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{posterior_germany_all.png}
@@ -673,68 +577,68 @@ When looking at Figure~\ref{posteriorGermanyAll}, it is difficult to distinguish
 %     \label{posteriorGermanyAll}
 % \end{figure}
 \subsubsection{Discussion of the Models for Norway}
-\paragraph{Demographic Models}$\newline$
-Comparing Table~\ref{demoNorway_nospatial} and Table~\ref{demoNorway}, it can be seen that the model without spatial component performs better in terms of MAE, but worse in terms of DIC, WAIC and CPO. \\
-In both models, only urban density has a significant impact on the risk of infection. \\
-The posterior mean of the intercept implies a risk rate of -53.7\% for all of Norway. \\
-A 1 standard deviation increase in urban density leads to a 7.9\% increase in the risk of infection. Since higher urban density means that there are more residential buildings in a given area, it should also be expected that there are more people in that area, which in turn facilitates the spread of a viral disease. \\
-Looking at Figure~\ref{posteriorNorwayDemo}, excluding the two municipalities of Hyllestad and Ulvik, the risk is highest in the municipality of the nation's capital, Oslo, and the surrounding municipalities, with a posterior probability of at least 0.75 in all. In addition, a higher posterior mean can be observed in the western parts of southern Norway.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{posterior_norway_demo.png}
-    \caption{Posterior mean of the area-specific risk and the posterior probability.}
-    \label{posteriorNorwayDemo}
-\end{figure}
+% \paragraph{Demographic Models}$\newline$
+% Comparing Table~\ref{demoNorway_nospatial} and Table~\ref{demoNorway}, it can be seen that the model without spatial component performs better in terms of MAE, but worse in terms of DIC, WAIC and CPO. \\
+% In both models, only urban density has a significant impact on the risk of infection. \\
+% The posterior mean of the intercept implies a risk rate of -53.7\% for all of Norway. \\
+% A 1 standard deviation increase in urban density leads to a 7.9\% increase in the risk of infection. Since higher urban density means that there are more residential buildings in a given area, it should also be expected that there are more people in that area, which in turn facilitates the spread of a viral disease. \\
+% Looking at Figure~\ref{posteriorNorwayDemo}, excluding the two municipalities of Hyllestad and Ulvik, the risk is highest in the municipality of the nation's capital, Oslo, and the surrounding municipalities, with a posterior probability of at least 0.75 in all. In addition, a higher posterior mean can be observed in the western parts of southern Norway.
 % \begin{figure}[H]
 %     \centering
-%     \includesvg[width = \textwidth]{posterior_norway_demo.svg}
+%     \includegraphics[width = \textwidth]{posterior_norway_demo.png}
 %     \caption{Posterior mean of the area-specific risk and the posterior probability.}
 %     \label{posteriorNorwayDemo}
 % \end{figure}
-For better interpretability, the logarithmic posterior mean is shown in Figure~\ref{posteriorNorwayDemoLog}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{posterior_norway_demo_log.png}
-    \caption{Logarithmic posterior mean of the area-specific risk.}
-    \label{posteriorNorwayDemoLog}
-\end{figure}
+% % \begin{figure}[H]
+% %     \centering
+% %     \includesvg[width = \textwidth]{posterior_norway_demo.svg}
+% %     \caption{Posterior mean of the area-specific risk and the posterior probability.}
+% %     \label{posteriorNorwayDemo}
+% % \end{figure}
+% For better interpretability, the logarithmic posterior mean is shown in Figure~\ref{posteriorNorwayDemoLog}.
 % \begin{figure}[H]
 %     \centering
-%     \includesvg[width = \textwidth]{posterior_norway_demo_log.svg}
+%     \includegraphics[width = \textwidth]{posterior_norway_demo_log.png}
 %     \caption{Logarithmic posterior mean of the area-specific risk.}
 %     \label{posteriorNorwayDemoLog}
 % \end{figure}
-Comparing the log relative risk with the log standardised incidence ratio in Figure~\ref{sirnorwaylog}, these two are quite similar. For most parts of Norway, the risk is at or below 0, while there is an increased risk in the Oslo region. However, there are a few municipalities that have a log-standardised incidence ratio of about 0, but a higher log-relative risk than this. Most of these are located in southern Norway, but a few are scattered throughout the rest of the country.
-\paragraph{Infrastructure Models}$\newline$
-Comparing Table~\ref{infraNorway_nospatial} and Table~\ref{infraNorway}, the BYM2 model outperforms the model without the spatial component in terms of every performance measure. \\
-For the model without a spatial component, the urban density, the number of aerodromes in a municipality and the number of offices in a municipality has a significant effect on the risk of infection whereas in the BYM2 model only the number of places of worship significantly influences the risk of infection. \\
-The intercept of the BYM2 model implies a risk rate of -67.2\% across Norway. \\
-A 1 standard deviation increase in the number of places of worship in a given community leads to a 16.5\% increase in risk. Yezli and Khan, in a paper, advocate for the closure of places of worship and the suspension of religious gatherings because, in their opinion, these places pose a risk of transmission of Covid-19 to potentially large numbers of people through a single case. In addition, these gatherings often involve dense mixing of many people in a confined space, sometimes for extended periods of time \autocite[][]{yezli2020covid}. Wildman et. al. also examine the role of religion during the Covid 19 pandemic and conclude that religious community building directly influences virus spread by either inhibiting or accelerating social transmission, depending on which specific religious group is considered\autocite[][]{wildman2020religion}. \\
-Looking at Figure~\ref{posteriorNorwayInfra} and Figure~\ref{posteriorNorwayInfraLog}, there is almost no difference to Figure~\ref{posteriorNorwayDemo} and Figure~\ref{posteriorNorwayDemoLog}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{posterior_norway_infra.png}
-    \caption{Posterior mean of the area-specific risk and the posterior probability.}
-    \label{posteriorNorwayInfra}
-\end{figure}
+% % \begin{figure}[H]
+% %     \centering
+% %     \includesvg[width = \textwidth]{posterior_norway_demo_log.svg}
+% %     \caption{Logarithmic posterior mean of the area-specific risk.}
+% %     \label{posteriorNorwayDemoLog}
+% % \end{figure}
+% Comparing the log relative risk with the log SIR in Figure~\ref{sirnorwaylog}, these two are quite similar. For most parts of Norway, the risk is at or below 0, while there is an increased risk in the Oslo region. However, there are a few municipalities that have a log-SIR of about 0, but a higher log-relative risk than this. Most of these are located in southern Norway, but a few are scattered throughout the rest of the country.
+% \paragraph{Infrastructure Models}$\newline$
+% Comparing Table~\ref{infraNorway_nospatial} and Table~\ref{infraNorway}, the BYM2 model outperforms the model without the spatial component in terms of every performance measure. \\
+% For the model without a spatial component, the urban density, the number of aerodromes in a municipality and the number of offices in a municipality has a significant effect on the risk of infection whereas in the BYM2 model only the number of places of worship significantly influences the risk of infection. \\
+% The intercept of the BYM2 model implies a risk rate of -67.2\% across Norway. \\
+% A 1 standard deviation increase in the number of places of worship in a given community leads to a 16.5\% increase in risk. Yezli and Khan, in a paper, advocate for the closure of places of worship and the suspension of religious gatherings because, in their opinion, these places pose a risk of transmission of Covid-19 to potentially large numbers of people through a single case. In addition, these gatherings often involve dense mixing of many people in a confined space, sometimes for extended periods of time \autocite[][]{yezli2020covid}. Wildman et. al. also examine the role of religion during the Covid 19 pandemic and conclude that religious community building directly influences virus spread by either inhibiting or accelerating social transmission, depending on which specific religious group is considered\autocite[][]{wildman2020religion}. \\
+% Looking at Figure~\ref{posteriorNorwayInfra} and Figure~\ref{posteriorNorwayInfraLog}, there is almost no difference to Figure~\ref{posteriorNorwayDemo} and Figure~\ref{posteriorNorwayDemoLog}.
 % \begin{figure}[H]
 %     \centering
-%     \includesvg[width = \textwidth]{posterior_norway_infra.svg}
+%     \includegraphics[width = \textwidth]{posterior_norway_infra.png}
 %     \caption{Posterior mean of the area-specific risk and the posterior probability.}
 %     \label{posteriorNorwayInfra}
 % \end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{posterior_norway_infra_log.png}
-    \caption{Logarithmic posterior mean of the area-specific risk.}
-    \label{posteriorNorwayInfraLog}
-\end{figure}
+% % \begin{figure}[H]
+% %     \centering
+% %     \includesvg[width = \textwidth]{posterior_norway_infra.svg}
+% %     \caption{Posterior mean of the area-specific risk and the posterior probability.}
+% %     \label{posteriorNorwayInfra}
+% % \end{figure}
 % \begin{figure}[H]
 %     \centering
-%     \includesvg[width = \textwidth]{posterior_norway_infra_log.svg}
+%     \includegraphics[width = \textwidth]{posterior_norway_infra_log.png}
 %     \caption{Logarithmic posterior mean of the area-specific risk.}
-%     \label{posteriorNorwayDemoLog}
+%     \label{posteriorNorwayInfraLog}
 % \end{figure}
+% % \begin{figure}[H]
+% %     \centering
+% %     \includesvg[width = \textwidth]{posterior_norway_infra_log.svg}
+% %     \caption{Logarithmic posterior mean of the area-specific risk.}
+% %     \label{posteriorNorwayDemoLog}
+% % \end{figure}
 \paragraph{Demographic + Infrastructure Models}$\newline$
 Comparing Table~\ref{allNorway_nospatial} and Table~\ref{allNorway}, it can be seen that the model without spatial component performs better in terms of MAE, but worse in terms of DIC, WAIC and CPO. \\
 For the model without the spatial component, the significant effects include the number of immigrants, the unemployment amongst immigrants, the urban density, the proportion of females and the number of aerodromes in a municipality. For the BYM2 model, there are only two significant effects, the number of immigrants as well as the median age in a municipality. \\
@@ -744,7 +648,9 @@ In both models, only urban density has a significant impact on the risk of infec
 The posterior mean of the intercept implies a risk rate of -53.7\% for all of Norway. \\
 A 1 standard deviation increase in urban density leads to a 7.9\% increase in the risk of infection. Since higher urban density means that there are more residential buildings in a given area, it should also be expected that there are more people in that area, which in turn facilitates the spread of a viral disease. \\
 For the median age, an increase of 1 standard deviation leads to a risk reduction of 10.8\%, implying that people living in "younger" communities have a higher risk of infection. One possible reason for this could be that young people are more mobile and therefore come into contact with other people more often than older people. \\
-When comparing Figure~\ref{posteriorNorwayAllLog} and Figure~\ref{posteriorNorwayInfraLog}, slight differences in the relative risk around the Oslo region can be seen. In Figure~\ref{posteriorNorwayAllLog}, the risk is higher northeast of Oslo and at the border to Sweden than in Figure~\ref{posteriorNorwayInfraLog}, while it is higher northwest of Oslo in Figure~\ref{posteriorNorwayInfraLog}, as well as in the northernmost regions of Norway.
+When comparing Figure~\ref{posteriorNorwayAllLog} and Figure%~\ref{posteriorNorwayInfraLog},
+slight differences in the relative risk around the Oslo region can be seen. In Figure~\ref{posteriorNorwayAllLog}, the risk is higher northeast of Oslo and at the border to Sweden than in Figure%~\ref{posteriorNorwayInfraLog}, while it is higher northwest of Oslo in Figure%~\ref{posteriorNorwayInfraLog},
+as well as in the northernmost regions of Norway.
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{posterior_norway_all.png}
