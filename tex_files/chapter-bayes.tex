@@ -860,7 +860,12 @@ The conditional predictive ordinate is given by
 \begin{equation}
     \hbox{CPO} = \pi\left(y_i|\pmb{y}_{-i}\right)
 \end{equation}
-with $\pmb{y}$ the data, $\pmb{y}_{-i}$ the data without the $i$-th observation, and $\pi\left(\cdot|y_{-i}\right)$ the predictive distribution of a new observation at $\pmb{y}_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
+with $\pmb{y}$ the data, $\pmb{y}_{-i}$ the data without the $i$-th observation, and $\pi\left(\cdot|\pmb{y}_{-i}\right)$ the predictive distribution of a new observation at $\pmb{y}_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
+\clearpage
+\section{Model Issues}\label{sec:issues}
+One problem that plagues these models is that they cannot be directly compared due to their different parameterisations and the fact that the precision in these models is interpreted differently. Since neither a Besag model nor a BYM model nor a Leroux model is scaled, the precision parameter is not representative of the marginal precision but is confounded with the mixing parameter. Therefore, the effect of a prior assigned to the precision parameter is dependent on the graph structure of the application. Thus, a given prior is not transferable between different applications if the underlying graph changes. Furthermore, the goal of the BYM2 model is not to optimise goodness-of-fit indicators, but to provide a meaningful model formulation where all parameters have a clear meaning. By mapping the precision parameter to the marginal standard deviation, the model parameters are flexible and the assignment of meaningful hyperpriorities is made easier \autocite[][]{riebler2016intuitive}. \\
+Additionally, the goodness-of-fit indicators introduced in section~\ref{sec:performance} have their own problems. The DIC, for example, produces unreasonable results if the posterior distribution is not well summarised by its mean, while the WAIC is based on a data partition that would create difficulties for structured models, such as for spatial or network data \autocite[][]{gelman2014understanding}. \\
+Finally, the choice of the prior also affects the value of these criteria and depending on the values chosen for the PC priors used in this work, overfitting of the models may occur, which is then reflected in these criteria, but more on this later.
 \clearpage
 \section{The Variance Inflation Factor}\label{sec:vif}
 The Variance Inflation Factor ($\hbox{VIF}$) is a measurement that can be used to avoid multicollinearity between covariates. The $\hbox{VIF}$ quantifies the severity of multicollinearity in a generalised linear model. It provides an index that measures the extent to which the variance of an estimated regression coefficient is increased due to collinearity. \\
@@ -874,9 +879,9 @@ with $R^2$ the coefficient of determination. In most literature, a value of at l
 As the posterior mean and the credibility intervals of coefficient are of interest, calculation of these is performed later on. This allows a better interpretation of the results. \\
 To compute the posterior mean of the coefficients, the code shown in Listing~\ref{codePosteriorMean} can be used. \\
 To get the expected value given a marginal function $\pi\left(x\right)$, the expected value of a function $f\left(x\right)$ is calculated, i.e.
-\begin{equation*}
+\begin{equation}
     \int f\left(x\right)\pi\left(x\right)dx.
-\end{equation*}
+\end{equation}
 If necessary, e.g. if the target variable follows a (negative) binomial distribution, the value must be transformed to its original scale, as in these cases the log-likelihood is modelled. Therefore, in these cases, the expected value would have to be exponentiated to allow a clear interpretation. \\
 To obtain a credibility interval of the fixed effects on the transformed scale, the code in Listing~\ref{codeCredibility} can be used. In practice, the marginals are first transformed to their original scale, if necessary, and then the 2.5\% quantile and the 97.5\% quantiles are calculated.
 %https://arxiv.org/pdf/1708.02723.pdf \\
