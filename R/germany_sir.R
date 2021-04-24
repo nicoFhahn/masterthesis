@@ -20,8 +20,8 @@ newest_numbers <- merge(
   by.y = "Kennziffer"
 )
 newest_numbers <- st_as_sf(newest_numbers)
-color_low <- "#002FA7"
-color_high <- "#F50039"
+color_low <- "#20A4F3"
+color_high <- "#FF206E"
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = sir)) +
   ggtitle(

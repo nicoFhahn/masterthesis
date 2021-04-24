@@ -4,8 +4,8 @@ library(leaflet)
 library(leaflet.mapboxgl)
 library(patchwork)
 source("R/preprocess_norge.R")
-color_low <- "#002FA7"
-color_high <- "#F50039"
+color_low <- "#20A4F3"
+color_high <- "#FF206E"
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = sir)) +
   ggtitle(

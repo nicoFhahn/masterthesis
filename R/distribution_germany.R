@@ -202,9 +202,9 @@ x_poisson <- rpois(
 distr <- tibble(
   value = c(x_nbinom, x_normal, x_poisson),
   distribution = c(
-    rep("Negative binomial", 3560),
-    rep("Normal", 3560),
-    rep("Poisson", 3560)
+    rep("Negative binomial", 4010),
+    rep("Normal", 4010),
+    rep("Poisson", 4010)
   )
 )
 distrplot_1 <- ggplot() +
@@ -213,7 +213,7 @@ distrplot_1 <- ggplot() +
     aes(value, y = ..density..),
     colour = "black",
     fill = "white",
-    binwidth = 200
+    binwidth = 750
   ) +
   geom_density(
     data = distr,
@@ -240,14 +240,14 @@ distrplot_1 <- ggplot() +
       title = "Distribution"
     )
   ) +
-  xlim(c(-5000, 10000))
+  xlim(c(-20000, 40000))
 distrplot_2 <- ggplot() +
   geom_histogram(
     data = newest_numbers,
     aes(value, y = ..density..),
     colour = "black",
     fill = "white",
-    binwidth = 200
+    binwidth = 750
   ) +
   geom_density(
     data = distr[distr$distribution != "Poisson", ],
@@ -274,7 +274,7 @@ distrplot_2 <- ggplot() +
       title = "Distribution"
     )
   ) +
-  xlim(c(-5000, 10000)) +
+  xlim(c(-20000, 40000)) +
   theme(
     legend.position = "none"
   )
