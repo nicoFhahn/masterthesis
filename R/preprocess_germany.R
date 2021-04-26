@@ -6,6 +6,8 @@ library(SpatialEpi)
 library(stringr)
 library(units)
 library(covid19germany)
+library(regclass)
+
 # download the newest RKI data
 rki <- get_RKI_timeseries()
 # group it after municipality

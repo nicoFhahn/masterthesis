@@ -10,6 +10,7 @@ library(units)
 library(covid19germany)
 #####################################################
 # download the newest RKI data
+cols <- colnames(newest_numbers)
 rki <- get_RKI_timeseries()
 # group it after municipality
 germany_confirmed <- group_RKI_timeseries(rki, Landkreis)
@@ -24,6 +25,12 @@ date_2 <- max(as.Date(germany_features$Date))
 if (date_1 != date_2) {
   # get the population of the municipalities
   germany_population <- ew_kreise
+  germany_confirmed$MovingCorrectionDead <- NULL
+  germany_confirmed$MovingCorrectionRecovered <- NULL
+  germany_confirmed$MovingCorrectionTestedIll <- NULL
+  germany_confirmed$CumMovingCorrectionDead <- NULL
+  germany_confirmed$CumMovingCorrectionRecovered <- NULL
+  germany_confirmed$CumMovingCorrectionTestedIll <- NULL
   # the data for berlin needs to be manually grouped
   # change the municipality name and ID to the same for all berlin cases
   germany_confirmed[
@@ -656,7 +663,7 @@ if (date_1 != date_2) {
       ls(),
       c(
         "germany_shape", "germany_confirmed_population",
-        "germany", "germany_confirmed"
+        "germany", "germany_confirmed", "cols"
       )
     )
   )
@@ -694,8 +701,13 @@ if (date_1 != date_2) {
   write_csv(no_geometry, "wrangled_data/germany_features_temporal.csv")
   rm(list = ls())
   # prepare the data
-  germany_features <- read_csv("wrangled_data/germany_features_temporal.csv")
+  source("R/preprocess_germany.R")
+  cols <- colnames(newest_numbers)
+} else {
+  source("R/preprocess_germany.R")
+  cols <- colnames(newest_numbers)
 }
+germany_features <- read_csv("wrangled_data/germany_features_temporal.csv")
 # turn variables into numeric
 germany_features$Gewerbesteuer <- as.numeric(
   trimws(germany_features$Gewerbesteuer)
@@ -793,7 +805,7 @@ germany_split_e <- future_map(
   },
   .progress = TRUE
 )
-future::plan(future::sequential)
+plan(sequential)
 # bind it all together
 germany <- do.call(rbind, germany_split_e)
 # add the id variables
@@ -822,4 +834,5 @@ germany <- merge(
 )
 # sort it
 germany <- germany[order(germany$idarea_1, germany$id_date_1), ]
+germany <- germany[, c(cols, "id_date_1", "id_date_2")]
 rm(list = setdiff(ls(), c("germany")))

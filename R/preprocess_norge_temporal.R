@@ -580,9 +580,14 @@ if (date_1 != date_2) {
     "wrangled_data/shapes_norge.shp"
   )
   rm(list = ls())
-  # load the data
-  norge_features <- read_csv("wrangled_data/norge_features_temporal.csv")
+  source("R/preprocess_norge.R")
+  cols <- colnames(newest_numbers)
+} else {
+  source("R/preprocess_norge.R")
+  cols <- colnames(newest_numbers)
 }
+# load the data
+norge_features <- read_csv("wrangled_data/norge_features_temporal.csv")
 # norge_features[, c(20:31, 36:53, 55)] <- 1000 * norge_features[, c(20:31, 36:53, 55)] / norge_features$population
 # scale the data
 norge_features[, c(20:31, 36:53, 55)] <- scale(
@@ -667,5 +672,6 @@ norge <- merge(
 )
 # sort it
 norge <- norge[order(norge$idarea_1, norge$id_date_1), ]
+norge <- norge[, c(cols, "id_date_1", "id_date_2")]
 # scale the remaining variables
 rm(list = setdiff(ls(), c("norge")))
