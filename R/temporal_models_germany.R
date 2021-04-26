@@ -1,7 +1,7 @@
 library(INLA)
 library(spdep)
 source("R/preprocess_germany_temporal.R")
-set.seed(7918)
+set.seed(14523)
 backup <- germany
 germany <- backup
 germany <- germany[
