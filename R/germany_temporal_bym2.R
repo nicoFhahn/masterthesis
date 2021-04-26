@@ -6,7 +6,7 @@ germany <- germany[
   germany$Date %in% seq(
     from = min(germany$Date),
     to = max(germany$Date),
-    by = 7
+    by = 2
   ),
 ]
 test <- sample(seq_len(nrow(germany)), size = floor(0.2 * nrow(germany)))
@@ -22,12 +22,6 @@ prior_1 <- list(
     param = c(1, 0.01)
   )
 )
-prior_2 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(0.5 / 0.31, 0.01)
-  )
-) #
 models <- list()
 results <- list()
 mae <- list()
@@ -40,20 +34,13 @@ g <- inla.read.graph(filename = "maps/map_4.adj")
 # specify the model formula
 # we will start with demographic variables and pop/urban density
 formula_1 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex +
+  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
+  higher_education +
   # specify the model with neighborhood matrix
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
   f(id_date_1, model = "rw2") +
   f(id_date_2, model = "iid")
-formula_2 <- value ~
-# add the demographic vars and pop density
-pop_dens + urb_dens + sex +
-  # specify the model with neighborhood matrix
-  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
-  f(id_date_1, model = "rw2") +
-  f(id_date_2, model = "iid")
-
 res_1 <- inla(
   formula_1,
   family = "nbinomial",
@@ -64,8 +51,16 @@ res_1 <- inla(
     link = link
   ),
   Ntrials = germany$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
+  verbose = TRUE
 )
+formula_2 <- value ~
+# add the demographic vars and pop density
+pop_dens + urb_dens + sex +
+  # specify the model with neighborhood matrix
+  f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2) +
+  f(id_date_1, model = "rw2") +
+  f(id_date_2, model = "iid")
 res_2 <- inla(
   formula_2,
   family = "nbinomial",

@@ -1,10 +1,9 @@
 library(readr)
 library(sf)
 library(INLA)
-# source("R/germany_leroux_models.R")
-# source("R/germany_besagproper_models.R")
-# source("R/germany_bym2_models.R")
-# source("R/germany_nospatial_models.R")
+library(ggplot2)
+library(patchwork)
+# source("R/nontemporal_models_germany.R")
 newest_numbers <- read_csv("eval_data/newest_numbers_germany_march24.csv")
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 newest_numbers <- merge(
@@ -14,58 +13,38 @@ newest_numbers <- merge(
   by.y = "Kennziffer"
 )
 newest_numbers <- st_as_sf(newest_numbers)
-load("models/leroux_germany.Rda")
-models_final_leroux <- models_final
-load("models/besagproper_germany.Rda")
-models_final_besag <- models_final
-load("models/bym2_germany.Rda")
-models_final_bym2 <- models_final
-load("models/nospatial_germany.Rda")
-models_final_nospatial <- models_final
-rm(models_final)
-models_leroux <- models_final_leroux[[1]]
-models_besag <- models_final_besag[[1]]
-models_bym2 <- models_final_bym2[[1]]
-models_nospatial <- models_final_nospatial[[1]]
-results_leroux <- models_final_leroux[[2]]
-results_besag <- models_final_besag[[2]]
-results_bym2 <- models_final_bym2[[2]]
-results_nospatial <- models_final_nospatial[[2]]
-mae_leroux <- models_final_leroux[[3]]
-mae_besag <- models_final_besag[[3]]
-mae_bym2 <- models_final_bym2[[3]]
-mae_nospatial <- models_final_nospatial[[3]]
+# load the models
+load("models/nontemporal_germany.Rda")
+# show the 5 municipalities with the most infections
 newest_numbers[
   order(newest_numbers$value, decreasing = TRUE),
 ][1:5, c("municipality", "population", "value")]
-####################### Models with no spatial component
-all_results <- c(results_nospatial[7])
-all_dic <- unlist(lapply(all_results, function(x) x$dic))
-all_waic <- unlist(lapply(all_results, function(x) x$waic))
-all_cpo <- unlist(lapply(all_results, function(x) x$cpo))
-id_nospatial <- which(
-  unlist(mae_nospatial[12:13]) %in% min(unlist(mae_nospatial[12:13]))
-) + 11
-all_dic[id_nospatial - 11]
-all_waic[id_nospatial - 11]
-all_cpo[id_nospatial - 11]
-mae_nospatial[id_nospatial]
-models_nospatial[[id_nospatial]]$summary.fixed[
-  order(models_nospatial[[id_nospatial]]$summary.fixed$mean),
+####################### Model with no spatial component
+# get the dic
+models_final[[2]][[1]]$dic
+# get the waic
+models_final[[2]][[1]]$waic
+# get the cpo
+models_final[[2]][[1]]$cpo
+# get the mae
+models_final[[3]][[1]]
+# get the summary
+models_final[[1]][[1]]$summary.fixed[
+  order(models_final[[1]][[1]]$summary.fixed$mean),
 ]
 sapply(
-  models_nospatial[[id_nospatial]]$marginals.fixed[
-    rownames(models_nospatial[[id_nospatial]]$summary.fixed[
-      order(models_nospatial[[id_nospatial]]$summary.fixed$mean),
+  models_final[[1]][[1]]$marginals.fixed[
+    rownames(models_final[[1]][[1]]$summary.fixed[
+      order(models_final[[1]][[1]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
   fun = exp
 )
 sapply(
-  models_nospatial[[id_nospatial]]$marginals.fixed[
-    rownames(models_nospatial[[id_nospatial]]$summary.fixed[
-      order(models_nospatial[[id_nospatial]]$summary.fixed$mean),
+  models_final[[1]][[1]]$marginals.fixed[
+    rownames(models_final[[1]][[1]]$summary.fixed[
+      order(models_final[[1]][[1]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -77,548 +56,545 @@ sapply(
     )
   }
 )
-# models with spatial
-all_results <- c(
-  results_besag[7], results_bym2[7],
-  results_leroux[7]
-)
-all_dic <- unlist(lapply(all_results, function(x) x$dic))
-all_waic <- unlist(lapply(all_results, function(x) x$waic))
-all_cpo <- unlist(lapply(all_results, function(x) x$cpo))
-id_nospatial_2 <- which(
-  unlist(mae_nospatial[12:13]) %in% min(unlist(mae_nospatial[12:13]))
-)
-all_dic[id_nospatial_2]
-all_waic[id_nospatial_2]
-all_cpo[id_nospatial_2]
-mae_besag[id_nospatial_2 + 11]
-all_dic[id_nospatial_2 + 2]
-all_waic[id_nospatial_2 + 2]
-all_cpo[id_nospatial_2 + 2]
-mae_bym2[id_nospatial_2 + 11]
-all_dic[id_nospatial_2 + 4]
-all_waic[id_nospatial_2 + 4]
-all_cpo[id_nospatial_2 + 4]
-mae_leroux[id_nospatial_2 + 11]
+# now the models with a spatial component
+# get the dic values
+# first besag, then bym2, then leroux
+models_final[[2]][[2]]$dic
+models_final[[2]][[3]]$dic
+models_final[[2]][[4]]$dic
+# now the waic
+models_final[[2]][[2]]$waic
+models_final[[2]][[3]]$waic
+models_final[[2]][[4]]$waic
+# now the cpo
+models_final[[2]][[2]]$cpo
+models_final[[2]][[3]]$cpo
+models_final[[2]][[4]]$cpo
+# now the mae
+models_final[[3]][[2]]
+models_final[[3]][[3]]
+models_final[[3]][[4]]
 options(scipen = 10)
+# create a tibble with the credibility intervals and posterior coefficients
+# for the bym2 model and the model without the spatial component
 marginal_frame <- tibble(
   lower = c(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$Gruene
+        exp, models_final[[1]][[1]]$marginals.fixed$Gruene
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$Gruene
+        exp, models_final[[1]][[3]]$marginals.fixed$Gruene
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$`(Intercept)`
+        exp, models_final[[1]][[1]]$marginals.fixed$`(Intercept)`
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$`(Intercept)`
+        exp, models_final[[1]][[3]]$marginals.fixed$`(Intercept)`
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$higher_education
+        exp, models_final[[1]][[1]]$marginals.fixed$higher_education
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$higher_education
+        exp, models_final[[1]][[3]]$marginals.fixed$higher_education
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$SPD
+        exp, models_final[[1]][[1]]$marginals.fixed$SPD
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$SPD
+        exp, models_final[[1]][[3]]$marginals.fixed$SPD
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$`log(trade_tax)`
+        exp, models_final[[1]][[1]]$marginals.fixed$`log(trade_tax)`
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$`log(trade_tax)`
+        exp, models_final[[1]][[3]]$marginals.fixed$`log(trade_tax)`
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$clinic
+        exp, models_final[[1]][[1]]$marginals.fixed$clinic
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$clinic
+        exp, models_final[[1]][[3]]$marginals.fixed$clinic
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$sex
+        exp, models_final[[1]][[1]]$marginals.fixed$sex
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$sex
+        exp, models_final[[1]][[3]]$marginals.fixed$sex
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$platform
+        exp, models_final[[1]][[1]]$marginals.fixed$platform
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$platform
+        exp, models_final[[1]][[3]]$marginals.fixed$platform
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$aerodrome
+        exp, models_final[[1]][[1]]$marginals.fixed$aerodrome
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$aerodrome
+        exp, models_final[[1]][[3]]$marginals.fixed$aerodrome
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$die_linke
+        exp, models_final[[1]][[1]]$marginals.fixed$die_linke
         
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$die_linke
+        exp, models_final[[1]][[3]]$marginals.fixed$die_linke
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$FDP
+        exp, models_final[[1]][[1]]$marginals.fixed$FDP
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$FDP
+        exp, models_final[[1]][[3]]$marginals.fixed$FDP
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$nursing_home
+        exp, models_final[[1]][[1]]$marginals.fixed$nursing_home
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$nursing_home
+        exp, models_final[[1]][[3]]$marginals.fixed$nursing_home
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$retail
+        exp, models_final[[1]][[1]]$marginals.fixed$retail
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$retail
+        exp, models_final[[1]][[3]]$marginals.fixed$retail
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$pop_dens
+        exp, models_final[[1]][[1]]$marginals.fixed$pop_dens
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$pop_dens
+        exp, models_final[[1]][[3]]$marginals.fixed$pop_dens
       )
     )[1]
   ),
   mean = c(
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$Gruene
+      models_final[[1]][[1]]$marginals.fixed$Gruene
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$Gruene
+      models_final[[1]][[3]]$marginals.fixed$Gruene
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$`(Intercept)`
+      models_final[[1]][[1]]$marginals.fixed$`(Intercept)`
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$`(Intercept)`
+      models_final[[1]][[3]]$marginals.fixed$`(Intercept)`
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$higher_education
+      models_final[[1]][[1]]$marginals.fixed$higher_education
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$higher_education
+      models_final[[1]][[3]]$marginals.fixed$higher_education
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$SPD
+      models_final[[1]][[1]]$marginals.fixed$SPD
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$SPD
+      models_final[[1]][[3]]$marginals.fixed$SPD
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$`log(trade_tax)`
+      models_final[[1]][[1]]$marginals.fixed$`log(trade_tax)`
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$`log(trade_tax)`
+      models_final[[1]][[3]]$marginals.fixed$`log(trade_tax)`
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$clinic
+      models_final[[1]][[1]]$marginals.fixed$clinic
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$clinic
+      models_final[[1]][[3]]$marginals.fixed$clinic
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$place_of_worship
+      models_final[[1]][[1]]$marginals.fixed$place_of_worship
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$place_of_worship
+      models_final[[1]][[3]]$marginals.fixed$place_of_worship
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$sex
+      models_final[[1]][[1]]$marginals.fixed$sex
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$sex
+      models_final[[1]][[3]]$marginals.fixed$sex
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$urb_dens
+      models_final[[1]][[1]]$marginals.fixed$urb_dens
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$urb_dens
+      models_final[[1]][[3]]$marginals.fixed$urb_dens
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$platform
+      models_final[[1]][[1]]$marginals.fixed$platform
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$platform
+      models_final[[1]][[3]]$marginals.fixed$platform
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$aerodrome
+      models_final[[1]][[1]]$marginals.fixed$aerodrome
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$aerodrome
+      models_final[[1]][[3]]$marginals.fixed$aerodrome
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$die_linke
+      models_final[[1]][[1]]$marginals.fixed$die_linke
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$die_linke
+      models_final[[1]][[3]]$marginals.fixed$die_linke
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$FDP
+      models_final[[1]][[1]]$marginals.fixed$FDP
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$FDP
+      models_final[[1]][[3]]$marginals.fixed$FDP
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$nursing_home
+      models_final[[1]][[1]]$marginals.fixed$nursing_home
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$nursing_home
+      models_final[[1]][[3]]$marginals.fixed$nursing_home
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$retail
+      models_final[[1]][[1]]$marginals.fixed$retail
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$retail
+      models_final[[1]][[3]]$marginals.fixed$retail
     ),
     inla.emarginal(
       exp,
-      models_nospatial[[id_nospatial]]$marginals.fixed$pop_dens
+      models_final[[1]][[1]]$marginals.fixed$pop_dens
     ),
     inla.emarginal(
       exp,
-      models_bym2[[id_nospatial]]$marginals.fixed$pop_dens
+      models_final[[1]][[3]]$marginals.fixed$pop_dens
     )
   ),
   upper = c(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$Gruene
+        exp, models_final[[1]][[1]]$marginals.fixed$Gruene
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$Gruene
+        exp, models_final[[1]][[3]]$marginals.fixed$Gruene
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$`(Intercept)`
+        exp, models_final[[1]][[1]]$marginals.fixed$`(Intercept)`
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$`(Intercept)`
+        exp, models_final[[1]][[3]]$marginals.fixed$`(Intercept)`
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$higher_education
+        exp, models_final[[1]][[1]]$marginals.fixed$higher_education
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$higher_education
+        exp, models_final[[1]][[3]]$marginals.fixed$higher_education
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$SPD
+        exp, models_final[[1]][[1]]$marginals.fixed$SPD
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$SPD
+        exp, models_final[[1]][[3]]$marginals.fixed$SPD
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$`log(trade_tax)`
+        exp, models_final[[1]][[1]]$marginals.fixed$`log(trade_tax)`
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$`log(trade_tax)`
+        exp, models_final[[1]][[3]]$marginals.fixed$`log(trade_tax)`
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$clinic
+        exp, models_final[[1]][[1]]$marginals.fixed$clinic
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$clinic
+        exp, models_final[[1]][[3]]$marginals.fixed$clinic
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$sex
+        exp, models_final[[1]][[1]]$marginals.fixed$sex
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$sex
+        exp, models_final[[1]][[3]]$marginals.fixed$sex
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$platform
+        exp, models_final[[1]][[1]]$marginals.fixed$platform
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$platform
+        exp, models_final[[1]][[3]]$marginals.fixed$platform
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$aerodrome
+        exp, models_final[[1]][[1]]$marginals.fixed$aerodrome
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$aerodrome
+        exp, models_final[[1]][[3]]$marginals.fixed$aerodrome
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$die_linke
+        exp, models_final[[1]][[1]]$marginals.fixed$die_linke
         
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$die_linke
+        exp, models_final[[1]][[3]]$marginals.fixed$die_linke
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$FDP
+        exp, models_final[[1]][[1]]$marginals.fixed$FDP
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$FDP
+        exp, models_final[[1]][[3]]$marginals.fixed$FDP
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$nursing_home
+        exp, models_final[[1]][[1]]$marginals.fixed$nursing_home
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$nursing_home
+        exp, models_final[[1]][[3]]$marginals.fixed$nursing_home
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$retail
+        exp, models_final[[1]][[1]]$marginals.fixed$retail
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$retail
+        exp, models_final[[1]][[3]]$marginals.fixed$retail
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_nospatial[[id_nospatial]]$marginals.fixed$pop_dens
+        exp, models_final[[1]][[1]]$marginals.fixed$pop_dens
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_bym2[[id_nospatial]]$marginals.fixed$pop_dens
+        exp, models_final[[1]][[3]]$marginals.fixed$pop_dens
       )
     )[2]
   ),
@@ -644,7 +620,12 @@ marginal_frame <- tibble(
     c("No spatial", "BYM2"), 16
   )
 )
-marginal_frame$variable <- ordered(marginal_frame$variable, levels = unique(marginal_frame$variable))
+# order the variable
+marginal_frame$variable <- ordered(
+  marginal_frame$variable,
+  levels = unique(marginal_frame$variable)
+)
+# plot the intervals and mean
 ggplot(
   data = marginal_frame
 ) +
@@ -688,23 +669,25 @@ ggplot(
       title = "Model"
     )
   )
-
-models_bym2[[id_nospatial_2 + 11]]$summary.fixed[
-  order(models_bym2[[id_nospatial_2 + 11]]$summary.fixed$mean),
+# get the summary of the bym2 model
+models_final[[1]][[3]]$summary.fixed[
+  order(models_final[[1]][[3]]$summary.fixed$mean),
 ]
+# get the exponentiated coefficients
 sapply(
-  models_bym2[[id_nospatial_2 + 11]]$marginals.fixed[
-    rownames(models_bym2[[id_nospatial_2 + 11]]$summary.fixed[
-      order(models_bym2[[id_nospatial_2 + 11]]$summary.fixed$mean),
+  models_final[[1]][[3]]$marginals.fixed[
+    rownames(models_final[[1]][[3]]$summary.fixed[
+      order(models_final[[1]][[3]]$summary.fixed$mean),
     ])
   ],
   inla.emarginal,
   fun = exp
 )
+# and the credibility intervals
 sapply(
-  models_bym2[[id_nospatial_2 + 11]]$marginals.fixed[
-    rownames(models_bym2[[id_nospatial_2 + 11]]$summary.fixed[
-      order(models_bym2[[id_nospatial_2 + 11]]$summary.fixed$mean),
+  models_final[[1]][[3]]$marginals.fixed[
+    rownames(models_final[[1]][[3]]$summary.fixed[
+      order(models_final[[1]][[3]]$summary.fixed$mean),
     ])
   ],
   function(x) {
@@ -716,8 +699,10 @@ sapply(
     )
   }
 )
-newest_numbers$rr <- models_bym2[[id_nospatial_2 + 11]]$summary.fitted.values$mean
-csi <- models_bym2[[id_nospatial_2 + 11]]$marginals.random$idarea_1[
+# add new variable for the relative risk
+newest_numbers$rr <- models_final[[1]][[3]]$summary.fitted.values$mean
+# now calculate the posterior probability
+csi <- models_final[[1]][[3]]$marginals.random$idarea_1[
   seq_len(nrow(newest_numbers))
 ]
 a <- 0
@@ -730,8 +715,10 @@ cat_csi <- cut(
   breaks = csi_cutoff,
   include.lowest = TRUE
 )
+# calculate the posterior mean of the relative risk
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
 zeta_cutoff <- c(0.1, 0.5, 0.9, 1, 1.4, 1.8, 2.2, 2.6)
+# group it
 cat_zeta <- cut(
   unlist(zeta),
   breaks = zeta_cutoff,
@@ -740,7 +727,7 @@ cat_zeta <- cut(
 newest_numbers$cat_zeta <- cat_zeta
 newest_numbers$prob_csi <- cat_csi
 mat_marg <- matrix(NA, nrow = nrow(newest_numbers), ncol = 100000)
-m <- models_bym2[[id_nospatial_2 + 11]]$marginals.random$idarea_1
+m <- models_final[[1]][[3]]$marginals.random$idarea_1
 for (i in seq_len(nrow(newest_numbers))) {
   u <- m[[i]]
   mat_marg[i, ] <- inla.rmarginal(100000, u)
@@ -750,7 +737,7 @@ var_v <- inla.rmarginal(
   100000,
   inla.tmarginal(
     function(x) 1 / x,
-    models_bym2[[id_nospatial_2 + 11]]$marginals.hyperpar$`Precision for idarea_1`
+    models_final[[1]][[3]]$marginals.hyperpar$`Precision for idarea_1`
   )
 )
 perc_var_u <- mean(var_u / (var_u + var_v))
@@ -801,6 +788,6 @@ plot_3 <- ggplot(data = newest_numbers) +
     )
   )
 plot_3
-library(patchwork)
 plot_2 + plot_3
-models_bym2[[id_nospatial]]$summary.hyperpar
+# get the summary of the hyperparameters
+models_final[[1]][[3]]$summary.hyperpar
