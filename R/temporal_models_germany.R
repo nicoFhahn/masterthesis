@@ -5,7 +5,7 @@ set.seed(7918)
 backup <- germany
 germany <- backup
 germany <- germany[
-  germany$date %in% seq(from = min(germany$date), to = max(germany$date), by = 4),
+  germany$Date %in% seq(from = min(germany$Date), to = max(germany$Date), by = 5),
 ]
 test <- sample(seq_len(nrow(germany)), size = floor(0.2 * nrow(germany)))
 test_value <- germany$value[test]
@@ -24,7 +24,7 @@ models <- list()
 gof <- list()
 mae <- list()
 # create the neighbordhood matrix
-nb <- poly2nb(germany[!duplicated(germany$kommune_no), ])
+nb <- poly2nb(germany[!duplicated(germany$municipality_id), ])
 # save the matrix
 nb2INLA("maps/map_4.adj", nb)
 g <- inla.read.graph(filename = "maps/map_4.adj")

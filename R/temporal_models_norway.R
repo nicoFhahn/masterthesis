@@ -5,7 +5,7 @@ set.seed(7918)
 backup <- norge
 norge <- backup
 norge <- norge[
-  norge$date %in% seq(from = min(norge$date), to = max(norge$date), by = 4),
+  norge$date %in% seq(from = min(norge$date), to = max(norge$date), by = 5),
 ]
 test <- sample(seq_len(nrow(norge)), size = floor(0.2 * nrow(norge)))
 test_value <- norge$value[test]

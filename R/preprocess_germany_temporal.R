@@ -10,7 +10,6 @@ library(units)
 library(covid19germany)
 #####################################################
 # download the newest RKI data
-cols <- colnames(newest_numbers)
 rki <- get_RKI_timeseries()
 # group it after municipality
 germany_confirmed <- group_RKI_timeseries(rki, Landkreis)
