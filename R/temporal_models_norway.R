@@ -122,17 +122,17 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 # make predictions
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(norge))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * norge$population[i],
     res_1$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * norge$population[i],
     res_2$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * norge$population[i],
     res_3$marginals.fitted.values[[i]]
   )
 }
