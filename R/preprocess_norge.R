@@ -6,6 +6,7 @@ library(sf)
 library(SpatialEpi)
 library(stringr)
 library(units)
+library(regclass)
 #####################################################
 # load the newest data
 norway_municipality_confirmed <- read_csv(

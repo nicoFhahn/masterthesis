@@ -35,6 +35,10 @@ for (i in 2:length(nb)) {
 }
 
 C <- Diagonal(x = 1, n = length(nb)) - Q
+lcs <- inla.make.lincombs(
+  id_date_1 = diag(length(unique(norge$id_date_1))),
+  id_date_2 = diag(length(unique(norge$id_date_1)))
+)
 # formula for the besag model
 formula_1 <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
@@ -71,7 +75,8 @@ res_1 <- inla(
   ),
   Ntrials = norge$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE
+  verbose = TRUE,
+  lincomb = lcs
 )
 res_2 <- inla(
   formula_2,
@@ -84,7 +89,8 @@ res_2 <- inla(
   ),
   Ntrials = norge$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE
+  verbose = TRUE,
+  lincomb = lcs
 )
 res_3 <- inla(
   formula_3,
@@ -97,7 +103,8 @@ res_3 <- inla(
   ),
   Ntrials = norge$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE
+  verbose = TRUE,
+  lincomb = lcs
 )
 models <- c(models, list(res_1, res_2, res_3))
 # get the goodness of fit indicators
@@ -122,17 +129,17 @@ predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
 # make predictions
-for (i in seq_len(nrow(newest_numbers))) {
+for (i in seq_len(nrow(norge))) {
   predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * norge$population[i],
     res_1$marginals.fitted.values[[i]]
   )
   predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * norge$population[i],
     res_2$marginals.fitted.values[[i]]
   )
   predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
+    function(x) x * norge$population[i],
     res_3$marginals.fitted.values[[i]]
   )
 }

@@ -35,6 +35,10 @@ for (i in 2:length(nb)) {
 }
 
 C <- Diagonal(x = 1, n = length(nb)) - Q
+lcs <- inla.make.lincombs(
+  id_date_1 = diag(length(unique(norge$id_date_1))),
+  id_date_2 = diag(length(unique(norge$id_date_1)))
+)
 # formula for the besag model
 formula_1 <- value ~
   pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
@@ -71,7 +75,8 @@ res_1 <- inla(
   ),
   Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE
+  verbose = TRUE,
+  lincomb = lcs
 )
 res_2 <- inla(
   formula_2,
@@ -84,7 +89,8 @@ res_2 <- inla(
   ),
   Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE
+  verbose = TRUE,
+  lincomb = lcs
 )
 res_3 <- inla(
   formula_3,
@@ -97,7 +103,8 @@ res_3 <- inla(
   ),
   Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE
+  verbose = TRUE,
+  lincomb = lcs
 )
 models <- c(models, list(res_1, res_2, res_3))
 # get the goodness of fit indicators
