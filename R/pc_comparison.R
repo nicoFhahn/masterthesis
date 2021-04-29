@@ -1,3 +1,5 @@
+library(ggplot2)
+library(patchwork)
 library(readr)
 library(sf)
 library(spdep)
@@ -35,19 +37,19 @@ C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 prior_1 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(0.01, 0.01)
+    param = c(0.1, 0.01)
   )
 )
 prior_2 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(0.1, 0.01)
+    param = c(0.2, 0.01)
   )
 )
 prior_3 <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(0.2, 0.01)
+    param = c(0.3, 0.01)
   )
 )
 prior_4 <- list(
@@ -894,9 +896,9 @@ results <- tibble(
   mae = unlist(mae),
   model = rep(c("Besag", "BYM2", "Leroux"), 10),
   U = c(
-    rep(0.01, 3),
     rep(0.1, 3),
     rep(0.2, 3),
+    rep(0.3, 3),
     rep(0.4, 3),
     rep(0.6, 3),
     rep(0.8, 3),
@@ -909,8 +911,6 @@ results <- tibble(
     rep(0.01, 30)
   )
 )
-library(ggplot2)
-library(patchwork)
 plot_1 <- ggplot(
   data = results[1:30, ],
   aes(
@@ -1019,6 +1019,7 @@ plot_4 <- ggplot(
   )
 plot_1 + plot_2
 plot_3 + plot_4
+plot_4
 hyperpar_frame <- tibble(
   precision = c(
     res_besag_1$summary.hyperpar$mean[2],
@@ -1086,9 +1087,9 @@ hyperpar_frame <- tibble(
   ),
   model = rep(c("Besag", "BYM2", "Leroux"), 10),
   U = c(
-    rep(0.01, 3),
     rep(0.1, 3),
     rep(0.2, 3),
+    rep(0.3, 3),
     rep(0.4, 3),
     rep(0.6, 3),
     rep(0.8, 3),
@@ -1198,7 +1199,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$`(Intercept)`
+        exp, res_bym2_10$marginals.fixed$`(Intercept)`
       )
     )[1],
     inla.qmarginal(
@@ -1216,7 +1217,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$median_age
+        exp, res_bym2_10$marginals.fixed$median_age
       )
     )[1],
     inla.qmarginal(
@@ -1234,7 +1235,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$aerodrome
+        exp, res_bym2_10$marginals.fixed$aerodrome
       )
     )[1],
     inla.qmarginal(
@@ -1252,7 +1253,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$office
+        exp, res_bym2_10$marginals.fixed$office
       )
     )[1],
     inla.qmarginal(
@@ -1270,7 +1271,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$platform
+        exp, res_bym2_10$marginals.fixed$platform
       )
     )[1],
     inla.qmarginal(
@@ -1288,7 +1289,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$sex
+        exp, res_bym2_10$marginals.fixed$sex
       )
     )[1],
     inla.qmarginal(
@@ -1306,7 +1307,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$higher_education
+        exp, res_bym2_10$marginals.fixed$higher_education
       )
     )[1],
     inla.qmarginal(
@@ -1324,7 +1325,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$nursing_home
+        exp, res_bym2_10$marginals.fixed$nursing_home
       )
     )[1],
     inla.qmarginal(
@@ -1342,7 +1343,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$marketplace
+        exp, res_bym2_10$marginals.fixed$marketplace
       )
     )[1],
     inla.qmarginal(
@@ -1360,7 +1361,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$urb_dens
+        exp, res_bym2_10$marginals.fixed$urb_dens
       )
     )[1],
     inla.qmarginal(
@@ -1378,7 +1379,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$unemp_immg
+        exp, res_bym2_10$marginals.fixed$unemp_immg
       )
     )[1],
     inla.qmarginal(
@@ -1396,7 +1397,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$place_of_worship
+        exp, res_bym2_10$marginals.fixed$place_of_worship
       )
     )[1],
     inla.qmarginal(
@@ -1414,7 +1415,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$unemp_tot
+        exp, res_bym2_10$marginals.fixed$unemp_tot
       )
     )[1],
     inla.qmarginal(
@@ -1432,7 +1433,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$immigrants_total
+        exp, res_bym2_10$marginals.fixed$immigrants_total
       )
     )[1]
   ),
@@ -1447,7 +1448,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$`(Intercept)`
+      res_bym2_10$marginals.fixed$`(Intercept)`
     ),
     inla.emarginal(
       exp,
@@ -1459,7 +1460,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$median_age
+      res_bym2_10$marginals.fixed$median_age
     ),
     inla.emarginal(
       exp,
@@ -1471,7 +1472,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$aerodrome
+      res_bym2_10$marginals.fixed$aerodrome
     ),
     inla.emarginal(
       exp,
@@ -1483,7 +1484,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$office
+      res_bym2_10$marginals.fixed$office
     ),
     inla.emarginal(
       exp,
@@ -1495,7 +1496,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$platform
+      res_bym2_10$marginals.fixed$platform
     ),
     inla.emarginal(
       exp,
@@ -1507,7 +1508,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$sex
+      res_bym2_10$marginals.fixed$sex
     ),
     inla.emarginal(
       exp,
@@ -1519,7 +1520,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$higher_education
+      res_bym2_10$marginals.fixed$higher_education
     ),
     inla.emarginal(
       exp,
@@ -1531,7 +1532,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$nursing_home
+      res_bym2_10$marginals.fixed$nursing_home
     ),
     inla.emarginal(
       exp,
@@ -1543,7 +1544,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$marketplace
+      res_bym2_10$marginals.fixed$marketplace
     ),
     inla.emarginal(
       exp,
@@ -1555,7 +1556,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$urb_dens
+      res_bym2_10$marginals.fixed$urb_dens
     ),
     inla.emarginal(
       exp,
@@ -1567,7 +1568,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$unemp_immg
+      res_bym2_10$marginals.fixed$unemp_immg
     ),
     inla.emarginal(
       exp,
@@ -1579,7 +1580,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$place_of_worship
+      res_bym2_10$marginals.fixed$place_of_worship
     ),
     inla.emarginal(
       exp,
@@ -1591,7 +1592,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$unemp_tot
+      res_bym2_10$marginals.fixed$unemp_tot
     ),
     inla.emarginal(
       exp,
@@ -1603,7 +1604,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$immigrants_total
+      res_bym2_10$marginals.fixed$immigrants_total
     )
   ),
   upper = c(
@@ -1622,7 +1623,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$`(Intercept)`
+        exp, res_bym2_10$marginals.fixed$`(Intercept)`
       )
     )[2],
     inla.qmarginal(
@@ -1640,7 +1641,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$median_age
+        exp, res_bym2_10$marginals.fixed$median_age
       )
     )[2],
     inla.qmarginal(
@@ -1658,7 +1659,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$aerodrome
+        exp, res_bym2_10$marginals.fixed$aerodrome
       )
     )[2],
     inla.qmarginal(
@@ -1676,7 +1677,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$office
+        exp, res_bym2_10$marginals.fixed$office
       )
     )[2],
     inla.qmarginal(
@@ -1694,7 +1695,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$platform
+        exp, res_bym2_10$marginals.fixed$platform
       )
     )[2],
     inla.qmarginal(
@@ -1712,7 +1713,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$sex
+        exp, res_bym2_10$marginals.fixed$sex
       )
     )[2],
     inla.qmarginal(
@@ -1730,7 +1731,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$higher_education
+        exp, res_bym2_10$marginals.fixed$higher_education
       )
     )[2],
     inla.qmarginal(
@@ -1748,7 +1749,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$nursing_home
+        exp, res_bym2_10$marginals.fixed$nursing_home
       )
     )[2],
     inla.qmarginal(
@@ -1766,7 +1767,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$marketplace
+        exp, res_bym2_10$marginals.fixed$marketplace
       )
     )[2],
     inla.qmarginal(
@@ -1784,7 +1785,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$urb_dens
+        exp, res_bym2_10$marginals.fixed$urb_dens
       )
     )[2],
     inla.qmarginal(
@@ -1802,7 +1803,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$unemp_immg
+        exp, res_bym2_10$marginals.fixed$unemp_immg
       )
     )[2],
     inla.qmarginal(
@@ -1820,7 +1821,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$place_of_worship
+        exp, res_bym2_10$marginals.fixed$place_of_worship
       )
     )[2],
     inla.qmarginal(
@@ -1838,7 +1839,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$unemp_tot
+        exp, res_bym2_10$marginals.fixed$unemp_tot
       )
     )[2],
     inla.qmarginal(
@@ -1856,7 +1857,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$immigrants_total
+        exp, res_bym2_10$marginals.fixed$immigrants_total
       )
     )[2]
   ),
@@ -1877,7 +1878,7 @@ marginal_frame <- tibble(
     rep("immigrants_total", 3)
   ),
   model = rep(
-    c("U = 0.01", "U = 1", "U = 2.5"), 14
+    c("U = 0.1", "U = 1", "U = 5"), 14
   )
 )
 marginal_frame$variable <- ordered(marginal_frame$variable, levels = unique(marginal_frame$variable))
@@ -1919,9 +1920,9 @@ ggplot(
     values = c("#1B998B", "#ED217C", "#2D3047"),
     labels = c(
       expression(
-        sigma[0]==0.01,
+        sigma[0]==0.1,
         sigma[0]==1,
-        sigma[0]==2.5,
+        sigma[0]==5,
       )
     )
   ) +
@@ -1948,7 +1949,7 @@ plot_7 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-2, 3)
+    limits = c(-3, 3)
   ) +
   theme_minimal() +
   theme(
@@ -1964,7 +1965,7 @@ plot_8 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-2, 3)
+    limits = c(-3, 3)
   ) +
   theme_minimal()
 plot_9 <- ggplot(data = newest_numbers) +
@@ -1978,7 +1979,7 @@ plot_9 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-2, 3)
+    limits = c(-3, 3)
   ) +
   theme_minimal() +
   theme(
@@ -1995,7 +1996,7 @@ plot_10 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-2, 3)
+    limits = c(-3, 3)
   ) +
   theme_minimal()
 plot_7 + plot_8
@@ -2004,14 +2005,14 @@ plot_11 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = res_bym2_1$summary.random$idarea_1$mean[357:712])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
-    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.01$")
+    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.1$")
   ) +
   scale_fill_gradient2(
     "Post mean",
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-2, 3)
+    limits = c(-3, 3)
   ) +
   theme_minimal() +
   theme(
@@ -2019,17 +2020,17 @@ plot_11 <- ggplot(data = newest_numbers) +
   )
 
 plot_12 <- ggplot(data = newest_numbers) +
-  geom_sf(aes(fill = res_bym2_9$summary.random$idarea_1$mean[357:712])) +
+  geom_sf(aes(fill = res_bym2_10$summary.random$idarea_1$mean[357:712])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
-    subtitle = TeX("$Structured\\,component, \\sigma_0 = 2.5$")
+    subtitle = TeX("$Structured\\,component, \\sigma_0 = 5$")
   ) +
   scale_fill_gradient2(
     "Post mean",
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-2, 3)
+    limits = c(-3, 3)
   ) +
   theme_minimal()
 plot_11 + plot_12
@@ -2058,7 +2059,7 @@ newest_numbers <- merge(
   by.y = "Kennziffer"
 )
 newest_numbers <- st_as_sf(newest_numbers)
-set.seed(145)
+set.seed(14523)
 test <- sample(
   seq_len(nrow(newest_numbers)),
   size = floor(0.2 * nrow(newest_numbers))
@@ -2079,154 +2080,154 @@ for (i in 2:nrow(newest_numbers)) {
 
 C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 formula_besag_1 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 formula_bym2_1 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 formula_leroux_1 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 formula_besag_2 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_2)
 formula_bym2_2 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_2)
 formula_leroux_2 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_2)
 formula_besag_3 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_3)
 formula_bym2_3 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_3)
 formula_leroux_3 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_3)
 formula_besag_4 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_4)
 formula_bym2_4 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_4)
 formula_leroux_4 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_4)
 formula_besag_5 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_5)
 formula_bym2_5 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_5)
 formula_leroux_5 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_5)
 formula_besag_6 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_6)
 formula_bym2_6 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_6)
 formula_leroux_6 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_6)
 formula_besag_7 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_7)
 formula_bym2_7 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_7)
 formula_leroux_7 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_7)
 formula_besag_8 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_8)
 formula_bym2_8 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_8)
 formula_leroux_8 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_8)
 formula_besag_9 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_9)
 formula_bym2_9 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_9)
 formula_leroux_9 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_9)
 formula_besag_10 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_10)
 formula_bym2_10 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_10)
 formula_leroux_10 <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + retail + nursing_home + aerodrome + platform +
-  higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_10)
 
 res_besag_1 <- inla(
@@ -2883,9 +2884,9 @@ results <- tibble(
   mae = unlist(mae),
   model = rep(c("Besag", "BYM2", "Leroux"), 10),
   U = c(
-    rep(0.01, 3),
     rep(0.1, 3),
     rep(0.2, 3),
+    rep(0.3, 3),
     rep(0.4, 3),
     rep(0.6, 3),
     rep(0.8, 3),
@@ -3073,9 +3074,9 @@ hyperpar_frame <- tibble(
   ),
   model = rep(c("Besag", "BYM2", "Leroux"), 10),
   U = c(
-    rep(0.01, 3),
     rep(0.1, 3),
     rep(0.2, 3),
+    rep(0.3, 3),
     rep(0.4, 3),
     rep(0.6, 3),
     rep(0.8, 3),
@@ -3185,7 +3186,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$Gruene
+        exp, res_bym2_10$marginals.fixed$Gruene
       )
     )[1],
     inla.qmarginal(
@@ -3203,7 +3204,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$`(Intercept)`
+        exp, res_bym2_10$marginals.fixed$`(Intercept)`
       )
     )[1],
     inla.qmarginal(
@@ -3221,7 +3222,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$higher_education
+        exp, res_bym2_10$marginals.fixed$higher_education
       )
     )[1],
     inla.qmarginal(
@@ -3239,7 +3240,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$SPD
+        exp, res_bym2_10$marginals.fixed$SPD
       )
     )[1],
     inla.qmarginal(
@@ -3257,7 +3258,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$`log(trade_tax)`
+        exp, res_bym2_10$marginals.fixed$`log(trade_tax)`
       )
     )[1],
     inla.qmarginal(
@@ -3275,7 +3276,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$clinic
+        exp, res_bym2_10$marginals.fixed$clinic
       )
     )[1],
     inla.qmarginal(
@@ -3293,7 +3294,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$place_of_worship
+        exp, res_bym2_10$marginals.fixed$place_of_worship
       )
     )[1],
     inla.qmarginal(
@@ -3311,7 +3312,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$sex
+        exp, res_bym2_10$marginals.fixed$sex
       )
     )[1],
     inla.qmarginal(
@@ -3329,7 +3330,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$urb_dens
+        exp, res_bym2_10$marginals.fixed$urb_dens
       )
     )[1],
     inla.qmarginal(
@@ -3347,7 +3348,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$platform
+        exp, res_bym2_10$marginals.fixed$platform
       )
     )[1],
     inla.qmarginal(
@@ -3365,7 +3366,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$aerodrome
+        exp, res_bym2_10$marginals.fixed$aerodrome
       )
     )[1],
     inla.qmarginal(
@@ -3384,7 +3385,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$die_linke
+        exp, res_bym2_10$marginals.fixed$die_linke
       )
     )[1],
     inla.qmarginal(
@@ -3402,7 +3403,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$FDP
+        exp, res_bym2_10$marginals.fixed$FDP
       )
     )[1],
     inla.qmarginal(
@@ -3420,7 +3421,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$nursing_home
+        exp, res_bym2_10$marginals.fixed$nursing_home
       )
     )[1],
     inla.qmarginal(
@@ -3438,7 +3439,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$retail
+        exp, res_bym2_10$marginals.fixed$retail
       )
     )[1],
     inla.qmarginal(
@@ -3456,7 +3457,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$pop_dens
+        exp, res_bym2_10$marginals.fixed$pop_dens
       )
     )[1]
   ),
@@ -3471,7 +3472,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$Gruene
+      res_bym2_10$marginals.fixed$Gruene
     ),
     inla.emarginal(
       exp,
@@ -3483,7 +3484,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$`(Intercept)`
+      res_bym2_10$marginals.fixed$`(Intercept)`
     ),
     inla.emarginal(
       exp,
@@ -3495,7 +3496,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$higher_education
+      res_bym2_10$marginals.fixed$higher_education
     ),
     inla.emarginal(
       exp,
@@ -3507,7 +3508,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$SPD
+      res_bym2_10$marginals.fixed$SPD
     ),
     inla.emarginal(
       exp,
@@ -3519,7 +3520,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$`log(trade_tax)`
+      res_bym2_10$marginals.fixed$`log(trade_tax)`
     ),
     inla.emarginal(
       exp,
@@ -3531,7 +3532,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$clinic
+      res_bym2_10$marginals.fixed$clinic
     ),
     inla.emarginal(
       exp,
@@ -3543,7 +3544,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$place_of_worship
+      res_bym2_10$marginals.fixed$place_of_worship
     ),
     inla.emarginal(
       exp,
@@ -3555,7 +3556,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$sex
+      res_bym2_10$marginals.fixed$sex
     ),
     inla.emarginal(
       exp,
@@ -3567,7 +3568,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$urb_dens
+      res_bym2_10$marginals.fixed$urb_dens
     ),
     inla.emarginal(
       exp,
@@ -3579,7 +3580,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$platform
+      res_bym2_10$marginals.fixed$platform
     ),
     inla.emarginal(
       exp,
@@ -3591,7 +3592,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$aerodrome
+      res_bym2_10$marginals.fixed$aerodrome
     ),
     inla.emarginal(
       exp,
@@ -3603,7 +3604,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$die_linke
+      res_bym2_10$marginals.fixed$die_linke
     ),
     inla.emarginal(
       exp,
@@ -3615,7 +3616,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$FDP
+      res_bym2_10$marginals.fixed$FDP
     ),
     inla.emarginal(
       exp,
@@ -3627,7 +3628,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$nursing_home
+      res_bym2_10$marginals.fixed$nursing_home
     ),
     inla.emarginal(
       exp,
@@ -3639,7 +3640,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$retail
+      res_bym2_10$marginals.fixed$retail
     ),
     inla.emarginal(
       exp,
@@ -3651,7 +3652,7 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_9$marginals.fixed$pop_dens
+      res_bym2_10$marginals.fixed$pop_dens
     )
   ),
   upper = c(
@@ -3670,7 +3671,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$Gruene
+        exp, res_bym2_10$marginals.fixed$Gruene
       )
     )[2],
     inla.qmarginal(
@@ -3688,7 +3689,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$`(Intercept)`
+        exp, res_bym2_10$marginals.fixed$`(Intercept)`
       )
     )[2],
     inla.qmarginal(
@@ -3706,7 +3707,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$higher_education
+        exp, res_bym2_10$marginals.fixed$higher_education
       )
     )[2],
     inla.qmarginal(
@@ -3724,7 +3725,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$SPD
+        exp, res_bym2_10$marginals.fixed$SPD
       )
     )[2],
     inla.qmarginal(
@@ -3742,7 +3743,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$`log(trade_tax)`
+        exp, res_bym2_10$marginals.fixed$`log(trade_tax)`
       )
     )[2],
     inla.qmarginal(
@@ -3760,7 +3761,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$clinic
+        exp, res_bym2_10$marginals.fixed$clinic
       )
     )[2],
     inla.qmarginal(
@@ -3778,7 +3779,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$place_of_worship
+        exp, res_bym2_10$marginals.fixed$place_of_worship
       )
     )[2],
     inla.qmarginal(
@@ -3796,7 +3797,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$sex
+        exp, res_bym2_10$marginals.fixed$sex
       )
     )[2],
     inla.qmarginal(
@@ -3814,7 +3815,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$urb_dens
+        exp, res_bym2_10$marginals.fixed$urb_dens
       )
     )[2],
     inla.qmarginal(
@@ -3832,7 +3833,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$platform
+        exp, res_bym2_10$marginals.fixed$platform
       )
     )[2],
     inla.qmarginal(
@@ -3850,7 +3851,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$aerodrome
+        exp, res_bym2_10$marginals.fixed$aerodrome
       )
     )[2],
     inla.qmarginal(
@@ -3869,7 +3870,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$die_linke
+        exp, res_bym2_10$marginals.fixed$die_linke
       )
     )[2],
     inla.qmarginal(
@@ -3887,7 +3888,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$FDP
+        exp, res_bym2_10$marginals.fixed$FDP
       )
     )[2],
     inla.qmarginal(
@@ -3905,7 +3906,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$nursing_home
+        exp, res_bym2_10$marginals.fixed$nursing_home
       )
     )[2],
     inla.qmarginal(
@@ -3923,7 +3924,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$retail
+        exp, res_bym2_10$marginals.fixed$retail
       )
     )[2],
     inla.qmarginal(
@@ -3941,7 +3942,7 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_9$marginals.fixed$pop_dens
+        exp, res_bym2_10$marginals.fixed$pop_dens
       )
     )[2]
   ),
@@ -3964,7 +3965,7 @@ marginal_frame <- tibble(
     rep("pop_dens", 3)
   ),
   model = rep(
-    c("U = 0.01", "U = 1", "U = 2.5"), 16
+    c("U = 0.1", "U = 1", "U = 2.5"), 16
   )
 )
 marginal_frame$variable <- ordered(marginal_frame$variable, levels = unique(marginal_frame$variable))
@@ -4006,9 +4007,9 @@ ggplot(
     values = c("#1B998B", "#ED217C", "#2D3047"),
     labels = c(
       expression(
-        sigma[0]==0.01,
+        sigma[0]==0.1,
         sigma[0]==1,
-        sigma[0]==2.5,
+        sigma[0]==5,
       )
     )
   ) +
@@ -4089,7 +4090,7 @@ plot_11 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = res_bym2_1$summary.random$idarea_1$mean[402:802])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
-    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.01$")
+    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.1$")
   ) +
   scale_fill_gradient2(
     "Post mean",
@@ -4104,10 +4105,10 @@ plot_11 <- ggplot(data = newest_numbers) +
   )
 
 plot_12 <- ggplot(data = newest_numbers) +
-  geom_sf(aes(fill = res_bym2_9$summary.random$idarea_1$mean[402:802])) +
+  geom_sf(aes(fill = res_bym2_10$summary.random$idarea_1$mean[402:802])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
-    subtitle = TeX("$Structured\\,component, \\sigma_0 = 2.5$")
+    subtitle = TeX("$Structured\\,component, \\sigma_0 = 5$")
   ) +
   scale_fill_gradient2(
     "Post mean",
@@ -4122,7 +4123,7 @@ ggplot(data = newest_numbers) +
   geom_sf(aes(fill = res_bym2_1$summary.random$idarea_1$mean[402:802])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
-    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.01$")
+    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.1$")
   ) +
   scale_fill_gradient2(
     "Post mean",
