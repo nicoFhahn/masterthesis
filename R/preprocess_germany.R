@@ -7,6 +7,7 @@ library(stringr)
 library(units)
 library(covid19germany)
 library(regclass)
+library(MASS)
 
 # download the newest RKI data
 rki <- get_RKI_timeseries()
@@ -653,6 +654,9 @@ germany_features$Gewerbesteuer <- as.numeric(
 germany_features$schutzsuchende <- as.numeric(
   trimws(germany_features$schutzsuchende)
 )
+germany_features$Gewerbesteuer <- log(germany_features$Gewerbesteuer)
+germany_features$einkuenfte_gesamt <- log(germany_features$einkuenfte_gesamt)
+germany_features$lohn_einkommenssteuer <- log(germany_features$lohn_einkommenssteuer)
 # calculate the percentage of the vote
 germany_features[, 7:12] <- germany_features[, 7:12] / germany_features$stimmen
 # germany_features[, c(1:4, 12:15, 22:39)] <- 1000 * germany_features[, c(1:4, 12:15, 22:39)] / germany_features$PopulationTotal
@@ -756,7 +760,7 @@ newest_numbers[, c(2:15, 20:35, 43:46)] <- scale(
 b <- newest_numbers[, c(2:15, 18, 20:35, 43:46)]
 sign <- TRUE
 while(sign) {
-  mod <- lm(
+  mod <- glm.nb(
     value ~ .,
     data = b
   )

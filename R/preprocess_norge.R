@@ -7,6 +7,7 @@ library(SpatialEpi)
 library(stringr)
 library(units)
 library(regclass)
+library(MASS)
 #####################################################
 # load the newest data
 norway_municipality_confirmed <- read_csv(
@@ -580,14 +581,9 @@ if (date_1 != date_2) {
   # load the data
   norge_features <- read_csv("wrangled_data/norge_features.csv")
 }
-# norge_features[, c(20:31, 36:53, 55)] <- 1000 * norge_features[, c(20:31, 36:53, 55)] / norge_features$population
 # scale the data
-norge_features[, c(20:31, 36:53, 55)] <- scale(
-  norge_features[, c(20:31, 36:53, 55)]
-)
-# norge_features[, c(18, 19, 33, 34, 35)] <- norge_features[, c(18, 19, 33, 34, 35)] / 100
-norge_features[, c(18, 19, 33, 34, 35)] <- scale(
-  norge_features[, c(18, 19, 33, 34, 35)]
+norge_features[, c(17:31, 33:53, 55)] <- scale(
+  norge_features[, c(17:31, 33:53, 55)]
 )
 # load the shapefiles
 norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
@@ -655,7 +651,7 @@ newest_numbers <- newest_numbers[
 ]
 # impute
 cols_imputed <- lapply(
-  c(7:34, 36:42),
+  c(6:34, 36:42),
   function(x, ...) {
     vals <- newest_numbers[, x]
     vals$geometry <- NULL
@@ -666,8 +662,8 @@ cols_imputed <- lapply(
 )
 # bind everything together again
 newest_numbers_imputed <- Reduce(cbind, cols_imputed)
-colnames(newest_numbers_imputed) <- colnames(newest_numbers)[c(7:34, 36:42)]
-newest_numbers_imputed <- cbind(newest_numbers[, 1:6], newest_numbers_imputed)
+colnames(newest_numbers_imputed) <- colnames(newest_numbers)[c(6:34, 36:42)]
+newest_numbers_imputed <- cbind(newest_numbers[, 1:5], newest_numbers_imputed)
 # turn it into a spatial frame
 newest_numbers <- st_as_sf(newest_numbers_imputed)
 newest_numbers$region <- NULL
@@ -682,7 +678,7 @@ b$geometry <- NULL
 b <- b[, c(5:29, 31, 38:40)]
 sign <- TRUE
 while(sign) {
-  mod <- lm(
+  mod <- glm.nb(
     value ~ .,
     data = b
   )
