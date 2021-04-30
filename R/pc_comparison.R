@@ -3246,37 +3246,19 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$`log(trade_tax)`
+        exp, res_bym2_1$marginals.fixed$office
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$`log(trade_tax)`
+        exp, res_bym2_7$marginals.fixed$office
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$`log(trade_tax)`
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$clinic
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$clinic
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$clinic
+        exp, res_bym2_10$marginals.fixed$office
       )
     )[1],
     inla.qmarginal(
@@ -3295,97 +3277,6 @@ marginal_frame <- tibble(
       c(0.025, 0.975),
       inla.tmarginal(
         exp, res_bym2_10$marginals.fixed$place_of_worship
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$sex
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$sex
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$sex
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$urb_dens
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$urb_dens
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$urb_dens
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$platform
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$platform
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$platform
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$aerodrome
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$aerodrome
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$aerodrome
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$die_linke
-        
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$die_linke
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$die_linke
       )
     )[1],
     inla.qmarginal(
@@ -3427,19 +3318,146 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$retail
+        exp, res_bym2_1$marginals.fixed$clinic
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$retail
+        exp, res_bym2_7$marginals.fixed$clinic
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$retail
+        exp, res_bym2_10$marginals.fixed$clinic
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$sex
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$sex
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$sex
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$urb_dens
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$urb_dens
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$urb_dens
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$aerodrome
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$aerodrome
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$aerodrome
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$marketplace
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$marketplace
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$marketplace
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$die_linke
+        
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$die_linke
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$die_linke
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$platform
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$platform
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$platform
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$trade_tax
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$trade_tax
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$trade_tax
       )
     )[1],
     inla.qmarginal(
@@ -3512,27 +3530,15 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_1$marginals.fixed$`log(trade_tax)`
+      res_bym2_1$marginals.fixed$office
     ),
     inla.emarginal(
       exp,
-      res_bym2_7$marginals.fixed$`log(trade_tax)`
+      res_bym2_7$marginals.fixed$office
     ),
     inla.emarginal(
       exp,
-      res_bym2_10$marginals.fixed$`log(trade_tax)`
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_1$marginals.fixed$clinic
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_7$marginals.fixed$clinic
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_10$marginals.fixed$clinic
+      res_bym2_10$marginals.fixed$office
     ),
     inla.emarginal(
       exp,
@@ -3545,66 +3551,6 @@ marginal_frame <- tibble(
     inla.emarginal(
       exp,
       res_bym2_10$marginals.fixed$place_of_worship
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_1$marginals.fixed$sex
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_7$marginals.fixed$sex
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_10$marginals.fixed$sex
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_1$marginals.fixed$urb_dens
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_7$marginals.fixed$urb_dens
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_10$marginals.fixed$urb_dens
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_1$marginals.fixed$platform
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_7$marginals.fixed$platform
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_10$marginals.fixed$platform
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_1$marginals.fixed$aerodrome
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_7$marginals.fixed$aerodrome
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_10$marginals.fixed$aerodrome
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_1$marginals.fixed$die_linke
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_7$marginals.fixed$die_linke
-    ),
-    inla.emarginal(
-      exp,
-      res_bym2_10$marginals.fixed$die_linke
     ),
     inla.emarginal(
       exp,
@@ -3632,15 +3578,99 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      res_bym2_1$marginals.fixed$retail
+      res_bym2_1$marginals.fixed$clinic
     ),
     inla.emarginal(
       exp,
-      res_bym2_7$marginals.fixed$retail
+      res_bym2_7$marginals.fixed$clinic
     ),
     inla.emarginal(
       exp,
-      res_bym2_10$marginals.fixed$retail
+      res_bym2_10$marginals.fixed$clinic
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_1$marginals.fixed$sex
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_7$marginals.fixed$sex
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_10$marginals.fixed$sex
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_1$marginals.fixed$urb_dens
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_7$marginals.fixed$urb_dens
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_10$marginals.fixed$urb_dens
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_1$marginals.fixed$aerodrome
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_7$marginals.fixed$aerodrome
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_10$marginals.fixed$aerodrome
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_1$marginals.fixed$marketplace
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_7$marginals.fixed$marketplace
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_10$marginals.fixed$marketplace
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_1$marginals.fixed$die_linke
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_7$marginals.fixed$die_linke
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_10$marginals.fixed$die_linke
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_1$marginals.fixed$platform
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_7$marginals.fixed$platform
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_10$marginals.fixed$platform
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_1$marginals.fixed$trade_tax
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_7$marginals.fixed$trade_tax
+    ),
+    inla.emarginal(
+      exp,
+      res_bym2_10$marginals.fixed$trade_tax
     ),
     inla.emarginal(
       exp,
@@ -3731,37 +3761,19 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$`log(trade_tax)`
+        exp, res_bym2_1$marginals.fixed$office
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$`log(trade_tax)`
+        exp, res_bym2_7$marginals.fixed$office
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$`log(trade_tax)`
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$clinic
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$clinic
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$clinic
+        exp, res_bym2_10$marginals.fixed$office
       )
     )[2],
     inla.qmarginal(
@@ -3780,97 +3792,6 @@ marginal_frame <- tibble(
       c(0.025, 0.975),
       inla.tmarginal(
         exp, res_bym2_10$marginals.fixed$place_of_worship
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$sex
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$sex
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$sex
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$urb_dens
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$urb_dens
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$urb_dens
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$platform
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$platform
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$platform
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$aerodrome
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$aerodrome
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$aerodrome
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$die_linke
-        
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$die_linke
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$die_linke
       )
     )[2],
     inla.qmarginal(
@@ -3912,19 +3833,146 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_1$marginals.fixed$retail
+        exp, res_bym2_1$marginals.fixed$clinic
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_7$marginals.fixed$retail
+        exp, res_bym2_7$marginals.fixed$clinic
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, res_bym2_10$marginals.fixed$retail
+        exp, res_bym2_10$marginals.fixed$clinic
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$sex
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$sex
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$sex
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$urb_dens
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$urb_dens
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$urb_dens
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$aerodrome
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$aerodrome
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$aerodrome
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$marketplace
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$marketplace
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$marketplace
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$die_linke
+        
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$die_linke
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$die_linke
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$platform
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$platform
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$platform
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_1$marginals.fixed$trade_tax
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_7$marginals.fixed$trade_tax
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, res_bym2_10$marginals.fixed$trade_tax
       )
     )[2],
     inla.qmarginal(
@@ -3951,21 +3999,22 @@ marginal_frame <- tibble(
     rep("Intercept", 3),
     rep("higher_education", 3),
     rep("SPD", 3),
-    rep("log(trade_tax)", 3),
-    rep("clinic", 3),
+    rep("office", 3),
     rep("place_of_worship", 3),
-    rep("sex", 3),
-    rep("urb_dens", 3),
-    rep("platform", 3),
-    rep("aerodrome", 3),
-    rep("die_linke", 3),
     rep("FDP", 3),
     rep("nursing_home", 3),
-    rep("retail", 3),
+    rep("clinic", 3),
+    rep("sex", 3),
+    rep("urb_dens", 3),
+    rep("aerodrome", 3),
+    rep("marketplace", 3),
+    rep("die_linke", 3),
+    rep("platform", 3),
+    rep("log(trade_tax)", 3),
     rep("pop_dens", 3)
   ),
   model = rep(
-    c("U = 0.1", "U = 1", "U = 2.5"), 16
+    c("U = 0.1", "U = 1", "U = 2.5"), 17
   )
 )
 marginal_frame$variable <- ordered(marginal_frame$variable, levels = unique(marginal_frame$variable))
