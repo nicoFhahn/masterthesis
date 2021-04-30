@@ -726,7 +726,7 @@ plot_7 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-6, 3)
   ) +
   theme_minimal() +
   theme(
@@ -742,7 +742,7 @@ plot_8 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-6, 3)
   ) +
   theme_minimal()
 plot_9 <- ggplot(data = newest_numbers) +
@@ -756,7 +756,7 @@ plot_9 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-6, 3)
   ) +
   theme_minimal() +
   theme(
@@ -773,7 +773,7 @@ plot_10 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-6, 3)
   ) +
   theme_minimal()
 plot_7 + plot_8
@@ -825,7 +825,7 @@ plot_11 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-6, 3)
   ) +
   theme_minimal() +
   theme(
@@ -843,7 +843,7 @@ plot_12 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-6, 3)
   ) +
   theme_minimal()
 plot_11 + plot_12
