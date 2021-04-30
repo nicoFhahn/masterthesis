@@ -286,3 +286,9 @@ distrplot_1 + distrplot_2 +
     title = "Distribution fits for the number of infections",
     subtitle = "Norway"
   )
+
+distrplot_2 +
+  ggtitle(
+    label = "Distribution fits for the number of infections",
+    subtitle = "Norway"
+  )
