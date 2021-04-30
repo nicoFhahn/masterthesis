@@ -36,8 +36,8 @@ for (i in 2:length(nb)) {
 
 C <- Diagonal(x = 1, n = length(nb)) - Q
 lcs <- inla.make.lincombs(
-  id_date_1 = diag(length(unique(norge$id_date_1))),
-  id_date_2 = diag(length(unique(norge$id_date_1)))
+  id_date_1 = diag(length(unique(germany$id_date_1))),
+  id_date_2 = diag(length(unique(germany$id_date_1)))
 )
 # formula for the besag model
 formula_1 <- value ~
