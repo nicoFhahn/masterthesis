@@ -137,6 +137,21 @@ In Figure~\ref{fig:neighbour}, the number of shared borders of each canton in Sw
  \caption{The number of shared borders of cantons in Switzerland}
  \label{fig:neighbour}
 \end{figure}
+\subsubsection{Moran's I}\label{sec:moran}
+Moran's I is a measure of spatial autocorrelation developed by Patrick Moran. Spatial autocorrelation is characterised by a correlation in a signal between close locations in space. Spatial autocorrelation is inherently more complex than one-dimensional autocorrelation due to the fact that spatial correlation is multidimensional (i.e. 2 or 3 spatial dimensions) and multi-directional. The formula for Moran's I is given by
+\begin{equation}
+    I = \frac{n}{W}\frac{\sum_{i=1}^n\sum_{j=1}^nw_{ij}\left(x_i-\overline{x}\right)\left(x_j-\overline{x}\right)}{\sum_{i=1}^n},
+\end{equation}
+with $n$ denoting the number of spatial units indexed by $i$ and $j$, $x$ the parameter of interest, $\pmb{w}$ a spatial neighbourhood matrix and $W$ the sum of all $w_{ij}$. \\
+Using Moran's I, a test for spatial autocorrelation can be constructed with the following hypotheses:
+\begin{align}
+    H_0:\hbox{ No spatial autocorrelation} \hbox{ vs. }  H_1:\hbox{ Spatial autocorrelation}.
+\end{align}
+Under $H_0$ the expected value is given by
+\begin{equation}
+    \mathbb{E}\left[I\right]=\frac{-1}{n-1}.
+\end{equation}
+As $n$ approaches infinity, the expected value therefore approaches 0 \autocite[][]{moran1950notes}.
 \subsubsection{Standardised Incidence Ratio}
 A basic measure of disease risk is the \textit{standardised incidence ratio}, which yields an estimate in each of the areas that form a partition of the study region. It is defined as the ratio of observed counts to expected counts
 \begin{equation}\label{eq:sir}

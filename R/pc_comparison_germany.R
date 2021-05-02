@@ -615,6 +615,8 @@ plot_4 <- ggplot(
   )
 plot_1 + plot_2
 plot_3 + plot_4
+plot_2
+plot_4
 marginal_frame$U <- as.factor(marginal_frame$U)
 ggplot(
   data = marginal_frame[marginal_frame$U %in% c(0.1, 1, 5), ]
@@ -815,7 +817,7 @@ res_bym2_5 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 plot_11 <- ggplot(data = newest_numbers) +
-  geom_sf(aes(fill = res_bym2_01$summary.random$idarea_1$mean[357:712])) +
+  geom_sf(aes(fill = res_bym2_01$summary.random$idarea_1$mean[402:802])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
     subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.1$")
@@ -833,7 +835,7 @@ plot_11 <- ggplot(data = newest_numbers) +
   )
 
 plot_12 <- ggplot(data = newest_numbers) +
-  geom_sf(aes(fill = res_bym2_5$summary.random$idarea_1$mean[357:712])) +
+  geom_sf(aes(fill = res_bym2_5$summary.random$idarea_1$mean[402:802])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
     subtitle = TeX("$Structured\\,component, \\sigma_0 = 5$")
@@ -848,10 +850,10 @@ plot_12 <- ggplot(data = newest_numbers) +
   theme_minimal()
 plot_11 + plot_12
 ggplot(data = newest_numbers) +
-  geom_sf(aes(fill = res_bym2_01$summary.random$idarea_1$mean[357:712])) +
+  geom_sf(aes(fill = res_bym2_01$summary.random$idarea_1$mean[402:802])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
-    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.01$")
+    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.1$")
   ) +
   scale_fill_gradient2(
     "Post mean",

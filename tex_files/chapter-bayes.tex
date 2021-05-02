@@ -170,6 +170,16 @@ Some basic properties of the multivariate normal distribution are the following.
     \item[4.] If $\pmb{y}\sim\mathcal{N}\left(\pmb{\mu}, \pmb{\Sigma}\right)$ and $\pmb{y}'\sim\mathcal{N}\left(\pmb{\mu'}, \pmb{\Sigma'}\right)$ are independent, 
     \item[]then $\pmb{y}+\pmb{y'}\sim\mathcal{N}\left(\pmb{\mu}+ \pmb{\mu'}, \pmb{\Sigma}+ \pmb{\Sigma'}\right)$ \autocite[][19--20]{rue2005gaussian}.
 \end{itemize}
+\subsection{Calculation Summary Statistics}\label{sec:mean_iv}
+As the posterior mean and the credibility intervals of coefficient are of interest, calculation of these is performed later on. This allows a better interpretation of the results. \\
+To compute the posterior mean of the coefficients, the code shown in Listing~\ref{codePosteriorMean} can be used. \\
+To get the expected value given a marginal function $\pi\left(x\right)$, the expected value of a function $f\left(x\right)$ is calculated, i.e.
+\begin{equation}
+    \int f\left(x\right)\pi\left(x\right)dx
+\end{equation}
+\autocite[][]{aitkin1991posterior}.\\
+If necessary, e.g. if the target variable follows a (negative) binomial distribution, the value must be transformed to its original scale, as in these cases the log-likelihood is modelled. Therefore, in these cases, the expected value would have to be exponentiated to allow a clear interpretation. \\
+To obtain a credibility interval of the fixed effects on the transformed scale, the code in Listing~\ref{codeCredibility} can be used. In practice, the marginals are first transformed to their original scale, if necessary, and then the 2.5\% quantile and the 97.5\% quantiles are calculated.
 \subsection{Skewness}
 Skewness is a statistical indicator that describes the type and strength of the asymmetry of a probability distribution. It shows whether and how strongly the distribution is skewed to the right (right-skewed, left-skewed, negative skewness) or to the left (left-skewed, right-skewed, positive skewness). Any non-symmetrical distribution is called skewed. \\
 The skewness of a random variable $X$ is the third standardized moment, defined as
@@ -191,7 +201,7 @@ A key question in Bayesian analysis is the effect of the prior on the posterior,
 One property of exponential families is that they have conjugate priors \autocite[][]{diaconis1979conjugate}, which is an important property in Bayesian statistics. If the posterior distribution $\pi\left(\pmb{\theta}|\pmb{y}\right)$ and the prior distribution $\pi\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $\pi\left(\pmb{y}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. These priors were first discussed and formalised by Raifa and Schlaifer in 1961 \autocite[][]{raiffaapplied}. \\
 The construction of a conjugate prior is done by factorising the likelihood function into two parts. One part must be independent of the parameter(s) of interest but can be dependent on the data, while the other factor is a function that depends on the parameter(s) of interest and is dependent on the data only through the sufficient statistics. The family of conjugate priors is by definition proportional to the second factor. The posterior distribution resulting from the conjugate prior is itself a member of the same family as the conjugate prior \autocite[][]{raiffaapplied}. In cases where the prior and posterior distributions are part of the same family, the prior is said to be closed under sampling. Furthermore, since the data are only incorporated into the posterior distribution through the sufficient statistics, there exist relatively simple formulas for updating the prior into the posterior.\\
 For an example of the construction of a conjugated prior, see Fink 1997 \autocite[][]{fink1997compendium}.\\
-A drawback of conjugated priors is that the a priori known information about $\mu$ may be insufficient for determining both parameters or may be inconsistent with the structure imposed by conjugacy \autocite[][]{robert2010bayesian}. Moreover, these priorities can be too restrictive and not every belief about the priori can be described \autocite[][]{irwin2005prior}. \\
+A drawback of conjugated priors is that the a priori known information about $\mu$ may be insufficient for determining both parameters or may be inconsistent with the structure imposed by conjugacy \autocite[][]{robert2010bayesian}. Moreover, these priors can be too restrictive and not every belief about the prior can be described \autocite[][]{irwin2005prior}. \\
 Thus, although conjugate priors are easy to handle both mathematically and computationally \autocite[][]{irwin2005prior}, they are not often used in practice because of these drawbacks.
 % \subsection{Jeffreys' Prior}
 % As conjugate priors depend on information from the data, they are so-called \textit{informative priors}. \textit{Jeffreys' prior} \autocite[][]{jeffreys1946invariant} is characterised in comparison to other a priori distributions by the fact that it is invariant to a reparametrisation of the model parameters. Due to this invariance, the Jeffreys' a priori distribution is also called \textit{non-informative}. \\
@@ -208,9 +218,9 @@ Thus, although conjugate priors are easy to handle both mathematically and compu
 %     \pi_{\phi}\left(\phi\right)\propto \sqrt{I_{\phi}\left(\phi\right)}=\sqrt{I_{\theta}\left(\theta\right)}\left|\frac{\partial\theta}{\partial\phi}\right|\propto \pi_{\theta}\left(\theta\right)\left|\frac{\partial\theta}{\partial\phi}\right|
 % \end{equation}
 % \autocite[][42--43]{box2011bayesian}. While Jeffreys' priors work well for single parameter models, they struggle when it comes to models with multidimensional parameters as these priors can have poor convergence properties \autocite[][]{jordan2010}.
-\subsection{Penalised Complexity Priors}
+\subsection{Penalised Complexity Priors}\label{sec:pc_prior}
 One issue when selecting the prior distribution of a particular parameter is that it is not always intuitive when it comes to understanding and interpreting this distribution, something that is essential to ensure that it behaves as intended by the user. This problem can be addressed by using \textit{penalised complexity priors}, which is a methodology that penalises the complexity of model components in relation to deviation from simple base model formulations.\\
-PC priors provide a systematic and unified approach to calculating priority distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterised by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalising the deviation from the flexible model to the fixed base model, the PC prior is calculated \autocite[][]{martins2014penalising}.
+PC priors provide a systematic and unified approach to calculating prior distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterised by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalising the deviation from the flexible model to the fixed base model, the PC prior is calculated \autocite[][]{martins2014penalising}.
 \subsubsection{The Principles Behind PC Priors}
 Four main principles should be followed to calculate priors in a consistent way and to understand their properties.
 \subsubsection*{Support to Occam's Razor} 
@@ -234,53 +244,26 @@ The derivation of the PC prior is based on a system of constant rate penalisatio
 \begin{equation}
     \frac{\pi_d\left(d\left(\xi\right)+\delta\right)}{\pi_d\left(d\left(\xi\right)\right)}=r^{\delta}, \hspace{20pt} d\left(\xi\right),\delta\geq0.
 \end{equation}
-$r\in\left(0,1\right)$ represents the constant decay rate and thus implies that the relative change in the priority distribution for $d\left(\xi\right)$ is independent of the actual distance. Therefore, $d\left(\xi\right)$ is exponentially distributed with density $\pi\left(d\left(\xi\right)\right)=\lambda\exp\left(-\lambda d\left(\xi\right)\right)$ and rate $\lambda = -\ln\left(r\right)$. By a standard variable change transformation, the corresponding PC prior for $\xi$ is given \autocite[][]{martins2014penalising}.
+$r\in\left(0,1\right)$ represents the constant decay rate and thus implies that the relative change in the prior distribution for $d\left(\xi\right)$ is independent of the actual distance. Therefore, $d\left(\xi\right)$ is exponentially distributed with density $\pi\left(d\left(\xi\right)\right)=\lambda\exp\left(-\lambda d\left(\xi\right)\right)$ and rate $\lambda = -\ln\left(r\right)$. By a standard variable change transformation, the corresponding PC prior for $\xi$ is given \autocite[][]{martins2014penalising}.
 \subsubsection*{User-Defined Scaling}
 Since $\lambda$ characterises the shrinkage properties of the prior, it is important that the rate can be chosen in an intuitive and interpretable way. One possibility is to determine $\lambda$ by including a probability statement of tail events, for example
 \begin{equation}\label{eq:pcprior}
     \mathbb{P}\left(Q\left(\xi\right) > U\right)=\alpha,
 \end{equation}
 where $U$ represents an assumed upper bound for an interpretable transformation $Q\left(\xi\right)$ and $\alpha$ denotes a small probability \autocite[][]{martins2014penalising}.
-% \subsubsection{PC Priors for AR(1)}
-% The first-order AR process is given by
-% \begin{equation}
-%     x_t=\phi x_{t-1}+\epsilon_t, \hspace{20pt}\epsilon\sim\mathcal{N}\left(0, \kappa^{-1}\right), \hspace{5pt} t=2,...,n,
-% \end{equation}
-% where $x_1$ is assumed to follow a normal distribution with mean $0$ and marginal precision $\tau=\kappa\left(1-\phi^2\right)$. The variables $\left\lbrace\epsilon_t\right\rbrace_{t=1}^n$ are independent and follow a $\mathcal{N}\left(0, \kappa\right)$ distribution. The AR(1) model represents an important special case of AR processes where the autocorrelation coefficient $\phi$ specifies the complete dependence structure. For the precision parameter $\tau$ a type 2 Gumbel distribution is used as PC prior:
-% \begin{equation*}
-%    \pi\left(\tau\right)=\frac{\lambda}{2}\tau^{-3/2}\exp\left(-\lambda\tau^{-1/2}\right), \hspace{10pt}\lambda>0.
-% \end{equation*}
-% This prior is derived using infinite precision as the base model, following Simpson et. al (2017) \autocite[][]{martins2014penalising}. The rate $\lambda$ is inferred through $\mathbb{P}\left(1/\sqrt{\tau} > U\right)=\alpha$, with $\alpha$ denoting a small probability \autocite[][]{sorbye2017penalised}.
-% \subsubsection*{Base Model: No Dependency in Time} 
-% The correlation matrix of an AR(1) is generally defined as $\pmb{\Sigma}_1=\left(\phi^{\left|i-j\right]}\right)$. In the case of no autocorrelation, white noise results and the correlation matrix is equal to the identity matrix, $\pmb{\Sigma}_0=\pmb{I}$. The distance function is defined as $d\left(\phi\right)=\sqrt{\left(1-n\right)\log\left(1-\phi^2\right)}$. According to the constant rate penalty principle, $d\left(\phi\right)$ is assigned an exponential prior with rate $\theta/\sqrt{n-1}$. This leads to a prior distribution that is invariant to $n$, and the PC for the one-lag autocorrelation is given by
-% \begin{equation}
-%    \pi\left(\phi\right)=\frac{\theta}{2}\exp\left(-\theta\sqrt{-\ln\left(1-\phi^2\right)}\right)\frac{|\phi|}{\left(1-\phi^2\right)\sqrt{-\ln\left(1-\phi^2\right)}}, \hspace{20pt} |\phi|<1,\theta>0.
-% \end{equation}
-% The rate parameter $\theta$ influences at what rate the prior shrinks towards the white noise base model. To infer $\theta$, a tail event is used. In the case of $\phi = 0$ a tail event can be defined by the fact that large absolute correlations are less likely, i.e..,
-% \begin{equation*}
-%    \mathbb{P}\left(|\phi|>U\right) = \alpha.
-% \end{equation*}
-%This implies that $\theta=-\ln\left(\alpha\right)/\sqrt{-\ln\left(1-U^2\right)}$ \autocite[][]{sorbye2017penalised}.
-% \subsubsection*{Base Model: No Change in Time} 
-% As an alternative to the base model for the AR(1) process, it can be assumed that the process remains constant in time ($\phi = 1$), thus representing a limiting random walk case, which is a non-stationary and singular process. To derive the PC prior for $\phi$, let $\pmb{\Sigma}_1=\left(\phi^{|i-j|}\right)$ and $\pmb{\Sigma}_0=\left(\phi_0^{|i-j|}\right)$, where $\phi_0$ is close to $1$ and $\phi<\phi_0$. The Kullback-Leibler divergence is
-% \begin{align*}
-%    &\hbox{KLD}\left(f_1\left(\phi\right)||f_0\right)=\\
-%    &\frac{1}{2}\left(\frac{1}{1-\phi_0^2}\left(n-2\left(n-1\right)\phi_0\phi+\left(n-2\right)\phi_0^2\right)-n-\left(n-1\right)\ln\left(\frac{1-\phi^2}{1-\phi_0^2}\right)\right).
-% \end{align*}
-% Considering the limit as $\phi_0\rightarrow1$, the distance is
-% \begin{align*}
-%    d\left(\phi\right)&=\underset{\phi_0\rightarrow1}{\lim}\sqrt{2\hbox{KLD}\left(f_1\left(\phi\right)||f_0\right)} \\
-%    &=\underset{\phi_0\rightarrow1}{\lim}\sqrt{\frac{2\left(n-1\right)\left(1-\phi\right)}{1-\phi_0^2}} = c\sqrt{1-\phi}, \hspace{20pt}|\phi|<1,
-% \end{align*}
-% constant for $c$, independent of $\phi$. Since $0\leq d\left(\phi\right)\leq c\sqrt{2}$, $d\left(\phi\right)$ is assigned a truncated exponential distribution with rate $\theta/c$, resulting in the following PC prior,
-% \begin{equation}
-%    \pi\left(\phi\right)=\frac{\theta\exp\left(-\theta\sqrt{1-\phi}\right)}{\left(1-\exp\left(-\sqrt{2}\theta\right)\right)2\sqrt{1-\phi}}, \hspace{20pt}|\phi|<1.
-% \end{equation}
-% To scale the prior in terms of $\theta$, $\left(U,\alpha\right)$ is determined in terms of $\mathbb{P}\left(\phi>U\right)=\alpha$. This equation is solved by
-% \begin{equation*}
-%    \frac{1-\exp\left(-\theta\sqrt{1-U}\right)}{1-\exp\left(-\sqrt{2}\theta\right)}=\alpha,
-% \end{equation*}
-% provided that $\alpha$ is larger than the lower limit $\sqrt{\left(1-U\right)/2}$ % \autocite[][]{sorbye2017penalised}.
+\subsubsection{Example: PC Prior for the Precision}
+A PC prior can be used to adjust the smoothness of a spatial field in an intuitive way by specifying such a prior for the precision $\tau$. This makes it possible to adjust the smoothness of the spatial field in an intuitive way. In this case, the penalised complexity prior is defined by the parameter $\sigma_0$. Equation~\ref{eq:pcprior} therefore looks like this,
+\begin{equation}\label{pcprec}
+    \mathbb{P}\left(\sigma > \sigma_0\right)=\alpha.
+\end{equation}
+The actual expression of the prior is given by
+\begin{equation}\label{eq:pc_prior_prec}
+    \pi\left(\tau\right)=\frac{\lambda}{2}\tau^{-3/2}\exp\left(-\lambda\tau^{-1/2}\right),\hspace{20pt}\tau>0
+\end{equation}
+and is a type-2-Gumbel distribution. \\
+The prior for $\tau$ corresponds to an exponential distribution with rate $\lambda$ for the standard deviation. \\
+$\lambda$ quantifies the size of the penalty for deviation from the base model and is increased with higher values for it. \\
+Here, $\lambda=\frac{-\log\left(\alpha\right)}{\sigma_0}$ \cite{martins2014penalising}.
 \clearpage
 \section{Markov-Chain-Monte-Carlo-Methods}
 Markov chain Monte Carlo methods, also referred to as MCMC methods, are a set of algorithms that enable sampling from probability distributions based on the construction of Markov chains. After a sufficient number of iterations, the stationary distribution of a Markov chain can be taken as the desired distribution, with the quality of this distribution improving as the number of iterations increases. Most of the time, the construction of such a chain is relatively simple; the real challenge is to determine how many steps are needed before convergence towards the stationary distribution is achieved. MCMC methods are mostly used to compute numerical approximations of multidimensional integrals, for instance in Bayesian statistics or computational biology. The two main concepts used in MCMC methods are Monte Carlo integration and the aforementioned Markov chains, hence the name Markov Chain Monte Carlo.
@@ -787,13 +770,14 @@ The hyperparameters of the model are the precision $\tau_u$ of the Besag model $
 \end{equation}
 and the prior is defined on $\pmb{\theta}$ \autocite[][]{besag1991bayesian, riebler2016intuitive}.
 \subsection{The Leroux Model}
-One problem with the BYM model is that the structured and unstructured components are not identifiable because they cannot be considered independently. Moreover, $\tau_v$ and $\tau_u$ do not represent variability at the same level, which makes the choice of hyperpriorities difficult. The Leroux model is formulated in such a way that the compromise between the two variations is made more explicit. It is assumed that $\pmb{x}$ follows a normal distribution with zero mean and covariance matrix
+One problem with the BYM model is that the structured and unstructured components are not identifiable because they cannot be considered independently. Moreover, $\tau_v$ and $\tau_u$ do not represent variability at the same level, which makes the choice of hyperpriors difficult. The Leroux model is formulated in such a way that the compromise between the two variations is made more explicit. It is assumed that $\pmb{x}$ follows a normal distribution with zero mean and covariance matrix
 \begin{equation}
     \hbox{Var}\left(\pmb{x}|\tau_x,\phi\right)=\tau_x^{-1}\left(\left(1-\phi\right)\pmb{I}+\phi\pmb{Q}\right)^{-1},
 \end{equation}
 with $\phi\in\left[0,1\right]$ as mixing parameter. For $\phi=0$ the model reduces to pure overdispersion and for $\phi=1$ to the Besag model. The conditional expected value of $x_i$ for all other random effects is the weighted mean of the unstructured model with zero mean and the mean of the Besag model, while the conditional variance is the weighted mean of $\tau_x^{-1}$ and $\left(\tau_x\cdot\ n_{\delta_i}\right)^{-1}$ \autocite[][]{leroux2000estimation, riebler2016intuitive}.
 \subsection{The BYM2 Model}
-One problem that all the aforementioned models have is the lack of scaling of the spatially structured component. Scaling facilitates the assignment of hyperpriorities and ensures that the interpretation of hyperpriorities remains the same across different areas. \\
+One problem that all the aforementioned models have is the lack of scaling of the spatially structured component. Scaling facilitates the assignment of hyperpriors and ensures that the interpretation of hyperpriors remains the same across different areas. \\
+Another problem is that the marginal standard deviations of the commonly used IGMRF priors can vary greatly, a fact that should be taken into account by assigning hyperpriors to the precision parameters of these models. \\
 Since the Besag model penalises a local deviation from its null space, the hyperprior will control this local deviation and thus affect the smoothness of the estimated spatial effects. If the estimate of the field is too smooth, the precision will be large and the spatial variation may be blurred. On the other hand, if the precision is too small, the model could overfit due to the large local variability. \\
 The marginal variances $\tau_x^{-1}\left[\pmb{Q}^{-}\right]_{ii}$ depend on the structure of the graph, which is reflected in the structure matrix $\pmb{Q}$. A generalised variance can be calculated as the geometric mean of the marginal variance as follows
 \begin{equation}\label{eq:bym_scale}
@@ -863,8 +847,8 @@ The conditional predictive ordinate is given by
 with $\pmb{y}$ the data, $\pmb{y}_{-i}$ the data without the $i$-th observation, and $\pi\left(\cdot|\pmb{y}_{-i}\right)$ the predictive distribution of a new observation at $\pmb{y}_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
 \clearpage
 \section{Model Issues}\label{sec:issues}
-One problem that plagues these models is that they cannot be directly compared due to their different parameterisations and the fact that the precision in these models is interpreted differently. Since neither a Besag model nor a BYM model nor a Leroux model is scaled, the precision parameter is not representative of the marginal precision but is confounded with the mixing parameter. Therefore, the effect of a prior assigned to the precision parameter is dependent on the graph structure of the application. Thus, a given prior is not transferable between different applications if the underlying graph changes. Furthermore, the goal of the BYM2 model is not to optimise goodness-of-fit indicators, but to provide a meaningful model formulation where all parameters have a clear meaning. By mapping the precision parameter to the marginal standard deviation, the model parameters are flexible and the assignment of meaningful hyperpriorities is made easier \autocite[][]{riebler2016intuitive}. \\
-Additionally, the goodness-of-fit indicators introduced in section~\ref{sec:performance} have their own problems. The DIC, for example, produces unreasonable results if the posterior distribution is not well summarised by its mean, while the WAIC is based on a data partition that would create difficulties for structured models, such as for spatial or network data \autocite[][]{gelman2014understanding}. \\
+One problem that plagues these models is that they cannot be directly compared due to their different parameterisations and the fact that the precision in these models is interpreted differently. Since neither a Besag model nor a BYM model nor a Leroux model is scaled, the precision parameter is not representative of the marginal precision but is confounded with the mixing parameter. Therefore, the effect of a prior assigned to the precision parameter is dependent on the graph structure of the application. Thus, a given prior is not transferable between different applications if the underlying graph changes. Furthermore, the goal of the BYM2 model is not to optimise goodness-of-fit indicators, but to provide a meaningful model formulation where all parameters have a clear meaning. By mapping the precision parameter to the marginal standard deviation, the model parameters are flexible and the assignment of meaningful hyperpriors is made easier \autocite[][]{riebler2016intuitive}. \\
+Additionally, the goodness-of-fit indicators introduced in Section~\ref{sec:performance} have their own problems. The DIC, for example, produces unreasonable results if the posterior distribution is not well summarised by its mean, while the WAIC is based on a data partition that would create difficulties for structured models, such as for spatial or network data \autocite[][]{gelman2014understanding}. \\
 Finally, the choice of the prior also affects the value of these criteria and depending on the values chosen for the PC priors used in this work, overfitting of the models may occur, which is then reflected in these criteria, but more on this later.
 \clearpage
 \section{The Variance Inflation Factor}\label{sec:vif}
@@ -875,14 +859,5 @@ For $p-1$ independent variables,
 \end{equation}
 with $R^2$ the coefficient of determination. In most literature, a value of at least 5 is suggested as too high and is therefore used as the threshold in this work \autocite[][]{craney2002model}.
 \clearpage
-\section{Calculation of the Mean and Quantiles}\label{sec:mean_iv}
-As the posterior mean and the credibility intervals of coefficient are of interest, calculation of these is performed later on. This allows a better interpretation of the results. \\
-To compute the posterior mean of the coefficients, the code shown in Listing~\ref{codePosteriorMean} can be used. \\
-To get the expected value given a marginal function $\pi\left(x\right)$, the expected value of a function $f\left(x\right)$ is calculated, i.e.
-\begin{equation}
-    \int f\left(x\right)\pi\left(x\right)dx.
-\end{equation}
-If necessary, e.g. if the target variable follows a (negative) binomial distribution, the value must be transformed to its original scale, as in these cases the log-likelihood is modelled. Therefore, in these cases, the expected value would have to be exponentiated to allow a clear interpretation. \\
-To obtain a credibility interval of the fixed effects on the transformed scale, the code in Listing~\ref{codeCredibility} can be used. In practice, the marginals are first transformed to their original scale, if necessary, and then the 2.5\% quantile and the 97.5\% quantiles are calculated.
 %https://arxiv.org/pdf/1708.02723.pdf \\
 %http://www.leg.ufpr.br/~elias/cursos/br2019/slides1.pdf

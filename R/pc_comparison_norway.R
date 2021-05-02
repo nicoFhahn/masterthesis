@@ -458,10 +458,6 @@ save(models, file = "priors/priors_norway.Rda")
 results <- do.call(rbind, lapply(models, function(x) x$results))
 hyperpar_frame <- do.call(rbind, lapply(models, function(x) x$hyperpar_frame))
 marginal_frame <- do.call(rbind, lapply(models, function(x) x$marginal_frame))
-plot(
-  results[results$model == "BYM2", ]$U,
-  results[results$model == "BYM2", ]$dic
-)
 plot_1 <- ggplot(
   results,
   aes(
@@ -566,6 +562,8 @@ plot_4 <- ggplot(
   )
 plot_1 + plot_2
 plot_3 + plot_4
+plot_2
+plot_4
 marginal_frame$U <- as.factor(marginal_frame$U)
 ggplot(
   data = marginal_frame[marginal_frame$U %in% c(0.1, 1, 5), ]
@@ -802,7 +800,7 @@ ggplot(data = newest_numbers) +
   geom_sf(aes(fill = res_bym2_01$summary.random$idarea_1$mean[357:712])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
-    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.01$")
+    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.1$")
   ) +
   scale_fill_gradient2(
     "Post mean",
