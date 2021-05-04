@@ -586,7 +586,6 @@ if (date_1 != date_2) {
 }
 # load the data
 norge_features <- read_csv("wrangled_data/norge_features_temporal.csv")
-# norge_features[, c(20:31, 36:53, 55)] <- 1000 * norge_features[, c(20:31, 36:53, 55)] / norge_features$population
 # scale the data
 norge_features[, c(17:31, 33:53, 55)] <- scale(
   norge_features[, c(17:31, 33:53, 55)]
@@ -671,13 +670,15 @@ norge <- norge[, c(cols[cols != "vaccine_shots"], "id_date_1", "id_date_2")]
 vaccines <- read_delim("norge_data/vaccination_norway_2nd_may.csv", delim = ";")
 colnames(vaccines) <- str_remove(colnames(vaccines), "Covid-19, ")
 colnames(vaccines)[1] <- "date"
-missing <- colnames(vaccines)[!colnames(vaccines) %in% unique(norge$kommune_name)]
+missing <- colnames(vaccines)[
+  !colnames(vaccines) %in% unique(norge$kommune_name)
+]
 sort(missing)
 # change colnames to correct names
 vaccines[, colnames(vaccines) == missing[3]] <- NULL
 colnames(vaccines)[colnames(vaccines) == missing[2]] <- "Tana"
 vaccines[, colnames(vaccines) == missing[4]] <- NULL
-colnames(vaccines)[colnames(vaccines) == missing[5]] <- "Kåfjord"
+colnames(vaccines)[colnames(vaccines) == missing[5]] <- "K?fjord"
 vaccines[, colnames(vaccines) == missing[7]] <- NULL
 colnames(vaccines)[colnames(vaccines) == missing[6]] <- "Kautokeino"
 vaccines[, colnames(vaccines) == missing[10]] <- NULL
@@ -685,23 +686,32 @@ colnames(vaccines)[colnames(vaccines) == missing[11]] <- "Karasjok"
 vaccines[, colnames(vaccines) == missing[14]] <- NULL
 colnames(vaccines)[colnames(vaccines) == missing[15]] <- "Porsanger"
 vaccines[, colnames(vaccines) == missing[17]] <- NULL
-colnames(vaccines)[colnames(vaccines) == missing[18]] <- "Snåsa"
+colnames(vaccines)[colnames(vaccines) == missing[18]] <- "Sn?sa"
 vaccines[, colnames(vaccines) == missing[21]] <- NULL
 colnames(vaccines)[colnames(vaccines) == missing[22]] <- "Nesseby"
 colnames(vaccines)[colnames(vaccines) == missing[12]] <- "Os"
 colnames(vaccines)[colnames(vaccines) == missing[13]] <- "Oslo"
-colnames(vaccines)[colnames(vaccines) == missing[16]] <- "Røyrvik"
+colnames(vaccines)[colnames(vaccines) == missing[16]] <- "R?yrvik"
 # load the data for heroy
-heroy_more <- read_delim("norge_data/vaccination_heroy_more_2nd_may.csv", delim = ";")
-heroy_nordland <- read_delim("norge_data/vaccination_heroy_nordland_2nd_may.csv", delim = ";")
-vaccines$`Herøy (Møre og Romsdal)` <- heroy_more$`Covid-19, Herøy`
-vaccines$`Herøy (Nordland)` <- heroy_nordland$`Covid-19, Herøy`
-vaccines$Herøy <- NULL
+heroy_more <- read_delim(
+  "norge_data/vaccination_heroy_more_2nd_may.csv",
+  delim = ";"
+)
+heroy_nordland <- read_delim(
+  "norge_data/vaccination_heroy_nordland_2nd_may.csv",
+  delim = ";"
+)
+vaccines$`Her?y (M?re og Romsdal)` <- heroy_more$`Covid-19, Her?y`
+vaccines$`Her?y (Nordland)` <- heroy_nordland$`Covid-19, Her?y`
+vaccines$Her?y <- NULL
 vaccines$`Ikke oppgitt` <- NULL
 vaccines$Svalbard <- NULL
 vaccines$`Tysfjord *` <- NULL
 # change the date variable
-vaccines$date <- as.Date(str_replace_all(vaccines$date, "\\.", "-"), format = "%d-%m-%Y")
+vaccines$date <- as.Date(
+  str_replace_all(vaccines$date, "\\.", "-"),
+  format = "%d-%m-%Y"
+)
 # use cumulative sums
 vaccines[, 2:357] <- cumsum(vaccines[, 2:357])
 # get long format
@@ -711,7 +721,9 @@ vaccine_shots <- melt(
   variable.name = "kommune_name"
 )
 # add missing data
-missing <- unique(norge$date)[!unique(norge$date) %in% unique(vaccine_shots$date)]
+missing <- unique(norge$date)[
+  !unique(norge$date) %in% unique(vaccine_shots$date)
+]
 missing_frame <- tibble(
   date = rep(missing, 356),
   kommune_name = rep(unique(vaccine_shots$kommune_name), length(missing)),

@@ -705,7 +705,6 @@ germany_features$schutzsuchende <- as.numeric(
 )
 # calculate the percentage of the vote
 germany_features[, 7:12] <- germany_features[, 7:12] / germany_features$stimmen
-# germany_features[, c(1:4, 12:15, 22:39)] <- 1000 * germany_features[, c(1:4, 12:15, 22:39)] / germany_features$PopulationTotal
 # read the shapefile
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 # merge it together

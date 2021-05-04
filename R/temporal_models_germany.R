@@ -5,7 +5,11 @@ set.seed(14523)
 backup <- germany
 germany <- backup
 germany <- germany[
-  germany$Date %in% seq(from = min(germany$Date), to = max(germany$Date), by = 5),
+  germany$Date %in% seq(
+    from = min(germany$Date),
+    to = max(germany$Date),
+    by = 5
+  ),
 ]
 test <- sample(seq_len(nrow(germany)), size = floor(0.2 * nrow(germany)))
 test_value <- germany$value[test]
@@ -41,7 +45,7 @@ lcs <- inla.make.lincombs(
 )
 # formula for the besag model
 formula_1 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   clinic + place_of_worship + nursing_home + aerodrome + platform + office +
   marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
@@ -49,7 +53,7 @@ formula_1 <- value ~
   f(id_date_2, model = "iid")
 # formula for the bym2 model
 formula_2 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   clinic + place_of_worship + nursing_home + aerodrome + platform + office +
   marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
@@ -57,7 +61,7 @@ formula_2 <- value ~
   f(id_date_2, model = "iid")
 # formula for the leroux model
 formula_3 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   clinic + place_of_worship + nursing_home + aerodrome + platform + office +
   marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +

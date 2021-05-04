@@ -37,17 +37,17 @@ for (i in 2:nrow(newest_numbers)) {
 
 C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 formula_besag <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   clinic + place_of_worship + nursing_home + aerodrome + platform + office +
   marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior)
 formula_bym2 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   clinic + place_of_worship + nursing_home + aerodrome + platform + office +
   marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior)
 formula_leroux <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   clinic + place_of_worship + nursing_home + aerodrome + platform + office +
   marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior)
@@ -96,7 +96,7 @@ models <- pblapply(
       Ntrials = newest_numbers$population,
       control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
     )
-    while(class(res_bym2) != "inla") {
+    while (class(res_bym2) != "inla") {
       print("bruh")
       prior <- list(
         prec = list(
@@ -133,7 +133,7 @@ models <- pblapply(
         function(x) x * newest_numbers$population[i],
         res_leroux$marginals.fitted.values[[i]]
       ), silent = TRUE)
-      if(class(predicted_leroux[i]) != "numeric") {
+      if (class(predicted_leroux[i]) != "numeric") {
         predicted_leroux[i] <- NA
       }
     }
@@ -276,14 +276,13 @@ models <- pblapply(
           inla.tmarginal(
             exp, res_bym2$marginals.fixed$marketplace
           )
-        )[1],#
+        )[1], #
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
             exp, res_bym2$marginals.fixed$die_linke
-            
           )
-        )[1],#
+        )[1], #
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
@@ -451,14 +450,13 @@ models <- pblapply(
           inla.tmarginal(
             exp, res_bym2$marginals.fixed$marketplace
           )
-        )[2],#
+        )[2], #
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
             exp, res_bym2$marginals.fixed$die_linke
-            
           )
-        )[2],#
+        )[2], #
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
@@ -499,7 +497,10 @@ models <- pblapply(
       ),
       U = x
     )
-    marginal_frame$variable <- ordered(marginal_frame$variable, levels = unique(marginal_frame$variable))
+    marginal_frame$variable <- ordered(
+      marginal_frame$variable,
+      levels = unique(marginal_frame$variable)
+    )
     list(
       results = results,
       hyperpar_frame = hyperpar_frame,
@@ -656,9 +657,9 @@ ggplot(
     values = c("#1B998B", "#ED217C", "#2D3047"),
     labels = c(
       expression(
-        sigma[0]==0.1,
-        sigma[0]==1,
-        sigma[0]==5,
+        sigma[0] == 0.1,
+        sigma[0] == 1,
+        sigma[0] == 5,
       )
     )
   ) +
@@ -713,8 +714,10 @@ res_leroux <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 newest_numbers$random_besag <- res_besag$summary.random$idarea_1$mean
-newest_numbers$random_bym2_unstructured <- res_bym2$summary.random$idarea_1$mean[1:401]
-newest_numbers$random_bym2_structured <- res_bym2$summary.random$idarea_1$mean[402:802]
+newest_numbers$random_bym2_unstructured <-
+  res_bym2$summary.random$idarea_1$mean[1:401]
+newest_numbers$random_bym2_structured <-
+  res_bym2$summary.random$idarea_1$mean[402:802]
 newest_numbers$random_leroux <- res_leroux$summary.random$idarea_1$mean
 color_low <- "#20A4F3"
 color_high <- "#FF206E"

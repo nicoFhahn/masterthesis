@@ -29,12 +29,12 @@ for (i in 2:nrow(newest_numbers)) {
 
 C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 formula_besag <- value ~
-  urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
+urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
   office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior)
 formula_bym2 <- value ~
-  urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
+urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
   office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior)
@@ -75,8 +75,7 @@ models <- pblapply(
       ),
       Ntrials = newest_numbers$population,
       control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-    ), silent = TRUE
-    )
+    ), silent = TRUE)
     res_leroux <- try(inla(
       formula_leroux,
       family = "nbinomial",
@@ -107,8 +106,7 @@ models <- pblapply(
         ),
         Ntrials = newest_numbers$population,
         control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-      ), silent = TRUE
-      )
+      ), silent = TRUE)
     }
     while (class(res_leroux) != "inla") {
       prior <- list(
@@ -128,8 +126,7 @@ models <- pblapply(
         ),
         Ntrials = newest_numbers$population,
         control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-      ), silent = TRUE
-      )
+      ), silent = TRUE)
     }
     predicted_besag <- c()
     predicted_bym2 <- c()
@@ -477,7 +474,10 @@ models <- pblapply(
       ),
       U = x
     )
-    marginal_frame$variable <- ordered(marginal_frame$variable, levels = unique(marginal_frame$variable))
+    marginal_frame$variable <- ordered(
+      marginal_frame$variable,
+      levels = unique(marginal_frame$variable)
+    )
     list(
       results = results,
       hyperpar_frame = hyperpar_frame,
@@ -634,9 +634,9 @@ ggplot(
     values = c("#1B998B", "#ED217C", "#2D3047"),
     labels = c(
       expression(
-        sigma[0]==0.1,
-        sigma[0]==1,
-        sigma[0]==5,
+        sigma[0] == 0.1,
+        sigma[0] == 1,
+        sigma[0] == 5,
       )
     )
   ) +
@@ -691,8 +691,10 @@ res_leroux <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 newest_numbers$random_besag <- res_besag$summary.random$idarea_1$mean
-newest_numbers$random_bym2_unstructured <- res_bym2$summary.random$idarea_1$mean[1:356]
-newest_numbers$random_bym2_structured <- res_bym2$summary.random$idarea_1$mean[357:712]
+newest_numbers$random_bym2_unstructured <-
+  res_bym2$summary.random$idarea_1$mean[1:356]
+newest_numbers$random_bym2_structured <-
+  res_bym2$summary.random$idarea_1$mean[357:712]
 newest_numbers$random_leroux <- res_leroux$summary.random$idarea_1$mean
 color_low <- "#20A4F3"
 color_high <- "#FF206E"

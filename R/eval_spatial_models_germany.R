@@ -215,7 +215,6 @@ marginal_frame <- tibble(
       c(0.025, 0.975),
       inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$aerodrome
-        
       )
     )[1],
     inla.qmarginal(
@@ -560,7 +559,6 @@ marginal_frame <- tibble(
       c(0.025, 0.975),
       inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$aerodrome
-        
       )
     )[2],
     inla.qmarginal(

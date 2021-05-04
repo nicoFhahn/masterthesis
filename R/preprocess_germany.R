@@ -656,10 +656,11 @@ germany_features$schutzsuchende <- as.numeric(
 )
 germany_features$Gewerbesteuer <- log(germany_features$Gewerbesteuer)
 germany_features$einkuenfte_gesamt <- log(germany_features$einkuenfte_gesamt)
-germany_features$lohn_einkommenssteuer <- log(germany_features$lohn_einkommenssteuer)
+germany_features$lohn_einkommenssteuer <- log(
+  germany_features$lohn_einkommenssteuer
+)
 # calculate the percentage of the vote
 germany_features[, 7:12] <- germany_features[, 7:12] / germany_features$stimmen
-# germany_features[, c(1:4, 12:15, 22:39)] <- 1000 * germany_features[, c(1:4, 12:15, 22:39)] / germany_features$PopulationTotal
 # read the shapefile
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 # merge it together
@@ -759,7 +760,7 @@ newest_numbers[, c(2:15, 20:35, 43:46)] <- scale(
 )
 b <- newest_numbers[, c(2:15, 18, 20:35, 43:46)]
 sign <- TRUE
-while(sign) {
+while (sign) {
   mod <- glm.nb(
     value ~ .,
     data = b

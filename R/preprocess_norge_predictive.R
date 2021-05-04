@@ -579,12 +579,10 @@ if (date_1 != date_2) {
   # load the data
   norge_features <- read_csv("wrangled_data/norge_features.csv")
 }
-# norge_features[, c(20:31, 36:53, 55)] <- 1000 * norge_features[, c(20:31, 36:53, 55)] / norge_features$population
 # scale the data
 norge_features[, c(20:31, 36:53, 55)] <- scale(
   norge_features[, c(20:31, 36:53, 55)]
 )
-# norge_features[, c(18, 19, 33, 34, 35)] <- norge_features[, c(18, 19, 33, 34, 35)] / 100
 norge_features[, c(18, 19, 33, 34, 35)] <- scale(
   norge_features[, c(18, 19, 33, 34, 35)]
 )
@@ -646,7 +644,7 @@ norge <- norge[
     as.Date("2021-03-24") + date_seq[date_seq <= 28]
   ),
 ]
-norge <- norge[order(norge$date, norge$kommune_no), ] 
+norge <- norge[order(norge$date, norge$kommune_no), ]
 numbers <- numbers[order(numbers$date, numbers$kommune_no), ]
 numbers <- numbers[numbers$kommune_no %in% norge$kommune_no, ]
 norge$date <- NULL
