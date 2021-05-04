@@ -43,26 +43,23 @@ lcs <- inla.make.lincombs(
 formula_1 <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
-  office + platform + higher_education +
+  office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
-  f(id_date_1, model = "rw2") +
-  f(id_date_2, model = "iid")
+  f(id_date_1, model = "rw2", hyper = prior_1)
 # formula for the bym2 model
 formula_2 <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
-  office + platform + higher_education +
+  office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
-  f(id_date_1, model = "rw2") +
-  f(id_date_2, model = "iid")
+  f(id_date_1, model = "rw2", hyper = prior_1)
 # formula for the leroux model
 formula_3 <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
-  office + platform + higher_education +
+  office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
-  f(id_date_1, model = "rw2") +
-  f(id_date_2, model = "iid")
+  f(id_date_1, model = "rw2", hyper = prior_1)
 # compute the models
 res_1 <- inla(
   formula_1,
@@ -75,8 +72,7 @@ res_1 <- inla(
   ),
   Ntrials = norge$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE,
-  lincomb = lcs
+  verbose = TRUE
 )
 res_2 <- inla(
   formula_2,
@@ -89,8 +85,7 @@ res_2 <- inla(
   ),
   Ntrials = norge$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE,
-  lincomb = lcs
+  verbose = TRUE
 )
 res_3 <- inla(
   formula_3,
@@ -103,8 +98,7 @@ res_3 <- inla(
   ),
   Ntrials = norge$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE,
-  lincomb = lcs
+  verbose = TRUE
 )
 models <- c(models, list(res_1, res_2, res_3))
 # get the goodness of fit indicators

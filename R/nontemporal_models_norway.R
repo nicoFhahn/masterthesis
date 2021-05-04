@@ -38,24 +38,24 @@ C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 formula_1 <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
-  office + platform + higher_education
+  office + platform + higher_education + vaccine_shots
 # formula for the besag model
 formula_2 <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
-  office + platform + higher_education +
+  office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 # formula for the bym2 model
 formula_3 <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
-  office + platform + higher_education +
+  office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 # formula for the leroux model
 formula_4 <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
-  office + platform + higher_education +
+  office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 # compute the models
 res_1 <- inla(

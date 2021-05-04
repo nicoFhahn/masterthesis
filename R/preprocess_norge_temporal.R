@@ -580,22 +580,16 @@ if (date_1 != date_2) {
     "wrangled_data/shapes_norge.shp"
   )
   rm(list = ls())
-  source("R/preprocess_norge.R")
-  cols <- colnames(newest_numbers)
+  cols <- colnames(read_csv("eval_data/newest_numbers_norway_march24.csv"))
 } else {
-  source("R/preprocess_norge.R")
-  cols <- colnames(newest_numbers)
+  cols <- colnames(read_csv("eval_data/newest_numbers_norway_march24.csv"))
 }
 # load the data
 norge_features <- read_csv("wrangled_data/norge_features_temporal.csv")
 # norge_features[, c(20:31, 36:53, 55)] <- 1000 * norge_features[, c(20:31, 36:53, 55)] / norge_features$population
 # scale the data
-norge_features[, c(20:31, 36:53, 55)] <- scale(
-  norge_features[, c(20:31, 36:53, 55)]
-)
-# norge_features[, c(18, 19, 33, 34, 35)] <- norge_features[, c(18, 19, 33, 34, 35)] / 100
-norge_features[, c(18, 19, 33, 34, 35)] <- scale(
-  norge_features[, c(18, 19, 33, 34, 35)]
+norge_features[, c(17:31, 33:53, 55)] <- scale(
+  norge_features[, c(17:31, 33:53, 55)]
 )
 
 # load the shapefiles
@@ -672,6 +666,71 @@ norge <- merge(
 )
 # sort it
 norge <- norge[order(norge$idarea_1, norge$id_date_1), ]
-norge <- norge[, c(cols, "id_date_1", "id_date_2")]
-# scale the remaining variables
+norge <- norge[, c(cols[cols != "vaccine_shots"], "id_date_1", "id_date_2")]
+# load the vaccine data
+vaccines <- read_delim("norge_data/vaccination_norway_2nd_may.csv", delim = ";")
+colnames(vaccines) <- str_remove(colnames(vaccines), "Covid-19, ")
+colnames(vaccines)[1] <- "date"
+missing <- colnames(vaccines)[!colnames(vaccines) %in% unique(norge$kommune_name)]
+sort(missing)
+# change colnames to correct names
+vaccines[, colnames(vaccines) == missing[3]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[2]] <- "Tana"
+vaccines[, colnames(vaccines) == missing[4]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[5]] <- "Kåfjord"
+vaccines[, colnames(vaccines) == missing[7]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[6]] <- "Kautokeino"
+vaccines[, colnames(vaccines) == missing[10]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[11]] <- "Karasjok"
+vaccines[, colnames(vaccines) == missing[14]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[15]] <- "Porsanger"
+vaccines[, colnames(vaccines) == missing[17]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[18]] <- "Snåsa"
+vaccines[, colnames(vaccines) == missing[21]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[22]] <- "Nesseby"
+colnames(vaccines)[colnames(vaccines) == missing[12]] <- "Os"
+colnames(vaccines)[colnames(vaccines) == missing[13]] <- "Oslo"
+colnames(vaccines)[colnames(vaccines) == missing[16]] <- "Røyrvik"
+# load the data for heroy
+heroy_more <- read_delim("norge_data/vaccination_heroy_more_2nd_may.csv", delim = ";")
+heroy_nordland <- read_delim("norge_data/vaccination_heroy_nordland_2nd_may.csv", delim = ";")
+vaccines$`Herøy (Møre og Romsdal)` <- heroy_more$`Covid-19, Herøy`
+vaccines$`Herøy (Nordland)` <- heroy_nordland$`Covid-19, Herøy`
+vaccines$Herøy <- NULL
+vaccines$`Ikke oppgitt` <- NULL
+vaccines$Svalbard <- NULL
+vaccines$`Tysfjord *` <- NULL
+# change the date variable
+vaccines$date <- as.Date(str_replace_all(vaccines$date, "\\.", "-"), format = "%d-%m-%Y")
+# use cumulative sums
+vaccines[, 2:357] <- cumsum(vaccines[, 2:357])
+# get long format
+vaccine_shots <- melt(
+  setDT(vaccines),
+  id.vars = "date",
+  variable.name = "kommune_name"
+)
+# add missing data
+missing <- unique(norge$date)[!unique(norge$date) %in% unique(vaccine_shots$date)]
+missing_frame <- tibble(
+  date = rep(missing, 356),
+  kommune_name = rep(unique(vaccine_shots$kommune_name), length(missing)),
+  value = 0
+)
+# bind it together
+vaccine_shots <- rbind(missing_frame, vaccine_shots)
+# merge it
+norge <- merge(
+  norge,
+  vaccine_shots,
+  by = c("date", "kommune_name")
+)
+colnames(norge)[28] <- "vaccine_shots"
+colnames(norge)[3] <- "value"
+norge$vaccine_shots <- norge$vaccine_shots / norge$population
+norge$vaccine_shots <- scale(norge$vaccine_shots)[, 1]
+norge <- norge[norge$date <= max(vaccines$date), ]
+# norge_2 <- norge
+# norge_2$geometry <- NULL
+# write_csv(norge_2, "eval_data/norge_may2.csv")
 rm(list = setdiff(ls(), c("norge")))

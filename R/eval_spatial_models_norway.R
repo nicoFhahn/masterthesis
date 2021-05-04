@@ -17,7 +17,7 @@ load("models/nontemporal_norway.RDa")
 # show the 5 municipalities with the most infections
 newest_numbers[
   order(newest_numbers$value, decreasing = TRUE),
-][1:5, c("kommune_name", "population", "value")]
+][1:5, c("kommune_name", "population", "value", "vaccine_shots")]
 ####################### Model with no spatial component
 # get the dic
 models_final[[2]][[1]]$dic
@@ -93,13 +93,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$median_age
+        exp, models_final[[1]][[1]]$marginals.fixed$sex
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$median_age
+        exp, models_final[[1]][[3]]$marginals.fixed$sex
       )
     )[1],
     inla.qmarginal(
@@ -129,25 +129,37 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$platform
+        exp, models_final[[1]][[1]]$marginals.fixed$median_age
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$platform
+        exp, models_final[[1]][[3]]$marginals.fixed$median_age
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$sex
+        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$sex
+        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$vaccine_shots
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$vaccine_shots
       )
     )[1],
     inla.qmarginal(
@@ -189,37 +201,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[1]]$marginals.fixed$platform
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$unemp_immg
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$unemp_immg
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[3]]$marginals.fixed$platform
       )
     )[1],
     inla.qmarginal(
@@ -237,6 +225,18 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$unemp_immg
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$unemp_immg
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$immigrants_total
       )
     )[1],
@@ -244,6 +244,18 @@ marginal_frame <- tibble(
       c(0.025, 0.975),
       inla.tmarginal(
         exp, models_final[[1]][[3]]$marginals.fixed$immigrants_total
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
       )
     )[1]
   ),
@@ -258,11 +270,11 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$median_age
+      models_final[[1]][[1]]$marginals.fixed$sex
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[3]]$marginals.fixed$median_age
+      models_final[[1]][[3]]$marginals.fixed$sex
     ),
     inla.emarginal(
       exp,
@@ -282,19 +294,27 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$platform
+      models_final[[1]][[1]]$marginals.fixed$median_age
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[3]]$marginals.fixed$platform
+      models_final[[1]][[3]]$marginals.fixed$median_age
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$sex
+      models_final[[1]][[1]]$marginals.fixed$place_of_worship
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[3]]$marginals.fixed$sex
+      models_final[[1]][[3]]$marginals.fixed$place_of_worship
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[1]]$marginals.fixed$vaccine_shots
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[3]]$marginals.fixed$vaccine_shots
     ),
     inla.emarginal(
       exp,
@@ -322,27 +342,11 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$urb_dens
+      models_final[[1]][[1]]$marginals.fixed$platform
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[3]]$marginals.fixed$urb_dens
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[1]]$marginals.fixed$unemp_immg
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[3]]$marginals.fixed$unemp_immg
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[1]]$marginals.fixed$place_of_worship
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[3]]$marginals.fixed$place_of_worship
+      models_final[[1]][[3]]$marginals.fixed$platform
     ),
     inla.emarginal(
       exp,
@@ -354,11 +358,27 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
+      models_final[[1]][[1]]$marginals.fixed$unemp_immg
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[3]]$marginals.fixed$unemp_immg
+    ),
+    inla.emarginal(
+      exp,
       models_final[[1]][[1]]$marginals.fixed$immigrants_total
     ),
     inla.emarginal(
       exp,
       models_final[[1]][[3]]$marginals.fixed$immigrants_total
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[1]]$marginals.fixed$urb_dens
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[3]]$marginals.fixed$urb_dens
     )
   ),
   upper = c(
@@ -377,13 +397,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$median_age
+        exp, models_final[[1]][[1]]$marginals.fixed$sex
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$median_age
+        exp, models_final[[1]][[3]]$marginals.fixed$sex
       )
     )[2],
     inla.qmarginal(
@@ -413,25 +433,37 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$platform
+        exp, models_final[[1]][[1]]$marginals.fixed$median_age
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$platform
+        exp, models_final[[1]][[3]]$marginals.fixed$median_age
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$sex
+        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$sex
+        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$vaccine_shots
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$vaccine_shots
       )
     )[2],
     inla.qmarginal(
@@ -473,37 +505,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[1]]$marginals.fixed$platform
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$unemp_immg
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$unemp_immg
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[3]]$marginals.fixed$platform
       )
     )[2],
     inla.qmarginal(
@@ -521,6 +529,18 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$unemp_immg
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$unemp_immg
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$immigrants_total
       )
     )[2],
@@ -529,26 +549,39 @@ marginal_frame <- tibble(
       inla.tmarginal(
         exp, models_final[[1]][[3]]$marginals.fixed$immigrants_total
       )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
+      )
     )[2]
   ),
   variable = c(
     rep("Intercept", 2),
-    rep("median_age", 2),
+    rep("sex", 2),
     rep("aerodrome", 2),
     rep("office", 2),
-    rep("platform", 2),
-    rep("sex", 2),
+    rep("median_age", 2),
+    rep("place_of_worship", 2),
+    rep("vaccine_shots", 2),
     rep("higher_education", 2),
     rep("nursing_home", 2),
     rep("marketplace", 2),
-    rep("urb_dens", 2),
-    rep("unemp_immg", 2),
-    rep("place_of_worship", 2),
+    rep("platform", 2),
     rep("unemp_total", 2),
-    rep("immigrants_total", 2)
+    rep("unemp_immg", 2),
+    rep("immigrants_total", 2),
+    rep("urb_dens", 2)
   ),
   model = rep(
-    c("No spatial", "BYM2"), 14
+    c("No spatial", "BYM2"), 15
   )
 )
 # order the variable
@@ -649,8 +682,8 @@ cat_csi <- cut(
 # calculate the posterior mean of the relative risk (also log)
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
 zeta_log <- lapply(csi, function(x) log10(inla.emarginal(exp, x)))
-zeta_cutoff <- c(0.1, 0.5, 0.9, 1, 1.4, 1.8, 2.2, 2.6, 3.4, 6, 9.2, 15.6, 22)
-zeta_log_cutoff <- c(-1, -0.6, -0.2, 0, 0.2, 0.4, 0.8, 1.2, 1.6)
+zeta_cutoff <- c(0.1, 0.5, 0.9, 1, 1.4, 1.8, 2.2, 2.6, 3.4, 3.8)
+zeta_log_cutoff <- c(-0.4, -0.2, 0, 0.2, 0.4, 0.6)
 # group it
 cat_zeta <- cut(
   unlist(zeta),

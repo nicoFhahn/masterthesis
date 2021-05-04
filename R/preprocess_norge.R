@@ -622,6 +622,9 @@ newest_numbers <- merge(
   norge[norge$date == max(norge$date), ],
   by = "kommune_no"
 )
+newest_numbers$date <- as.Date(
+  "2021-03-24"
+)
 # calculate the expected count
 expected_count <- expected(
   population = newest_numbers$population,
@@ -673,9 +676,62 @@ newest_numbers$pop_dens <- as.numeric(scale(newest_numbers$pop_dens))
 newest_numbers$urb_dens <- as.numeric(scale(newest_numbers$urb_dens))
 newest_numbers$sex <- as.numeric(scale(newest_numbers$sex))
 newest_numbers$median_age <- as.numeric(scale(newest_numbers$median_age))
+vaccines <- read_delim("norge_data/vaccination_norway_2nd_may.csv", delim = ";")
+colnames(vaccines) <- str_remove(colnames(vaccines), "Covid-19, ")
+colnames(vaccines)[1] <- "date"
+missing <- colnames(vaccines)[!colnames(vaccines) %in% unique(norge$kommune_name)]
+sort(missing)
+# change colnames to correct names
+vaccines[, colnames(vaccines) == missing[3]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[2]] <- "Tana"
+vaccines[, colnames(vaccines) == missing[4]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[5]] <- "Kåfjord"
+vaccines[, colnames(vaccines) == missing[7]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[6]] <- "Kautokeino"
+vaccines[, colnames(vaccines) == missing[10]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[11]] <- "Karasjok"
+vaccines[, colnames(vaccines) == missing[14]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[15]] <- "Porsanger"
+vaccines[, colnames(vaccines) == missing[17]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[18]] <- "Snåsa"
+vaccines[, colnames(vaccines) == missing[21]] <- NULL
+colnames(vaccines)[colnames(vaccines) == missing[22]] <- "Nesseby"
+colnames(vaccines)[colnames(vaccines) == missing[12]] <- "Os"
+colnames(vaccines)[colnames(vaccines) == missing[13]] <- "Oslo"
+colnames(vaccines)[colnames(vaccines) == missing[16]] <- "Røyrvik"
+# load the data for heroy
+heroy_more <- read_delim("norge_data/vaccination_heroy_more_2nd_may.csv", delim = ";")
+heroy_nordland <- read_delim("norge_data/vaccination_heroy_nordland_2nd_may.csv", delim = ";")
+vaccines$`Herøy (Møre og Romsdal)` <- heroy_more$`Covid-19, Herøy`
+vaccines$`Herøy (Nordland)` <- heroy_nordland$`Covid-19, Herøy`
+vaccines$Herøy <- NULL
+vaccines$`Ikke oppgitt` <- NULL
+vaccines$Svalbard <- NULL
+vaccines$`Tysfjord *` <- NULL
+# change the date variable
+vaccines$date <- as.Date(str_replace_all(vaccines$date, "\\.", "-"), format = "%d-%m-%Y")
+# use cumulative sums
+vaccines[, 2:357] <- cumsum(vaccines[, 2:357])
+# get long format
+vaccine_shots <- melt(
+  setDT(vaccines),
+  id.vars = "date",
+  variable.name = "kommune_name"
+)
+# merge it
+newest_numbers <- merge(
+  newest_numbers,
+  vaccine_shots,
+  by = c("date", "kommune_name")
+)
+colnames(newest_numbers)[41] <- "vaccine_shots"
+colnames(newest_numbers)[5] <- "value"
+newest_numbers$vaccine_shots <- newest_numbers$vaccine_shots /
+  newest_numbers$population
+newest_numbers$vaccine_shots <- scale(newest_numbers$vaccine_shots)[, 1]
 b <- newest_numbers
 b$geometry <- NULL
-b <- b[, c(5:29, 31, 38:40)]
+b <- b[, c(5:29, 31, 38:41)]
 sign <- TRUE
 while(sign) {
   mod <- glm.nb(
@@ -688,7 +744,7 @@ while(sign) {
     b[, names(VIF(mod))[VIF(mod) == max(VIF(mod))]] <- NULL
   }
 }
-newest_numbers[, c(5:29, 31, 38:40)] <- NULL
+newest_numbers[, c(5:29, 31, 38:41)] <- NULL
 newest_numbers <- st_as_sf(cbind(b, newest_numbers))
 
 rm(list = setdiff(ls(), c("newest_numbers")))

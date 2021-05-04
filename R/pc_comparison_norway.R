@@ -7,14 +7,7 @@ library(INLA)
 library(tibble)
 library(latex2exp)
 library(pbapply)
-newest_numbers <- read_csv("eval_data/newest_numbers_norway_march24.csv")
-norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
-newest_numbers <- merge(
-  newest_numbers,
-  norge_sf,
-  by = "kommune_no"
-)
-newest_numbers <- st_as_sf(newest_numbers)
+source("R/preprocess_norge.R")
 set.seed(7918)
 test <- sample(
   seq_len(nrow(newest_numbers)),
@@ -38,14 +31,14 @@ C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 formula_besag <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
-  office + platform + higher_education +
+  office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior)
 formula_bym2 <- value ~
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
-  office + platform + higher_education +
+  office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior)
-formula_leroux <- value ~
+formula_leroux <- value ~ vaccine_shots +
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + aerodrome +
   office + platform + higher_education +
@@ -84,7 +77,7 @@ models <- pblapply(
       control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
     ), silent = TRUE
     )
-    res_leroux <- inla(
+    res_leroux <- try(inla(
       formula_leroux,
       family = "nbinomial",
       data = newest_numbers,
@@ -95,7 +88,7 @@ models <- pblapply(
       ),
       Ntrials = newest_numbers$population,
       control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-    )
+    ), silent = TRUE)
     while (class(res_bym2) != "inla") {
       prior <- list(
         prec = list(
@@ -105,6 +98,27 @@ models <- pblapply(
       )
       res_bym2 <- try(inla(
         formula_bym2,
+        family = "nbinomial",
+        data = newest_numbers,
+        E = expected_count,
+        control.predictor = list(
+          compute = TRUE,
+          link = link
+        ),
+        Ntrials = newest_numbers$population,
+        control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+      ), silent = TRUE
+      )
+    }
+    while (class(res_leroux) != "inla") {
+      prior <- list(
+        prec = list(
+          prior = "pc.prec",
+          param = c(x + runif(1, -0.01, 0.01), 0.01)
+        )
+      )
+      res_leroux <- try(inla(
+        formula_leroux,
         family = "nbinomial",
         data = newest_numbers,
         E = expected_count,
@@ -208,7 +222,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$median_age
+            exp, res_bym2$marginals.fixed$sex
           )
         )[1],
         inla.qmarginal(
@@ -226,13 +240,19 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$platform
+            exp, res_bym2$marginals.fixed$median_age
           )
         )[1],
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$sex
+            exp, res_bym2$marginals.fixed$place_of_worship
+          )
+        )[1],
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
+            exp, res_bym2$marginals.fixed$vaccine_shots
           )
         )[1],
         inla.qmarginal(
@@ -256,19 +276,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$urb_dens
-          )
-        )[1],
-        inla.qmarginal(
-          c(0.025, 0.975),
-          inla.tmarginal(
-            exp, res_bym2$marginals.fixed$unemp_immg
-          )
-        )[1],
-        inla.qmarginal(
-          c(0.025, 0.975),
-          inla.tmarginal(
-            exp, res_bym2$marginals.fixed$place_of_worship
+            exp, res_bym2$marginals.fixed$platform
           )
         )[1],
         inla.qmarginal(
@@ -280,7 +288,19 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
+            exp, res_bym2$marginals.fixed$unemp_immg
+          )
+        )[1],
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
             exp, res_bym2$marginals.fixed$immigrants_total
+          )
+        )[1],
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
+            exp, res_bym2$marginals.fixed$urb_dens
           )
         )[1]
       ),
@@ -291,7 +311,7 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$median_age
+          res_bym2$marginals.fixed$sex
         ),
         inla.emarginal(
           exp,
@@ -303,11 +323,15 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$platform
+          res_bym2$marginals.fixed$median_age
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$sex
+          res_bym2$marginals.fixed$place_of_worship
+        ),
+        inla.emarginal(
+          exp,
+          res_bym2$marginals.fixed$vaccine_shots
         ),
         inla.emarginal(
           exp,
@@ -323,15 +347,7 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$urb_dens
-        ),
-        inla.emarginal(
-          exp,
-          res_bym2$marginals.fixed$unemp_immg
-        ),
-        inla.emarginal(
-          exp,
-          res_bym2$marginals.fixed$place_of_worship
+          res_bym2$marginals.fixed$platform
         ),
         inla.emarginal(
           exp,
@@ -339,7 +355,15 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
+          res_bym2$marginals.fixed$unemp_immg
+        ),
+        inla.emarginal(
+          exp,
           res_bym2$marginals.fixed$immigrants_total
+        ),
+        inla.emarginal(
+          exp,
+          res_bym2$marginals.fixed$urb_dens
         )
       ),
       upper = c(
@@ -352,7 +376,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$median_age
+            exp, res_bym2$marginals.fixed$sex
           )
         )[2],
         inla.qmarginal(
@@ -370,13 +394,19 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$platform
+            exp, res_bym2$marginals.fixed$median_age
           )
         )[2],
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$sex
+            exp, res_bym2$marginals.fixed$place_of_worship
+          )
+        )[2],
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
+            exp, res_bym2$marginals.fixed$vaccine_shots
           )
         )[2],
         inla.qmarginal(
@@ -400,19 +430,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$urb_dens
-          )
-        )[2],
-        inla.qmarginal(
-          c(0.025, 0.975),
-          inla.tmarginal(
-            exp, res_bym2$marginals.fixed$unemp_immg
-          )
-        )[2],
-        inla.qmarginal(
-          c(0.025, 0.975),
-          inla.tmarginal(
-            exp, res_bym2$marginals.fixed$place_of_worship
+            exp, res_bym2$marginals.fixed$platform
           )
         )[2],
         inla.qmarginal(
@@ -424,25 +442,38 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
+            exp, res_bym2$marginals.fixed$unemp_immg
+          )
+        )[2],
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
             exp, res_bym2$marginals.fixed$immigrants_total
+          )
+        )[2],
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
+            exp, res_bym2$marginals.fixed$urb_dens
           )
         )[2]
       ),
       variable = c(
         rep("Intercept", 1),
-        rep("median_age", 1),
+        rep("sex", 1),
         rep("aerodrome", 1),
         rep("office", 1),
-        rep("platform", 1),
-        rep("sex", 1),
+        rep("median_age", 1),
+        rep("place_of_worship", 1),
+        rep("vaccine_shots", 1),
         rep("higher_education", 1),
         rep("nursing_home", 1),
         rep("marketplace", 1),
-        rep("urb_dens", 1),
-        rep("unemp_immg", 1),
-        rep("place_of_worship", 1),
+        rep("platform", 1),
         rep("unemp_total", 1),
-        rep("immigrants_total", 1)
+        rep("unemp_immg", 1),
+        rep("immigrants_total", 1),
+        rep("urb_dens", 1)
       ),
       U = x
     )
