@@ -604,10 +604,9 @@ norway_municipality_confirmed_long$date <- as.Date(
 # ]
 newest_numbers <- norway_municipality_confirmed_long[
   norway_municipality_confirmed_long$date == as.Date(
-    "2021-03-24"
+    "2021-05-02"
   ),
 ]
-
 # remove needless variables
 newest_numbers$value <- NULL
 newest_numbers$time <- NULL
@@ -623,7 +622,7 @@ newest_numbers <- merge(
   by = "kommune_no"
 )
 newest_numbers$date <- as.Date(
-  "2021-03-24"
+  "2021-05-02"
 )
 # calculate the expected count
 expected_count <- expected(
@@ -687,7 +686,7 @@ sort(missing)
 vaccines[, colnames(vaccines) == missing[3]] <- NULL
 colnames(vaccines)[colnames(vaccines) == missing[2]] <- "Tana"
 vaccines[, colnames(vaccines) == missing[4]] <- NULL
-colnames(vaccines)[colnames(vaccines) == missing[5]] <- "K?fjord"
+colnames(vaccines)[colnames(vaccines) == missing[5]] <- "Kåfjord"
 vaccines[, colnames(vaccines) == missing[7]] <- NULL
 colnames(vaccines)[colnames(vaccines) == missing[6]] <- "Kautokeino"
 vaccines[, colnames(vaccines) == missing[10]] <- NULL
@@ -695,12 +694,12 @@ colnames(vaccines)[colnames(vaccines) == missing[11]] <- "Karasjok"
 vaccines[, colnames(vaccines) == missing[14]] <- NULL
 colnames(vaccines)[colnames(vaccines) == missing[15]] <- "Porsanger"
 vaccines[, colnames(vaccines) == missing[17]] <- NULL
-colnames(vaccines)[colnames(vaccines) == missing[18]] <- "Sn?sa"
+colnames(vaccines)[colnames(vaccines) == missing[18]] <- "Snåsa"
 vaccines[, colnames(vaccines) == missing[21]] <- NULL
 colnames(vaccines)[colnames(vaccines) == missing[22]] <- "Nesseby"
 colnames(vaccines)[colnames(vaccines) == missing[12]] <- "Os"
 colnames(vaccines)[colnames(vaccines) == missing[13]] <- "Oslo"
-colnames(vaccines)[colnames(vaccines) == missing[16]] <- "R?yrvik"
+colnames(vaccines)[colnames(vaccines) == missing[16]] <- "Røyrvik"
 # load the data for heroy
 heroy_more <- read_delim(
   "norge_data/vaccination_heroy_more_2nd_may.csv", delim = ";"
@@ -708,9 +707,9 @@ heroy_more <- read_delim(
 heroy_nordland <- read_delim(
   "norge_data/vaccination_heroy_nordland_2nd_may.csv", delim = ";"
 )
-vaccines$`Her?y (M?re og Romsdal)` <- heroy_more$`Covid-19, Her?y`
-vaccines$`Her?y (Nordland)` <- heroy_nordland$`Covid-19, Her?y`
-vaccines$Her?y <- NULL
+vaccines$`Herøy (Møre og Romsdal)` <- heroy_more$`Covid-19, Herøy`
+vaccines$`Herøy (Nordland)` <- heroy_nordland$`Covid-19, Herøy`
+vaccines$Herøy <- NULL
 vaccines$`Ikke oppgitt` <- NULL
 vaccines$Svalbard <- NULL
 vaccines$`Tysfjord *` <- NULL
@@ -756,4 +755,4 @@ while (sign) {
 newest_numbers[, c(5:29, 31, 38:41)] <- NULL
 newest_numbers <- st_as_sf(cbind(b, newest_numbers))
 
-rm(list = setdiff(ls(), c("newest_numbers")))
+rm(list = setdiff(ls(), c("newest_numbers", "backup")))

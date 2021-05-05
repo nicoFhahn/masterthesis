@@ -593,8 +593,6 @@ plot_4 <- ggplot(
   )
 plot_1 + plot_2
 plot_3 + plot_4
-plot_2
-plot_4
 marginal_frame$U <- as.factor(marginal_frame$U)
 ggplot(
   data = marginal_frame[marginal_frame$U %in% c(0.1, 1, 5), ]
@@ -708,7 +706,7 @@ plot_7 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-2, 3)
   ) +
   theme_minimal() +
   theme(
@@ -724,7 +722,7 @@ plot_8 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-2, 3)
   ) +
   theme_minimal()
 plot_9 <- ggplot(data = newest_numbers) +
@@ -738,7 +736,7 @@ plot_9 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-2, 3)
   ) +
   theme_minimal() +
   theme(
@@ -755,7 +753,7 @@ plot_10 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-2, 3)
   ) +
   theme_minimal()
 plot_7 + plot_8
@@ -807,7 +805,7 @@ plot_11 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-1, 1)
   ) +
   theme_minimal() +
   theme(
@@ -825,7 +823,7 @@ plot_12 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-3, 3)
+    limits = c(-1, 1)
   ) +
   theme_minimal()
 plot_11 + plot_12
@@ -841,7 +839,4 @@ ggplot(data = newest_numbers) +
     high = color_high,
     midpoint = 0
   ) +
-  theme_minimal() +
-  theme(
-    legend.position = "none"
-  )
+  theme_minimal()

@@ -679,7 +679,7 @@ germany$Date <- as.Date(germany$Date)
 #   )[1],
 # ]
 newest_numbers <- germany[
-  germany$Date == as.Date("2021-03-24"),
+  germany$Date == as.Date("2021-04-28"),
 ]
 # calculate the expected count for the newest numbers
 expected_count <- expected(
@@ -776,4 +776,4 @@ newest_numbers <- st_as_sf(cbind(b, newest_numbers, geom))
 # add the geometry again
 newest_numbers$geometry <- geom
 newest_numbers <- st_as_sf(newest_numbers)
-rm(list = setdiff(ls(), c("newest_numbers")))
+rm(list = setdiff(ls(), c("newest_numbers", "backup")))

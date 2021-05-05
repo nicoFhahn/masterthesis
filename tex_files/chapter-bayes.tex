@@ -130,7 +130,7 @@ In statistics and probability theory, the \textit{exponential family} is a param
 \begin{equation}
     f(\pmb{y}|\pmb{\theta}, \lambda)=\exp\left(\frac{\pmb{y}^T\pmb{\theta} - b(\pmb{\theta})}{\lambda}+c(\pmb{y},\lambda) \right),
 \end{equation}
-with $c(\pmb{y},\lambda)\geq 0$. %and measurable. 
+with $c(\pmb{y},\lambda)\geq 0$. 
 $\pmb{\theta}\in\Theta\subset\mathbb{R}^q$ is the \textit{natural} or \textit{canonical} parameter of the exponential family, while $\lambda > 0$ is a \textit{dispersion} or \textit{nuisance} parameter \autocite[][]{holland1981exponential}. The natural parameter space $\Theta$ is the set of all $\pmb{\theta}$ satisfying
 \begin{equation}
     0<\int\exp\left(\left(\pmb{y}^T\pmb{\theta} - b(\pmb{\theta})\right)/\lambda+c(\pmb{y},\lambda) \right)d\pmb{y}< \infty
@@ -203,21 +203,6 @@ The construction of a conjugate prior is done by factorising the likelihood func
 For an example of the construction of a conjugated prior, see Fink 1997 \autocite[][]{fink1997compendium}.\\
 A drawback of conjugated priors is that the a priori known information about $\mu$ may be insufficient for determining both parameters or may be inconsistent with the structure imposed by conjugacy \autocite[][]{robert2010bayesian}. Moreover, these priors can be too restrictive and not every belief about the prior can be described \autocite[][]{irwin2005prior}. \\
 Thus, although conjugate priors are easy to handle both mathematically and computationally \autocite[][]{irwin2005prior}, they are not often used in practice because of these drawbacks.
-% \subsection{Jeffreys' Prior}
-% As conjugate priors depend on information from the data, they are so-called \textit{informative priors}. \textit{Jeffreys' prior} \autocite[][]{jeffreys1946invariant} is characterised in comparison to other a priori distributions by the fact that it is invariant to a reparametrisation of the model parameters. Due to this invariance, the Jeffreys' a priori distribution is also called \textit{non-informative}. \\
-% Let $\phi=\phi\left({\theta}\right)$ be a one-to-one transformation of ${\theta}$ and $I\left(\cdot\right)$ be the Fisher information, then
-% \begin{equation}
-%     I_{\phi}\left(\phi\right)=I_{\theta}\left({\theta}\right)\left(\frac{\partial{\theta}}{\partial\phi}\right)^2.
-% \end{equation}
-% If some principle of choice led to $\pi\left(\theta\right)$ as a non-informative prior for $\theta$, the same principle should lead to
-% \begin{equation}
-%     \pi_{\phi}\left(\phi\right)=\pi_{\theta}\left(\theta\right)\left|\frac{\partial\theta}{\partial\phi}\right|
-% \end{equation}
-% as a non-informative prior for $\phi$. The desired "invariance" is then given by
-% \begin{equation}
-%     \pi_{\phi}\left(\phi\right)\propto \sqrt{I_{\phi}\left(\phi\right)}=\sqrt{I_{\theta}\left(\theta\right)}\left|\frac{\partial\theta}{\partial\phi}\right|\propto \pi_{\theta}\left(\theta\right)\left|\frac{\partial\theta}{\partial\phi}\right|
-% \end{equation}
-% \autocite[][42--43]{box2011bayesian}. While Jeffreys' priors work well for single parameter models, they struggle when it comes to models with multidimensional parameters as these priors can have poor convergence properties \autocite[][]{jordan2010}.
 \subsection{Penalised Complexity Priors}\label{sec:pc_prior}
 One issue when selecting the prior distribution of a particular parameter is that it is not always intuitive when it comes to understanding and interpreting this distribution, something that is essential to ensure that it behaves as intended by the user. This problem can be addressed by using \textit{penalised complexity priors}, which is a methodology that penalises the complexity of model components in relation to deviation from simple base model formulations.\\
 PC priors provide a systematic and unified approach to calculating prior distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterised by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalising the deviation from the flexible model to the fixed base model, the PC prior is calculated \autocite[][]{martins2014penalising}.
@@ -263,7 +248,7 @@ The actual expression of the prior is given by
 and is a type-2-Gumbel distribution. \\
 The prior for $\tau$ corresponds to an exponential distribution with rate $\lambda$ for the standard deviation. \\
 $\lambda$ quantifies the size of the penalty for deviation from the base model and is increased with higher values for it. \\
-Here, $\lambda=\frac{-\log\left(\alpha\right)}{\sigma_0}$ \cite{martins2014penalising}.
+Here, $\lambda=\frac{-\log\left(\alpha\right)}{\sigma_0}$ \autocite[][]{martins2014penalising}.
 \clearpage
 \section{Markov-Chain-Monte-Carlo-Methods}
 Markov chain Monte Carlo methods, also referred to as MCMC methods, are a set of algorithms that enable sampling from probability distributions based on the construction of Markov chains. After a sufficient number of iterations, the stationary distribution of a Markov chain can be taken as the desired distribution, with the quality of this distribution improving as the number of iterations increases. Most of the time, the construction of such a chain is relatively simple; the real challenge is to determine how many steps are needed before convergence towards the stationary distribution is achieved. MCMC methods are mostly used to compute numerical approximations of multidimensional integrals, for instance in Bayesian statistics or computational biology. The two main concepts used in MCMC methods are Monte Carlo integration and the aforementioned Markov chains, hence the name Markov Chain Monte Carlo.
@@ -372,60 +357,6 @@ The algorithm always accepts values $y_t$ that lead to an increase in the ratio 
 \end{equation*}
 \autocite[][]{hastings1970monte}. \\
 If the Markov chain starts with a value $x^{(0)} > 0$, then $f\left(x^{(t)}\right) > 0\,\,\forall t\in\mathbb{N}$ since the values of $y$ such that $f\left(y_t\right) = 0$ will all be rejected by the algorithm. As the number of iterations $t$ increases, the distribution of saved states $x_0,...,x_t$ will converge towards the target density $f(\pmb{x})$ \autocite[][270--275]{robert2013monte}.
-% hier könnten noch Diagnostics für MCMC methods / MH Algorithm sein, z.b. Traceplot. Außerdem sample mean für schätzung des posterior mean und sample variance für schätzung der varianz
-% \subsection{The Gibbs Sampler}
-% Gibbs-Sampling is a special case of the Metropolis-Hastings Algorithm, that is used to generate a sequence of samples of the joint probability distribution of two or more random variables. The aim of the method is to approximate this unknown joint probability distribution. Gibbs sampling is especially suitable when the joint distribution of a random vector is unknown, but the conditional distribution of each random variable is known. The underlying principle is to repeatedly select a variable and generate a value according to its conditional distribution, depending on the values of the other variables. During this iteration step, the values of the other variables remain unchanged. A Markov chain can be derived from the resulting sequence of sample vectors, and it can be shown that the stationary distribution of this Markov chain is precisely the sought joint distribution of the random vector. \\
-% The Gibbs sampler was first introduced in a 1984 paper by Stuart and Donald Geman \autocite[][]{geman1984stochastic} and is named after the physicist Josiah Willard Gibbs.
-% \subsubsection{The Two-Stage Gibbs Sampler}
-% A general introduction to Gibbs sampling is the two-stage Gibbs sampler, which is applicable to a wide range of statistical models that do not demand the generality of the multi-stage Gibbs sampler. \\
-% Implementing the algorithm is straightforward. If the random variables $X$ and $Y$ have a joint density $f\left(\pmb{x},\pmb{y}\right)$, the two-stage Gibbs sampler generates a Markov chain $\left(X_t,Y_t\right)$ as shown below.
-% \begin{algorithm}
-% \caption{The Two-Stage Gibbs Sampler}
-% \begin{algorithmic}[1]
-% \Statex Take $X_0=x_0$
-% \For{each iteration $t$}
-%    \State Generate $Y_t\sim f_{Y|X}\left(\cdot|x_{t-1}\right)$
-%    \State Generate $X_t\sim f_{X|Y}\left(\cdot|y_t\right)$
-%    \EndFor
-% \end{algorithmic}
-% \end{algorithm} 
-% $f_{Y|X}$ and $f_{X|Y}$ represent the conditional densities associated with $f$. It is worth noting that not only $\left(X_t,Y_t\right)$ is a Markov chain, but also the subsequences $\left(X_t\right)$ and $\left(Y_t\right)$ are. \autocite[][339]{robert2013monte}.
-% \subsubsection*{Normal Bivariate Gibbs Sampler} 
-% In the case of the bivariate normal density
-% \begin{equation*}
-%    \left(X,Y\right)\sim \mathcal{N}_2\left(0,  \begin{pmatrix}
-%    1 & p \\ p & 1
-%    \end{pmatrix}\right)
-% \end{equation*}
-% the Gibbs sampler reads as follows:
-% \begin{algorithm}
-% \caption{The Two-Stage Gibbs Sampler for a normal distribution}
-% \begin{algorithmic}[1]
-% \Statex Given $y_t$
-% \For{each iteration $t$}
-%     \State Generate $X_{t+1}|y_t \sim \mathcal{N}\left(py_t, 1-p^2\right)$
-%    \State Generate $Y_{t+1}|x_{t+1}\sim\mathcal{N}\left(px_{t+1},1-p^2\right)$
-%    \EndFor
-% \end{algorithmic}
-% \end{algorithm} \\
-% \autocite[][340]{robert2013monte}
-% \subsubsection{The Multi-Stage Gibbs Sampler}
-% Let $p>1$, then the random variable $X\in\mathcal{X}$ can be written as $X=\left(X_1,...,X_p\right)$, where the $X_i$'s are either one-dimensional or multidimensional. Moreover, assume that a simulation is possible from the corresponding univariate conditional densities $f_1,...,f_p$, i.e., 
-% \begin{equation*}
-%   X_i|\pmb{x}_{-i}\sim f_i\left(x_i|\pmb{x}_{-i}\right)
-% \end{equation*}
-% can be simulated for $i=1,...,p$. The Gibbs sampler is then specified by the following transition from $X^{(t)}$ to $X^{(t+1)}$:
-% \begin{algorithm}[H]
-% \caption{The Multi-Stage Gibbs Sampler}
-% \begin{algorithmic}[1]
-% \Statex Given $x^{(t)}=\left(x_1^{(t)},...,x_p^{(t)}\right)$, generate
-% \State $X_1^{(t+1)}\sim f_1\left(x_1|x_2^{(t)},...,x_p^{(t)}\right)$;
-% \State $X_2^{(t+1)}\sim f_2\left(x_2|x_1^{(t)},x_3^{(t)},...,x_p^{(t)}\right)$;
-% \Statex $\vdots$
-% \Statex $X_p^{(p+1)}\sim f_p\left(x_p|\pmb{x}_{-p}\right)$
-% \end{algorithmic}
-% \end{algorithm} $\newline$
-% $f_1,...,f_p$ are referred to as the \textit{full conditionals} and these are the only densities used for simulation. Hence, all simulations can be univariate, even for a high-dimensional problems  \autocite[][371--373]{robert2013monte}.
 \clearpage
 \section{Latent Gaussian Models and INLA}
 In recent years, a growing amount of georeferenced data has become available, leading to an increased need for appropriate statistical modeling to handle large and complex datasets. Bayesian hierarchical models have proven to be effective in capturing complex stochastic structures in spatial processes. A large proportion of these models are based on latent Gaussian models, a subclass of structured additive regression models. These models include Integrated Nested Laplace Approximations (INLA), which are a class of models used to approximate the posterior marginals of a latent Gaussian field. These approximations work by reformulating the regression model as a three-part hierarchical model. The parts are as follows:
@@ -859,5 +790,3 @@ For $p-1$ independent variables,
 \end{equation}
 with $R^2$ the coefficient of determination. In most literature, a value of at least 5 is suggested as too high and is therefore used as the threshold in this work \autocite[][]{craney2002model}.
 \clearpage
-%https://arxiv.org/pdf/1708.02723.pdf \\
-%http://www.leg.ufpr.br/~elias/cursos/br2019/slides1.pdf

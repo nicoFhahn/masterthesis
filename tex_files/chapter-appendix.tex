@@ -48,24 +48,12 @@ For large values of $r$, the negative binomial distribution can be approximated 
 \clearpage
 \section{Distribution Fits}
 \subsection{Distribution Fits for Germany}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = 0.8\textwidth]{fit_normal_germany.svg}
-%     \caption{A normal fit to the number of cases in German municipalities}
-%     \label{fitNormalGermany}
-% \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.8\textwidth]{fit_normal_germany.png}
     \caption{A normal fit to the number of cases in German municipalities}
     \label{fitNormalGermany}
 \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = 0.8\textwidth]{fit_poisson_germany.svg}
-%     \caption{A Poisson fit to the number of cases in German municipalities}
-%     \label{fitPoissonGermany}
-% \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.8\textwidth]{fit_poisson_germany.png}
@@ -73,24 +61,12 @@ For large values of $r$, the negative binomial distribution can be approximated 
     \label{fitPoissonGermany}
 \end{figure}
 \subsection{Distribution Fits for Norway}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = 0.8\textwidth]{fit_normal_norway.svg}
-%     \caption{A normal fit to the number of cases in Norwegian municipalities}
-%     \label{fitNormalNorway
-% \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.8\textwidth]{fit_normal_norway.png}
     \caption{A normal fit to the number of cases in Norwegian municipalities}
     \label{fitNormalNorway}
 \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = 0.8\textwidth]{fit_poisson_norway.svg}
-%     \caption{A Poisson fit to the number of cases in Norwegian municipalities}
-%     \label{fitPoissonNorway}
-% \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.8\textwidth]{fit_poisson_norway.png}
@@ -101,88 +77,46 @@ For large values of $r$, the negative binomial distribution can be approximated 
 \section{Choice of Hyperpriors for Germany}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \textwidth]{waic_germany_smooth.png}
-    \caption{Value the WAIC when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+    \includegraphics[width = \textwidth]{comparison_2_germany.png}
+    \caption{Values of the DIC and the WAIC when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
     \label{comparison_germany_1}
 \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = \textwidth]{waic_germany_smooth.svg}
-%     \caption{Value of the WAIC when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
-%     \label{comparison_germany_1}
-% \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \textwidth]{mae_germany_smooth.png}
-    \caption{Value the MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+    \includegraphics[width = \textwidth]{comparison_1_germany.png}
+    \caption{Values of the CPO and the MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
     \label{comparison_germany_2}
 \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = \textwidth]{mae_germany_smooth.svg}
-%     \caption{Value of the MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
-%     \label{comparison_germany_2}
-% \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{intervals_prior_germany.png}
     \caption{Comparison of the credibility intervals of a BYM2 model for different values of $\sigma_0$}
     \label{comparison_germany_5}
 \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = \textwidth]{intervals_prior_germany.svg}
-%    \caption{Comparison of the credibility intervals of a BYM2 model for different values of $\sigma_0$}
-%     \label{comparison_germany_5}
-% \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{spatial_field_germany_1.png}
     \caption{Spatial field for a Besag model and a Leroux model.}
     \label{comparison_germany_6}
 \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = \textwidth]{spatial_field_germany_1.svg}
-%    \caption{Spatial field for a Besag model and a Leroux model.}
-%     \label{comparison_germany_6}
-% \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{spatial_field_germany_2.png}
     \caption{Spatial fields for a BYM2 model.}
     \label{comparison_germany_7}
 \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = \textwidth]{spatial_field_germany_2.svg}
-%    \caption{Spatial fields for a BYM2 model.}
-%     \label{comparison_germany_7}
-% \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{spatial_field_germany_3.png}
     \caption{Spatial fields for the structured component of a BYM2 model when changing the value for $\sigma_0$.}
     \label{comparison_germany_8}
 \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = \textwidth]{spatial_field_germany_3.svg}
-%    \caption{Spatial fields for the structured component of a BYM2 model when changing the value for $\sigma_0$.}
-%     \label{comparison_germany_8}
-% \end{figure}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{spatial_field_germany_4.png}
     \caption{Structured component of the spatial field for a BYM2 model.}
     \label{comparison_germany_9}
 \end{figure}
-% \begin{figure}[H]
-%     \centering
-%     \includesvg[width = \textwidth]{spatial_field_germany_4.svg}
-%    \caption{Structured component of the spatial field for a BYM2 model.}
-%     \label{comparison_germany_9}
-% \end{figure}
 \section{Code Examples}
 \subsection{Specifying the Different Types of Models}
 \begin{lstlisting}[caption={Specifying different models in INLA.}, label={codeModels}, language=R]
@@ -288,50 +222,6 @@ for(i in seq_len(nrow(newest_numbers))) {
 mean(abs(predicted[test] - test))
 
 \end{lstlisting}
-% \subsection{Variable Selection using INLA}
-% \begin{lstlisting}[caption={The code for variable selection in INLA.}, label={codeSelection}, language=R]
-% # define the stack
-% stack_all <- inla.stack(
-%   data = list(value = newest_numbers$value),
-%   A = list(1),
-%   effects = list(
-%     data.frame(
-%       Intercept = 1,
-%       newest_numbers[, c(2:15, 20:35, 43:46)]
-%     )
-%   )
-% )
-% # run backwards varaible selection
-% result_all_backwards <- INLAstep(
-%   fam1 = "nbinomial",
-%   newest_numbers,
-%   in_stack = stack_all,
-%   invariant = "Intercept",
-%   direction = "backwards",
-%   include = c(2:15, 20:35, 43:46),
-%   y = "value",
-%   y2 = "value",
-%   powerl = 1,
-%   inter = 1,
-%   thresh = 2,
-%   num.threads = 7
-% )
-% # run forwards variable selection
-% result_all_forwards <- INLAstep(
-%   fam1 = "nbinomial",
-%   newest_numbers,
-%   in_stack = stack_all,
-%   invariant = "Intercept",
-%   direction = "forwards",
-%   include = c(2:15, 20:35, 43:46),
-%   y = "value",
-%   y2 = "value",
-%   powerl = 1,
-%   inter = 1,
-%   thresh = 2,
-%   num.threads = 7
-% )
-% \end{lstlisting}
 \subsection{Calculating the Posterior Mean}
 \begin{lstlisting}[caption={Calculating the posterior mean of a coefficent.}, label={codePosteriorMean}, language=R]
 inla.emarginal(exp, model_leroux$marginals.fixed$trade_tax)

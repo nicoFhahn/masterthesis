@@ -833,4 +833,5 @@ germany <- merge(
 # sort it
 germany <- germany[order(germany$idarea_1, germany$id_date_1), ]
 germany <- germany[, c(cols, "id_date_1", "id_date_2")]
-rm(list = setdiff(ls(), c("germany")))
+germany <- germany[germany$Date <= newest_numbers$Date[1],]
+rm(list = setdiff(ls(), c("germany", "newest_numbers")))

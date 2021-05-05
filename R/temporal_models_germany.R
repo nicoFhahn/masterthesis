@@ -16,6 +16,12 @@ test_value <- germany$value[test]
 germany$value[test] <- NA
 link <- rep(NA, nrow(germany))
 link[which(is.na(germany$value))] <- 1
+set.seed(14523)
+test_spatial <- sample(seq_len(nrow(newest_numbers)), size = floor(0.2 * nrow(newest_numbers)))
+test_value_spatial <- newest_numbers$value[test_spatial]
+newest_numbers$value[test_spatial] <- NA
+link_spatial <- rep(NA, nrow(newest_numbers))
+link_spatial[which(is.na(newest_numbers$value))] <- 1
 #####################################################
 # specify penalized prior
 prior_1 <- list(
@@ -29,9 +35,12 @@ gof <- list()
 mae <- list()
 # create the neighbordhood matrix
 nb <- poly2nb(germany[!duplicated(germany$municipality_id), ])
+nb_spatial <- poly2nb(newest_numbers)
 # save the matrix
 nb2INLA("maps/map_4.adj", nb)
+nb2INLA("maps/map_6.adj", nb_spatial)
 g <- inla.read.graph(filename = "maps/map_4.adj")
+g_spatial <- inla.read.graph(filename = "maps/map_6.adj")
 Q <- Diagonal(x = sapply(nb, length))
 for (i in 2:length(nb)) {
   Q[i - 1, i] <- -1
@@ -49,24 +58,30 @@ pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   clinic + place_of_worship + nursing_home + aerodrome + platform + office +
   marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1) +
-  f(id_date_1, model = "rw2") +
-  f(id_date_2, model = "iid")
+  f(id_date_1, model = "rw2", hyper = prior_1)
 # formula for the bym2 model
 formula_2 <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   clinic + place_of_worship + nursing_home + aerodrome + platform + office +
   marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
-  f(id_date_1, model = "rw2") +
-  f(id_date_2, model = "iid")
+  f(id_date_1, model = "rw2", hyper = prior_1)
 # formula for the leroux model
 formula_3 <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   clinic + place_of_worship + nursing_home + aerodrome + platform + office +
   marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1) +
-  f(id_date_1, model = "rw2") +
-  f(id_date_2, model = "iid")
+  f(id_date_1, model = "rw2", hyper = prior_1)
+formula_4 <- value ~
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education
+formula_5 <- value ~
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
+  marketplace + higher_education +
+  f(idarea_1, model = "bym2", graph = g_spatial, scale.model = TRUE, hyper = prior_1)
 # compute the models
 res_1 <- inla(
   formula_1,
@@ -79,8 +94,7 @@ res_1 <- inla(
   ),
   Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE,
-  lincomb = lcs
+  verbose = TRUE
 )
 res_2 <- inla(
   formula_2,
@@ -93,8 +107,7 @@ res_2 <- inla(
   ),
   Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE,
-  lincomb = lcs
+  verbose = TRUE
 )
 res_3 <- inla(
   formula_3,
@@ -107,10 +120,35 @@ res_3 <- inla(
   ),
   Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
-  verbose = TRUE,
-  lincomb = lcs
+  verbose = TRUE
 )
-models <- c(models, list(res_1, res_2, res_3))
+res_4 <- inla(
+  formula_4,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE,
+    link = link
+  ),
+  Ntrials = newest_numbers$population,
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
+  verbose = TRUE
+)
+res_5 <- inla(
+  formula_5,
+  family = "nbinomial",
+  data = newest_numbers,
+  E = expected_count,
+  control.predictor = list(
+    compute = TRUE,
+    link = link
+  ),
+  Ntrials = newest_numbers$population,
+  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
+  verbose = TRUE
+)
+models <- c(models, list(res_1, res_2, res_3, res_4, res_5))
 # get the goodness of fit indicators
 gof <- c(gof, list(
   list(
@@ -127,11 +165,23 @@ gof <- c(gof, list(
     dic = res_3$dic$dic,
     waic = res_3$waic$waic,
     cpo = sum(log(res_3$cpo$cpo), na.rm = TRUE)
+  ),
+  list(
+    dic = res_4$dic$dic,
+    waic = res_4$waic$waic,
+    cpo = sum(log(res_4$cpo$cpo), na.rm = TRUE)
+  ),
+  list(
+    dic = res_5$dic$dic,
+    waic = res_5$waic$waic,
+    cpo = sum(log(res_5$cpo$cpo), na.rm = TRUE)
   )
 ))
 predicted_1 <- c()
 predicted_2 <- c()
 predicted_3 <- c()
+predicted_4 <- c()
+predicted_5 <- c()
 # make predictions
 for (i in seq_len(nrow(germany))) {
   predicted_1[i] <- inla.emarginal(
@@ -147,11 +197,23 @@ for (i in seq_len(nrow(germany))) {
     res_3$marginals.fitted.values[[i]]
   )
 }
+for (i in seq_len(nrow(newest_numbers))) {
+  predicted_4[i] <- inla.emarginal(
+    function(x) x * newest_numbers$population[i],
+    res_4$marginals.fitted.values[[i]]
+  )
+  predicted_5[i] <- inla.emarginal(
+    function(x) x * newest_numbers$population[i],
+    res_5$marginals.fitted.values[[i]]
+  )
+}
 # calculate the mae
 mae <- c(mae, list(
   mean(abs(predicted_1[test] - test_value)),
   mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value))
+  mean(abs(predicted_3[test] - test_value)),
+  mean(abs(predicted_4[test_spatial] - test_value_spatial)),
+  mean(abs(predicted_5[test_spatial] - test_value_spatial))
 ))
 models_final <- list(models, gof, mae)
 # save the models
