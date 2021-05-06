@@ -129,7 +129,7 @@ res_4 <- inla(
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
-    link = link
+    link = link_spatial
   ),
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
@@ -142,7 +142,7 @@ res_5 <- inla(
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
-    link = link
+    link = link_spatial
   ),
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE),
