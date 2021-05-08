@@ -8,7 +8,6 @@ library(units)
 library(covid19germany)
 library(regclass)
 library(MASS)
-
 # download the newest RKI data
 rki <- get_RKI_timeseries()
 # group it after municipality
@@ -679,7 +678,7 @@ germany$Date <- as.Date(germany$Date)
 #   )[1],
 # ]
 newest_numbers <- germany[
-  germany$Date == as.Date("2021-04-28"),
+  germany$Date == as.Date("2021-03-24"),
 ]
 # calculate the expected count for the newest numbers
 expected_count <- expected(
@@ -758,7 +757,7 @@ newest_numbers$geometry <- NULL
 newest_numbers[, c(2:15, 20:35, 43:46)] <- scale(
   newest_numbers[, c(2:15, 20:35, 43:46)]
 )
-b <- newest_numbers[, c(2:15, 18, 20:35, 43:46)]
+b <- newest_numbers[, c(2:5, 12:15, 18, 20:35, 43:46)]
 sign <- TRUE
 while (sign) {
   mod <- glm.nb(
@@ -771,7 +770,7 @@ while (sign) {
     b[, names(VIF(mod))[VIF(mod) == max(VIF(mod))]] <- NULL
   }
 }
-newest_numbers[, c(2:15, 18, 20:35, 43:46)] <- NULL
+newest_numbers[, c(2:5, 12:15, 18, 20:35, 43:46)] <- NULL
 newest_numbers <- st_as_sf(cbind(b, newest_numbers, geom))
 # add the geometry again
 newest_numbers$geometry <- geom

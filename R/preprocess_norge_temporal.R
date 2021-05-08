@@ -740,7 +740,110 @@ colnames(norge)[3] <- "value"
 norge$vaccine_shots <- norge$vaccine_shots / norge$population
 norge$vaccine_shots <- scale(norge$vaccine_shots)[, 1]
 norge <- norge[norge$date <= max(vaccines$date), ]
+stringency <- read_csv("countrywide_data/covid-stringency-index.csv")
+stringency_norway <- stringency[stringency$Entity == "Norway", ]
+stringency_norway <- stringency_norway[
+  stringency_norway$Day %in% norge$date,
+]
+norge <- merge(
+  norge,
+  stringency_norway,
+  by.x = "date",
+  by.y = "Day"
+)
+contract_tracing <- read_csv("countrywide_data/covid-contact-tracing.csv")
+contract_tracing <- contract_tracing[contract_tracing$Entity == "Norway", ]
+contract_tracing <- contract_tracing[
+  contract_tracing$Day %in% norge$date,
+]
+norge <- merge(
+  norge,
+  contract_tracing,
+  by.x = "date",
+  by.y = "Day"
+)
+school_closure <- read_csv("countrywide_data/school-closures-covid.csv")
+school_closure <- school_closure[school_closure$Entity == "Norway", ]
+school_closure <- school_closure[
+  school_closure$Day %in% norge$date,
+]
+norge <- merge(
+  norge,
+  school_closure,
+  by.x = "date",
+  by.y = "Day"
+)
+workplace_closure <- read_csv("countrywide_data/workplace-closures-covid.csv")
+workplace_closure <- workplace_closure[workplace_closure$Entity == "Norway", ]
+workplace_closure <- workplace_closure[
+  workplace_closure$Day %in% norge$date,
+]
+norge <- merge(
+  norge,
+  workplace_closure,
+  by.x = "date",
+  by.y = "Day"
+)
+stay_home <- read_csv("countrywide_data/stay-at-home-covid.csv")
+stay_home <- stay_home[stay_home$Entity == "Norway", ]
+stay_home <- stay_home[
+  stay_home$Day %in% norge$date,
+]
+norge <- merge(
+  norge,
+  stay_home,
+  by.x = "date",
+  by.y = "Day"
+)
+norge$contact_tracing[norge$contact_tracing == 0] <- "No tracing"
+norge$contact_tracing[norge$contact_tracing == 1] <- "Limited tracing"
+norge$contact_tracing[norge$contact_tracing == 2] <- "Comprehensive tracing"
+norge$contact_tracing <- ordered(
+  as.factor(norge$contact_tracing),
+  levels = c(
+    "No tracing", "Limited tracing", "Comprehensive tracing"
+  )
+)
+norge$school_closures[norge$school_closures == 0] <- "No measures"
+norge$school_closures[norge$school_closures == 1] <- "Recommended"
+norge$school_closures[norge$school_closures == 2] <- "Required (some levels)"
+norge$school_closures[norge$school_closures == 3] <- "Required (all levels)"
+norge$school_closures <- ordered(
+  as.factor(norge$school_closures),
+  levels = c(
+    "No measures", "Recommended", "Required (some levels)", "Required (all levels)"
+  )
+)
+norge$workplace_closures[norge$workplace_closures == 0] <- "No measures"
+norge$workplace_closures[norge$workplace_closures == 1] <- "Recommended"
+norge$workplace_closures[norge$workplace_closures == 2] <- "Required for some"
+norge$workplace_closures[
+  norge$workplace_closures == 3
+] <- "Required for all but key workers"
+norge$workplace_closures <- ordered(
+  as.factor(norge$workplace_closures),
+  levels = c(
+    "No measures", "Recommended", "Required for some", "Required for all but key workers"
+  )
+)
+norge$stay_home_requirements[norge$stay_home_requirements == 0] <- "No measures"
+norge$stay_home_requirements[norge$stay_home_requirements == 1] <- "Recommended"
+norge$stay_home_requirements[
+  norge$stay_home_requirements == 2
+] <- "Required (except essentials)"
+norge$stay_home_requirements[
+  norge$stay_home_requirements == 3
+] <- "Required (few exceptions)"
+norge$stay_home_requirements <- ordered(
+  as.factor(norge$stay_home_requirements),
+  levels = c(
+    "No measures", "Recommended",
+    "Required (except essentials)", "Required (few exceptions)"
+  )
+)
+norge <- norge[, c(1:28, 31, 34, 37, 40, 43)]
+
 # norge_2 <- norge
 # norge_2$geometry <- NULL
 # write_csv(norge_2, "eval_data/norge_may2.csv")
-rm(list = setdiff(ls(), c("norge")))
+rm(list = setdiff(ls(), c("norge", "newest_numbers")))

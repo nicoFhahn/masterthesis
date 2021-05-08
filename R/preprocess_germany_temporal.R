@@ -834,4 +834,106 @@ germany <- merge(
 germany <- germany[order(germany$idarea_1, germany$id_date_1), ]
 germany <- germany[, c(cols, "id_date_1", "id_date_2")]
 germany <- germany[germany$Date <= newest_numbers$Date[1],]
+stringency <- read_csv("countrywide_data/covid-stringency-index.csv")
+stringency_germany <- stringency[stringency$Entity == "Germany", ]
+stringency_germany <- stringency_germany[
+  stringency_germany$Day %in% germany$Date,
+]
+germany <- merge(
+  germany,
+  stringency_germany,
+  by.x = "Date",
+  by.y = "Day"
+)
+contract_tracing <- read_csv("countrywide_data/covid-contact-tracing.csv")
+contract_tracing <- contract_tracing[contract_tracing$Entity == "Germany", ]
+contract_tracing <- contract_tracing[
+  contract_tracing$Day %in% germany$Date,
+]
+germany <- merge(
+  germany,
+  contract_tracing,
+  by.x = "Date",
+  by.y = "Day"
+)
+school_closure <- read_csv("countrywide_data/school-closures-covid.csv")
+school_closure <- school_closure[school_closure$Entity == "Germany", ]
+school_closure <- school_closure[
+  school_closure$Day %in% germany$Date,
+]
+germany <- merge(
+  germany,
+  school_closure,
+  by.x = "Date",
+  by.y = "Day"
+)
+workplace_closure <- read_csv("countrywide_data/workplace-closures-covid.csv")
+workplace_closure <- workplace_closure[workplace_closure$Entity == "Germany", ]
+workplace_closure <- workplace_closure[
+  workplace_closure$Day %in% germany$Date,
+]
+germany <- merge(
+  germany,
+  workplace_closure,
+  by.x = "Date",
+  by.y = "Day"
+)
+stay_home <- read_csv("countrywide_data/stay-at-home-covid.csv")
+stay_home <- stay_home[stay_home$Entity == "Germany", ]
+stay_home <- stay_home[
+  stay_home$Day %in% germany$Date,
+]
+germany <- merge(
+  germany,
+  stay_home,
+  by.x = "Date",
+  by.y = "Day"
+)
+germany$contact_tracing[germany$contact_tracing == 0] <- "No tracing"
+germany$contact_tracing[germany$contact_tracing == 1] <- "Limited tracing"
+germany$contact_tracing[germany$contact_tracing == 2] <- "Comprehensive tracing"
+germany$contact_tracing <- ordered(
+  as.factor(germany$contact_tracing),
+  levels = c(
+    "No tracing", "Limited tracing", "Comprehensive tracing"
+  )
+)
+germany$school_closures[germany$school_closures == 0] <- "No measures"
+germany$school_closures[germany$school_closures == 1] <- "Recommended"
+germany$school_closures[germany$school_closures == 2] <- "Required (some levels)"
+germany$school_closures[germany$school_closures == 3] <- "Required (all levels)"
+germany$school_closures <- ordered(
+  as.factor(germany$school_closures),
+  levels = c(
+    "No measures", "Recommended", "Required (some levels)", "Required (all levels)"
+  )
+)
+germany$workplace_closures[germany$workplace_closures == 0] <- "No measures"
+germany$workplace_closures[germany$workplace_closures == 1] <- "Recommended"
+germany$workplace_closures[germany$workplace_closures == 2] <- "Required for some"
+germany$workplace_closures[
+  germany$workplace_closures == 3
+] <- "Required for all but key workers"
+germany$workplace_closures <- ordered(
+  as.factor(germany$workplace_closures),
+  levels = c(
+    "No measures", "Recommended", "Required for some", "Required for all but key workers"
+  )
+)
+germany$stay_home_requirements[germany$stay_home_requirements == 0] <- "No measures"
+germany$stay_home_requirements[germany$stay_home_requirements == 1] <- "Recommended"
+germany$stay_home_requirements[
+  germany$stay_home_requirements == 2
+] <- "Required (except essentials)"
+germany$stay_home_requirements[
+  germany$stay_home_requirements == 3
+] <- "Required (few exceptions)"
+germany$stay_home_requirements <- ordered(
+  as.factor(germany$stay_home_requirements),
+  levels = c(
+    "No measures", "Recommended",
+    "Required (except essentials)", "Required (few exceptions)"
+  )
+)
+germany <- germany[, c(1:32, 35, 38, 41, 44, 47)]
 rm(list = setdiff(ls(), c("germany", "newest_numbers")))

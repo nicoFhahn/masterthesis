@@ -581,7 +581,7 @@ if (date_1 != date_2) {
   # load the data
   norge_features <- read_csv("wrangled_data/norge_features.csv")
 }
-# scale the data
+ # scale the data
 norge_features[, c(17:31, 33:53, 55)] <- scale(
   norge_features[, c(17:31, 33:53, 55)]
 )
@@ -604,7 +604,7 @@ norway_municipality_confirmed_long$date <- as.Date(
 # ]
 newest_numbers <- norway_municipality_confirmed_long[
   norway_municipality_confirmed_long$date == as.Date(
-    "2021-05-02"
+    "2021-03-24"
   ),
 ]
 # remove needless variables

@@ -7,7 +7,14 @@ library(INLA)
 library(tibble)
 library(latex2exp)
 library(pbapply)
-source("R/preprocess_norge.R")
+newest_numbers <- read_csv("eval_data/newest_numbers_norway_march24.csv")
+norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
+newest_numbers <- merge(
+  newest_numbers,
+  norge_sf,
+  by = "kommune_no"
+)
+newest_numbers <- st_as_sf(newest_numbers)
 set.seed(7918)
 test <- sample(
   seq_len(nrow(newest_numbers)),
@@ -44,7 +51,7 @@ formula_leroux <- value ~ vaccine_shots +
   office + platform + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior)
 models <- pblapply(
-  seq(0.1, 5, 0.01),
+  seq(0.1, 2, 0.01),
   function(x, ...) {
     prior <- list(
       prec = list(
@@ -497,8 +504,9 @@ plot_1 <- ggplot(
     colour = model
   )
 ) +
-  geom_smooth(se = FALSE) +
+  geom_smooth(method = "gam", se = FALSE) +
   geom_vline(xintercept = 1) +
+  geom_point(alpha = 0.2) +
   theme_minimal() +
   guides(
     colour = guide_legend(
@@ -524,8 +532,9 @@ plot_2 <- ggplot(
     colour = model
   )
 ) +
-  geom_smooth(se = FALSE) +
+  geom_smooth(method = "gam", se = FALSE) +
   geom_vline(xintercept = 1) +
+  geom_point(alpha = 0.2) +
   theme_minimal() +
   guides(
     colour = guide_legend(
@@ -548,8 +557,9 @@ plot_3 <- ggplot(
     colour = model
   )
 ) +
-  geom_smooth(se = FALSE) +
+  geom_smooth(method = "gam", se = FALSE) +
   geom_vline(xintercept = 1) +
+  geom_point(alpha = 0.2) +
   theme_minimal() +
   guides(
     colour = guide_legend(
@@ -575,8 +585,9 @@ plot_4 <- ggplot(
     colour = model
   )
 ) +
-  geom_smooth(se = FALSE) +
+  geom_smooth(method = "gam", se = FALSE) +
   geom_vline(xintercept = 1) +
+  geom_point(alpha = 0.2) +
   theme_minimal() +
   guides(
     colour = guide_legend(
@@ -593,9 +604,10 @@ plot_4 <- ggplot(
   )
 plot_1 + plot_2
 plot_3 + plot_4
+plot_4
 marginal_frame$U <- as.factor(marginal_frame$U)
 ggplot(
-  data = marginal_frame[marginal_frame$U %in% c(0.1, 1, 5), ]
+  data = marginal_frame[marginal_frame$U %in% c(0.1, 1, 2), ]
 ) +
   geom_errorbar(
     aes(
@@ -634,7 +646,7 @@ ggplot(
       expression(
         sigma[0] == 0.1,
         sigma[0] == 1,
-        sigma[0] == 5,
+        sigma[0] == 2,
       )
     )
   ) +
@@ -779,10 +791,10 @@ res_bym2_01 <- inla(
 prior <- list(
   prec = list(
     prior = "pc.prec",
-    param = c(5, 0.01)
+    param = c(2, 0.01)
   )
 )
-res_bym2_5 <- inla(
+res_bym2_2 <- inla(
   formula_bym2,
   family = "nbinomial",
   data = newest_numbers,
@@ -805,7 +817,7 @@ plot_11 <- ggplot(data = newest_numbers) +
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-1, 1)
+    limits = c(-4, 3)
   ) +
   theme_minimal() +
   theme(
@@ -813,30 +825,17 @@ plot_11 <- ggplot(data = newest_numbers) +
   )
 
 plot_12 <- ggplot(data = newest_numbers) +
-  geom_sf(aes(fill = res_bym2_5$summary.random$idarea_1$mean[357:712])) +
+  geom_sf(aes(fill = res_bym2_2$summary.random$idarea_1$mean[357:712])) +
   ggtitle(
     label = "Spatial field for the BYM2 model",
-    subtitle = TeX("$Structured\\,component, \\sigma_0 = 5$")
+    subtitle = TeX("$Structured\\,component, \\sigma_0 = 2$")
   ) +
   scale_fill_gradient2(
     "Post mean",
     low = color_low,
     high = color_high,
     midpoint = 0,
-    limits = c(-1, 1)
+    limits = c(-4, 3)
   ) +
   theme_minimal()
 plot_11 + plot_12
-ggplot(data = newest_numbers) +
-  geom_sf(aes(fill = res_bym2_01$summary.random$idarea_1$mean[357:712])) +
-  ggtitle(
-    label = "Spatial field for the BYM2 model",
-    subtitle = TeX("$Structured\\,component, \\sigma_0 = 0.1$")
-  ) +
-  scale_fill_gradient2(
-    "Post mean",
-    low = color_low,
-    high = color_high,
-    midpoint = 0
-  ) +
-  theme_minimal()

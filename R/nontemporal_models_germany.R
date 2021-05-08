@@ -37,25 +37,25 @@ C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 # formula for the non spatial model
 formula_1 <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
-  marketplace + higher_education
+  Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
+  platform + office + marketplace + higher_education
 # formula for the besag model
 formula_2 <- value ~
-pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
-  marketplace + higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
+  platform + office + marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 # formula for the bym2 model
 formula_3 <- value ~
-pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
-  marketplace + higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
+  platform + office + marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 # formula for the leroux model
 formula_4 <- value ~
-pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  clinic + place_of_worship + nursing_home + aerodrome + platform + office +
-  marketplace + higher_education +
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+  Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
+  platform + office + marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 # compute the models
 res_1 <- inla(
