@@ -172,14 +172,13 @@ Some basic properties of the multivariate normal distribution are the following.
 \end{itemize}
 \subsection{Calculation Summary Statistics}\label{sec:mean_iv}
 As the posterior mean and the credibility intervals of coefficient are of interest, calculation of these is performed later on. This allows a better interpretation of the results. \\
-To compute the posterior mean of the coefficients, the code shown in Listing~\ref{codePosteriorMean} can be used. \\
 To get the expected value given a marginal function $\pi\left(x\right)$, the expected value of a function $f\left(x\right)$ is calculated, i.e.
 \begin{equation}
     \int f\left(x\right)\pi\left(x\right)dx
 \end{equation}
 \autocite[][]{aitkin1991posterior}.\\
 If necessary, e.g. if the target variable follows a (negative) binomial distribution, the value must be transformed to its original scale, as in these cases the log-likelihood is modelled. Therefore, in these cases, the expected value would have to be exponentiated to allow a clear interpretation. \\
-To obtain a credibility interval of the fixed effects on the transformed scale, the code in Listing~\ref{codeCredibility} can be used. In practice, the marginals are first transformed to their original scale, if necessary, and then the 2.5\% quantile and the 97.5\% quantiles are calculated.
+In practice, to obtain the credibility interval of a variable, the marginal values are first transformed to their original scale, if necessary, and then the 2.5\% quantile and the 97.5\% quantiles are calculated.
 \subsection{Skewness}
 Skewness is a statistical indicator that describes the type and strength of the asymmetry of a probability distribution. It shows whether and how strongly the distribution is skewed to the right (right-skewed, left-skewed, negative skewness) or to the left (left-skewed, right-skewed, positive skewness). Any non-symmetrical distribution is called skewed. \\
 The skewness of a random variable $X$ is the third standardized moment, defined as
@@ -365,7 +364,7 @@ In recent years, a growing amount of georeferenced data has become available, le
     \item[2.] Computation of the (simplified) Laplace approximation for selected values of $\pmb{\theta}$ to improve the Gaussian approximation.
     \item[3.] Combination of the first two parts by numerical integration.
 \end{itemize}
-$\pmb{\theta}$ is a vector of hyperparameters. The hyperparameters $\pmb{\theta}$ can be, for example, the variance in the Gaussian likelihood or the shape parameter in the likelihood of the gamma distribution. In the case of latent fields, they can be, for instance, dispersion parameters or spatial correlation parameters. \autocite[][]{rue2009approximate}
+$\pmb{\theta}$ is a vector of hyperparameters. The hyperparameters $\pmb{\theta}$ can be, for example, the variance in the Gaussian likelihood or the shape parameter in the likelihood of the gamma distribution. In the case of latent fields, they can be, for instance, dispersion parameters or spatial correlation parameters \autocite[][]{rue2009approximate}
 \subsection{Notation and Basic Properties}
 \label{sec:notation}
 For structured additive regression models, the distribution of the response variable $y_i$ is assumed to be a member of the exponential family, with the mean $\mu_i$ linked to a structured additive predictor $\eta_i$ by a link function $g\left(\cdot\right)$ such that $g\left(\mu_i\right)=\eta_i$. The predictor $\eta_i$  takes into account the effect of multiple covariates in an additive way,

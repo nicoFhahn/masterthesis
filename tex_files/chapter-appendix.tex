@@ -77,21 +77,15 @@ For large values of $r$, the negative binomial distribution can be approximated 
 \section{Choice of Hyperpriors for Germany}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \textwidth]{comparison_2_germany.png}
+    \includegraphics[width = \textwidth]{comparison_1_germany.png}
     \caption{Values of the DIC and the WAIC when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
     \label{comparison_germany_1}
 \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \textwidth]{comparison_1_germany.png}
-    \caption{Values of the CPO and the MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+    \includegraphics[width = \textwidth]{mae_germany.png}
+    \caption{Values of the MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
     \label{comparison_germany_2}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{intervals_prior_germany.png}
-    \caption{Comparison of the credibility intervals of a BYM2 model for different values of $\sigma_0$}
-    \label{comparison_germany_5}
 \end{figure}
 \begin{figure}[H]
     \centering
@@ -105,18 +99,7 @@ For large values of $r$, the negative binomial distribution can be approximated 
     \caption{Spatial fields for a BYM2 model.}
     \label{comparison_germany_7}
 \end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{spatial_field_germany_3.png}
-    \caption{Spatial fields for the structured component of a BYM2 model when changing the value for $\sigma_0$.}
-    \label{comparison_germany_8}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{spatial_field_germany_4.png}
-    \caption{Structured component of the spatial field for a BYM2 model.}
-    \label{comparison_germany_9}
-\end{figure}
+\clearpage
 \section{Code Examples}
 \subsection{Specifying the Different Types of Models}
 \begin{lstlisting}[caption={Specifying different models in INLA.}, label={codeModels}, language=R]
@@ -134,6 +117,23 @@ newest_numbers$value[test] <- NA
 # define the link function
 link <- rep(NA, nrow(newest_numbers))
 link[which(is.na(newest_numbers$value))] <- 1
+# for the temporal model every 5th day is taken
+germany <- germany[
+  germany$Date %in% seq(
+    from = min(germany$Date),
+    to = max(germany$Date),
+    by = 5
+  ),
+]
+# draw a sample
+test_temporal <- sample(
+  seq_len(nrow(germany)),
+  size = floor(0.2 * nrow(germany))
+)
+test_value_temporal <- germany$value[test_temporal]
+germany$value[test_temporal] <- NA
+link_temporal <- rep(NA, nrow(germany))
+link_temporal[which(is.na(germany$value))] <- 1
 # define the penalised prior
 prior_1 <- list(
   prec = list(
@@ -154,24 +154,46 @@ for (i in 2:nrow(newest_numbers)) {
 }
 
 C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
-# define the formula for besags proper model
-formula_besag <- value ~
-  pop_dens + urb_dens + sex +
+# formula for the model without the spatial component
+formula_1 <- value ~
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+  die_linke + clinic + place_of_worship + nursing_home +
+  aerodrome + platform + office + marketplace + higher_education
+# formula for the besag model
+formula_2 <- value ~
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+  die_linke + clinic + place_of_worship + nursing_home +
+  aerodrome + platform + office + marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
-# define the formula for bym2 model
-formula_bym2 <- value ~
-  pop_dens + urb_dens + sex +
+# formula for the bym2 model
+formula_3 <- value ~
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+  die_linke + clinic + place_of_worship + nursing_home +
+  aerodrome + platform + office + marketplace + higher_education +
   f(
     idarea_1, model = "bym2", graph = g,
     scale.model = TRUE, hyper = prior_1
   )
-# define the formula for leroux model
-formula_leroux <- value ~
-  pop_dens + urb_dens + sex +
+# formula for the leroux model
+formula_4 <- value ~
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+  die_linke + clinic + place_of_worship + nursing_home +
+  aerodrome + platform + office + marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
+# formula for the temporal bym2 model
+formula_5 <- value ~
+  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+  die_linke + clinic + place_of_worship + nursing_home +
+  aerodrome + platform + office + marketplace + higher_education +
+  f(
+    idarea_1, model = "bym2", graph = g,
+    scale.model = TRUE, hyper = prior_1
+  ) +
+  f(id_date_1, model = "rw2", hyper = prior_1)
 # compute the models
-res_besag <- inla(
-  formula_besag,
+# for the non-temporal models the code looks like this
+res_1 <- inla(
+  formula_1,
   family = "nbinomial",
   data = newest_numbers,
   E = expected_count,
@@ -182,165 +204,72 @@ res_besag <- inla(
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-res_bym2 <- inla(
-  formula_bym2,
+# for the temporal models the code looks like this
+res_5 <- inla(
+  formula_5,
   family = "nbinomial",
-  data = newest_numbers,
+  data = germany,
   E = expected_count,
   control.predictor = list(
     compute = TRUE,
-    link = link
+    link = link_temporal
   ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-res_leroux <- inla(
-  formula_leroux,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
+  Ntrials = germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 \end{lstlisting}
 \subsection{Making Predictions for the Test Data}
 \begin{lstlisting}[caption={The code for making predictions in INLA.}, label={codePrediction}, language=R]
 # create a vector to save the predictions to
-predicted <- c()
-# now make the predictions
-for(i in seq_len(nrow(newest_numbers))) {
-  predicted[i] <- inla.emarginal(
+predicted_1 <- c()
+predicted_2 <- c()
+# make predictions for a non-temporal model
+for (i in seq_len(nrow(newest_numbers))) {
+  predicted_1[i] <- inla.emarginal(
     function(x) x * newest_numbers$population[i],
-    res_bym2$marginals.fitted.values[[i]]
+    res_1$marginals.fitted.values[[i]]
   )
 }
-# calculate the MAE for the test data
-mean(abs(predicted[test] - test))
-
+# calculate the mae
+mean(abs(predicted_1[test] - test_value)),
+# make predictions for a temporal model
+for (i in seq_len(nrow(germany))) {
+  predicted_2[i] <- inla.emarginal(
+    function(x) x * germany$population[i],
+    res_5$marginals.fitted.values[[i]]
+  )
+}
+# calculate the mae
+mean(abs(predicted_2[test_temporal] - test_value_temporal)),
 \end{lstlisting}
 \subsection{Calculating the Posterior Mean}
 \begin{lstlisting}[caption={Calculating the posterior mean of a coefficent.}, label={codePosteriorMean}, language=R]
-inla.emarginal(exp, model_leroux$marginals.fixed$trade_tax)
-# calculate the increase in risk for an increase 
-# by 2 in the trade tax
 inla.emarginal(
-  exp,
-  model_leroux$marginals.fixed$trade_tax
-  ) ^ 2
+      exp,
+      res_1$marginals.fixed$`(Intercept)`
+)
 \end{lstlisting}
 \subsection{Calculating a Credibility Interval}
 \begin{lstlisting}[caption={Extracting the credibility interval for a coefficient}, label={codeCredibility}, language=R]
 inla.qmarginal(
-  c(0.025,0.975),
-  inla.tmarginal(
-    exp,
-    model_leroux$marginals.fixed$trade_tax
-  )
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp,
+        res_1$marginals.fixed$`(Intercept)`
+      )
 )
 \end{lstlisting}
-\subsection{Best Spatial Models For Germany}
-\subsubsection{Best Spatial Model using Demographic Variables}
-\begin{lstlisting}[caption={The code for the demographic model.}, label={codeDemoGermany}, language=R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
+\subsection{Calculating the Temporal Trend}
+\begin{lstlisting}[caption={Calculating the Temporal Trend of a Model}, label={codeTemporal}, language=R]
+temporal_car <- lapply(
+  res_5$marginals.random$id_date_1,
+  function(x) {
+    marg <- inla.tmarginal(
+      function(y) exp(y),
+      x
+    )
+    inla.emarginal(mean, marg)
+  }
 )
-formula <- value ~
-  pop_dens + urb_dens + SPD + Gruene + FDP + die_linke +
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  )
-\end{lstlisting}
-\subsubsection{Best Spatial Model using Infrastructural Variables}
-\begin{lstlisting}[caption={The code for the infrastructure model.}, label={codeInfraGermany}, language=R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
-formula <- value ~
-  pop_dens + urb_dens + clinic + place_of_worship + retail +
-  nursing_home + aerodrome + platform + higher_education +
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  )
-\end{lstlisting}
-\subsubsection{Best Spatial Model using Both Types of Variables}
-\begin{lstlisting}[caption={The code for the demographic + infrastructure model.}, label={codeBothGermany}, language=R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
-formula <- value ~
-  pop_dens + urb_dens + sex + log(trade_tax) + SPD +
-  Gruene + FDP + die_linke + clinic + place_of_worship +
-  retail + nursing_home + aerodrome + platform +
-  higher_education +
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  )
-\end{lstlisting}
-\subsection{Best Spatial Models For Norway}
-\subsubsection{Best Spatial Model using Demographic Variables}
-\begin{lstlisting}[caption={The code for the demographic model.}, label={codeDemoNorway}, language = R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(0.5 / 0.31, 0.01)
-  )
-)
-formula <- value ~
-  urb_dens + sex +
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  )
-\end{lstlisting}
-\subsubsection{Best Spatial Model using Infrastructural Variables}
-\begin{lstlisting}[caption={The code for the infrastructural model.}, label={codeInfraNorway}, language = R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(0.5 / 0.31, 0.01)
-  )
-)
-formula <- value ~
-  urb_dens + marketplace + place_of_worship +
-  nursing_home + aerodrome + office + platform +
-  higher_education +
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  )
-\end{lstlisting}
-\subsubsection{Best Spatial Model using Both Types of Variables}
-\begin{lstlisting}[caption={The code for the demographic + infrastructure model.}, label={codeBothNorway}, language=R]
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(0.5 / 0.31, 0.01)
-  )
-)
-formula <- value ~
-  urb_dens + median_age + unemp_tot + unemp_immg +
-  immigrants_total + sex + marketplace + place_of_worship + 
-  nursing_home + aerodrome + office + platform +
-  higher_education +
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  )
 \end{lstlisting}
 \clearpage

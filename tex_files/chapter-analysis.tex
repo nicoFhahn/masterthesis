@@ -40,12 +40,6 @@ After looking at the standardised incidence rates for the countries of interest,
 All of these models are computed using the INLA \cite{rinla} R package. \\
 To specify each type of model, the code shown in Listing~\ref{codeModels} can be used. \\
 The measures introduced in Section~\ref{sec:performance}, namely the DIC, the WAIC, the CPO and the mean absolute error (MAE), are used to compare the models.\\
-For all countries, the models are computed with
-\begin{itemize}
-  \item[1.] only the demographic variables as covariates
-  \item[2.] only the infrastructural variables as covariates
-  \item[3.] both, demographic and infrastructural variables, as covariates
-\end{itemize}
 In addition to specifying what type of spatial model to use, if any, there is also the option of specifying a prior. \\
 As can be seen in Section~\ref{sec:pc_prior}, a pc prior can be specified for the precision parameter $\tau$, which is what is done here. \\
 For the parameters $\sigma_0$ and $\alpha$ in Equation~\ref{eq:pc_prior_prec} the values 1 and 0.01 are chosen. \\
@@ -114,7 +108,7 @@ Looking at a histogram for the confirmed number of cases and overlaying the dens
 \clearpage
 \section{Models without a Spatial Component}\label{sec:nospatial}
 To establish a baseline, a look is first taken at models that do not include a spatial effect. This way, it can be observed how the means and credibility intervals of the covariates change when a spatial effect is added to a model and how the performance of the model changes with respect to the goodness-of-fit indicators introduced in Section~\ref{sec:performance}. \\
-Before computing the models, using the $\hbox{VIF}$ introduced in Section~\ref{sec:vif}, predictors are removed if their $\hbox{VIF}$ is above 5. To do this, an OLS regression is first run on all variables, followed by the calculation of $\hbox{VIF}$. Then the variable with the highest value is removed before running the regression model again with all remaining variables. This process is repeated until only variables with a $\hbox{VIF}$ of less than 5 remain. \\
+Before computing the models, using the $\hbox{VIF}$ introduced in Section~\ref{sec:vif}, predictors are removed if their $\hbox{VIF}$ is above 5. To do this, a GLM is first run on all variables, followed by the calculation of $\hbox{VIF}$. Then the variable with the highest value is removed before running the model again with all remaining variables. This process is repeated until only variables with a $\hbox{VIF}$ of less than 5 remain. \\
 In sections~\ref{sec:nospatial_germany} and~\ref{sec:nospatial_norway} the results of these models are presented. Their goodness-of-fit indicators as well as the coefficients together with their credibility intervals calculated as in section~\ref{sec:mean_iv} are reported. \\
 These models are based on data from 24 March 2021, when 2,695,037 people were infected with Covid-19 in Germany, while 87,537 people were infected in Norway. The five municipalities with the most infections in Germany are shown in Table~\ref{top5germany} and in Table~\ref{top5norway} for Norway.
 \begin{table}[H] 
@@ -153,7 +147,7 @@ Table~\ref{allGermany_nospatial} contains the performance measures for the basel
 \toprule
 \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-5504 & 5506 & -2778 & 179234 \\
+5483 & 5485 & -2769 & 182896 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -163,27 +157,29 @@ Table~\ref{allGermany_nospatial} contains the performance measures for the basel
 \toprule
 \textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -0.07213 & 0.9553 & 0.9291 & 0.9821 & $^*$\\
-pop\_dens & 0.1566 & 1.170 & 1.115 & 1.227 & $^*$\\
-log & \multirow{2}{*}{0.08821} & \multirow{2}{*}{1.093} & \multirow{2}{*}{1.041} & \multirow{2}{*}{1.146} & \multirow{2}{*}{$^*$}\\
+(Intercept) & -0.04558 & 0.9555 & 0.9303 & 0.9815 & $^*$\\
+afd & 0.1674 & 1.185 & 1.043 & 1.340 & $^*$\\
+pop\_dens & 0.1579 & 1.171 & 1.116 & 1.229 & $^*$\\
+log & \multirow{2}{*}{0.07761} & \multirow{2}{*}{1.081} & \multirow{2}{*}{1.032} & \multirow{2}{*}{1.132} & \multirow{2}{*}{$^*$}\\
 trade\_tax \\
-sex & 0.04363 & 1.045 & 1.009 & 1.081 & $^*$\\
-platform & 0.03324 & 1.034 & 0.9796 & 1.091 \\
-FDP & 0.03242 & 1.033 & 0.9945 & 1.073 \\
-higher\_ & \multirow{2}{*}{0.01918} & \multirow{2}{*}{1.020} & \multirow{2}{*}{0.9787} & \multirow{2}{*}{1.063} \\
+sex & 0.03181 & 1.032 & 0.9979 & 1.068 & \\
+platform & 0.02898 & 1.030 & 0.9772 & 1.085 \\
+higher\_ & \multirow{2}{*}{0.02166} & \multirow{2}{*}{1.022} & \multirow{2}{*}{0.9819} & \multirow{2}{*}{1.065} \\
 education\\
-clinic & 0.01448 & 1.015 & 0.9608 & 1.073 \\
-urb\_dens & 0.009294 & 1.010 & 0.9699 & 1.051 \\
-aerodrome & -0.0009688 & 0.9991 & 0.9731 & 1.028 \\
-nursing\_ & \multirow{2}{*}{-0.006835} & \multirow{2}{*}{0.9933} & \multirow{2}{*}{0.9609} & \multirow{2}{*}{1.027} \\
+Union & 0.007963 & 1.011 & 0.8684 & 1.170\\
+urb\_dens & 0.003826 & 1.004 & 0.9660 & 1.044 \\
+FDP & 0.003800 & 1.004 & 0.9662 & 1.043 \\
+aerodrome & -0.003584 & 0.9965 & 0.9719 & 1.024 \\
+clinic & -0.003633 & 0.9968 & 0.9450 & 1.052 \\
+nursing\_ & \multirow{2}{*}{-0.009224} & \multirow{2}{*}{0.9910} & \multirow{2}{*}{0.9597} & \multirow{2}{*}{1.033} \\
 home\\
-place\_of\_ & \multirow{2}{*}{-0.03459} & \multirow{2}{*}{0.9662} & \multirow{2}{*}{0.9256} & \multirow{2}{*}{1.008} \\
+place\_of\_ & \multirow{2}{*}{-0.009957} & \multirow{2}{*}{0.9903} & \multirow{2}{*}{0.9486} & \multirow{2}{*}{1.033} \\
 worship\\
-marketplace & -0.03482 & 0.9663 & 0.9080 & 1.027 \\
-office & -0.04362 & 0.9576 & 0.9140 & 1.004 \\
-die\_linke & -0.0721 & 0.9306 & 0.8948 & 0.9676 & $^*$\\
-SPD & -0.1316 & 0.8768 & 0.8476 & 0.9068 & $^*$\\
-Gruene & -0.2816 & 0.7548 & 0.7197 & 0.7913 & $^*$\\
+office & -0.02750 & 0.9732 & 0.9294 & 1.020 \\
+marketplace & -0.03931 & 0.9619 & 0.9060 & 1.020 \\
+SPD & -0.09923 & 0.9063 & 0.8357 & 0.9809 & $^*$\\
+die\_linke & -0.1435 & 0.8655 & 0.7964 & 0.9389 & $^*$\\
+Gruene & -0.1681 & 0.8473 & 0.7383 & 0.9677 & $^*$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -229,7 +225,8 @@ aerodrome & -0.1928 & 0.8269 & 0.7031 & 0.9369 & $^*$ \\
 \end{table}
 \clearpage
 \section{Spatial Models}\label{ch:spatial}
-Under the null hypothesis of no spatial autocorrelation, a p-value greater than 0.05 would be expected. The results of the test are presented in Table~\ref{moranTest}. Looking at the p-value for both countries, it can be seen that there is a spatial correlation for the number of infections in a municpality.
+Looking at the SIR value for Germany in Figure~\ref{sirgermany} and the SIR value for Norway in Figure~\ref{sirnorway} and Figure~\ref{sirnorwaylog}, it clearly looks like there is a correlation between the SIR and the spatial units. For Germany, the SIR is higher in eastern Germany than in the rest of the country and in Norway the risk seems to be mainly concentrated around the Oslo region. \\
+To check whether there is spatial autocorrelation, Moran's I, introduced in Section~\ref{sec:moran}, can be calculated and the Moran test can then be used to tell whether there is spatial autocorrelation. Under the null hypothesis of no spatial autocorrelation, a p-value greater than 0.05 would be expected. The results of the test are presented in Table~\ref{moranTest}. Looking at the p-value for both countries, it can be seen that the number of infections in a municipality and the spatial units are correlated.
 \begin{table}[H] 
 \caption{Results of the Moran test for Germany and Norway. \label{moranTest}}
 \begin{tabular}{l r r r r}
@@ -251,14 +248,14 @@ The best performance of all models, in terms of MAE, was observed for the BYM2 m
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-No spatial & 5504 & 5506 & -2778 & 179234 \\
-Besag& 4706 & 4685 & -2738 & 176201\\
-BYM2 & 4628 & 4612 & -2729 & 176017\\
-Leroux & 5118 & 5108 & -2998 & 179150 \\
+No spatial & 5483 & 5485 & -2769 & 182896 \\
+Besag& 4746 & 4734 & -2739 & 179454\\
+BYM2 & 4632 & 4617 & -2717 & 179417\\
+Leroux & 4734 & 4740 & -2915 & 184903 \\
 \bottomrule
 \end{tabular}
 \end{table}
-Figure~\ref{intervalGermany} shows the differences between the coefficients in the model without the spatial component and the BYM2 model. Excluding the intercept, only three effects are significant in the BYM2 model compared to six in the model without the spatial component. Moreover, the coefficients of the BYM2 model are closer to 1 and have smaller credibility intervals. The reason for this is that when using a spatial field in combination with a PC prior, higher values for $\sigma_0$ make the spatial field larger, which in turn causes the posterior mean to shrink towards 1.
+Figure~\ref{intervalGermany} shows the differences between the coefficients in the model without the spatial component and the BYM2 model. Excluding the intercept, only three effects are significant in the BYM2 model compared to six in the model without the spatial component. Moreover, the coefficients of the BYM2 model are closer to 1. 
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{intervals_germany.png}
@@ -272,31 +269,33 @@ The values of the coefficients and credibility intervals are shown in Table~\ref
 \toprule
 \textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -0.08087 & 0.9223 & 0.9105 & 0.9345 & $^*$\\
-pop\_dens & 0.1084 & 1.115 & 1.066 & 1.165 & $^*$\\
-log & \multirow{2}{*}{0.5714} & \multirow{2}{*}{1.059} & \multirow{2}{*}{1.022} & \multirow{2}{*}{1.097} & \multirow{2}{*}{$^*$}\\
+(Intercept) & -0.07877 & 0.9243 & 0.9128 & 0.9361 & $^*$\\
+afd & 0.2092 & 1.235 & 1.093 & 1.390 & $^*$\\
+pop\_dens & 0.09926 & 1.105 & 1.058 & 1.152 & $^*$\\
+log & \multirow{2}{*}{0.05640} & \multirow{2}{*}{1.058} & \multirow{2}{*}{1.023} & \multirow{2}{*}{1.094} & \multirow{2}{*}{$^*$}\\
 trade\_tax \\
-platform & 0.01315 & 1.013 & 0.9705 & 1.058 \\
-die\_linke & 0.01160 & 1.012 & 0.9605 & 1.066 \\
-marketplace & 0.01117 & 1.011 & 0.9669 & 1.057 \\
-aerodrome & 0.009694 & 1.010 & 0.9919 & 1.028 \\
-urb\_dens & 0.007543 & 1.008 & 0.9760 & 1.040 \\
-sex & 0.004908 & 1.005 & 0.9746 & 1.036 \\
-clinic & 0.004868 & 1.005 & 0.9648 & 1.047 \\
-nursing\_ & \multirow{2}{*}{0.003748} & \multirow{2}{*}{1.004} & \multirow{2}{*}{0.9799} & \multirow{2}{*}{1.028} \\
+aerodrome & 0.01133 & 1.011 & 0.9943 & 1.029 \\
+marketplace & 0.01008 & 1.010 & 0.9679 & 1.054 \\
+platform & 0.004396 & 1.005 & 0.9640 & 1.046 \\
+nursing\_ & \multirow{2}{*}{0.002161} & \multirow{2}{*}{1.002} & \multirow{2}{*}{0.9794} & \multirow{2}{*}{1.025} \\
 home\\
-FDP & -0.006087 & 0.9942 & 0.9507 & 1.039 \\
-place\_of\_ & \multirow{2}{*}{-0.01738} & \multirow{2}{*}{0.9829} & \multirow{2}{*}{0.9483} & \multirow{2}{*}{1.018} \\
+Union & 0.002024 & 1.005 & 0.8636 & 1.162\\
+clinic & 0.001086 & 1.001 & 0.9630 & 1.041 \\
+urb\_dens & -0.0008993 & 0.9992 & 0.9692 & 1.030 \\
+sex & -0.003978 & 1.032 & 0.9674 & 1.025 & \\
+office & -0.005478 & 0.9947 & 0.9601 & 1.030 \\
+place\_of\_ & \multirow{2}{*}{-0.009868} & \multirow{2}{*}{0.9903} & \multirow{2}{*}{0.9570} & \multirow{2}{*}{1.024} \\
 worship\\
-office & -0.02228 & 0.9781 & 0.9428 & 1.014 \\
-SPD & -0.02744 & 0.9732 & 0.9290 & 1.019 \\
-higher\_ & \multirow{2}{*}{-0.02879} & \multirow{2}{*}{0.9718} & \multirow{2}{*}{0.9368} & \multirow{2}{*}{1.008} \\
+higher\_ & \multirow{2}{*}{-0.01749} & \multirow{2}{*}{0.9828} & \multirow{2}{*}{0.9491} & \multirow{2}{*}{1.017} \\
 education\\
-Gruene & -0.1735 & 0.8410 & 0.7980 & 0.8856 & $^*$\\
+SPD & -0.02298 & 0.9785 & 0.8874 & 1.076\\
+FDP & -0.03763 & 0.9633 & 0.921& 1.006 \\
+Gruene & -0.05887 & 0.9450 & 0.8250 & 1.077 \\
+die\_linke & -0.06719 & 0.9361 & 0.8510 & 1.027\\
 \bottomrule
 \end{tabular}
 \end{table}
-For the hyperparameters, a value of 14.22 is reported for the precision and a value of 0.9172 for $\phi$. Hence, 91.72\% of the marginal variance is explained by the structured effect. Therefore, this model is far from reducing to pure overdispersion and comes close to a Besag model, which is also reflected in the similar values of the goodness-of-fit indicators in Table~\ref{allGermany}.
+For the hyperparameters, a value of 16.19 is reported for the precision and a value of 0.9036 for $\phi$. Hence, 90.36\% of the marginal variance is explained by the structured effect. Therefore, this model is far from reducing to pure overdispersion and comes close to a Besag model, which is also reflected in the similar values of the goodness-of-fit indicators in Table~\ref{allGermany}.
 \subsection{Spatial Models for Norway}
 Comparing the performance of the models, the spatial models again showed better performance in terms of DIC and WAIC and this time also significantly better performance in terms of CPO. However, the model without the spatial component showed better predictive performance, as indicated by the lowest value for the MAE in Table~\ref{allNorway}. This could indicate that neighbourhood effects are not as strong in Norway as in Germany.
 \begin{table}[H] 
@@ -312,7 +311,7 @@ Leroux & 2338 & 2314 & -5449 & 8138\\
 \bottomrule
 \end{tabular}
 \end{table}
-Looking at the differences between the coefficients and credibility intervals in Figure~\ref{intervalNorway}, the picture is similar to Figure~\ref{intervalGermany}. This time, however, all significant effects of the model without the spatial component are still significant. But again the coefficients of the BYM2 model are closer to 1 and the credibility intervals are narrower.
+Looking at the differences between the coefficients and credibility intervals in Figure~\ref{intervalNorway}, the picture is similar to Figure~\ref{intervalGermany}. This time, however, all significant effects of the model without the spatial component are still significant. This again shows that the spatial effect is weaker in Norway than in Germany, as no new variables turn out to be significant and no variables lose their significance when the spatial term is added.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{intervals_norway.png}
@@ -356,7 +355,7 @@ As can be seen in Equation~\ref{pcprec}, there is flexibility when it comes to c
 Some of the issues that come with the choice of these hyperpriors were already discussed in Section~\ref{sec:issues}. \\
 In the following, an assessment is made of how the performance of a Besag model, a BYM2 model and a Leroux model changes when playing around with the value for the standard deviation $\sigma_0$. To create these plots, models were calculated with $\sigma_0$ values of $\pmb{\sigma_0}=\left(0.1,0.11,0.12,...,5\right)$.\\
 In Figure~\ref{comparison_norway_1} it can be seen that when choosing a higher value for $\sigma_0$, the DIC and WAIC is lower in the case of the Besag model and the BYM2 model. For the Leroux model, on the other hand, the WAIC gets lower until about 2 before it rises until around $\sigma_0 = 2.5$ and then flattens out. It is a positive sign that this is not the case with the BYM2 model, as it was designed to avoid exactly this kind of thing. \\
-For the CPO and MAE in Figure~\ref{comparison_norway_2}, it can be seen that for all model types, a higher value for $\sigma_0$ leads to both a lower CPO and a higher MAE.
+For the CPO and MAE in Figure~\ref{comparison_norway_2}, it can be seen that for all model types, a higher value for $\sigma_0$ leads to a higher MAE.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{comparison_1_norway.png}
@@ -365,21 +364,28 @@ For the CPO and MAE in Figure~\ref{comparison_norway_2}, it can be seen that for
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = \textwidth]{comparison_2_norway.png}
-  \caption{Value of the CPO and the MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
+  \includegraphics[width = \textwidth]{mae_norway.png}
+  \caption{Value of the MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
   \label{comparison_norway_2}
 \end{figure}
 By allowing the precision to be greater, the variance is forced to be smaller. Hence, choosing a lower value for the precision leads to lower values for the WAIC. While this indicates a better fit to the training data, Figure~\ref{comparison_norway_2} also shows that the MAE increases when a higher value for $\sigma_0$ is chosen, as the models overfit on the training data and therefore make worse predictions. \\
 The corresponding figures for Germany are shown in Figure~\ref{comparison_germany_1} and Figure~\ref{comparison_germany_2} in the Appendix. \\
-Figure~\ref{comparison_norway_5} shows how the credibility intervals of the coefficients of a BYM2 model change when the value for $\sigma_0$ is increased. In general, the credibility intervals for $\sigma_0 = 1$ are narrower than those for $\sigma_0 = 0.1$, but no significant changes are seen between $\sigma_0 = 1$ and $\sigma_0 = 5$. The values of the coefficients tend to remain relatively similar most of the time, especially when the value of the coefficient is close to 1. However, a few times, for example for the variables immigrants\_total, platform and unemp\_immg, the values differ. Furthermore, the coefficients for $\sigma_0 = 1$ and $\sigma_0 = 5$ are more closer to 1 than the ones for $\sigma_0=0.1$ The reason for that is that a higher value for $\sigma_0$ makes the variance of the spatial field larger, therefore the posterior mean should shrink towards 1.
+Figure~\ref{comparison_norway_5} shows how the credibility intervals of the coefficients of a BYM2 model change when the value for $\sigma_0$ is increased. The values of the coefficients tend to remain relatively similar most of the time, especially when the value of the coefficient is close to 1. However, a few times, for example for the variables immigrants\_total, platform and unemp\_immg, the values differ. Furthermore, the coefficients for $\sigma_0 = 1$ and $\sigma_0 = 2$ are more closer to 1 than the ones for $\sigma_0=0.1$.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{intervals_prior_norway.png}
   \caption{Comparison of the credibility intervals of a BYM2 model for different values of $\sigma_0$.}
   \label{comparison_norway_5}
 \end{figure}
-The corresponding figure for Germany is shown in Figure~\ref{comparison_germany_5} in the Appendix. \\
-Figure~\ref{comparison_norway_6} and Figure~\ref{comparison_norway_7} underline the problem of the models not being comparable with each other. Figure~\ref{comparison_norway_6} already shows huge differences in the spatial field of the Besag model and the Leroux model, with the posterior mean of the Besag model mostly between -0.5 and 0.5, compared to a posterior mean that ranges from -2 to 3 in the case of the Leroux model. In the left part of Figure~\ref{comparison_norway_7} the values of Equation~\ref{eq:bym2_1} are plotted, while in the right part the values of $u_{*}$ are plotted. \\
+Having credibility intervals and posterior means that are very similar to each other, regardless of the value chosen for $\sigma_0$, is a great sign as it means that the calculated model is robust. That is, it means that the fixed covariates are important in their own right because they provide different information than the spatial field, even if the spatial field is allowed to be very smooth or coarse. This is exactly the case for Germany, which can be seen in Figure~\ref{comparison_germany_5}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{intervals_prior_germany.png}
+    \caption{Comparison of the credibility intervals of a BYM2 model for different values of $\sigma_0$}
+    \label{comparison_germany_5}
+\end{figure}
+Figure~\ref{comparison_norway_6} and Figure~\ref{comparison_norway_7} underline the problem of the models not being comparable with each other. Figure~\ref{comparison_norway_6} already shows huge differences in the spatial field of the Besag model and the Leroux model, with the spatial field of the Besag model looking smoother than the spatial field of the Leroux model. This is a sign that the Leroux model is quickly overfitting to the data.
+In the left part of Figure~\ref{comparison_norway_7} the values of Equation~\ref{eq:bym2_1} are plotted, while in the right part the values of $u_{*}$ are plotted. \\
 For the spatial field of the unstructured random effect, the values of the posterior mean are similar to the values of the Besag model. For the structured component, however, the absolute values are somewhat higher. Nevertheless, in both cases the values are far from the values for the Leroux model.
 \begin{figure}[H]
   \centering
@@ -393,23 +399,102 @@ For the spatial field of the unstructured random effect, the values of the poste
   \caption{Spatial fields for a BYM2 model.}
   \label{comparison_norway_7}
 \end{figure}
-Finally, looking at the spatial field of the structured component when changing the value for $\sigma_0$, as seen in Figure~\ref{comparison_norway_8}, it can be seen that for a small value like $\sigma_0 = 0.1$, the values of the posterior mean are mostly around 0, while for a higher value these values get slightly higher. Interestingly, however, if the posterior mean is given its own scale for $\sigma_0 = 0.1$, as done in Figure~\ref{comparison_norway_9}, it can be seen that the higher up north a municipality lies, the higher the posterior mean becomes. The reason for this is that if $\sigma_0$ is small, the spatial field is only one plane. $\sigma_0$ specifies how much the spatial effect is allowed to deviate from this plane, and with a small value for $\sigma_0$ only a small deviation is allowed, which can then look similar to a linear effect. Thus, since the municipality with the highest posterior mean is located in northern Norway, all other areas with high risk are also located in northern Norway. Since a municipality with an elevated one is located in the south of Norway, there is also a higher risk on the south coast compared to the central parts of Norway.
+The corresponding figures for Germany are shown in Figure~\ref{comparison_germany_6} and Figure~\ref{comparison_germany_7} in the Appendix. \\
+Finally, looking at the spatial field of the structured component when changing the value for $\sigma_0$, as seen in Figure~\ref{comparison_norway_8}, it can be seen that for a small value like $\sigma_0 = 0.1$, the values of the posterior mean are mostly around 0, while for a higher value these values get slightly higher. The reason for this is simply that higher values for $\sigma_0$ make the spatial field fit the data more closely, making it less smooth.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{spatial_field_norway_3.png}
   \caption{Spatial fields for the structured component of a BYM2 model when changing the value for $\sigma_0$.}
   \label{comparison_norway_8}
 \end{figure}
+Looking at Figure~\ref{comparison_germany_8}, there are hardly any differences in the spatial fields for $\sigma_0=0,1$ and $\sigma_0=2$, which again shows how robust the model is for Germany.
 \begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{spatial_field_norway_4.png}
-  \caption{Structured component of the spatial field for a BYM2 model.}
-  \label{comparison_norway_9}
+    \centering
+    \includegraphics[width = \textwidth]{spatial_field_germany_3.png}
+    \caption{Spatial fields for the structured component of a BYM2 model when changing the value for $\sigma_0$.}
+    \label{comparison_germany_8}
 \end{figure}
-The corresponding figures for Germany are shown in Figure~\ref{comparison_germany_6}, Figure~\ref{comparison_germany_7}, Figure~\ref{comparison_germany_8} and Figure~\ref{comparison_germany_9} in the Appendix. \\
+
 \clearpage
 \section{Spatio-Temporal Models}
 \subsection{Spatio-Temporal Models for Germany}
+\begin{table}[H] 
+\caption{The German municipalities with the most infections as of May 2nd 2021. \label{top5Germany_temporal}}
+\begin{tabular}{l r r r}
+\toprule
+\textbf{Municipality}	& \textbf{Population}	& \textbf{Number of infections} \\
+\midrule
+SK Berlin & 3644826 & 165450 \\
+SK Hamburg & 1841179 & 70903 \\
+SK Munich & 1471508 & 66951 \\
+SK Cologne & 1085664 & 47007 \\
+Region Hannover & 1157624 & 43665 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H] 
+\caption{The performance measures for the best performing model of each type. \label{allGermany_temporal}}
+\begin{tabular}{l r r r r}
+\toprule
+\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
+\midrule
+No spatial & 5606 & 5609 & -2831 & 178621 \\
+Spatial BYM2 & 4743 & 4742 & -2806 & 175619\\
+Besag & 371291 & 371346 & -185605 & 204410 \\
+BYM2 & 371291 & 371348 & -185605 & 204369\\
+Leroux & 371283 & 371353 & -185609 & 204434\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{intervals_germany_temporal.png}
+  \caption{The posterior mean and credibility intervals of the coefficients}
+  \label{intervalGermany_temporal}
+\end{figure}
+\begin{table}[H]
+\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedAllGermany_temporal}}
+\begin{tabular}{l r r r r c}
+\toprule
+\textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
+\midrule
+(Intercept) & -0.1633 & 0.8494 & 0.8326 & 0.8662 & $^*$\\
+clinic & 0.04774 & 1.049 & 0.9978 & 1.103 \\
+pop\_dens & 0.03800 & 1.039 & 0.9862 & 1.094 \\
+urb\_dens & 0.03051 & 1.031 & 0.9940 & 1.069 \\
+FDP & 0.01803 & 1.018 & 0.9720 & 1.067 \\
+log & \multirow{2}{*}{0.01034} & \multirow{2}{*}{1.011} & \multirow{2}{*}{0.9604} & \multirow{2}{*}{1.063} & \multirow{2}{*}{}\\
+trade\_tax \\
+office & 0.008501 & 1.009 & 0.9538 & 1.066 \\
+aerodrome & 0.006449 & 1.007 & 0.9831 & 1.030 \\
+platform & 0.004554 & 1.005 & 0.9536 & 1.058 \\
+nursing\_ & \multirow{2}{*}{0.002101} & \multirow{2}{*}{1.002} & \multirow{2}{*}{0.9726} & \multirow{2}{*}{1.032} \\
+home\\
+higher\_ & \multirow{2}{*}{-0.004663} & \multirow{2}{*}{0.9955} & \multirow{2}{*}{0.9585} & \multirow{2}{*}{1.034} \\
+education\\
+place\_of\_ & \multirow{2}{*}{-0.007753} & \multirow{2}{*}{0.9925} & \multirow{2}{*}{0.9533} & \multirow{2}{*}{1.033} \\
+worship\\
+sex & -0.01148 & 0.9887 & 0.0.9565 & 1.022 \\
+marketplace & -0.01395 & 0.9865 & 0.9340 & 1.041 \\
+Gruene & -0.02903 & 0.9718 & 0.9188 & 1.027\\
+SPD & -0.06109 & 0.9410 & 0.8944 & 0.9892 & $^*$ \\
+die\_linke & -0.1081 & 0.8980 & 0.8471 & 0.9508& $^*$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+For the hyperparameters, a value of 12.59 is reported for the precision of the area and 26950740 for the precision of the date, A value of 0.6989 is reported for $\phi$. Hence, 69.89\% of the marginal variance is explained by the structured effect. Therefore, this model is closer to a Besag model than it is to overdispersion.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{temporal_trend_germany.png}
+  \caption{The temporal trend of the BYM2 model.}
+  \label{temporal_trend_germany}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{posterior_germany_temporal.png}
+  \caption{Posterior mean of the area-specific risk and the posterior probability.}
+  \label{posterior_germany_temporal}
+\end{figure}
 \subsection{Spatio-Temporal Models for Norway}
 \begin{table}[H] 
 \caption{The Norwegian municipalities with the most infections as of May 2nd 2021. \label{top5norway_temporal}}
@@ -431,14 +516,68 @@ Lillestrøm & 85983 & 3725 & 30.2\%\\
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
 \midrule
-No spatial & 2812 & 2816 & -1642 & 7573 \\
-Spatial BYM2 & 2774 & 2781 & -3903 & 7794\\
-Besag & 2807 & 2813 & -1915 & 7731 \\
-BYM2 \\
-Leroux & 2338 & 2314 & -5449 & 8138\\
+No spatial & 2813 & 2817 & -1662 & 7686 \\
+Spatial BYM2 & 2777 & 2783 & -4065 & 7943\\
+Besag & 130574 & 130545 & -65273 & 11376 \\
+BYM2 & 130572 & 130543 & -65272 & 11376\\
+Leroux & 130574 & 130545 & -65273 & 11377\\
 \bottomrule
 \end{tabular}
 \end{table}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{intervals_norway_temporal.png}
+  \caption{The posterior mean and credibility intervals of the coefficients}
+  \label{intervalNorway_temporal}
+\end{figure}
+\begin{table}[H]
+\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedAllNorway_temporal}}
+\begin{tabular}{l r r r r c}
+\toprule
+\textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
+\midrule
+(Intercept) & -1.127 & 0.3244 & 0.2917 & 0.3594 & $^*$ \\
+urb\_dens & 0.1946 & 1.220 & 1.015 & 1.453 & $^*$ \\
+unemp\_tot & 0.1637 & 1.184 & 0.9596 & 1.445 \\
+immigrants\_ & \multirow{2}{*}{0.1310}& \multirow{2}{*}{1.143}& \multirow{2}{*}{0.9856}& \multirow{2}{*}{1.318}& \multirow{2}{*}{}\\
+total \\
+platform & 0.08178 & 1.090 & 0.8996 & 1.309 \\
+place\_of\_ & \multirow{2}{*}{0.07557}& \multirow{2}{*}{1.084}& \multirow{2}{*}{0.8907}& \multirow{2}{*}{1.306} \\
+worship \\
+unemp\_ & \multirow{2}{*}{0.06943} & \multirow{2}{*}{1.077} & \multirow{2}{*}{0.8897} & \multirow{2}{*}{1.291} & \multirow{2}{*}{} \\
+immg\\
+marketplace & 0.05738 & 1.061 & 0.9409 & 1.192 \\
+nursing\_ & \multirow{2}{*}{0.05047} & \multirow{2}{*}{1.054} & \multirow{2}{*}{0.9338} & \multirow{2}{*}{1.185} \\
+home\\
+vaccine\_shots & 0.03609 & 1.037 & 1.001 & 1.074 & $^*$\\
+higher\_ & \multirow{2}{*}{-0.001071}& \multirow{2}{*}{1.001}& \multirow{2}{*}{0.8780}& \multirow{2}{*}{1.136}\\ 
+education \\
+aerodrome & -0.1367 & 0.8738 & 0.7777 & 0.9779 & $^*$ \\
+sex & -0.1538 & 0.8591 & 0.7606 & 0.9662 & $^*$ \\
+median\_age & -0.2013 & 0.8192 & 0.7244 & 0.9223 &$^*$ \\
+office & -0.2455 & 0.7874 & 0.6254 & 0.9777 & $^*$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+For the hyperparameters, a value of 0.9783 is reported for the precision of the area and 5471899 for the precision of the date, A value of 0.02769 is reported for $\phi$. Hence, 2.77\% of the marginal variance is explained by the structured effect. Therefore, this model is very close to pure overdispersion.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{temporal_trend_norway.png}
+  \caption{The temporal trend of the BYM2 model.}
+  \label{temporal_trend_norway}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{posterior_norway_temporal.png}
+  \caption{Posterior mean of the area-specific risk and the posterior probability.}
+  \label{posterior_norway_temporal}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = \textwidth]{posterior_norway_temporal_log.png}
+  \caption{Log posterior mean of the area-specific risk.}
+  \label{posterior_norway_temporal_log}
+\end{figure}
 \clearpage
 \section{Predictive Models}
 \subsection{Predictive Models for Germany}
