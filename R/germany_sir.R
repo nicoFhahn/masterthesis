@@ -4,7 +4,7 @@ library(readr)
 library(sf)
 library(SpatialEpi)
 # load the data
-newest_numbers <- read_csv("eval_data/newest_numbers_germany_march24.csv")
+newest_numbers <- read_csv("eval_data/newest_numbers_germany_may2.csv")
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 newest_numbers <- merge(
   newest_numbers,

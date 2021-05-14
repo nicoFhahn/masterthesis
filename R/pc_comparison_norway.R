@@ -7,14 +7,7 @@ library(INLA)
 library(tibble)
 library(latex2exp)
 library(pbapply)
-newest_numbers <- read_csv("eval_data/newest_numbers_norway_march24.csv")
-norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
-newest_numbers <- merge(
-  newest_numbers,
-  norge_sf,
-  by = "kommune_no"
-)
-newest_numbers <- st_as_sf(newest_numbers)
+source("R/preprocess_norge.R")
 set.seed(7918)
 test <- sample(
   seq_len(nrow(newest_numbers)),
@@ -232,13 +225,13 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$aerodrome
+            exp, res_bym2$marginals.fixed$office
           )
         )[1],
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$office
+            exp, res_bym2$marginals.fixed$aerodrome
           )
         )[1],
         inla.qmarginal(
@@ -256,7 +249,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$vaccine_shots
+            exp, res_bym2$marginals.fixed$nursing_home
           )
         )[1],
         inla.qmarginal(
@@ -268,7 +261,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$nursing_home
+            exp, res_bym2$marginals.fixed$platform
           )
         )[1],
         inla.qmarginal(
@@ -280,7 +273,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$platform
+            exp, res_bym2$marginals.fixed$vaccine_shots
           )
         )[1],
         inla.qmarginal(
@@ -292,13 +285,13 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$unemp_immg
+            exp, res_bym2$marginals.fixed$immigrants_total
           )
         )[1],
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$immigrants_total
+            exp, res_bym2$marginals.fixed$unemp_immg
           )
         )[1],
         inla.qmarginal(
@@ -319,11 +312,11 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$aerodrome
+          res_bym2$marginals.fixed$office
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$office
+          res_bym2$marginals.fixed$aerodrome
         ),
         inla.emarginal(
           exp,
@@ -335,7 +328,7 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$vaccine_shots
+          res_bym2$marginals.fixed$nursing_home
         ),
         inla.emarginal(
           exp,
@@ -343,7 +336,7 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$nursing_home
+          res_bym2$marginals.fixed$platform
         ),
         inla.emarginal(
           exp,
@@ -351,7 +344,7 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$platform
+          res_bym2$marginals.fixed$vaccine_shots
         ),
         inla.emarginal(
           exp,
@@ -359,11 +352,11 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$unemp_immg
+          res_bym2$marginals.fixed$immigrants_total
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$immigrants_total
+          res_bym2$marginals.fixed$unemp_immg
         ),
         inla.emarginal(
           exp,
@@ -386,13 +379,13 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$aerodrome
+            exp, res_bym2$marginals.fixed$office
           )
         )[2],
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$office
+            exp, res_bym2$marginals.fixed$aerodrome
           )
         )[2],
         inla.qmarginal(
@@ -410,7 +403,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$vaccine_shots
+            exp, res_bym2$marginals.fixed$nursing_home
           )
         )[2],
         inla.qmarginal(
@@ -422,7 +415,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$nursing_home
+            exp, res_bym2$marginals.fixed$platform
           )
         )[2],
         inla.qmarginal(
@@ -434,7 +427,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$platform
+            exp, res_bym2$marginals.fixed$vaccine_shots
           )
         )[2],
         inla.qmarginal(
@@ -446,13 +439,13 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$unemp_immg
+            exp, res_bym2$marginals.fixed$immigrants_total
           )
         )[2],
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$immigrants_total
+            exp, res_bym2$marginals.fixed$unemp_immg
           )
         )[2],
         inla.qmarginal(
@@ -464,20 +457,20 @@ models <- pblapply(
       ),
       variable = c(
         rep("Intercept", 1),
-        rep("sex", 1),
-        rep("aerodrome", 1),
-        rep("office", 1),
-        rep("median_age", 1),
-        rep("place_of_worship", 1),
-        rep("vaccine_shots", 1),
-        rep("higher_education", 1),
-        rep("nursing_home", 1),
-        rep("marketplace", 1),
-        rep("platform", 1),
-        rep("unemp_total", 1),
-        rep("unemp_immg", 1),
-        rep("immigrants_total", 1),
-        rep("urb_dens", 1)
+        rep("Sex", 1),
+        rep("Office", 1),
+        rep("Aerodrome", 1),
+        rep("Median age", 1),
+        rep("Place of worship", 1),
+        rep("Nursing home", 1),
+        rep("Higher education", 1),
+        rep("Platform", 1),
+        rep("Marketplace", 1),
+        rep("Vaccinations", 1),
+        rep("Total unemployment", 1),
+        rep("Total immigrants", 1),
+        rep("Unemployed immigrants", 1),
+        rep("Urban density", 1)
       ),
       U = x
     )

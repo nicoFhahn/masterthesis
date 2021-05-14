@@ -20,23 +20,15 @@ norway_municipality_confirmed_long <- melt(
   variable.name = "date"
 )
 # read the shapefile
-norge_shape <- read_sf("shapefiles/kommuner_komprimert-polygon.shp")
+norge_shape <- read_sf("norge_data/shapefile_norway.shp")
+cols <- unlist(read_csv("norge_data/colnames_shapefile.csv"))
+colnames(norge_shape) <- c(cols[cols != "geometry"], "geometry")
 # read the last safed data
 norge_features <- read_csv("wrangled_data/norge_features.csv")
 # check if there is newer data available
 date_1 <- max(as.Date(as.character(norway_municipality_confirmed_long$date)))
 date_2 <- max(as.Date(norge_features$date))
 if (date_1 != date_2) {
-  # this kommune exists twice, therefore we merge the geometry
-  kommune_4602 <- norge_shape[norge_shape$kommunenum == 4602, ][1, ]
-  kommune_4602$geometry <- st_union(
-    norge_shape[norge_shape$kommunenum == 4602, ]
-  )
-  # remove the two data points
-  norge_shape <- norge_shape[norge_shape$kommunenum != 4602, ]
-  # add the new data
-  norge_shape <- rbind(norge_shape, kommune_4602)
-  # now we load the age data
   norge_demo <- read_delim("norge_data/norge_age.csv", ";")
   # extract the numbers
   norge_demo$age <- as.numeric(str_extract(norge_demo$age, "[0-9]{1,}"))
@@ -203,351 +195,6 @@ if (date_1 != date_2) {
   norge_no_shape$region.x <- NULL
   norge_no_shape$region.x <- NULL
   colnames(norge_no_shape)[32] <- "region"
-  # load the osm data
-  load("osmdata/norge_hospital.Rda")
-  load("osmdata/norge_place_of_worship.Rda")
-  load("osmdata/norge_retail.Rda")
-  load("osmdata/norge_nursing_home.Rda")
-  load("osmdata/norge_restaurant.Rda")
-  load("osmdata/norge_aerodrome.Rda")
-  load("osmdata/norge_office.Rda")
-  load("osmdata/norge_shops.Rda")
-  load("osmdata/norge_platform.Rda")
-  load("osmdata/norge_university.Rda")
-  load("osmdata/norge_college.Rda")
-  load("osmdata/norge_kindergarten.Rda")
-  load("osmdata/norge_schools.Rda")
-  load("osmdata/norge_bakery.Rda")
-  load("osmdata/norge_residential.Rda")
-  load("osmdata/norge_hairdresser.Rda")
-  load("osmdata/norge_clinic.Rda")
-  load("osmdata/norge_sport.Rda")
-  load("osmdata/norge_entertainment.Rda")
-  load("osmdata/norge_marketplace.Rda")
-  # perform all spatial matching
-  norge_shape$marketplace <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_marketplace[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$entertainment <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_entertainment[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$sport <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_sport[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$clinic <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_clinic[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$hairdresser <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_hairdresser[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$shops <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_shops[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$place_of_worship <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_place_of_worship[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$retail <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_retail[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$nursing_home <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_nursing_home[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$restaurant <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_restaurant[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$aerodrome <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_aerodrome[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$office <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_office[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$platform <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_platform[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$university <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_university[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$college <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_college[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$kindergarten <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_kindergarten[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$schools <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_schools[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$bakeries <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_bakeries[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
-  norge_shape$residential <- unlist(
-    lapply(
-      seq_len(
-        nrow(norge_shape)
-      ),
-      function(x, ...) {
-        length(
-          unlist(
-            st_intersects(
-              norge_shape[x, ],
-              norge_residential[[norge_shape$kommunenum[x]]]
-            )
-          )
-        )
-      }
-    )
-  )
   setDT(norge_shape)
   colnames(norge_shape)[1] <- "kommune_no"
   # merge it all together
@@ -574,14 +221,10 @@ if (date_1 != date_2) {
   no_geometry$higher_education <- no_geometry$college + no_geometry$university
   # safe the data
   write_csv(no_geometry, "wrangled_data/norge_features.csv")
-  write_sf(
-    st_as_sf(norge_complete)[!duplicated(norge_complete$kommune_no), ][, 1],
-    "wrangled_data/shapes_norge.shp"
-  )
   # load the data
   norge_features <- read_csv("wrangled_data/norge_features.csv")
 }
- # scale the data
+# scale the data
 norge_features[, c(17:31, 33:53, 55)] <- scale(
   norge_features[, c(17:31, 33:53, 55)]
 )
@@ -604,7 +247,7 @@ norway_municipality_confirmed_long$date <- as.Date(
 # ]
 newest_numbers <- norway_municipality_confirmed_long[
   norway_municipality_confirmed_long$date == as.Date(
-    "2021-03-24"
+    "2021-05-02"
   ),
 ]
 # remove needless variables
