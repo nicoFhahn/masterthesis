@@ -7,7 +7,7 @@ Characteristic for Bayesian statistics is the consistent use of probability dist
 The Bayesian concept of probability does not presuppose infinitely repeatable random experiments, so that Bayesian methods can be used even with small data sets. A small amount of data leads to a broad probability distribution, which is not strongly localised. \\ 
 In the Bayesian approach, the parameters of interest are treated as random variables that are governed by their parameters, for instance the mean and standard deviation, and distributions. \\
 Bayesian inference is an essential technique in mathematical statistics and the polar opposite of the frequentist approach, in which a hypothesis is tested without being assigned a probability. \\
-In the Bayesian approach a \textit{prior} distribution $\pi\left(\pmb{\theta}, \sigma^2\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\pmb{\theta}$ and $\sigma^2$ prior to obtaining the data. Using the prior distribution, the likelihood function $\pi\left(\pmb{y}|\pmb{\theta},\sigma^2\right)$, and the observed data $\pmb{y}$, it is possible to calculate the probability distribution $\pi\left(\pmb{\theta},\sigma^2\right|\pmb{y})$ of $\pmb{\theta}$ and $\sigma^2$ given the data $\pmb{y}$. This distribution is called the \textit{posterior} distribution of $\pmb{\theta}$ and $\sigma^2$ and is used to make inferences about the parameters \autocite[][6]{box2011bayesian}.
+In the Bayesian approach a \textit{prior} distribution $\pi\left(\pmb{\theta}\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\pmb{\theta}$ prior to obtaining the data. Using the prior distribution, the likelihood function $\pi\left(\pmb{y}|\pmb{\theta}\right)$, and the observed data $\pmb{y}$, it is possible to calculate the probability distribution $\pi\left(\pmb{\theta}\right|\pmb{y})$ of $\pmb{\theta}$ given the data $\pmb{y}$. This distribution is called the \textit{posterior} distribution of $\pmb{\theta}$ and is used to make inferences about the parameters \autocite[][6]{box2011bayesian}.
 \clearpage
 \section{Preliminaries}
 This work follows strict notation rules to easily represent different elements such as matrices or graphs and contains frequently used abbreviations. These and some other basic concepts used in this work are introduced below. The notation follows the one used by Rue and Held \autocite[][14--19]{rue2005gaussian}.
@@ -125,52 +125,7 @@ Let $A$ be a subset of $\mathcal{V}$. A \textit{subgraph} $\mathcal{G}^A$ is a g
     \mathcal{E}^A = \left\lbrace\left\lbrace i,j\right\rbrace\in\mathcal{A} \hbox{ and } \left\lbrace i,j\right\rbrace\in A\times A\right\rbrace.
 \end{equation*}
 Let $\mathcal{G}$ be the graph in \autoref{fig:und_graph} and $\mathcal{A}=\left\lbrace2,3\right\rbrace$, then $\mathcal{V}^A=\left\lbrace2,3\right\rbrace$ and $\mathcal{E}^A=\left\lbrace\left\lbrace 2,3\right\rbrace\right\rbrace$ \autocite[][17--18]{rue2005gaussian}.
-\subsection{The Exponential Family}
-In statistics and probability theory, the \textit{exponential family} is a parametric set of probability distributions of a specific form. The distribution of a random variable $\pmb{y}$ belongs to the exponential family if the discrete or continuous density with respect to a $\sigma$-finite measure of $\pmb{y}$ has the form
-\begin{equation}
-    f(\pmb{y}|\pmb{\theta}, \lambda)=\exp\left(\frac{\pmb{y}^T\pmb{\theta} - b(\pmb{\theta})}{\lambda}+c(\pmb{y},\lambda) \right),
-\end{equation}
-with $c(\pmb{y},\lambda)\geq 0$. 
-$\pmb{\theta}\in\Theta\subset\mathbb{R}^q$ is the \textit{natural} or \textit{canonical} parameter of the exponential family, while $\lambda > 0$ is a \textit{dispersion} or \textit{nuisance} parameter \autocite[][]{holland1981exponential}. The natural parameter space $\Theta$ is the set of all $\pmb{\theta}$ satisfying
-\begin{equation}
-    0<\int\exp\left(\left(\pmb{y}^T\pmb{\theta} - b(\pmb{\theta})\right)/\lambda+c(\pmb{y},\lambda) \right)d\pmb{y}< \infty
-\end{equation} Moreover, $b(\pmb{\theta})$ is a twice differentiable  function and all moments of $\pmb{y}$ exist. Specifically, 
-\begin{alignat}{3}
-    \mathbb{E}_{\pmb{\theta}}(\pmb{y}) &= \mu(\pmb{\theta}) =& \frac{\partial b(\pmb{\theta})}{\partial\pmb{\theta}} \\
-    \hbox{Cov}_{\pmb{\theta}}(\pmb{y}) &= \pmb{\Sigma}(\pmb{\theta}) =& \lambda\frac{\partial^2b(\pmb{\theta})}{\partial\pmb{\theta}\partial\pmb{\theta}^T}.
-\end{alignat}
-The covariance matrix $\pmb{\Sigma}(\pmb{\theta})$ is positive definite in $\Theta^0$, therefore $\mu:\Theta^0\rightarrow  M = \mu\left(\Theta^0\right)$ is injective. By substituting the inverse function $\pmb{\theta}(\mu)$ into $\frac{\partial^2b(\pmb{\theta})}{\partial\pmb{\theta}\partial\pmb{\theta}^T}$, the variance function 
-\begin{equation}
-    v(\mu)=\frac{\partial^2b(\pmb{\theta}(\mu))}{\partial\pmb{\theta}\partial\pmb{\theta}^T}
-\end{equation}
-is given and the covariance can be written as
-\begin{equation}
-    \hbox{Cov}_{\pmb{\theta}}(\pmb{y}) = \lambda v(\mu).
-\end{equation}
-Important members of the exponential family are the normal, binomial, Poisson, gamma and multivariate normal distribution \autocite[][433]{fahrmeir2013multivariate}.
-\subsection{The Multivariate Normal Distribution}
-The density of a normally distributed random variable $\pmb{y}=\left(y_1,...,y_n\right)^T, n<\infty$ with mean vector $\pmb{\mu}$ ($n\times1$) and SPD covariance matrix $\pmb{\Sigma}$ ($n\times n$) is
-\begin{equation}
-    \pi\left(\pmb{y}\right)=\left(2\pi\right)^{-n/2}|\pmb{\Sigma}|^{-1/2}\exp\left(-\frac{1}{2}\left(\pmb{y}-\pmb{\mu}\right)^T\pmb{\Sigma}^{-1}\left(\pmb{y}-\pmb{\mu}\right)\right),\hspace{5pt}\pmb{y}\in\mathbb{R}^n
-\end{equation}
-Here, $\mu_i=\mathbb{E}\left[y_i\right]$, $ \Sigma_{ij}=\hbox{Cov}\left(y_i,y_j\right)$, $ \Sigma_{ii}=\hbox{Var}\left(y_i\right) > 0$ and $\hbox{Corr}\left(y_i,y_j\right)=\Sigma_{ij}/\left(\Sigma_{ii}\Sigma_{jj}\right)^{1/2}$. This is written as $\pmb{y}\sim\mathcal{N}\left(\pmb{\mu},\pmb{\Sigma}\right)$. For $n=1$, $\mu=0$ and $\Sigma_{11}=1$ the standard normal distribution is obtained. \\
-$\pmb{y}$ is now split up into $\pmb{y}=\left(\pmb{y}_{\pmb{A}}^T,\pmb{y}_{\pmb{B}}^T\right)$ and $\pmb{\mu}$ and $\pmb{\Sigma}$ are divided accordingly:
-\begin{equation*}
-    \pmb{\mu} = \begin{pmatrix}\pmb{\mu}_{\pmb{A}} \\ \pmb{\mu}_{\pmb{B}}\end{pmatrix} \hspace{20pt}\hbox{ and }\hspace{20pt} \pmb{\Sigma}=\begin{pmatrix}\pmb{\Sigma}_{\pmb{AA}} & \pmb{\Sigma}_{\pmb{AB}}\\\pmb{\Sigma}_{\pmb{BA}} & \pmb{\Sigma}_{\pmb{BB}}\end{pmatrix}.
-\end{equation*}
-Some basic properties of the multivariate normal distribution are the following.
-\begin{itemize}
-    \item[1.] $\pmb{y}_{\pmb{A}}\sim\mathcal{N}\left(\pmb{\mu}_{\pmb{A}}, \pmb{\Sigma}_{\pmb{AA}}\right)$.
-    \item[2.] $\pmb{\Sigma}_{\pmb{AB}}=\pmb{0}$ precisely when $\pmb{y}_{\pmb{A}}$ and $\pmb{y}_{\pmb{B}}$ are independent.
-    \item[3.] The conditional distribution $\pi\left(\pmb{y}_{\pmb{A}}|\pmb{y}_{\pmb{B}}\right)$ is $\mathcal{N}\left(\pmb{\mu}_{\pmb{A}|\pmb{B}}, \pmb{\Sigma}_{\pmb{A}|\pmb{B}}\right)$, where
-    \begin{align*}
-        \pmb{\mu}_{\pmb{A}|\pmb{B}} &= \pmb{\mu}_{\pmb{A}}+\pmb{\Sigma}_{\pmb{AB}}\pmb{\Sigma}_{\pmb{BB}}^{-1}\left(\pmb{y}_{\pmb{B}}-\pmb{\mu}_{\pmb{B}}\right) \hbox{ and} \\
-        \pmb{\Sigma}_{\pmb{A}|\pmb{B}} &= \pmb{\Sigma}_{\pmb{AA}}-\pmb{\Sigma}_{\pmb{AB}}\pmb{\Sigma}_{\pmb{BB}}^{-1}\pmb{\Sigma}_{\pmb{BA}}.
-    \end{align*}
-    \item[4.] If $\pmb{y}\sim\mathcal{N}\left(\pmb{\mu}, \pmb{\Sigma}\right)$ and $\pmb{y}'\sim\mathcal{N}\left(\pmb{\mu'}, \pmb{\Sigma'}\right)$ are independent, 
-    \item[]then $\pmb{y}+\pmb{y'}\sim\mathcal{N}\left(\pmb{\mu}+ \pmb{\mu'}, \pmb{\Sigma}+ \pmb{\Sigma'}\right)$ \autocite[][19--20]{rue2005gaussian}.
-\end{itemize}
-\subsection{Calculation Summary Statistics}\label{sec:mean_iv}
+\subsection{Calculation of Summary Statistics}\label{sec:mean_iv}
 As the posterior mean and the credibility intervals of coefficient are of interest, calculation of these is performed later on. This allows a better interpretation of the results. \\
 To get the expected value given a marginal function $\pi\left(x\right)$, the expected value of a function $f\left(x\right)$ is calculated, i.e.
 \begin{equation}
@@ -179,21 +134,6 @@ To get the expected value given a marginal function $\pi\left(x\right)$, the exp
 \autocite[][]{aitkin1991posterior}.\\
 If necessary, e.g. if the target variable follows a (negative) binomial distribution, the value must be transformed to its original scale, as in these cases the log-likelihood is modelled. Therefore, in these cases, the expected value would have to be exponentiated to allow a clear interpretation. \\
 In practice, to obtain the credibility interval of a variable, the marginal values are first transformed to their original scale, if necessary, and then the 2.5\% quantile and the 97.5\% quantiles are calculated.
-\subsection{Skewness}
-Skewness is a statistical indicator that describes the type and strength of the asymmetry of a probability distribution. It shows whether and how strongly the distribution is skewed to the right (right-skewed, left-skewed, negative skewness) or to the left (left-skewed, right-skewed, positive skewness). Any non-symmetrical distribution is called skewed. \\
-The skewness of a random variable $X$ is the third standardized moment, defined as
-\begin{equation}\label{eq:skewness}
-    \hbox{Skew}[X]=\mathbb{E}\left[\left(\frac{X-\mu}{\sigma}\right)^3\right] = \frac{\mathbb{E}\left[\left(X-\mu\right)^3\right]}{\left(\mathbb{E}\left[\left(X-\mu\right)^{3/2}\right]\right)^2}=\frac{\mu_3}{\sigma^3},
-\end{equation}
-with $\mu_3$ the third central moment and $\sigma$ the standard deviation \autocite[][]{doane2011measuring, wilkins1944note}.
-\subsection{Kurtosis}
-Kurtosis is a measure of the slope of a probability distribution of a random variable. Distributions with low kurtosis scatter relatively evenly; for distributions with high kurtosis, the scatter results more from extreme but rare events. \\
-The kurtosis of a random variable $X$ is the fourth standardized moment, defined as
-\begin{equation}\label{eq:kurtosis}
-    \hbox{Kurt}[X]=\mathbb{E}\left[\left(\frac{X-\mu}{\sigma}\right)^4\right] = \frac{\mathbb{E}\left[\left(X-\mu\right)^4\right]}{\left(\mathbb{E}\left[\left(X-\mu\right)^2\right]\right)^2}=\frac{\mu_4}{\sigma^4},
-\end{equation}
-with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \autocite[][]{decarlo1997meaning, wilkins1944note}.
-\clearpage
 \section{Prior Selection}
 A key question in Bayesian analysis is the effect of the prior on the posterior, and how that effect can be measured. Do posterior distributions derived with different priors become very similar as more and more data is collected? It has been formally proven that under certain regularity conditions, the impact of the prior decreases with increasing sample size. From a practical point of view, it is more important to know what happens when the sample size $n$ is finite. In this section, different types of priors are introduced.
 \subsection{Conjugate Priors}
@@ -358,7 +298,8 @@ The algorithm always accepts values $y_t$ that lead to an increase in the ratio 
 If the Markov chain starts with a value $x^{(0)} > 0$, then $f\left(x^{(t)}\right) > 0\,\,\forall t\in\mathbb{N}$ since the values of $y$ such that $f\left(y_t\right) = 0$ will all be rejected by the algorithm. As the number of iterations $t$ increases, the distribution of saved states $x_0,...,x_t$ will converge towards the target density $f(\pmb{x})$ \autocite[][270--275]{robert2013monte}.
 \clearpage
 \section{Latent Gaussian Models and INLA}
-In recent years, a growing amount of georeferenced data has become available, leading to an increased need for appropriate statistical modeling to handle large and complex datasets. Bayesian hierarchical models have proven to be effective in capturing complex stochastic structures in spatial processes. A large proportion of these models are based on latent Gaussian models, a subclass of structured additive regression models. These models include Integrated Nested Laplace Approximations (INLA), which are a class of models used to approximate the posterior marginals of a latent Gaussian field. These approximations work by reformulating the regression model as a three-part hierarchical model. The parts are as follows:
+In recent years, a growing amount of georeferenced data has become available, leading to an increased need for appropriate statistical modeling to handle large and complex datasets. The usual approach to inference for latent Gaussian models involves the previously introduced Markov chain Monte Carlo methods. Due to several factors, these methods may perform poorly when applied to such models. One factor is the interdependence of the components of the latent field $\pmb{x}$ while another is that $\pmb{\theta}$ and $\pmb{x}$ are highly dependent on each other, especially for large $n$. The first of these problems can potentially be overcome by constructing a joint proposal based on a Gaussian approximation of the full conditional of $\pmb{x}$ \autocite[][]{gamerman1997sampling}, while the second problem requires, at least in part, a joint update of $\pmb{\theta}$ and $\pmb{x}$. There are several proposals to solve these shortcomings, but MCMC sampling continues to show poor computational speed \autocite[][322]{rue2009approximate}.\\
+Bayesian hierarchical models have proven to be effective in capturing complex stochastic structures in spatial processes. A large proportion of these models are based on latent Gaussian models, a subclass of structured additive regression models. These models include Integrated Nested Laplace Approximations (INLA), which are a class of models used to approximate the posterior marginals of a latent Gaussian field. These approximations work by reformulating the regression model as a three-part hierarchical model. The parts are as follows:
 \begin{itemize}
     \item[1.] Approximation of the posterior marginal of $\pmb{\theta}$ by using the Laplace approximation.
     \item[2.] Computation of the (simplified) Laplace approximation for selected values of $\pmb{\theta}$ to improve the Gaussian approximation.
@@ -394,8 +335,6 @@ Temporal dependence can be introduced by using $i$ in \eqref{eq:predictor} as te
 \subsubsection{Spatial and Spatio-Temporal Models}
 Similar to the previous type of model, spatial dependence can be modeled by a spatial covariate $\pmb{u}$ such that $f\left(u_s\right)=f_s$, where $s$ denotes the spatial location or region $s$. The stochastic model for $f_s$ is constructed to promote spacial smooth realisations of some sort. Popular models of this type include the Besag-York-Mollié \autocite[][]{besag1991bayesian} model with extensions for regional data, continuous indexed Gaussian models \autocite[][]{banerjee2014hierarchical} and texture models \autocite[][]{marroquin2001gauss}. The dependence between spatial and temporal covariates can be achieved either by using a spatio-temporal covariate $(s,t)$ or a corresponding spatio-temporal Gaussian field \autocite[][]{kammann2003geoadditive}.\\
 Often the final model consists of a sum of several components, e.g. a spatial component, random effects and both linear and smooth effects of some covariates. In order to separate the effects of the different components in \eqref{eq:predictor}, sometimes linear or sum-to-zero constraints can be imposed \autocite[][319--321]{rue2009approximate}.
-\subsection{The MCMC Approach to Inference}
-The usual approach to inference for latent Gaussian models involves the previously introduced Markov chain Monte Carlo methods. Due to several factors, these methods may perform poorly when applied to such models. One factor is the interdependence of the components of the latent field $\pmb{x}$ while another is that $\pmb{\theta}$ and $\pmb{x}$ are highly dependent on each other, especially for large $n$. The first of these problems can potentially be overcome by constructing a joint proposal based on a Gaussian approximation of the full conditional of $\pmb{x}$ \autocite[][]{gamerman1997sampling}, while the second problem requires, at least in part, a joint update of $\pmb{\theta}$ and $\pmb{x}$. There are several proposals to solve these shortcomings, but MCMC sampling continues to show poor computational speed \autocite[][322]{rue2009approximate}.
 \subsection{Gaussian Random Fields}
 Let $\pmb{s} = \left(s_1,...,s_n\right)^T$ be a vector of locations. A \textit{Gaussian random field} (GRF)
 \begin{equation}
@@ -430,25 +369,25 @@ Plotting the empirical semivariogram against the separation distance conveys ess
     \label{fig:semivariogram}
 \end{figure}
 The empirical semivariogram is an exploratory tool useful for assessing whether data exhibit spatial correlation. Furthermore, it can be compared to a Monte Carlo envelope of empirical semivariograms calculated from random permutations of the data while keeping the locations fixed \autocite[][]{diggle2003introduction}. If the empirical semivariogram lies outside the Monte Carlo envelope with increasing distance, this is an indication of spatial correlation.\\
-These graphs are again taken from "Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny" by Paula Moraga \autocite[][]{moraga2019geospatial}. 
-An example of a semivariogram is shown in Figure~\ref{fig:semivariogram}. This graph is taken from "Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny" by Paula Moraga \autocite[][]{moraga2019geospatial}. \\ 
-The dependence structure of a GRF is given by the covariance matrix, which is constructed from a covariance function. Matérn models and exponential functions are conventionally used for this purpose \autocite[][]{gelfand2010handbook}. For the locations $s_i, s_j\in\mathbb{R}^2$ the exponential covariance function is given by
-\begin{equation}
-\hbox{Cov}\left(Z\left(s_i\right), Z\left(s_j\right)\right)=\sigma^2\exp\left(-\kappa\left|\left|s_i-s_j\right|\right|\right),
-\end{equation}
-where the distance between the locations $s_i$ and $s_j$ is denoted by $\left|\left|s_i-s_j\right|\right|$, the variance of the spatial field is given by $\sigma^2$, while $\kappa>0$ controls the rate at which the correlation decays as the distance increases. \\
-The Matérn family represents a flexible class of covariance functions that arises naturally in a variety of scientific fields \autocite[][]{guttorp2006studies}. The Matérn covariance function is written as
-\begin{equation}
-    \hbox{Cov}\left(Z\left(s_i\right),Z\left(s_j\right)\right)=\frac{\sigma^2}{2^{\nu-1}\Gamma\left(\nu\right)}\left(\kappa\left|\left|s_i-s_j\right|\right|\right)^{\nu}K_\nu\left(\kappa\left|\left|s_i-s_j\right|\right|\right).
-\end{equation}
-$\sigma^2$ denotes the marginal variance of the spatial field, $K_\nu\left(\cdot\right)$ represents the modified Bessel function of second kind and order $\nu>0$, where $\nu$ is an integer. The mean square differentiability of the process is determined by $\nu$ and is usually fixed since it is difficult to identify in applications. For $\nu=0.5$, this covariance function is the equivalent of the exponential covariance function. $\kappa > 0$ is related to the range $\rho$, which is defined as the distance at which there is approximately no correlation between two given points, $\rho=\sqrt{8\nu}/\kappa$ to be exact \autocite[][]{cameletti2013spatio}. Examples of these two covariance functions are shown in Figure~\ref{fig:covariance}. These graphs are again taken from "Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny" by Paula Moraga \autocite[][]{moraga2019geospatial}. 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{covariancefunctions-1.png}
-    \includegraphics[width=0.8\textwidth]{covariancefunctions-2.png}
-    \caption{Covariance functions corresponding to exponential and Matérn models.}
-    \label{fig:covariance}
-\end{figure}
+An example of a semivariogram is shown in Figure~\ref{fig:semivariogram}. This graph is taken from "Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny" by Paula Moraga \autocite[][]{moraga2019geospatial}. 
+% \\ 
+% The dependence structure of a GRF is given by the covariance matrix, which is constructed from a covariance function. Matérn models and exponential functions are conventionally used for this purpose \autocite[][]{gelfand2010handbook}. For the locations $s_i, s_j\in\mathbb{R}^2$ the exponential covariance function is given by
+% \begin{equation}
+% \hbox{Cov}\left(Z\left(s_i\right), Z\left(s_j\right)\right)=\sigma^2\exp\left(-\kappa\left|\left|s_i-s_j\right|\right|\right),
+% \end{equation}
+% where the distance between the locations $s_i$ and $s_j$ is denoted by $\left|\left|s_i-s_j\right|\right|$, the variance of the spatial field is given by $\sigma^2$, while $\kappa>0$ controls the rate at which the correlation decays as the distance increases. \\
+% The Matérn family represents a flexible class of covariance functions that arises naturally in a variety of scientific fields \autocite[][]{guttorp2006studies}. The Matérn covariance function is written as
+% \begin{equation}
+%     \hbox{Cov}\left(Z\left(s_i\right),Z\left(s_j\right)\right)=\frac{\sigma^2}{2^{\nu-1}\Gamma\left(\nu\right)}\left(\kappa\left|\left|s_i-s_j\right|\right|\right)^{\nu}K_\nu\left(\kappa\left|\left|s_i-s_j\right|\right|\right).
+% \end{equation}
+% $\sigma^2$ denotes the marginal variance of the spatial field, $K_\nu\left(\cdot\right)$ represents the modified Bessel function of second kind and order $\nu>0$, where $\nu$ is an integer. The mean square differentiability of the process is determined by $\nu$ and is usually fixed since it is difficult to identify in applications. For $\nu=0.5$, this covariance function is the equivalent of the exponential covariance function. $\kappa > 0$ is related to the range $\rho$, which is defined as the distance at which there is approximately no correlation between two given points, $\rho=\sqrt{8\nu}/\kappa$ to be exact \autocite[][]{cameletti2013spatio}. Examples of these two covariance functions are shown in Figure~\ref{fig:covariance}. These graphs are again taken from "Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny" by Paula Moraga \autocite[][]{moraga2019geospatial}. 
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{covariancefunctions-1.png}
+%     \includegraphics[width=0.8\textwidth]{covariancefunctions-2.png}
+%     \caption{Covariance functions corresponding to exponential and Matérn models.}
+%     \label{fig:covariance}
+% \end{figure}
 \subsection{Gaussian Markov Random Fields}
 \subsubsection{Definition of GMRFs}
 Let $\pmb{x}=\left(x_1,...,x_n\right)^T$ be normally distributed with mean $\pmb{\mu}$ and covariance matrix $\pmb{\Sigma}$. Let $\mathcal{G}=\left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V}=\left\lbrace 1,...,\right\rbrace$ and $\mathcal{E}$ be such that there is no edge between nodes $i$ and $j$ exactly when $x_i\perp x_j|\pmb{x}_{ij}$. Then $\pmb{x}$ is a \textit{Gaussian Markov random field} (GMRF) with respect to $\mathcal{G}$. \\

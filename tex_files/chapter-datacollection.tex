@@ -9,10 +9,10 @@ As is often the case with statisticians, the construction of the dataset used to
 The Covid-19 data for Norway comes from a dataset made available to the public via the a repository on the website \href{https://www.github.com}{Github.com}, created by the user thohan88. The repository contains a daily updated dataset that is the result of combining several data sources, which include the Institute of Public Health and the Norwegian Directorate of Health. According to the author of the repository, the project is "an open-source effort to make data about the Covid-19 situation in Norway available to the public in a timely and coherent manner" \autocite[][]{thohan88}. \\
 A few sample data points from this dataset are displayed in Table~\ref{datasetNorge}.\\
 \begin{table}[H] 
-\caption{An excerpt from the Covid-19 data for Norway. Does not contain all variables.\label{datasetNorge}}
+\caption{An excerpt from the Covid-19 data for Norway. Does not contain all variables. The number of infections are the cumulative number of infections. \label{datasetNorge}}
 \begin{tabular}{l l r r r}
 \toprule
-\textbf{kommune\_no}	& \textbf{kommune\_name}	& \textbf{population}	& \textbf{2020-03-26}	& \textbf{2020-03-27}\\
+\textbf{Id}	& \textbf{Municipality}	& \textbf{Population}	& \textbf{Inf. 2020-03-26}	& \textbf{Inf. 2020-03-27}\\
 \midrule
 1103 & Stavanger & 143574 & 87 & 88 \\
 1507 & Ålesund & 66258 & 20 & 20 \\
@@ -29,7 +29,7 @@ The variable \textit{CumNumberTestedIll} contains the cumulative number of peopl
 \caption{An excerpt from the Covid-19 data for Germany. Does not contain all variables.\label{datasetGermany}}
 \begin{tabular}{l l r r r}
 \toprule
-\textbf{Landkreis}	& \textbf{Date}	& \textbf{CumNumberTestedIll} & \textbf{population}\\
+\textbf{Municipality}	& \textbf{Date}	& \textbf{Cumulative number of infections} & \textbf{Population}\\
 \midrule
 SK München & 2020-01-29 & 1 & 1471508\\
 SK München & 2020-02-03 & 2 & 1471508\\
@@ -80,7 +80,7 @@ The initial step in creating the final dataset was to convert the data from a wi
 \caption{An excerpt from the long version of the Norwegian Covid-19 data. Does not contain all variables.\label{norwayLong}}
 \begin{tabular}{l l r r r}
 \toprule
-\textbf{kommune\_no}	& \textbf{kommune\_name}	& \textbf{population} & \textbf{date} & \textbf{value}\\
+\textbf{Id}	& \textbf{Municipality}	& \textbf{Population} & \textbf{Date} & \textbf{Infections}\\
 \midrule
 1507 & Ålesund & 66258 & 2020-03-26 & 20\\
 5001 & Trondheim  & 205163  & 2020-03-26 & 113\\
@@ -97,13 +97,13 @@ If there were missing values in the covariates, these values were imputed using 
 Next, the vaccination data for Norway was loaded. As the daily number of vaccinated persons for each municipality is included in the data, these numbers only needed to be cumulated before being merged with the rest of the data based on municipality name and date. \\
 Finally, seven new variables were created:
 \begin{itemize}
-    \item[1.] expected\_count, which is the expected number of cases in each municipality.
-    \item[2.] sir, which is the standardised incidence ratio in each municipality.
-    \item[3.] idarea\_1, which is a unique ID given to each municipality.
-    \item[4.] higher\_education, which counts the number of universities and colleges in a given area.
-    \item[5.] sex, which gives the proportion of females living in a given area.
-    \item[6.] pop\_dens, i.e. the number of people per square kilometre in a given area.
-    \item[7.] urb\_dens, i.e. the number of residential buildings per square kilometre in a given area.
+    \item[1.] Expected count, which is the expected number of cases in each municipality.
+    \item[2.] SIR, which is the standardised incidence ratio in each municipality.
+    \item[3.] An area ID, which is a unique ID given to each municipality.
+    \item[4.] Higher education, which counts the number of universities and colleges in a given area.
+    \item[5.] Sex, which gives the proportion of females living in a given area.
+    \item[6.] Population density, i.e. the number of people per square kilometre in a given area.
+    \item[7.] Urban density, i.e. the number of residential buildings per square kilometre in a given area.
 \end{itemize}
 The final dataset contains the variables shown in Table~\ref{datasetNorway}.
 \begin{table}[H] 
@@ -112,53 +112,53 @@ The final dataset contains the variables shown in Table~\ref{datasetNorway}.
 \toprule
 \textbf{Variable Name}	& \textbf{Explanation}	& \textbf{Scale}\\
 \midrule
-kommune\_no & The municipality ID & None \\
-kommune\_name & The municipality name & None \\
-population & Population in a municipality & None \\
-date & The date of the data used & None \\
-value & The number of infected people & None \\
-median\_age & The median age & scaled \\
-\multirow{2}{*}{unemp\_tot} & The proportion of &\multirow{2}{*}{scaled}\\
+Id & The municipality ID & None \\
+Municipality & The municipality name & None \\
+Population & Population in a municipality & None \\
+Date & The date of the data used & None \\
+Infections & The number of infected people & None \\
+Median age & The median age & scaled \\
+\multirow{2}{*}{Total unemployment} & The proportion of &\multirow{2}{*}{scaled}\\
 & unemployed people \\
-\multirow{2}{*}{unemp\_immg} & The proportion of & \multirow{2}{*}{scaled}\\
+\multirow{2}{*}{Unemployed immigrants} & The proportion of & \multirow{2}{*}{scaled}\\
  & unemployed immigrants  \\
-\multirow{2}{*}{workers\_ft} & The number of & \multirow{2}{*}{scaled} \\
+\multirow{2}{*}{Full-time workers} & The number of & \multirow{2}{*}{scaled} \\
 & full-time workers \\
-\multirow{2}{*}{workers\_pt} & The number of & \multirow{2}{*}{scaled} \\
+\multirow{2}{*}{Part-time workers} & The number of & \multirow{2}{*}{scaled} \\
 & part-time workers \\
-\multirow{2}{*}{construction\_ft} & The number of full-time & \multirow{2}{*}{scaled} \\
+\multirow{2}{*}{Full-time construction} & The number of full-time & \multirow{2}{*}{scaled} \\
 & construction workers \\
-\multirow{2}{*}{construction\_pt} & The number of part-time & \multirow{2}{*}{scaled} \\
+\multirow{2}{*}{Part-time construction} & The number of part-time & \multirow{2}{*}{scaled} \\
 & construction workers \\
-immigrants\_total & The proportion of immigrants  & scaled \\
-marketplace & The number of marketplaces & scaled \\
-entertainment & The number of entertainment venues & scaled \\
-sport & The number of sports amenities & scaled \\
-clinic & The number of clinics & scaled \\
-hairdresser & The number of hairdresser & scaled \\
-shops & The number of shops & scaled \\
-place\_of\_worship & The number of places of worship & scaled \\
-retail & The number of retail stores & scaled \\
-nursing\_home & The number of nursing homes & scaled \\
-restaurant & The number of restaurants & scaled \\
-aerodrome & The number of aerodromes & scaled \\
-office & The number of offices & scaled \\
-\multirow{2}{*}{platform} & The number of public & \multirow{2}{*}{scaled} \\
+Total immigrants & The proportion of immigrants  & scaled \\
+Marketplace & The number of marketplaces & scaled \\
+Entertainment & The number of entertainment venues & scaled \\
+Sport & The number of sports amenities & scaled \\
+Clinic & The number of clinics & scaled \\
+Hairdresser & The number of hairdresser & scaled \\
+Shops & The number of shops & scaled \\
+Place of worship & The number of places of worship & scaled \\
+Retail & The number of retail stores & scaled \\
+Nursing home & The number of nursing homes & scaled \\
+Restaurant & The number of restaurants & scaled \\
+Aerodrome & The number of aerodromes & scaled \\
+Office & The number of offices & scaled \\
+\multirow{2}{*}{Platform} & The number of public & \multirow{2}{*}{scaled} \\
 & transport platforms \\
-kindergarten & The number of kindergartens & scaled \\
-schools & The number of schools & scaled \\
-bakeries & The number of bakeries & scaled \\
-residential & The number of residential buildings & None \\
-\multirow{2}{*}{higher\_education} & The number of colleges & \multirow{2}{*}{scaled} \\
+Kindergarten & The number of kindergartens & scaled \\
+Schools & The number of schools & scaled \\
+Bakeries & The number of bakeries & scaled \\
+Residential & The number of residential buildings & None \\
+\multirow{2}{*}{Higher education} & The number of colleges & \multirow{2}{*}{scaled} \\
 & and universities \\
-expected\_count & The expected number of infections & None \\
-sir & The standardised incidence ratio & None \\
-idarea\_1 & A unique ID & None \\
-area & The area in km$^2$ & None \\
-pop\_dens & People per km$^2$ & scaled\\
-\multirow{1}{*}{urb\_dens} &  Residential buildings per km$^2$ & scaled \\
-sex & The proportion of females & scaled \\
-vaccine\_shots & The proportion of vaccinated & scaled \\
+Expected count & The expected number of infections & None \\
+SIR & The standardised incidence ratio & None \\
+Area Id & A unique ID & None \\
+Area & The area in km$^2$ & None \\
+Population density & People per km$^2$ & scaled\\
+\multirow{1}{*}{Urban density} &  Residential buildings per km$^2$ & scaled \\
+Sex & The proportion of females & scaled \\
+Vaccinations & The proportion of vaccinated & scaled \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -172,53 +172,53 @@ The final dataset contains the variables shown in Table~\ref{finalGermany}.
 \toprule
 \textbf{Variable Name}	& \textbf{Explanation}	& \textbf{Scale}\\
 \midrule
-municipality\_id & The municipality ID & None\\
-municipality & The municipality name & None \\
-population & Population in a municipality & None \\
-date & The date of the data used & None\\
-value & The number of infected people & None \\
-trade\_tax & The trade tax in Euros & scaled \\
-income\_tax & The income tax in Euros & scaled \\
-income\_total & The income and payroll tax in Euros & scaled \\
-\multirow{2}{*}{asyl\_benefits} & The number of people & \multirow{2}{*}{scaled} \\
+Id & The municipality ID & None\\
+Municipality & The municipality name & None \\
+Population & Population in a municipality & None \\
+Date & The date of the data used & None\\
+Infections & The number of infected people & None \\
+Logarithmic trade tax & The trade tax in Euros & scaled \\
+Logarithmic income tax & The income tax in Euros & scaled \\
+Logarithmic total income & The income and payroll tax in Euros & scaled \\
+\multirow{2}{*}{Asyl benefits} & The number of people & \multirow{2}{*}{scaled} \\
 & receiving asylum seeker benefits \\
-welfare\_recipients & The number of welfare recipients & scaled \\
-unemployed\_total & The number of unemployed people & scaled \\
-unemployed\_foreigners & The number of unemployed foreigners & scaled \\
-protection\_seekers & The number of protection seekers & scaled \\
-Union & Percentage of vote for Union & scaled\\
+Welfare recipients & The number of welfare recipients & scaled \\
+Unemployed people & The number of unemployed people & scaled \\
+Unemployed foreigners & The number of unemployed foreigners & scaled \\
+Protection seekers & The number of protection seekers & scaled \\
+Die Union & Percentage of vote for Union & scaled\\
 SPD & Percentage of vote for SPD & scaled\\
-Gruene & Percentage of vote for Gruene & scaled\\
+Greens & Percentage of vote for the Greens & scaled\\
 FDP & Percentage of vote for FDP & scaled\\
-die\_linke & Percentage of vote for die Linke & scaled\\
-afd & Percentage of vote voted for AfD & scaled \\
-marketplace & The number of marketplaces & scaled \\
-entertainment & The number of entertainment venues & scaled \\
-sport & The number of sports amenities & scaled \\
-clinic & The number of clinics & scaled \\
-hairdresser & The number of hairdresser & scaled \\
-shops & The number of shops & scaled \\
-place\_of\_worship & The number of places of worship & scaled \\
-retail & The number of retail stores & scaled \\
-nursing\_home & The number of nursing homes & scaled \\
-restaurant & The number of restaurants & scaled \\
-aerodrome & The number of aerodromes & scaled \\
-office & The number of offices & scaled \\
-\multirow{2}{*}{platform} & The number of public & \multirow{2}{*}{scaled} \\
+The left & Percentage of vote for the left & scaled\\
+AfD & Percentage of vote voted for AfD & scaled \\
+Marketplace & The number of marketplaces & scaled \\
+Entertainment & The number of entertainment venues & scaled \\
+Sport & The number of sports amenities & scaled \\
+Clinic & The number of clinics & scaled \\
+Hairdresser & The number of hairdresser & scaled \\
+Shops & The number of shops & scaled \\
+Place of worship & The number of places of worship & scaled \\
+Retail & The number of retail stores & scaled \\
+Nursing home & The number of nursing homes & scaled \\
+Restaurant & The number of restaurants & scaled \\
+Aerodrome & The number of aerodromes & scaled \\
+Office & The number of offices & scaled \\
+\multirow{2}{*}{Platform} & The number of public & \multirow{2}{*}{scaled} \\
 & transport platforms \\
-kindergarten & The number of kindergartens & scaled \\
-schools & The number of schools & scaled \\
-bakeries & The number of bakeries & scaled \\
-residential & The number of residential buildings & None \\
-\multirow{2}{*}{higher\_education} & The number of colleges & \multirow{2}{*}{scaled} \\
+Kindergarten & The number of kindergartens & scaled \\
+Schools & The number of schools & scaled \\
+Bakeries & The number of bakeries & scaled \\
+Residential & The number of residential buildings & None \\
+\multirow{2}{*}{Higher education} & The number of colleges & \multirow{2}{*}{scaled} \\
 & and universities \\
-expected\_count & The expected number of infections & None \\
-sir & The standardised incidence ratio & None \\
-idarea\_1 & A unique ID & None \\
-area & The area in km$^2$ & None \\
-pop\_dens & People per km$^2$ & scaled  \\
-\multirow{1}{*}{urb\_dens} & Residential buildings per km$^2$  & scaled\\
-sex & The proportion of females & scaled \\
+Expected count & The expected number of infections & None \\
+SIR & The standardised incidence ratio & None \\
+Area Id & A unique ID & None \\
+Area & The area in km$^2$ & None \\
+Population density & People per km$^2$ & scaled  \\
+\multirow{1}{*}{Urban density} & Residential buildings per km$^2$  & scaled\\
+Sex & The proportion of females & scaled \\
 \bottomrule
 \end{tabular}
 \end{table}

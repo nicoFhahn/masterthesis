@@ -2,7 +2,30 @@
 %
 \chapter{Appendix}
 \label{sec:appendix}
-\section{Probability Distributions}
+\section{Probability Distributions and the Exponential Family}
+\subsection{The Exponential Family}
+In statistics and probability theory, the \textit{exponential family} is a parametric set of probability distributions of a specific form. The distribution of a random variable $\pmb{y}$ belongs to the exponential family if the discrete or continuous density with respect to a $\sigma$-finite measure of $\pmb{y}$ has the form
+\begin{equation}
+    f(\pmb{y}|\pmb{\theta}, \lambda)=\exp\left(\frac{\pmb{y}^T\pmb{\theta} - b(\pmb{\theta})}{\lambda}+c(\pmb{y},\lambda) \right),
+\end{equation}
+with $c(\pmb{y},\lambda)\geq 0$. 
+$\pmb{\theta}\in\Theta\subset\mathbb{R}^q$ is the \textit{natural} or \textit{canonical} parameter of the exponential family, while $\lambda > 0$ is a \textit{dispersion} or \textit{nuisance} parameter \autocite[][]{holland1981exponential}. The natural parameter space $\Theta$ is the set of all $\pmb{\theta}$ satisfying
+\begin{equation}
+    0<\int\exp\left(\left(\pmb{y}^T\pmb{\theta} - b(\pmb{\theta})\right)/\lambda+c(\pmb{y},\lambda) \right)d\pmb{y}< \infty
+\end{equation} Moreover, $b(\pmb{\theta})$ is a twice differentiable  function and all moments of $\pmb{y}$ exist. Specifically, 
+\begin{alignat}{3}
+    \mathbb{E}_{\pmb{\theta}}(\pmb{y}) &= \mu(\pmb{\theta}) =& \frac{\partial b(\pmb{\theta})}{\partial\pmb{\theta}} \\
+    \hbox{Cov}_{\pmb{\theta}}(\pmb{y}) &= \pmb{\Sigma}(\pmb{\theta}) =& \lambda\frac{\partial^2b(\pmb{\theta})}{\partial\pmb{\theta}\partial\pmb{\theta}^T}.
+\end{alignat}
+The covariance matrix $\pmb{\Sigma}(\pmb{\theta})$ is positive definite in $\Theta^0$, therefore $\mu:\Theta^0\rightarrow  M = \mu\left(\Theta^0\right)$ is injective. By substituting the inverse function $\pmb{\theta}(\mu)$ into $\frac{\partial^2b(\pmb{\theta})}{\partial\pmb{\theta}\partial\pmb{\theta}^T}$, the variance function 
+\begin{equation}
+    v(\mu)=\frac{\partial^2b(\pmb{\theta}(\mu))}{\partial\pmb{\theta}\partial\pmb{\theta}^T}
+\end{equation}
+is given and the covariance can be written as
+\begin{equation}
+    \hbox{Cov}_{\pmb{\theta}}(\pmb{y}) = \lambda v(\mu).
+\end{equation}
+Important members of the exponential family are the normal, binomial, Poisson, gamma and multivariate normal distribution \autocite[][433]{fahrmeir2013multivariate}.
 \subsection{The Normal Distribution}
 The normal distribution is an important type of continuous probability distribution in stochastics. The special significance of the normal distribution is based, among other things, on the central limit theorem, according to which distributions that result from the additive combination of a large number of independent influences are approximately normally distributed under weak conditions. \\
 The density is given by
@@ -15,6 +38,28 @@ The first two moments of the distribution are given by
     \hbox{Var}\left[X\right] &= \sigma^2.
 \end{align}
 The graph of this density function has a "bell-shaped form" and is symmetrical with $\mu$ as the centre of symmetry \autocite[][83-85]{fahrmeir2016statistik}.
+\subsection{The Multivariate Normal Distribution}
+The density of a normally distributed random variable $\pmb{y}=\left(y_1,...,y_n\right)^T, n<\infty$ with mean vector $\pmb{\mu}$ ($n\times1$) and SPD covariance matrix $\pmb{\Sigma}$ ($n\times n$) is
+\begin{equation}
+    \pi\left(\pmb{y}\right)=\left(2\pi\right)^{-n/2}|\pmb{\Sigma}|^{-1/2}\exp\left(-\frac{1}{2}\left(\pmb{y}-\pmb{\mu}\right)^T\pmb{\Sigma}^{-1}\left(\pmb{y}-\pmb{\mu}\right)\right),\hspace{5pt}\pmb{y}\in\mathbb{R}^n
+\end{equation}
+Here, $\mu_i=\mathbb{E}\left[y_i\right]$, $ \Sigma_{ij}=\hbox{Cov}\left(y_i,y_j\right)$, $ \Sigma_{ii}=\hbox{Var}\left(y_i\right) > 0$ and $\hbox{Corr}\left(y_i,y_j\right)=\Sigma_{ij}/\left(\Sigma_{ii}\Sigma_{jj}\right)^{1/2}$. This is written as $\pmb{y}\sim\mathcal{N}\left(\pmb{\mu},\pmb{\Sigma}\right)$. For $n=1$, $\mu=0$ and $\Sigma_{11}=1$ the standard normal distribution is obtained. \\
+$\pmb{y}$ is now split up into $\pmb{y}=\left(\pmb{y}_{\pmb{A}}^T,\pmb{y}_{\pmb{B}}^T\right)$ and $\pmb{\mu}$ and $\pmb{\Sigma}$ are divided accordingly:
+\begin{equation*}
+    \pmb{\mu} = \begin{pmatrix}\pmb{\mu}_{\pmb{A}} \\ \pmb{\mu}_{\pmb{B}}\end{pmatrix} \hspace{20pt}\hbox{ and }\hspace{20pt} \pmb{\Sigma}=\begin{pmatrix}\pmb{\Sigma}_{\pmb{AA}} & \pmb{\Sigma}_{\pmb{AB}}\\\pmb{\Sigma}_{\pmb{BA}} & \pmb{\Sigma}_{\pmb{BB}}\end{pmatrix}.
+\end{equation*}
+Some basic properties of the multivariate normal distribution are the following.
+\begin{itemize}
+    \item[1.] $\pmb{y}_{\pmb{A}}\sim\mathcal{N}\left(\pmb{\mu}_{\pmb{A}}, \pmb{\Sigma}_{\pmb{AA}}\right)$.
+    \item[2.] $\pmb{\Sigma}_{\pmb{AB}}=\pmb{0}$ precisely when $\pmb{y}_{\pmb{A}}$ and $\pmb{y}_{\pmb{B}}$ are independent.
+    \item[3.] The conditional distribution $\pi\left(\pmb{y}_{\pmb{A}}|\pmb{y}_{\pmb{B}}\right)$ is $\mathcal{N}\left(\pmb{\mu}_{\pmb{A}|\pmb{B}}, \pmb{\Sigma}_{\pmb{A}|\pmb{B}}\right)$, where
+    \begin{align*}
+        \pmb{\mu}_{\pmb{A}|\pmb{B}} &= \pmb{\mu}_{\pmb{A}}+\pmb{\Sigma}_{\pmb{AB}}\pmb{\Sigma}_{\pmb{BB}}^{-1}\left(\pmb{y}_{\pmb{B}}-\pmb{\mu}_{\pmb{B}}\right) \hbox{ and} \\
+        \pmb{\Sigma}_{\pmb{A}|\pmb{B}} &= \pmb{\Sigma}_{\pmb{AA}}-\pmb{\Sigma}_{\pmb{AB}}\pmb{\Sigma}_{\pmb{BB}}^{-1}\pmb{\Sigma}_{\pmb{BA}}.
+    \end{align*}
+    \item[4.] If $\pmb{y}\sim\mathcal{N}\left(\pmb{\mu}, \pmb{\Sigma}\right)$ and $\pmb{y}'\sim\mathcal{N}\left(\pmb{\mu'}, \pmb{\Sigma'}\right)$ are independent, 
+    \item[]then $\pmb{y}+\pmb{y'}\sim\mathcal{N}\left(\pmb{\mu}+ \pmb{\mu'}, \pmb{\Sigma}+ \pmb{\Sigma'}\right)$ \autocite[][19--20]{rue2005gaussian}.
+\end{itemize}
 \subsection{The Poisson Distribution}
 The Poisson distribution is a discrete probability distribution that can be used to model the number of events that occur independently of each other at a constant mean rate in a fixed time interval or spatial area. \\
 The density is given by
@@ -45,6 +90,23 @@ The first two moments of the distribution are given by
 \end{align} 
 For large values of $r$, the negative binomial distribution can be approximated by a normal distribution
 \cite{haldane1941fitting}.
+\clearpage
+\clearpage
+\section{Moments}
+\subsection{Skewness}
+Skewness is a statistical indicator that describes the type and strength of the asymmetry of a probability distribution. It shows whether and how strongly the distribution is skewed to the right (right-skewed, left-skewed, negative skewness) or to the left (left-skewed, right-skewed, positive skewness). Any non-symmetrical distribution is called skewed. \\
+The skewness of a random variable $X$ is the third standardized moment, defined as
+\begin{equation}\label{eq:skewness}
+    \hbox{Skew}[X]=\mathbb{E}\left[\left(\frac{X-\mu}{\sigma}\right)^3\right] = \frac{\mathbb{E}\left[\left(X-\mu\right)^3\right]}{\left(\mathbb{E}\left[\left(X-\mu\right)^{3/2}\right]\right)^2}=\frac{\mu_3}{\sigma^3},
+\end{equation}
+with $\mu_3$ the third central moment and $\sigma$ the standard deviation \autocite[][]{doane2011measuring, wilkins1944note}.
+\subsection{Kurtosis}
+Kurtosis is a measure of the slope of a probability distribution of a random variable. Distributions with low kurtosis scatter relatively evenly; for distributions with high kurtosis, the scatter results more from extreme but rare events. \\
+The kurtosis of a random variable $X$ is the fourth standardized moment, defined as
+\begin{equation}\label{eq:kurtosis}
+    \hbox{Kurt}[X]=\mathbb{E}\left[\left(\frac{X-\mu}{\sigma}\right)^4\right] = \frac{\mathbb{E}\left[\left(X-\mu\right)^4\right]}{\left(\mathbb{E}\left[\left(X-\mu\right)^2\right]\right)^2}=\frac{\mu_4}{\sigma^4},
+\end{equation}
+with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \autocite[][]{decarlo1997meaning, wilkins1944note}.
 \clearpage
 \section{Distribution Fits}
 \subsection{Distribution Fits for Germany}

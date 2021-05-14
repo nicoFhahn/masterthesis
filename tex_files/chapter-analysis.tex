@@ -10,23 +10,23 @@ When looking at the SIR for Germany in Figure~\ref{sirgermany}, it is noticeable
 \begin{figure}[H]
  \centering
  \includegraphics[width = 1.2\textwidth]{sir_germany.png}
- \caption{The SIR for Germany based on the data of the 24th of March 2021}
+ \caption{The SIR for Germany based on the data of the 2nd of May 2021}
  \label{sirgermany}
 \end{figure}
 \subsection{SIR for Norway}
 Looking at the standardised incidence rate for Norway in Figure~\ref{sirnorway}, a standardised incidence rate of less than 1 can be seen for most municipalities north of Trondheim. In the southern parts of Norway there are several municipalities with a rate above 1, for example the standardised incidence rate around the capital Oslo is around 2. However, the two small municipalities, Hyllestad and Ulvik, have the highest standardised incidence rate in Norway. In Hyllestad, 95 of 1328 people have been infected with Covid-19 so far, while in Ulvik, 134 of 1080 people have been infected so far. \\
-The SIR in Hyllestad is around 4.5, following an outbreak in a shipyard in autumn 2020 \cite{newspaper1}, while Ulvik has a ratio of around 8, following an outbreak of the UK variant of Covid-19. According to the head of the municipality, Hans Petter Thorbjørnsen, the infections are thought to have spread through children \cite{newspaper2}.
+The SIR in Hyllestad is around 3.4, following an outbreak in a shipyard in autumn 2020 \cite{newspaper1}, while Ulvik has a ratio of around 5.7, following an outbreak of the UK variant of Covid-19. According to the head of the municipality, Hans Petter Thorbjørnsen, the infections are thought to have spread through children \cite{newspaper2}.
 \begin{figure}[H]
  \centering
  \includegraphics[width = 1.2\textwidth]{sir_norway.png}
- \caption{The SIR for Norway based on the data of the 24th of March 2021}
+ \caption{The SIR for Norway based on the data of the 2nd of May 2021}
  \label{sirnorway}
 \end{figure}
 Because the high numbers from two small municipalities complicate the interpretation of Figure~\ref{sirnorway}, Figure~\ref{sirnorwaylog} shows the SIR on a log10 scale. On this scale, a value of 0 means that the risk of infection in a given municipality is neither lower nor higher. Values below 0 mean that the risk of infection in a municipality is lower than average, while values above 1 mean that the risk of infection in a municipality is higher than average. It is now clearer that the standardized incidence ratio is below 1 in most parts of Norway, but that there is a higher risk in the region around Oslo.
 \begin{figure}[H]
  \centering
  \includegraphics[width = 1.2\textwidth]{sir_norway_log.png}
- \caption{The log10 SIR for Norway based on the data of the 24th of March 2021}
+ \caption{The log10 SIR for Norway based on the data of the 2nd of May 2021}
  \label{sirnorwaylog}
 \end{figure}
 \clearpage
@@ -82,16 +82,16 @@ Lastly, the AIC is calculated for fitting a normal distribution to the data, a P
 \toprule
 \textbf{Country}	& \textbf{Distribution}	& \textbf{AIC} \\
 \midrule
-Germany & Normal & 8360 \\
-Germany & Poisson & 2148100 \\
-Germany & Negative Binomial & 7731 \\
-Norway & Normal & 6166 \\
-Norway & Poisson & 366181 \\
-Norway & Negative Binomial & 4086 \\
+Germany & Normal & 8619 \\
+Germany & Poisson & 2699357 \\
+Germany & Negative Binomial & 8010 \\
+Norway & Normal & 6400 \\
+Norway & Poisson & 509139 \\
+Norway & Negative Binomial & 4293 \\
 \bottomrule
 \end{tabular}
 \end{table} 
-The poor fit for the Poisson distribution can be explained by looking at the range of the number of confirmed cases in a given municipality. For Germany, this number ranges from 508 to 137634 (as of March 18, 2021), while for Norway, the number ranges from 0 to 24905 (as of March 20, 2021). This results in a mean and standard deviation for Germany of 6617 and 9014, respectively. For Norway, the values for these metrics are 236 and 1389. This is problematic because, as shown in Equation~\ref{eq:poisson_exp} and Equation~\ref{eq:poisson_var}, for a Poisson distribution the expected value and the variance should be equal. \\
+The poor fit for the Poisson distribution can be explained by looking at the range of the number of confirmed cases in a given municipality. For Germany, this number ranges from 697 to 169021 (as of May 2, 2021), while for Norway, the number ranges from 0 to 34654 (as of May 2, 2021). This results in a mean and standard deviation for Germany of 8550 and 11204, respectively. For Norway, the values for these metrics are 326 and 1930. This is problematic because, as shown in Equation~\ref{eq:poisson_exp} and Equation~\ref{eq:poisson_var}, for a Poisson distribution the expected value and the variance should be equal. \\
 Looking at a histogram for the confirmed number of cases and overlaying the densities of a normal, Poisson and a negative binomial distribution helps to confirm the choice of a negative binomial distribution as the distribution that the data most closely resembles. Figure~\ref{fitDistrGermany} and Figure~\ref{fitDistrNorway} both show that a negative binomial distribution fits the data better than a normal distribution. Due to the high values for the AIC, the Poisson distribution is excluded from these graphics.
 \begin{figure}[H]
   \centering
@@ -110,32 +110,32 @@ Looking at a histogram for the confirmed number of cases and overlaying the dens
 To establish a baseline, a look is first taken at models that do not include a spatial effect. This way, it can be observed how the means and credibility intervals of the covariates change when a spatial effect is added to a model and how the performance of the model changes with respect to the goodness-of-fit indicators introduced in Section~\ref{sec:performance}. \\
 Before computing the models, using the $\hbox{VIF}$ introduced in Section~\ref{sec:vif}, predictors are removed if their $\hbox{VIF}$ is above 5. To do this, a GLM is first run on all variables, followed by the calculation of $\hbox{VIF}$. Then the variable with the highest value is removed before running the model again with all remaining variables. This process is repeated until only variables with a $\hbox{VIF}$ of less than 5 remain. \\
 In sections~\ref{sec:nospatial_germany} and~\ref{sec:nospatial_norway} the results of these models are presented. Their goodness-of-fit indicators as well as the coefficients together with their credibility intervals calculated as in section~\ref{sec:mean_iv} are reported. \\
-These models are based on data from 24 March 2021, when 2,695,037 people were infected with Covid-19 in Germany, while 87,537 people were infected in Norway. The five municipalities with the most infections in Germany are shown in Table~\ref{top5germany} and in Table~\ref{top5norway} for Norway.
+These models are based on data from 2 May 2021, when 3,428,487 people were infected with Covid-19 in Germany, while 87,537 people were infected in Norway. The five municipalities with the most infections in Germany are shown in Table~\ref{top5germany} and in Table~\ref{top5norway} for Norway.
 \begin{table}[H] 
-\caption{The German municipalities with the most infections as of March 24th 2021. \label{top5germany}}
+\caption{The German municipalities with the most infections as of May 2nd 2021. \label{top5germany}}
 \begin{tabular}{l r r}
 \toprule
 \textbf{Municipality}	& \textbf{Population}	& \textbf{Number of infections} \\
 \midrule
-SK Berlin & 3644826 & 141639  \\   
-SK Hamburg & 1841179 & 58661  \\
-SK Munich & 1471508 & 57690  \\
-SK Cologne & 1085664 & 37592  \\
-Region Hannover & 1157624 & 36241  \\
+SK Berlin & 3644826 & 169021  \\   
+SK Hamburg & 1841179 & 72595  \\
+SK Munich & 1471508 & 68762  \\
+SK Cologne & 1085664 & 48831  \\
+Region Hannover & 1157624 & 45043  \\
 \bottomrule
 \end{tabular}
 \end{table}
 \begin{table}[H] 
-\caption{The Norwegian municipalities with the most infections as of March 24th 2021. \label{top5norway}}
+\caption{The Norwegian municipalities with the most infections as of May 2nd 2021. \label{top5norway}}
 \begin{tabular}{l r r r}
 \toprule
 \textbf{Municipality}	& \textbf{Population}	& \textbf{Number of infections} &\textbf{\% first vaccine shot} \\
 \midrule
-Oslo & 693494 & 26151 & 14.1\%\\
-Bergen & 283929 & 4738 & 13.8\%\\
-Drammen & 101386 & 3149 & 15.3\%\\
-Bærum & 127731 & 2834 & 13.8\%\\
-Lillestrøm & 85983 & 2779 & 12.8\%\\
+Oslo & 693494 & 34654 & 32.7\%\\
+Bergen & 283929 & 6039 & 30.0\%\\
+Drammen & 101386 & 4097 & 34.1\%\\
+Bærum & 127731 & 3860 & 31.7\%\\
+Lillestrøm & 85983 & 3819 & 30.2\%\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -147,7 +147,7 @@ Table~\ref{allGermany_nospatial} contains the performance measures for the basel
 \toprule
 \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-5483 & 5485 & -2769 & 182896 \\
+5595 & 5598 & -2816 & 182174 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -157,29 +157,30 @@ Table~\ref{allGermany_nospatial} contains the performance measures for the basel
 \toprule
 \textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -0.04558 & 0.9555 & 0.9303 & 0.9815 & $^*$\\
-afd & 0.1674 & 1.185 & 1.043 & 1.340 & $^*$\\
-pop\_dens & 0.1579 & 1.171 & 1.116 & 1.229 & $^*$\\
-log & \multirow{2}{*}{0.07761} & \multirow{2}{*}{1.081} & \multirow{2}{*}{1.032} & \multirow{2}{*}{1.132} & \multirow{2}{*}{$^*$}\\
-trade\_tax \\
-sex & 0.03181 & 1.032 & 0.9979 & 1.068 & \\
-platform & 0.02898 & 1.030 & 0.9772 & 1.085 \\
-higher\_ & \multirow{2}{*}{0.02166} & \multirow{2}{*}{1.022} & \multirow{2}{*}{0.9819} & \multirow{2}{*}{1.065} \\
-education\\
-Union & 0.007963 & 1.011 & 0.8684 & 1.170\\
-urb\_dens & 0.003826 & 1.004 & 0.9660 & 1.044 \\
-FDP & 0.003800 & 1.004 & 0.9662 & 1.043 \\
-aerodrome & -0.003584 & 0.9965 & 0.9719 & 1.024 \\
-clinic & -0.003633 & 0.9968 & 0.9450 & 1.052 \\
-nursing\_ & \multirow{2}{*}{-0.009224} & \multirow{2}{*}{0.9910} & \multirow{2}{*}{0.9597} & \multirow{2}{*}{1.033} \\
-home\\
-place\_of\_ & \multirow{2}{*}{-0.009957} & \multirow{2}{*}{0.9903} & \multirow{2}{*}{0.9486} & \multirow{2}{*}{1.033} \\
+(Intercept) & -0.1494 & 0.9602 & 0.9363 & 0.9846 & $^*$\\
+AfD & 0.1788 & 1.198 & 1.062 & 1.346 & $^*$\\
+Population & \multirow{2}{*}{0.1567} & \multirow{2}{*}{1.170} & \multirow{2}{*}{1.117} & \multirow{2}{*}{1.226} & \multirow{2}{*}{$^*$}\\
+density \\
+Logarithmic & \multirow{2}{*}{0.08418} & \multirow{2}{*}{1.088} & \multirow{2}{*}{1.041} & \multirow{2}{*}{1.136} & \multirow{2}{*}{$^*$}\\
+trade tax \\
+Platform & 0.03655 & 1.038 & 0.9880 & 1.089 \\
+Die Union & 0.03169 & 1.035 & 0.8967 & 1.188\\
+Higher & \multirow{2}{*}{0.01797} & \multirow{2}{*}{1.018} & \multirow{2}{*}{0.9806} & \multirow{2}{*}{1.058} \\
+Education\\
+Sex & 0.01615 & 1.016 & 0.9843 & 1.049 & \\
+Urban density & 0.008459 & 1.009 & 0.9725 & 1.047 \\
+FDP & 0.007239 & 1.007 & 0.9722 & 1.044 \\
+Place of & \multirow{2}{*}{-0.003902} & \multirow{2}{*}{0.9963} & \multirow{2}{*}{0.9549} & \multirow{2}{*}{1.039} \\
 worship\\
-office & -0.02750 & 0.9732 & 0.9294 & 1.020 \\
-marketplace & -0.03931 & 0.9619 & 0.9060 & 1.020 \\
-SPD & -0.09923 & 0.9063 & 0.8357 & 0.9809 & $^*$\\
-die\_linke & -0.1435 & 0.8655 & 0.7964 & 0.9389 & $^*$\\
-Gruene & -0.1681 & 0.8473 & 0.7383 & 0.9677 & $^*$\\
+Nursing & \multirow{2}{*}{-0.01245} & \multirow{2}{*}{0.9878} & \multirow{2}{*}{0.9586} & \multirow{2}{*}{1.018} \\
+home\\
+Clinic & -0.01257 & 0.9878 & 0.9396 & 1.039 \\
+Aerodrome & -0.01432 & 0.9859 & 0.9542 & 1.019 \\
+Office & -0.02943 & 0.9712 & 0.9304 & 1.015 \\
+Marketplace & -0.04434 & 0.9570 & 0.9048 & 1.011 \\
+SPD & -0.08652 & 0.9178 & 0.8502 & 0.9890 & $^*$\\
+The left & -0.1173 & 0.8900 & 0.8231 & 0.9610 & $^*$\\
+Greens & -0.1494 & 0.8630 & 0.7575 & 0.9789 & $^*$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -190,7 +191,7 @@ Table~\ref{allNorway_nospatial} contains the performance measures for the baseli
 \begin{tabular}{r r r r}
 \toprule\textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-2812 & 2816 & -1642 & 7573 \\
+2830 & 2835 & -1689 & 7986 \\
 \bottomrule
 \end{tabular}
 \end{table} 
@@ -200,26 +201,27 @@ Table~\ref{allNorway_nospatial} contains the performance measures for the baseli
 \toprule
 \textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -0.8312 & 0.4360 & 0.3987 & 0.4767 & $^*$ \\
-immigrants\_ & \multirow{2}{*}{0.2276}& \multirow{2}{*}{1.259}& \multirow{2}{*}{1.097}& \multirow{2}{*}{1.438}& \multirow{2}{*}{$^*$}\\
-total \\
-unemp\_ & \multirow{2}{*}{0.2212} & \multirow{2}{*}{1.251} & \multirow{2}{*}{1.067} & \multirow{2}{*}{1.465} & \multirow{2}{*}{$^*$} \\
-immg\\
-urb\_dens & 0.1917 & 1.215 & 1.044 & 1.431 & $^*$ \\
-unemp\_tot & 0.09610 & 1.107 & 0.8920 & 1.365 \\
-platform & 0.04379 & 1.048 & 0.9079 & 1.212 \\
-marketplace & 0.03919 & 1.041 & 0.9499 & 1.152 \\
-median\_age & 0.02467 & 1.027 & 0.9101 & 1.155 \\
-nursing\_ & \multirow{2}{*}{0.01579} & \multirow{2}{*}{1.017} & \multirow{2}{*}{0.9361} & \multirow{2}{*}{1.121} \\
-home\\
-higher\_ & \multirow{2}{*}{0.008634}& \multirow{2}{*}{1.010}& \multirow{2}{*}{0.9298}& \multirow{2}{*}{1.112}\\ 
+(Intercept) & -0.8305 & 0.4363 & 0.3994 & 0.4764 & $^*$ \\
+Unemployed & \multirow{2}{*}{0.2291} & \multirow{2}{*}{1.262} & \multirow{2}{*}{1.077} & \multirow{2}{*}{1.475} & \multirow{2}{*}{$^*$} \\
+immigrants\\
+Total & \multirow{2}{*}{0.2080}& \multirow{2}{*}{1.234}& \multirow{2}{*}{1.079}& \multirow{2}{*}{1.407}& \multirow{2}{*}{$^*$}\\
+immigrants \\
+Urban density & 0.1881 & 1.211 & 1.049 & 1.413 & $^*$ \\
+Total & \multirow{2}{*}{0.1119} & \multirow{2}{*}{1.125} & \multirow{2}{*}{0.9094} & \multirow{2}{*}{1.382} \\
+unemployment \\
+Vaccinations & 0.07299 & 1.078 & 0.9600 & 1.206\\
+Marketplace & 0.04402 & 1.046 & 0.9526 & 1.159 \\
+Platform & 0.03983 & 1.043 & 0.9070 & 1.204 \\
+Higher & \multirow{2}{*}{0.02369}& \multirow{2}{*}{1.025}& \multirow{2}{*}{0.9429}& \multirow{2}{*}{1.129}\\ 
 education \\
-vaccine\_shots & -0.01745 & 0.9848 & 0.8645 & 1.114\\
-place\_of\_ & \multirow{2}{*}{-0.03233}& \multirow{2}{*}{0.9710}& \multirow{2}{*}{0.8373}& \multirow{2}{*}{1.128} \\
+Nursing & \multirow{2}{*}{0.01011} & \multirow{2}{*}{1.011} & \multirow{2}{*}{0.9302} & \multirow{2}{*}{1.115} \\
+home\\
+Place of\_ & \multirow{2}{*}{-0.02375}& \multirow{2}{*}{0.9793}& \multirow{2}{*}{0.8456}& \multirow{2}{*}{1.136} \\
 worship \\
-sex & -0.1435 & 0.8679 & 0.7706 & 0.9739 & $^*$ \\
-office & -0.1439 & 0.8689 & 0.7419 & 1.019 \\
-aerodrome & -0.1928 & 0.8269 & 0.7031 & 0.9369 & $^*$ \\
+Median age & -0.04400 & 0.9588 & 0.8480 & 1.079 \\
+Aerodrome & -0.1276 & 0.8812 & 0.8022 & 0.9682 & $^*$ \\
+Office & -0.1536 & 0.8604 & 0.7359 & 1.008 \\
+Sex & -0.1644 & 0.8499 & 0.7559 & 0.9524 & $^*$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -233,8 +235,8 @@ To check whether there is spatial autocorrelation, Moran's I, introduced in Sect
 \toprule
 \textbf{Country} & \textbf{Moran's I}	& \textbf{$\mathbb{E}\left[I\right]$}	& \textbf{p-Value} \\
 \midrule
-Germany & 0.1047 & -0.002500 & < 0.01 \\
-Norway & 0.1085 & -0.002817 & < 0.01 \\
+Germany & 0.1096 & -0.002500 & < 0.01 \\
+Norway & 0.1083 & -0.002817 & < 0.01 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -248,10 +250,10 @@ The best performance of all models, in terms of MAE, was observed for the BYM2 m
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE}\\
 \midrule
-No spatial & 5483 & 5485 & -2769 & 182896 \\
-Besag& 4746 & 4734 & -2739 & 179454\\
-BYM2 & 4632 & 4617 & -2717 & 179417\\
-Leroux & 4734 & 4740 & -2915 & 184903 \\
+No spatial & 5595 & 5598 & -2816 & 182174 \\
+Besag& 4832 & 4875 & -2802 & 179229\\
+BYM2 & 4732 & 4705 & -2751 & 179181\\
+Leroux & 4818 & 4882 & -2919 & 184348 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -269,33 +271,34 @@ The values of the coefficients and credibility intervals are shown in Table~\ref
 \toprule
 \textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -0.07877 & 0.9243 & 0.9128 & 0.9361 & $^*$\\
-afd & 0.2092 & 1.235 & 1.093 & 1.390 & $^*$\\
-pop\_dens & 0.09926 & 1.105 & 1.058 & 1.152 & $^*$\\
-log & \multirow{2}{*}{0.05640} & \multirow{2}{*}{1.058} & \multirow{2}{*}{1.023} & \multirow{2}{*}{1.094} & \multirow{2}{*}{$^*$}\\
-trade\_tax \\
-aerodrome & 0.01133 & 1.011 & 0.9943 & 1.029 \\
-marketplace & 0.01008 & 1.010 & 0.9679 & 1.054 \\
-platform & 0.004396 & 1.005 & 0.9640 & 1.046 \\
-nursing\_ & \multirow{2}{*}{0.002161} & \multirow{2}{*}{1.002} & \multirow{2}{*}{0.9794} & \multirow{2}{*}{1.025} \\
-home\\
-Union & 0.002024 & 1.005 & 0.8636 & 1.162\\
-clinic & 0.001086 & 1.001 & 0.9630 & 1.041 \\
-urb\_dens & -0.0008993 & 0.9992 & 0.9692 & 1.030 \\
-sex & -0.003978 & 1.032 & 0.9674 & 1.025 & \\
-office & -0.005478 & 0.9947 & 0.9601 & 1.030 \\
-place\_of\_ & \multirow{2}{*}{-0.009868} & \multirow{2}{*}{0.9903} & \multirow{2}{*}{0.9570} & \multirow{2}{*}{1.024} \\
-worship\\
-higher\_ & \multirow{2}{*}{-0.01749} & \multirow{2}{*}{0.9828} & \multirow{2}{*}{0.9491} & \multirow{2}{*}{1.017} \\
-education\\
-SPD & -0.02298 & 0.9785 & 0.8874 & 1.076\\
-FDP & -0.03763 & 0.9633 & 0.921& 1.006 \\
-Gruene & -0.05887 & 0.9450 & 0.8250 & 1.077 \\
-die\_linke & -0.06719 & 0.9361 & 0.8510 & 1.027\\
+(Intercept) & -0.07023 & 0.9322 & 0.9214 & 0.9433 & $^*$\\
+AfD & 0.2200 & 1.248 & 1.114 & 1.393 & $^*$\\
+Population & \multirow{2}{*}{0.1058} & \multirow{2}{*}{1.112} & \multirow{2}{*}{1.068} & \multirow{2}{*}{1.157} & \multirow{2}{*}{$^*$}\\
+density \\
+Logarithmic & \multirow{2}{*}{0.06494} & \multirow{2}{*}{1.067} & \multirow{2}{*}{1.034} & \multirow{2}{*}{1.101} & \multirow{2}{*}{$^*$}\\
+Trade tax \\
+Die Union & 0.02625 & 1.029 & 0.8937 & 1.179\\
+Platform & 0.01619 & 1.017 & 0.9781 & 1.056 \\
+Aerodrome & 0.01192 & 1.012 & 0.9894 & 1.035 \\
+Marketplace & 0.003678 & 1.004 & 0.9646 & 1.044 \\
+Urban density & 0.003663 & 1.004 & 0.9756 & 1.032 \\
+Nursing& \multirow{2}{*}{-0.003431} & \multirow{2}{*}{0.9966} & \multirow{2}{*}{0.9754} & \multirow{2}{*}{1.018} \\
+Home\\
+Clinic & -0.004643 & 0.9955 & 0.9600 & 1.032 \\
+SPD & -0.006260 & 0.9948 & 0.9080 & 1.085\\
+Office & -0.01021 & 0.9900 & 0.9578 & 1.023 \\
+Higher & \multirow{2}{*}{-0.01335} & \multirow{2}{*}{0.9869} & \multirow{2}{*}{0.9551} & \multirow{2}{*}{1.019} \\
+Education\\
+Sex & -0.01359 & 0.9866 & 0.9601 & 1.014 & \\
+Place of & \multirow{2}{*}{-0.01497} & \multirow{2}{*}{0.9853} & \multirow{2}{*}{0.9532} & \multirow{2}{*}{1.018} \\
+Worship\\
+FDP & -0.03553 & 0.9653 & 0.9271& 1.005 \\
+The left & -0.04276 & 0.9591 & 0.8776 & 1.046\\
+Greens & -0.05333 & 0.9500 & 0.8372 & 1.073 \\
 \bottomrule
 \end{tabular}
 \end{table}
-For the hyperparameters, a value of 16.19 is reported for the precision and a value of 0.9036 for $\phi$. Hence, 90.36\% of the marginal variance is explained by the structured effect. Therefore, this model is far from reducing to pure overdispersion and comes close to a Besag model, which is also reflected in the similar values of the goodness-of-fit indicators in Table~\ref{allGermany}.
+For the hyperparameters, a value of 18.61 is reported for the precision and a value of 0.9032 for $\phi$. Hence, 90.32\% of the marginal variance is explained by the structured effect. Therefore, this model is far from reducing to pure overdispersion and comes close to a Besag model, which is also reflected in the similar values of the goodness-of-fit indicators in Table~\ref{allGermany}.
 \subsection{Spatial Models for Norway}
 Comparing the performance of the models, the spatial models again showed better performance in terms of DIC and WAIC and this time also significantly better performance in terms of CPO. However, the model without the spatial component showed better predictive performance, as indicated by the lowest value for the MAE in Table~\ref{allNorway}. This could indicate that neighbourhood effects are not as strong in Norway as in Germany.
 \begin{table}[H] 
@@ -304,10 +307,10 @@ Comparing the performance of the models, the spatial models again showed better 
 \toprule
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
 \midrule
-No spatial & 2812 & 2816 & -1642 & 7573 \\
-Besag & 2807 & 2813 & -1915 & 7731 \\
-BYM2 & 2774 & 2781 & -3903 & 7794\\
-Leroux & 2338 & 2314 & -5449 & 8138\\
+No spatial & 2830 & 2835 & -1689 & 7986 \\
+Besag & 2824 & 2830 & -2099 & 8186 \\
+BYM2 & 2780 & 2787 & -4387 & 8344\\
+Leroux & 2359 & 2340 & -4820 & 8691\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -325,30 +328,31 @@ The values of the coefficients and credibility intervals are shown in Table~\ref
 \toprule
 \textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
 \midrule
-(Intercept) & -0.9280 & 0.3961 & 0.3512 & 0.4433 & $^*$ \\
-urb\_dens & 0.1995 & 1.224 & 1.059 & 1.425 & $^*$ \\
-immigrants\_ & \multirow{2}{*}{0.1975}& \multirow{2}{*}{1.221}& \multirow{2}{*}{1.064}& \multirow{2}{*}{1.397}& \multirow{2}{*}{$^*$}\\
-total \\
-unemp\_ & \multirow{2}{*}{0.1867} & \multirow{2}{*}{1.210} & \multirow{2}{*}{1.016} & \multirow{2}{*}{1.431} & \multirow{2}{*}{$^*$} \\
-immg\\
-unemp\_tot & 0.09715 & 1.108 & 0.9005 & 1.351 \\
-platform & 0.05346 & 1.058 & 0.9123 & 1.224 \\
-marketplace & 0.04769 & 1.050 & 0.9566 & 1.158 \\
-nursing\_ & \multirow{2}{*}{0.02157} & \multirow{2}{*}{1.023} & \multirow{2}{*}{0.9379} & \multirow{2}{*}{1.124} \\
-home\\
-higher\_ & \multirow{2}{*}{0.002974}& \multirow{2}{*}{1.004}& \multirow{2}{*}{0.9169}& \multirow{2}{*}{1.107}\\ 
+(Intercept) & -0.9387 & 0.3919 & 0.3448 & 0.4397 & $^*$ \\
+Urban density & 0.2001 & 1.225 & 1.064 & 1.415 & $^*$ \\
+Unemployed & \multirow{2}{*}{0.1851} & \multirow{2}{*}{1.208} & \multirow{2}{*}{1.017} & \multirow{2}{*}{1.425} & \multirow{2}{*}{$^*$} \\
+immigrants\\
+Total & \multirow{2}{*}{0.1825}& \multirow{2}{*}{1.203}& \multirow{2}{*}{1.052}& \multirow{2}{*}{1.371}& \multirow{2}{*}{$^*$}\\
+immigrants \\
+Total & \multirow{2}{*}{0.1145}& \multirow{2}{*}{1.127}& \multirow{2}{*}{0.9209}& \multirow{2}{*}{1.367}\\
+unemployment \\
+Vaccinations & 0.07554 & 1.080 & 0.9592 & 1.211\\
+Marketplace & 0.04588 & 1.048 & 0.9546 & 1.156 \\
+Platform & 0.04438 & 1.048 & 0.9053 & 1.211\\
+Higher & \multirow{2}{*}{0.02068}& \multirow{2}{*}{1.022}& \multirow{2}{*}{0.9312}& \multirow{2}{*}{1.128}\\ 
 education \\
-vaccine\_shots & 0.0006441 & 1.003 & 0.8772 & 1.136\\
-place\_of\_ & \multirow{2}{*}{-0.01238}& \multirow{2}{*}{0.9908}& \multirow{2}{*}{0.8484}& \multirow{2}{*}{1.156} \\
+Nursing & \multirow{2}{*}{0.01626} & \multirow{2}{*}{1.017} & \multirow{2}{*}{0.9326} & \multirow{2}{*}{1.117} \\
+home\\
+Place of & \multirow{2}{*}{-0.002547}& \multirow{2}{*}{1.001}& \multirow{2}{*}{0.8572}& \multirow{2}{*}{1.166} \\
 worship \\
-median\_age & -0.04544 & 0.9576 & 0.8425 & 1.084 \\
-office & -0.1579 & 0.8571 & 0.7230 & 1.010 \\
-aerodrome & -0.1709 & 0.8453 & 0.7155 & 0.9606 & $^*$ \\
-sex & -0.1766 & 0.8396 & 0.7458 & 0.9417 & $^*$ \\
+Median age& -0.1054 & 0.9018 & 0.7939 & 1.020 \\
+Aerodrome & -0.3110 & 0.8783 & 0.7968 & 0.9664 & $^*$ \\
+Office & -0.1641 & 0.8518 & 0.7187 & 1.003 \\
+Sex & -0.2022 & 0.8184 & 0.7285 & 0.9158 & $^*$ \\
 \bottomrule
 \end{tabular}
 \end{table}
-For the hyperparameters, a value of 6.568 is reported for the precision and a value of 0.1227 for $\phi$. Hence, 12.27\% of the marginal variance is explained by the structured effect. Therefore, this model is close to pure overdispersion.
+For the hyperparameters, a value of 5.398 is reported for the precision and a value of 0.1295 for $\phi$. Hence, 12.95\% of the marginal variance is explained by the structured effect. Therefore, this model is close to pure overdispersion.
 \clearpage
 \section{Choice of Hyperpriors}
 As can be seen in Equation~\ref{pcprec}, there is flexibility when it comes to choosing the values for the standard deviation $\sigma_0$ as well as the probability $\alpha$. Therefore, an upper bound for the standard deviation can be chosen as well as the weight placed on this "tail event", describing how informative the resulting prior is. \\
@@ -476,7 +480,7 @@ place\_of\_ & \multirow{2}{*}{-0.007753} & \multirow{2}{*}{0.9925} & \multirow{2
 worship\\
 sex & -0.01148 & 0.9887 & 0.0.9565 & 1.022 \\
 marketplace & -0.01395 & 0.9865 & 0.9340 & 1.041 \\
-Gruene & -0.02903 & 0.9718 & 0.9188 & 1.027\\
+Greens & -0.02903 & 0.9718 & 0.9188 & 1.027\\
 SPD & -0.06109 & 0.9410 & 0.8944 & 0.9892 & $^*$ \\
 die\_linke & -0.1081 & 0.8980 & 0.8471 & 0.9508& $^*$ \\
 \bottomrule

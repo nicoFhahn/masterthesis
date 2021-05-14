@@ -46,53 +46,53 @@ Projected CRS are based on Cartesian coordinates on an implicitly flat surface a
 This transition always entails some distortion, skewing some of the properties of the earth's surface, such as area, direction, distance and shape. Generally, the name of a projection is based on a property it preserves, e.g. equal area projection preserves area, equidistant projection preserves distance and conformal projection preserves local shape. \\
 Again, subgroups exist in projection coordinate systems, \textit{conic}, \textit{cylindrical} and \textit{planar} projections. In a conic projection, the earth's surface is projected onto a cone along one or two tangent lines. Along these lines the distortions are minimised and increase with the distance to the lines. The projection is therefore best suited for maps of mid-latitude areas. Cylindrical projections map the surface onto a cylinder. These types of projections can be created by touching the surface of the Earth along one or two tangent lines. They are often used to map the entire Earth. A planar projection projects data onto a flat surface that touches the globe at a point or along a tangent line, and is typically used in mapping polar projections \autocite[][]{lovelace2019geocomputation}.
 \clearpage
-\section{Spatial Point Processes}
-A stochastic process that describes the location of particular events/points that occur in a region is known as a point process. The number of points as well as the location of the points are random. An example of a point process would be the number of earthquakes and their locations.
-\subsection{Fundamentals of Point Processes}
-Let $Z$ be a random, at most countable set of points in a space $\mathbb{X}$, for example $\mathbb{R}^d$. Ignoring measurability issues, $Z$ can be thought of as a mapping $\omega\mapsto Z\left(\omega\right)$ from $\Omega$ into the set of countable subsets of $\mathbb{X}$, where $\left(\Omega, \mathcal{F}, \mathbb{P}\right)$ defines an underlying probability space. $Z$ can then be identified with the family of mappings
-\begin{equation}
-    \omega\mapsto\eta\left(\omega, B\right):=\hbox{card}\left(z(\omega)\cap B\right), \hspace{20pt}B\subset\mathbb{X},
-\end{equation}
-which counts the number of points from $Z$ in $B$. For any fixed $\omega\in\Omega$, $\eta\left(\omega,\cdot\right)$ is the counting measure supported by $Z\left(\omega\right)$ \autocite[][]{cox1980point}. \\
-For a general definition of a point process, let $\left(\mathbb{X}, \mathcal{X}\right)$ be a measurable space and let $N_{<\infty}\left(\mathbb{X}\right)\equiv N_{<\infty}$ be the space of all measures $\mu$ on $\mathbb{X}$ such that $\mu(B)\in\mathbb{N}_0: =\mathbb{N}\cup\lbrace0\rbrace\,\forall B\in\mathcal{X}$. Let $N\left(\mathbb{X}\right)\equiv N$ be the space of all measures describable as a countable sum of measures from $N_{<\infty}$, for example the \textit{zero measure} 0 which is equal to $0$ on $\mathcal{X}$. In general, any sequence $\left(x_n\right)_{n=1}^k$ of elements of $\mathbb{X}$, where $k\in\overline{\mathbb{N}}:=\mathbb{N}\cup\lbrace\infty\rbrace$ denotes the number of terms in the sequence, can be used to define a measure
-\begin{align}
-    \mu&=\sum_{n=1}^k\delta_{x_n}. \label{eq:measure} \\
-    \Rightarrow\mu\left(B\right)&=\sum_{n=1}^k\pmb{1}_B\left(x_n\right),\hspace{20pt} B\in\mathcal{X}. \nonumber
-\end{align}
-More generally, for any measurable $f:\mathbb{X}\rightarrow\left[0,\infty\right]$,
-\begin{equation}
-    \int fd\mu=\sum_{n=1}^kf\left(x_n\right)
-\end{equation}
-For $k=0$ in \eqref{eq:measure}, $\mu$ is equal to the zero measure. The point set $\pmb{x}=\left(x_1,...,x_n\right)^T$ is said to be not pairwise different and if $x_i=x_j$ with $i\neq j$, $\mu$ is said to have multiplicities. The multiplicity of $x_i$ is equal to the number
-\begin{equation*}
-    \hbox{card}\left\lbrace j\leq k:x_j=x_i\right\rbrace.
-\end{equation*}
-Any $\mu$ of the form \eqref{eq:measure} is interpreted as a counting measure with possible multiplicities, but in general it cannot be guaranteed that every $\mu\in N$ can be written in this particular form. \\
-A point process $\eta$ on $\mathbb{X}$ is called \textit{proper point process} if random elements $X_1,X_2,...\hbox{exist} \in \mathbb{X}$ and a $\overline{\mathbb{N}}_0$-valued random variable $\kappa$ such that almost surely
-\begin{equation}
-    \eta=\sum_{n=1}^{\kappa}\delta_{X_n}.
-\end{equation}
-For $\kappa=0$ this is the zero measure on $\mathbb{X}$. \\
-This terminology is motivated by the intuition that a point process is a (random) set of points, rather than an integer measure. A proper point process fits this intuition better, since it can be interpreted as a countable set of points in $\mathbb{X}$ \autocite[][9--12]{last2017lectures}.
-\subsection{Poisson Processes}
-Poisson processes are defined by the fact that the number of points in a given set follows a Poisson distribution. Furthermore, the numbers of points in disjoint sets are stochastically independent. \\
-In application, Poisson processes are used in a wide range of fields, including biology, economics and image processing. \\
-Let $\lambda$ be an $s$-finite measure on $\mathbb{X}$. Let a \textit{Poisson process} with intensity measure $\lambda$ be defined as a point process $\eta$ on $\mathbb{X}$ with the following two properties:
-\begin{itemize}
-    \item[1.] $\forall B\in\mathcal{X}: \eta\left(B\right)\sim\hbox{Po}\left(\lambda(B);k\right)\forall k\in\mathbb{N}_0 \Longleftrightarrow \mathbb{P}\left(\eta\left(B\right)=k\right)$
-    \item[2.] 
-    $\forall m\in\mathbb{N}$ and all pairwise disjoint sets $B_1,...,B_m\in\mathcal{X}:$ the random variables $\eta\left(B_1\right),...,\eta\left(B_m\right)$ are independent.
-\end{itemize}
-A point process satisfying the second of these conditions is called \textit{completely independent}. If $\eta$ is a Poisson process with intensity measure $\lambda$, then
-\begin{equation}
-    \mathbb{E}\left[\eta\left(B\right)\right]=\lambda(B).
-\end{equation}
-For the zero measure,
-\begin{equation*}
-    \mathbb{P}\left(\eta(\mathbb{X})=0\right)=1,
-\end{equation*}
-with $\lambda=0$ \autocite[][19]{last2017lectures}.
-\clearpage
+% \section{Spatial Point Processes}
+% A stochastic process that describes the location of particular events/points that occur in a region is known as a point process. The number of points as well as the location of the points are random. An example of a point process would be the number of earthquakes and their locations.
+% \subsection{Fundamentals of Point Processes}
+% Let $Z$ be a random, at most countable set of points in a space $\mathbb{X}$, for example $\mathbb{R}^d$. Ignoring measurability issues, $Z$ can be thought of as a mapping $\omega\mapsto Z\left(\omega\right)$ from $\Omega$ into the set of countable subsets of $\mathbb{X}$, where $\left(\Omega, \mathcal{F}, \mathbb{P}\right)$ defines an underlying probability space. $Z$ can then be identified with the family of mappings
+% \begin{equation}
+%     \omega\mapsto\eta\left(\omega, B\right):=\hbox{card}\left(z(\omega)\cap B\right), \hspace{20pt}B\subset\mathbb{X},
+% \end{equation}
+% which counts the number of points from $Z$ in $B$. For any fixed $\omega\in\Omega$, $\eta\left(\omega,\cdot\right)$ is the counting measure supported by $Z\left(\omega\right)$ \autocite[][]{cox1980point}. \\
+% For a general definition of a point process, let $\left(\mathbb{X}, \mathcal{X}\right)$ be a measurable space and let $N_{<\infty}\left(\mathbb{X}\right)\equiv N_{<\infty}$ be the space of all measures $\mu$ on $\mathbb{X}$ such that $\mu(B)\in\mathbb{N}_0: =\mathbb{N}\cup\lbrace0\rbrace\,\forall B\in\mathcal{X}$. Let $N\left(\mathbb{X}\right)\equiv N$ be the space of all measures describable as a countable sum of measures from $N_{<\infty}$, for example the \textit{zero measure} 0 which is equal to $0$ on $\mathcal{X}$. In general, any sequence $\left(x_n\right)_{n=1}^k$ of elements of $\mathbb{X}$, where $k\in\overline{\mathbb{N}}:=\mathbb{N}\cup\lbrace\infty\rbrace$ denotes the number of terms in the sequence, can be used to define a measure
+% \begin{align}
+%     \mu&=\sum_{n=1}^k\delta_{x_n}. \label{eq:measure} \\
+%     \Rightarrow\mu\left(B\right)&=\sum_{n=1}^k\pmb{1}_B\left(x_n\right),\hspace{20pt} B\in\mathcal{X}. \nonumber
+% \end{align}
+% More generally, for any measurable $f:\mathbb{X}\rightarrow\left[0,\infty\right]$,
+% \begin{equation}
+%     \int fd\mu=\sum_{n=1}^kf\left(x_n\right)
+% \end{equation}
+% For $k=0$ in \eqref{eq:measure}, $\mu$ is equal to the zero measure. The point set $\pmb{x}=\left(x_1,...,x_n\right)^T$ is said to be not pairwise different and if $x_i=x_j$ with $i\neq j$, $\mu$ is said to have multiplicities. The multiplicity of $x_i$ is equal to the number
+% \begin{equation*}
+%     \hbox{card}\left\lbrace j\leq k:x_j=x_i\right\rbrace.
+% \end{equation*}
+% Any $\mu$ of the form \eqref{eq:measure} is interpreted as a counting measure with possible multiplicities, but in general it cannot be guaranteed that every $\mu\in N$ can be written in this particular form. \\
+% A point process $\eta$ on $\mathbb{X}$ is called \textit{proper point process} if random elements $X_1,X_2,...\hbox{exist} \in \mathbb{X}$ and a $\overline{\mathbb{N}}_0$-valued random variable $\kappa$ such that almost surely
+% \begin{equation}
+%     \eta=\sum_{n=1}^{\kappa}\delta_{X_n}.
+% \end{equation}
+% For $\kappa=0$ this is the zero measure on $\mathbb{X}$. \\
+% This terminology is motivated by the intuition that a point process is a (random) set of points, rather than an integer measure. A proper point process fits this intuition better, since it can be interpreted as a countable set of points in $\mathbb{X}$ \autocite[][9--12]{last2017lectures}.
+% \subsection{Poisson Processes}
+% Poisson processes are defined by the fact that the number of points in a given set follows a Poisson distribution. Furthermore, the numbers of points in disjoint sets are stochastically independent. \\
+% In application, Poisson processes are used in a wide range of fields, including biology, economics and image processing. \\
+% Let $\lambda$ be an $s$-finite measure on $\mathbb{X}$. Let a \textit{Poisson process} with intensity measure $\lambda$ be defined as a point process $\eta$ on $\mathbb{X}$ with the following two properties:
+% \begin{itemize}
+%     \item[1.] $\forall B\in\mathcal{X}: \eta\left(B\right)\sim\hbox{Po}\left(\lambda(B);k\right)\forall k\in\mathbb{N}_0 \Longleftrightarrow \mathbb{P}\left(\eta\left(B\right)=k\right)$
+%     \item[2.] 
+%     $\forall m\in\mathbb{N}$ and all pairwise disjoint sets $B_1,...,B_m\in\mathcal{X}:$ the random variables $\eta\left(B_1\right),...,\eta\left(B_m\right)$ are independent.
+% \end{itemize}
+% A point process satisfying the second of these conditions is called \textit{completely independent}. If $\eta$ is a Poisson process with intensity measure $\lambda$, then
+% \begin{equation}
+%     \mathbb{E}\left[\eta\left(B\right)\right]=\lambda(B).
+% \end{equation}
+% For the zero measure,
+% \begin{equation*}
+%     \mathbb{P}\left(\eta(\mathbb{X})=0\right)=1,
+% \end{equation*}
+% with $\lambda=0$ \autocite[][19]{last2017lectures}.
+% \clearpage
 \section{Modeling and Visualising Health Data}
 \subsection{Areal Data}
 Areal or lattice data are the result of segmenting a fixed domain into a finite number of sub-regions where results are aggregated, e.g. the number of infections with a specific disease in districts or the number of overweight people in provinces. Often the aim of disease risk models is to assess the risk within the same areas for which data are available. This can be done with a simple measure such as the \textit{standardised incidence ratio} (SIR) or by using a Bayesian hierarchical model, which allows information to be drawn from neighbouring areas and incorporates covariates, thereby smoothing and reducing extreme values. \\
