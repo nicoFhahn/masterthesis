@@ -240,7 +240,10 @@ distrplot_1 <- ggplot() +
       title = "Distribution"
     )
   ) +
-  xlim(c(-20000, 40000))
+  xlim(c(-20000, 40000)) +
+  theme(
+    legend.position = "none"
+  )
 distrplot_2 <- ggplot() +
   geom_histogram(
     data = newest_numbers,
@@ -274,10 +277,7 @@ distrplot_2 <- ggplot() +
       title = "Distribution"
     )
   ) +
-  xlim(c(-20000, 40000)) +
-  theme(
-    legend.position = "none"
-  )
+  xlim(c(-20000, 40000))
 
 distrplot_1 + distrplot_2 +
   plot_layout(guides = "collect") +

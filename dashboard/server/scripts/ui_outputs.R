@@ -11,3 +11,17 @@ output$dropdown_ui_norway <- renderUI({
     selected = "office"
   )
 })
+
+output$dropdown_ui_germany <- renderUI({
+  cols <- colnames(newest_numbers_germany)[c(2:15, 17:34, 37:41, 44:46, 48)]
+  pickerInput(
+    inputId = "picker_germany",
+    label = "Select variable",
+    choices = list(
+      Infrastructure = sort(cols[c(16:32, 37)]),
+      Health = sort(cols[38:41]),
+      Others = sort(cols[c(1:15, 33:36)])
+    ),
+    selected = "office"
+  )
+})

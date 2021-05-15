@@ -1,6 +1,7 @@
 library(readr)
 library(tibble)
 library(dplyr)
+library(stringr)
 infections <- read_csv(
   "timeseries/owid-covid-data.csv"
 )
@@ -20,8 +21,11 @@ covariate_tibbles <- lapply(
 min_date <- as.Date("2020-01-01")
 max_date <- as.Date("2021-05-14")
 date_range <- seq(min_date, max_date, 1)
-countries <- unique(do.call(c, lapply(covariate_tibbles, function(x) unique(x$Entity))))
-covariate_tibbles_full <- pbapply::pblapply(
+countries_1 <- unique(do.call(c, lapply(covariate_tibbles, function(x) unique(x$Entity))))
+countries_2 <- unique(infections$location)
+countries <- unique(c(countries_1, countries_2))
+x <- covariate_tibbles[[5]]
+covariate_tibbles_full <- lapply(
   covariate_tibbles,
   function(x, ...) {
     missing_countries <- countries[!countries %in% x$Entity]
@@ -37,9 +41,18 @@ covariate_tibbles_full <- pbapply::pblapply(
         missing_frame <- y[rep(1, length(missing_dates)), ]
         missing_frame$Entity <- y$Entity[1]
         missing_frame$Day <-missing_dates
-        missing_frame[, 3:ncol(missing_frame)] <- NA
+        if (any(missing_frame$Day < min(y$Day))) {
+          if (any(str_detect(colnames(y), "vaccinated"))) {
+            missing_frame[missing_frame$Day < min(y$Day), 3:ncol(missing_frame)] <- 0
+          } else {
+            missing_frame[missing_frame$Day < min(y$Day), 3:ncol(missing_frame)] <- y[y$Day == min(y$Day), 3:ncol(missing_frame)]
+          }
+        }
+        if (any(missing_frame$Day > max(y$Day))) {
+          missing_frame[missing_frame$Day > max(y$Day), 3:ncol(missing_frame)] <- y[nrow(y), 3:ncol(missing_frame)]
+        }
         y <- rbind(missing_frame, y)
-        y
+        y[order(y$Day), ]
       }
     )
     x <- bind_rows(country_split)
@@ -100,4 +113,76 @@ infections <- infections[
     paste(covariates_tibble$Country, covariates_tibble$Date),
 ]
 full_tibble <- cbind(infections, covariates_tibble)
+full_tibble[, 20] <- NULL
+full_tibble[, 20] <- NULL
+full_tibble$testing_policy[full_tibble$testing_policy == 0 & !is.na(full_tibble$testing_policy)] <- "No testing policy"
+full_tibble$testing_policy[full_tibble$testing_policy == 1 & !is.na(full_tibble$testing_policy)] <- "Symptoms & key groups"
+full_tibble$testing_policy[full_tibble$testing_policy == 2 & !is.na(full_tibble$testing_policy)] <- "Anyone with symptoms"
+full_tibble$testing_policy[full_tibble$testing_policy == 3 & !is.na(full_tibble$testing_policy)] <- "Open public testing"
+full_tibble$testing_policy <- as.factor(full_tibble$testing_policy)
+full_tibble$contact_tracing[full_tibble$contact_tracing == 0 & !is.na(full_tibble$contact_tracing)] <- "No tracing"
+full_tibble$contact_tracing[full_tibble$contact_tracing == 1 & !is.na(full_tibble$contact_tracing)] <- "Limited tracing"
+full_tibble$contact_tracing[full_tibble$contact_tracing == 2 & !is.na(full_tibble$contact_tracing)] <- "Comprehensive tracing"
+full_tibble$contact_tracing <- as.factor(full_tibble$contact_tracing)
+full_tibble$vaccination_policy[full_tibble$vaccination_policy == 0 & !is.na(full_tibble$vaccination_policy)] <- "None"
+full_tibble$vaccination_policy[full_tibble$vaccination_policy == 1 & !is.na(full_tibble$vaccination_policy)] <- "One group"
+full_tibble$vaccination_policy[full_tibble$vaccination_policy == 2 & !is.na(full_tibble$vaccination_policy)] <- "Two groups"
+full_tibble$vaccination_policy[full_tibble$vaccination_policy == 3 & !is.na(full_tibble$vaccination_policy)] <- "All vulnerable groups"
+full_tibble$vaccination_policy[full_tibble$vaccination_policy == 4 & !is.na(full_tibble$vaccination_policy)] <- "Vulnerable + some others"
+full_tibble$vaccination_policy[full_tibble$vaccination_policy == 5 & !is.na(full_tibble$vaccination_policy)] <- "Universal"
+full_tibble$vaccination_policy <- as.factor(full_tibble$vaccination_policy)
+full_tibble$facial_coverings[full_tibble$facial_coverings == 0 & !is.na(full_tibble$facial_coverings)] <- "No policy"
+full_tibble$facial_coverings[full_tibble$facial_coverings == 1 & !is.na(full_tibble$facial_coverings)] <- "Recommended"
+full_tibble$facial_coverings[full_tibble$facial_coverings == 2 & !is.na(full_tibble$facial_coverings)] <- "Required in some public spaces"
+full_tibble$facial_coverings[full_tibble$facial_coverings == 3 & !is.na(full_tibble$facial_coverings)] <- "Required in all public spaces"
+full_tibble$facial_coverings[full_tibble$facial_coverings == 4 & !is.na(full_tibble$facial_coverings)] <- "Required outside at all times"
+full_tibble$facial_coverings <- as.factor(full_tibble$facial_coverings)
+full_tibble$income_support[full_tibble$income_support == 0 & !is.na(full_tibble$income_support)] <- "No income support"
+full_tibble$income_support[full_tibble$income_support == 1 & !is.na(full_tibble$income_support)] <- "<50% of lost salary"
+full_tibble$income_support[full_tibble$income_support == 2 & !is.na(full_tibble$income_support)] <- ">50% of lost salary"
+full_tibble$income_support <- as.factor(full_tibble$income_support)
+full_tibble$restrictions_internal_movements[full_tibble$restrictions_internal_movements == 0 & !is.na(full_tibble$restrictions_internal_movements)] <- "No measures"
+full_tibble$restrictions_internal_movements[full_tibble$restrictions_internal_movements == 1 & !is.na(full_tibble$restrictions_internal_movements)] <- "Recommend movement restriction"
+full_tibble$restrictions_internal_movements[full_tibble$restrictions_internal_movements == 2 & !is.na(full_tibble$restrictions_internal_movements)] <- "Restrict movement"
+full_tibble$restrictions_internal_movements <- as.factor(full_tibble$restrictions_internal_movements)
+full_tibble$international_travel_controls[full_tibble$international_travel_controls == 0 & !is.na(full_tibble$international_travel_controls)] <- "No measures"
+full_tibble$international_travel_controls[full_tibble$international_travel_controls == 1 & !is.na(full_tibble$international_travel_controls)] <- "Screening"
+full_tibble$international_travel_controls[full_tibble$international_travel_controls == 2 & !is.na(full_tibble$international_travel_controls)] <- "Quarantine from high-risk regions"
+full_tibble$international_travel_controls[full_tibble$international_travel_controls == 3 & !is.na(full_tibble$international_travel_controls)] <- "Ban on high-risk regions"
+full_tibble$international_travel_controls[full_tibble$international_travel_controls == 4 & !is.na(full_tibble$international_travel_controls)] <- "Total border closure"
+full_tibble$international_travel_controls <- as.factor(full_tibble$international_travel_controls)
+full_tibble$public_information_campaigns[full_tibble$public_information_campaigns == 0 & !is.na(full_tibble$public_information_campaigns)] <- "None"
+full_tibble$public_information_campaigns[full_tibble$public_information_campaigns == 1 & !is.na(full_tibble$public_information_campaigns)] <- "Public officials urging caution"
+full_tibble$public_information_campaigns[full_tibble$public_information_campaigns == 2 & !is.na(full_tibble$public_information_campaigns)] <- "Coordinated information campaign"
+full_tibble$public_information_campaigns <- as.factor(full_tibble$public_information_campaigns)
+full_tibble$cancel_public_events[full_tibble$cancel_public_events == 0 & !is.na(full_tibble$cancel_public_events)] <- "No measures"
+full_tibble$cancel_public_events[full_tibble$cancel_public_events == 1 & !is.na(full_tibble$cancel_public_events)] <- "Recommended cancellations"
+full_tibble$cancel_public_events[full_tibble$cancel_public_events == 2 & !is.na(full_tibble$cancel_public_events)] <- "Required cancellations"
+full_tibble$cancel_public_events <- as.factor(full_tibble$cancel_public_events)
+full_tibble$restriction_gatherings[full_tibble$restriction_gatherings == 0 & !is.na(full_tibble$restriction_gatherings)] <- "No restrictions"
+full_tibble$restriction_gatherings[full_tibble$restriction_gatherings == 1 & !is.na(full_tibble$restriction_gatherings)] <- ">1000 people"
+full_tibble$restriction_gatherings[full_tibble$restriction_gatherings == 2 & !is.na(full_tibble$restriction_gatherings)] <- "100-1000 people"
+full_tibble$restriction_gatherings[full_tibble$restriction_gatherings == 3 & !is.na(full_tibble$restriction_gatherings)] <- "10-100 people"
+full_tibble$restriction_gatherings[full_tibble$restriction_gatherings == 4 & !is.na(full_tibble$restriction_gatherings)] <- "<10 people"
+full_tibble$restriction_gatherings <- as.factor(full_tibble$restriction_gatherings)
+full_tibble$close_public_transport[full_tibble$close_public_transport == 0 & !is.na(full_tibble$close_public_transport)] <- "No measures"
+full_tibble$close_public_transport[full_tibble$close_public_transport == 1 & !is.na(full_tibble$close_public_transport)] <- "Recommended closing"
+full_tibble$close_public_transport[full_tibble$close_public_transport == 2 & !is.na(full_tibble$close_public_transport)] <- "Required closing"
+full_tibble$close_public_transport <- as.factor(full_tibble$close_public_transport)
+full_tibble$school_closures[full_tibble$school_closures == 0 & !is.na(full_tibble$school_closures)] <- "No measures"
+full_tibble$school_closures[full_tibble$school_closures == 1 & !is.na(full_tibble$school_closures)] <- "Recommended"
+full_tibble$school_closures[full_tibble$school_closures == 2 & !is.na(full_tibble$school_closures)] <- "Required (some levels)"
+full_tibble$school_closures[full_tibble$school_closures == 3 & !is.na(full_tibble$school_closures)] <- "Required (all levels)"
+full_tibble$school_closures <- as.factor(full_tibble$school_closures)
+full_tibble$stay_home_requirements[full_tibble$stay_home_requirements == 0 & !is.na(full_tibble$stay_home_requirements)] <- "No measures"
+full_tibble$stay_home_requirements[full_tibble$stay_home_requirements == 1 & !is.na(full_tibble$stay_home_requirements)] <- "Recommended"
+full_tibble$stay_home_requirements[full_tibble$stay_home_requirements == 2 & !is.na(full_tibble$stay_home_requirements)] <- "Required (except essentials)"
+full_tibble$stay_home_requirements[full_tibble$stay_home_requirements == 3 & !is.na(full_tibble$stay_home_requirements)] <- "Required (few exceptions)"
+full_tibble$stay_home_requirements <- as.factor(full_tibble$stay_home_requirements)
+full_tibble$workplace_closures[full_tibble$workplace_closures == 0 & !is.na(full_tibble$workplace_closures)] <- "No measures"
+full_tibble$workplace_closures[full_tibble$workplace_closures == 1 & !is.na(full_tibble$workplace_closures)] <- "Recommended"
+full_tibble$workplace_closures[full_tibble$workplace_closures == 2 & !is.na(full_tibble$workplace_closures)] <- "Required for some"
+full_tibble$workplace_closures[full_tibble$workplace_closures == 3 & !is.na(full_tibble$workplace_closures)] <- "Required for all but key workers"
+full_tibble$workplace_closures <- as.factor(full_tibble$workplace_closures)
 write_csv(full_tibble, "wrangled_data/timeseries_covid.csv")
+rm(list = ls())

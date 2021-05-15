@@ -65,12 +65,14 @@ ui <- dashboardPage(
               "Total number of infections",
               "Total number of infections per 100k",
               "Seven day incidence"
-            )
+            ),
+            selected = "Seven day incidence"
           ),
           pickerInput(
             inputId = "municipality_norway",
             label = "Select municipality",
-            choices = sort(unique(norway_munc_conf_long$kommune_name))
+            choices = sort(unique(norway_munc_conf_long$kommune_name)),
+            selected = "Trondheim"
           )
         )
       ),
@@ -113,12 +115,14 @@ ui <- dashboardPage(
               "Total number of infections",
               "Total number of infections per 100k",
               "Seven day incidence"
-            )
+            ),
+            selected = "Seven day incidence"
           ),
           pickerInput(
             inputId = "municipality_germany",
             label = "Select municipality",
-            choices = sort(unique(germany_munc_conf_long$kommune_name))
+            choices = sort(unique(germany_munc_long$Landkreis)),
+            selected = "LK Rosenheim"
           )
         )
       ) 
