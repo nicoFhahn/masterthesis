@@ -683,7 +683,7 @@ cat_csi <- cut(
 zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
 zeta_log <- lapply(csi, function(x) log10(inla.emarginal(exp, x)))
 zeta_cutoff <- c(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4)
-zeta_log_cutoff <- c(-0.4, -0.2, 0, 0.2, 0.4, 0.6)
+zeta_log_cutoff <- c(-0.5, -0.3, -0.1, 0, 0.1, 0.3, 0.5, 0.7)
 # group it
 cat_zeta <- cut(
   unlist(zeta),
@@ -698,30 +698,16 @@ cat_zeta_log <- cut(
 newest_numbers$cat_zeta <- cat_zeta
 newest_numbers$cat_zeta_log <- cat_zeta_log
 newest_numbers$prob_csi <- cat_csi
-mat_marg <- matrix(NA, nrow = nrow(newest_numbers), ncol = 100000)
-m <- models_final[[1]][[3]]$marginals.random$idarea_1
-for (i in seq_len(nrow(newest_numbers))) {
-  u <- m[[i]]
-  mat_marg[i, ] <- inla.rmarginal(100000, u)
-}
-var_u <- apply(mat_marg, 2, var)
-var_v <- inla.rmarginal(
-  100000,
-  inla.tmarginal(
-    function(x) 1 / x,
-    models_final[[1]][[3]]$marginals.hyperpar$`Precision for idarea_1`
-  )
-)
-perc_var_u <- mean(var_u / (var_u + var_v))
-perc_var_u
-
+marg_hyper < -inla.hyperpar.sample(100000, models_final[[1]][[3]])
+perc_var_u1 <- mean(marg_hyper[, 1] / ( marg_hyper[, 1] + marg_hyper[, 2]))
+perc_var_u1
 color_low <- "#20A4F3"
 color_high <- "#FF206E"
 
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = rr)) +
   ggtitle(
-    label = "Relative risk based on all variables",
+    label = "Relative risk",
     subtitle = "Norway"
   ) +
   scale_fill_gradient2(
@@ -735,46 +721,102 @@ plot_1
 plot_2 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = cat_zeta)) +
   ggtitle(
-    label = "Posterior mean of the relative risk",
+    label = "Posterior mean of the random effects",
     subtitle = "Norway"
   ) +
   scale_fill_viridis_d(option = "B", direction = -1, drop = FALSE) +
   theme_minimal() +
   guides(
     fill = guide_legend(
-      title = "Relative risk"
+      title = "Mean"
     )
   )
 plot_2
 plot_3 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = prob_csi)) +
   ggtitle(
-    label = "Posterior probability",
+    label = "Exceedance probability",
     subtitle = "Norway"
   ) +
   scale_fill_viridis_d(option = "B", direction = -1, drop = FALSE) +
   theme_minimal() +
   guides(
     fill = guide_legend(
-      title = "Posterior probability"
+      title = "Probability"
     )
   )
 plot_3
-
+plot_1
 plot_2 + plot_3
 plot_4 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = cat_zeta_log)) +
   ggtitle(
-    label = "Log10 Posterior mean of the relative risk",
+    label = "Log10 Posterior mean of the random effects",
     subtitle = "Norway"
   ) +
   scale_fill_viridis_d(option = "B", direction = -1, drop = FALSE) +
   theme_minimal() +
   guides(
     fill = guide_legend(
-      title = "Relative risk"
+      title = "Log10 mean"
     )
   )
-plot_4
+plot_4 + plot_3
 # get the summary of the hyperparameters
 models_final[[1]][[3]]$summary.hyperpar
+newest_numbers$zeta <- unlist(zeta)
+pal <- colorNumeric(
+  "YlOrRd",
+  newest_numbers$rr
+)
+newest_numbers$csi <- unlist(prob_csi)
+threshold <- 0.75
+library(leaflet)
+leaflet(data = newest_numbers[newest_numbers$csi >= threshold, ]) %>%
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  addPolygons(
+    color = "black",
+    weight = 1,
+    opacity = 1,
+    fillOpacity = 0.8,
+    fillColor = ~pal(rr),
+    label = paste(
+      "Kommune: ", newest_numbers[newest_numbers$csi >= threshold, ]$kommune_name, "<br>",
+      "Zeta: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$zeta, 2), "<br>",
+      "Xi: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$csi, 2), "<br>",
+      "RR: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$rr, 2), "<br>",
+      "Number of infections: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$value, 2), "<br>",
+      "Urban density: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$urb_dens, 2), "<br>",
+      "Unemployed immigrants: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$unemp_immg, 2), "<br>",
+      "Total immigrants: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$immigrants_total, 2), "<br>",
+      "Expected count: ", newest_numbers[newest_numbers$csi >= threshold, ]$expected_count
+    ) %>%
+      lapply(htmltools::HTML)
+  )
+threshold <- 0
+pal <- colorFactor(
+  "inferno",
+  newest_numbers$cat_zeta_log
+)
+threshold <- 0
+leaflet(data = newest_numbers[newest_numbers$csi >= threshold, ]) %>%
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  addPolygons(
+    color = "black",
+    weight = 1,
+    opacity = 1,
+    fillOpacity = 0.8,
+    fillColor = ~pal(cat_zeta_log),
+    label = paste(
+      "Kommune: ", newest_numbers[newest_numbers$csi >= threshold, ]$kommune_name, "<br>",
+      "Zeta: ", newest_numbers[newest_numbers$csi >= threshold, ]$cat_zeta_log, "<br>",
+      "Xi: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$csi, 2), "<br>",
+      "RR: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$rr, 2), "<br>",
+      "Number of infections: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$value, 2), "<br>",
+      "Urban density: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$urb_dens, 2), "<br>",
+      "Unemployed immigrants: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$unemp_immg, 2), "<br>",
+      "Total immigrants: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$immigrants_total, 2), "<br>",
+      "Expected count: ", newest_numbers[newest_numbers$csi >= threshold, ]$expected_count
+    ) %>%
+      lapply(htmltools::HTML)
+  )

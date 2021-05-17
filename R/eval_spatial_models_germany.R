@@ -861,31 +861,32 @@ plot_1
 plot_2 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = cat_zeta)) +
   ggtitle(
-    label = "Posterior mean of the relative risk",
+    label = "Posterior mean of the random effects",
     subtitle = "Germany"
   ) +
   scale_fill_viridis_d(option = "B", direction = -1, drop = FALSE) +
   theme_minimal() +
   guides(
     fill = guide_legend(
-      title = "Relative risk"
+      title = "Mean"
     )
   )
 plot_2
 plot_3 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = prob_csi)) +
   ggtitle(
-    label = "Posterior probability",
+    label = "Exceedance probability",
     subtitle = "Germany"
   ) +
   scale_fill_viridis_d(option = "B", direction = -1, drop = FALSE) +
   theme_minimal() +
   guides(
     fill = guide_legend(
-      title = "Posterior probability"
+      title = "Probability"
     )
   )
 plot_3
 plot_2 + plot_3
+plot_1
 # get the summary of the hyperparameters
 models_final[[1]][[3]]$summary.hyperpar
