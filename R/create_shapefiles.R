@@ -12,17 +12,17 @@ norge_shape <- norge_shape[norge_shape$kommunenum != 4602, ]
 norge_shape <- rbind(norge_shape, kommune_4602)
 # load the osm data
 load("osmdata/norge_hospital.Rda")
-norge_hospital<- st_as_sf(dplyr::bind_rows(norge_hospital))
+norge_hospital <- st_as_sf(dplyr::bind_rows(norge_hospital))
 norge_hospital <- norge_hospital[!duplicated(norge_hospital$osm_id, incomparables = NA), ]
 norge_hospital <- norge_hospital[!rownames(norge_hospital) %in% rownames(norge_hospital[is.na(norge_hospital$osm_id), ][duplicated(st_coordinates(norge_hospital[is.na(norge_hospital$osm_id), ])), ]), ]
 norge_hospital$type <- "hospital"
 load("osmdata/norge_place_of_worship.Rda")
-norge_place_of_worship<- st_as_sf(dplyr::bind_rows(norge_place_of_worship))
+norge_place_of_worship <- st_as_sf(dplyr::bind_rows(norge_place_of_worship))
 norge_place_of_worship <- norge_place_of_worship[!duplicated(norge_place_of_worship$osm_id, incomparables = NA), ]
 norge_place_of_worship <- norge_place_of_worship[!rownames(norge_place_of_worship) %in% rownames(norge_place_of_worship[is.na(norge_place_of_worship$osm_id), ][duplicated(st_coordinates(norge_place_of_worship[is.na(norge_place_of_worship$osm_id), ])), ]), ]
 norge_place_of_worship$type <- "place of worship"
 load("osmdata/norge_retail.Rda")
-norge_retail<- st_as_sf(dplyr::bind_rows(norge_retail))
+norge_retail <- st_as_sf(dplyr::bind_rows(norge_retail))
 norge_retail <- norge_retail[!duplicated(norge_retail$osm_id, incomparables = NA), ]
 norge_retail <- norge_retail[!rownames(norge_retail) %in% rownames(norge_retail[is.na(norge_retail$osm_id), ][duplicated(st_coordinates(norge_retail[is.na(norge_retail$osm_id), ])), ]), ]
 norge_retail$type <- "retail"
@@ -45,8 +45,8 @@ norge_aerodrome[unlist(lapply(norge_aerodrome, nrow)) > 1] <- lapply(
     if (any(distances <= 1000)) {
       dups_exist <- TRUE
       i <- 1
-      while(dups_exist) {
-        if(length(which(distances <= 1000)) > 0) {
+      while (dups_exist) {
+        if (length(which(distances <= 1000)) > 0) {
           x <- x[-(which(distances <= 1000) + i), ]
         }
         coordinates <- st_coordinates(x[(i + 1):nrow(x), ])
@@ -499,17 +499,17 @@ germany_shape <- read_sf("shapefiles/Kreisgrenzen_2017_mit_Einwohnerzahl.shp")
 germany_shape <- st_transform(germany_shape, 4326)
 # load all the osm data
 load("osmdata/germany_hospital.Rda")
-germany_hospital<- st_as_sf(dplyr::bind_rows(germany_hospital))
+germany_hospital <- st_as_sf(dplyr::bind_rows(germany_hospital))
 germany_hospital <- germany_hospital[!duplicated(germany_hospital$osm_id, incomparables = NA), ]
 germany_hospital <- germany_hospital[!rownames(germany_hospital) %in% rownames(germany_hospital[is.na(germany_hospital$osm_id), ][duplicated(st_coordinates(germany_hospital[is.na(germany_hospital$osm_id), ])), ]), ]
 germany_hospital$type <- "hospital"
 load("osmdata/germany_place_of_worship.Rda")
-germany_place_of_worship<- st_as_sf(dplyr::bind_rows(germany_place_of_worship))
+germany_place_of_worship <- st_as_sf(dplyr::bind_rows(germany_place_of_worship))
 germany_place_of_worship <- germany_place_of_worship[!duplicated(germany_place_of_worship$osm_id, incomparables = NA), ]
 germany_place_of_worship <- germany_place_of_worship[!rownames(germany_place_of_worship) %in% rownames(germany_place_of_worship[is.na(germany_place_of_worship$osm_id), ][duplicated(st_coordinates(germany_place_of_worship[is.na(germany_place_of_worship$osm_id), ])), ]), ]
 germany_place_of_worship$type <- "place of worship"
 load("osmdata/germany_retail.Rda")
-germany_retail<- st_as_sf(dplyr::bind_rows(germany_retail))
+germany_retail <- st_as_sf(dplyr::bind_rows(germany_retail))
 germany_retail <- germany_retail[!duplicated(germany_retail$osm_id, incomparables = NA), ]
 germany_retail <- germany_retail[!rownames(germany_retail) %in% rownames(germany_retail[is.na(germany_retail$osm_id), ][duplicated(st_coordinates(germany_retail[is.na(germany_retail$osm_id), ])), ]), ]
 germany_retail$type <- "retail"
@@ -532,8 +532,8 @@ germany_aerodrome[unlist(lapply(germany_aerodrome, nrow)) > 1] <- lapply(
     if (any(distances <= 1000)) {
       dups_exist <- TRUE
       i <- 1
-      while(dups_exist) {
-        if(length(which(distances <= 1000)) > 0) {
+      while (dups_exist) {
+        if (length(which(distances <= 1000)) > 0) {
           x <- x[-(which(distances <= 1000) + i), ]
         }
         coordinates <- st_coordinates(x[(i + 1):nrow(x), ])

@@ -2,7 +2,8 @@
 %
 \chapter{Data Analysis}
 \label{sec:analysis}
-In this chapter the models fitted for each country are reviewed. First, a look at the standardised incidence rate for each country is taken, before spatial models, spatio-temporal models and finally predictive models are discussed.
+This chapter will focus on the analysis of the research question. First, it will take a look at the standardised incidence rate in each country. Next, the relationship between the number of infections and several factors of interest will be analysed. For this analysis, a probability must be found that fits the data reasonably well. One way to do this is presented in Section~\ref{sec:likelihood}. Thereafter, two different types of models are calculated; models without a spatial component and models with a spatial component. Section~\ref{sec:nospatial} contains the results of the models without a spatial component and Section~\ref{ch:spatial} contains the results of the models with the spatial component. Next, it is analysed how the performance of the spatial models changes when changing the value for the standard deviation $\sigma_0$ in Equation~\ref{pcprec}.
+\clearpage
 \section{Standardised Incidence Ratio (SIR)}
 This section takes a brief look at the SIR for the countries of interest. Recall from Equation~\ref{eq:sir}, that the SIR is defined as the ratio of observed counts to expected counts.
 \subsection{SIR for Germany}
@@ -15,7 +16,7 @@ When looking at the SIR for Germany in Figure~\ref{sirgermany}, it is noticeable
 \end{figure}
 \subsection{SIR for Norway}
 Looking at the standardised incidence rate for Norway in Figure~\ref{sirnorway}, a standardised incidence rate of less than 1 can be seen for most municipalities north of Trondheim. In the southern parts of Norway there are several municipalities with a rate above 1, for example the standardised incidence rate around the capital Oslo is around 2. However, the two small municipalities, Hyllestad and Ulvik, have the highest standardised incidence rate in Norway. In Hyllestad, 95 of 1328 people have been infected with Covid-19 so far, while in Ulvik, 134 of 1080 people have been infected so far. \\
-The SIR in Hyllestad is around 3.4, following an outbreak in a shipyard in autumn 2020 \cite{newspaper1}, while Ulvik has a ratio of around 5.7, following an outbreak of the UK variant of Covid-19. According to the head of the municipality, Hans Petter Thorbjørnsen, the infections are thought to have spread through children \cite{newspaper2}.
+The SIR in Hyllestad is around 3.4, following an outbreak in a shipyard in autumn 2020 \autocite[][]{newspaper1}, while Ulvik has a ratio of around 5.7, following an outbreak of the UK variant of Covid-19. According to the head of the municipality, Hans Petter Thorbjørnsen, the infections are thought to have spread through children \autocite[][]{newspaper2}.
 \begin{figure}[H]
  \centering
  \includegraphics[width = 1.2\textwidth]{sir_norway.png}
@@ -37,7 +38,7 @@ After looking at the standardised incidence rates for the countries of interest,
   \item[2.] A Leroux Model
   \item[3.] A BYM2 Model
 \end{itemize}
-All of these models are computed using the INLA \cite{rinla} R package. \\
+All of these models are computed using the INLA \autocite[][]{rinla} R package. \\
 To specify each type of model, the code shown in Listing~\ref{codeModels} can be used. \\
 The measures introduced in Section~\ref{sec:performance}, namely the DIC, the WAIC, the CPO and the mean absolute error (MAE), are used to compare the models.\\
 In addition to specifying what type of spatial model to use, if any, there is also the option of specifying a prior. \\
@@ -46,7 +47,7 @@ For the parameters $\sigma_0$ and $\alpha$ in Equation~\ref{eq:pc_prior_prec} th
 The models are compared using the mean absolute error. For this, 20\% of the observations are removed from the training set and used for testing instead. The predicted number of infections for these municipalities is then compared to the actual numbers.
 \\
 A list of all calculated models along with their performance measures is provided in the appendix.
-\subsection{Choice of Likelihood}
+\subsection{Choice of Likelihood}\label{sec:likelihood}
 Before the models are computed, however, the distribution that fits the number of cases must first be found. One way to do this, the function \texttt{descdist()} from the \texttt{fitdistrplus} R package is used. The Cullen and Frey graph illustrates how "close" a sample is to a theoretical distribution based on the kurtosis and the square of the skewness, defined in Equation~\ref{eq:kurtosis} and Equation~\ref{eq:skewness}. It can be used to get a preliminary idea of which distributions fit the data, in this case the number of infections, reasonably well. \\
 The plots for Germany and Norway can be seen in Figure~\ref{cf_germany} and Figure~\ref{cf_norway}. The blue dot represents the data, the star a theoretical normal distribution, the dashed line a theoretical Poisson distribution and the grey area a theoretical negative binomial distribution. In both cases, the blue dot is relatively far from the star and lies in the region of a negative binomial distribution. For the Norwegian sample shown in Figure~\ref{cf_norway}, the sample is closer to a Poisson distribution than is the case for the German sample in Figure~\ref{cf_germany}.
 \begin{figure}[H]
@@ -276,7 +277,7 @@ AfD & 0.2200 & 1.248 & 1.114 & 1.393 & $^*$\\
 Population & \multirow{2}{*}{0.1058} & \multirow{2}{*}{1.112} & \multirow{2}{*}{1.068} & \multirow{2}{*}{1.157} & \multirow{2}{*}{$^*$}\\
 density \\
 Logarithmic & \multirow{2}{*}{0.06494} & \multirow{2}{*}{1.067} & \multirow{2}{*}{1.034} & \multirow{2}{*}{1.101} & \multirow{2}{*}{$^*$}\\
-Trade tax \\
+trade tax \\
 Die Union & 0.02625 & 1.029 & 0.8937 & 1.179\\
 Platform & 0.01619 & 1.017 & 0.9781 & 1.056 \\
 Aerodrome & 0.01192 & 1.012 & 0.9894 & 1.035 \\
@@ -354,7 +355,7 @@ Sex & -0.2022 & 0.8184 & 0.7285 & 0.9158 & $^*$ \\
 \end{table}
 For the hyperparameters, a value of 5.398 is reported for the precision and a value of 0.1295 for $\phi$. Hence, 12.95\% of the marginal variance is explained by the structured effect. Therefore, this model is close to pure overdispersion.
 \clearpage
-\section{Choice of Hyperpriors}
+\section{Choice of Hyperpriors}\label{sec:hyperprios}
 As can be seen in Equation~\ref{pcprec}, there is flexibility when it comes to choosing the values for the standard deviation $\sigma_0$ as well as the probability $\alpha$. Therefore, an upper bound for the standard deviation can be chosen as well as the weight placed on this "tail event", describing how informative the resulting prior is. \\
 Some of the issues that come with the choice of these hyperpriors were already discussed in Section~\ref{sec:issues}. \\
 In the following, an assessment is made of how the performance of a Besag model, a BYM2 model and a Leroux model changes when playing around with the value for the standard deviation $\sigma_0$. To create these plots, models were calculated with $\sigma_0$ values of $\pmb{\sigma_0}=\left(0.1,0.11,0.12,...,5\right)$.\\
@@ -420,169 +421,6 @@ Looking at Figure~\ref{comparison_germany_8}, there are hardly any differences i
 \end{figure}
 
 \clearpage
-\section{Spatio-Temporal Models}
-\subsection{Spatio-Temporal Models for Germany}
-\begin{table}[H] 
-\caption{The German municipalities with the most infections as of May 2nd 2021. \label{top5Germany_temporal}}
-\begin{tabular}{l r r r}
-\toprule
-\textbf{Municipality}	& \textbf{Population}	& \textbf{Number of infections} \\
-\midrule
-SK Berlin & 3644826 & 165450 \\
-SK Hamburg & 1841179 & 70903 \\
-SK Munich & 1471508 & 66951 \\
-SK Cologne & 1085664 & 47007 \\
-Region Hannover & 1157624 & 43665 \\
-\bottomrule
-\end{tabular}
-\end{table}
-\begin{table}[H] 
-\caption{The performance measures for the best performing model of each type. \label{allGermany_temporal}}
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
-\midrule
-No spatial & 5606 & 5609 & -2831 & 178621 \\
-Spatial BYM2 & 4743 & 4742 & -2806 & 175619\\
-Besag & 371291 & 371346 & -185605 & 204410 \\
-BYM2 & 371291 & 371348 & -185605 & 204369\\
-Leroux & 371283 & 371353 & -185609 & 204434\\
-\bottomrule
-\end{tabular}
-\end{table}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{intervals_germany_temporal.png}
-  \caption{The posterior mean and credibility intervals of the coefficients}
-  \label{intervalGermany_temporal}
-\end{figure}
-\begin{table}[H]
-\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedAllGermany_temporal}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -0.1633 & 0.8494 & 0.8326 & 0.8662 & $^*$\\
-clinic & 0.04774 & 1.049 & 0.9978 & 1.103 \\
-pop\_dens & 0.03800 & 1.039 & 0.9862 & 1.094 \\
-urb\_dens & 0.03051 & 1.031 & 0.9940 & 1.069 \\
-FDP & 0.01803 & 1.018 & 0.9720 & 1.067 \\
-log & \multirow{2}{*}{0.01034} & \multirow{2}{*}{1.011} & \multirow{2}{*}{0.9604} & \multirow{2}{*}{1.063} & \multirow{2}{*}{}\\
-trade\_tax \\
-office & 0.008501 & 1.009 & 0.9538 & 1.066 \\
-aerodrome & 0.006449 & 1.007 & 0.9831 & 1.030 \\
-platform & 0.004554 & 1.005 & 0.9536 & 1.058 \\
-nursing\_ & \multirow{2}{*}{0.002101} & \multirow{2}{*}{1.002} & \multirow{2}{*}{0.9726} & \multirow{2}{*}{1.032} \\
-home\\
-higher\_ & \multirow{2}{*}{-0.004663} & \multirow{2}{*}{0.9955} & \multirow{2}{*}{0.9585} & \multirow{2}{*}{1.034} \\
-education\\
-place\_of\_ & \multirow{2}{*}{-0.007753} & \multirow{2}{*}{0.9925} & \multirow{2}{*}{0.9533} & \multirow{2}{*}{1.033} \\
-worship\\
-sex & -0.01148 & 0.9887 & 0.0.9565 & 1.022 \\
-marketplace & -0.01395 & 0.9865 & 0.9340 & 1.041 \\
-Greens & -0.02903 & 0.9718 & 0.9188 & 1.027\\
-SPD & -0.06109 & 0.9410 & 0.8944 & 0.9892 & $^*$ \\
-die\_linke & -0.1081 & 0.8980 & 0.8471 & 0.9508& $^*$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-For the hyperparameters, a value of 12.59 is reported for the precision of the area and 26950740 for the precision of the date, A value of 0.6989 is reported for $\phi$. Hence, 69.89\% of the marginal variance is explained by the structured effect. Therefore, this model is closer to a Besag model than it is to overdispersion.
-\begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{temporal_trend_germany.png}
-  \caption{The temporal trend of the BYM2 model.}
-  \label{temporal_trend_germany}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{posterior_germany_temporal.png}
-  \caption{Posterior mean of the area-specific risk and the posterior probability.}
-  \label{posterior_germany_temporal}
-\end{figure}
-\subsection{Spatio-Temporal Models for Norway}
-\begin{table}[H] 
-\caption{The Norwegian municipalities with the most infections as of May 2nd 2021. \label{top5norway_temporal}}
-\begin{tabular}{l r r r}
-\toprule
-\textbf{Municipality}	& \textbf{Population}	& \textbf{Number of infections} &\textbf{\% first vaccine shot} \\
-\midrule
-Oslo & 693494 & 33296 & 32.7\%\\
-Bergen & 283929 & 5701 & 30.0\%\\
-Drammen & 101386 & 3956 & 34.1\%\\
-Bærum & 127731 & 3726 & 31.7\%\\
-Lillestrøm & 85983 & 3725 & 30.2\%\\
-\bottomrule
-\end{tabular}
-\end{table}
-\begin{table}[H] 
-\caption{The performance measures for the best performing model of each type. \label{allNorway_temporal}}
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{MAE} \\
-\midrule
-No spatial & 2813 & 2817 & -1662 & 7686 \\
-Spatial BYM2 & 2777 & 2783 & -4065 & 7943\\
-Besag & 130574 & 130545 & -65273 & 11376 \\
-BYM2 & 130572 & 130543 & -65272 & 11376\\
-Leroux & 130574 & 130545 & -65273 & 11377\\
-\bottomrule
-\end{tabular}
-\end{table}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{intervals_norway_temporal.png}
-  \caption{The posterior mean and credibility intervals of the coefficients}
-  \label{intervalNorway_temporal}
-\end{figure}
-\begin{table}[H]
-\caption{The fixed effects for the model. Values are rounded. A $^*$ denotes a significant effect. \label{fixedAllNorway_temporal}}
-\begin{tabular}{l r r r r c}
-\toprule
-\textbf{Variable}	& \textbf{mean$_{\hbox{p}}$}	& \textbf{exp(mean$_{\hbox{p}}$)} & \textbf{exp(q0025$_{\hbox{p}}$)} & \textbf{exp(q0975$_{\hbox{p}}$)} & \textbf{sig.}\\
-\midrule
-(Intercept) & -1.127 & 0.3244 & 0.2917 & 0.3594 & $^*$ \\
-urb\_dens & 0.1946 & 1.220 & 1.015 & 1.453 & $^*$ \\
-unemp\_tot & 0.1637 & 1.184 & 0.9596 & 1.445 \\
-immigrants\_ & \multirow{2}{*}{0.1310}& \multirow{2}{*}{1.143}& \multirow{2}{*}{0.9856}& \multirow{2}{*}{1.318}& \multirow{2}{*}{}\\
-total \\
-platform & 0.08178 & 1.090 & 0.8996 & 1.309 \\
-place\_of\_ & \multirow{2}{*}{0.07557}& \multirow{2}{*}{1.084}& \multirow{2}{*}{0.8907}& \multirow{2}{*}{1.306} \\
-worship \\
-unemp\_ & \multirow{2}{*}{0.06943} & \multirow{2}{*}{1.077} & \multirow{2}{*}{0.8897} & \multirow{2}{*}{1.291} & \multirow{2}{*}{} \\
-immg\\
-marketplace & 0.05738 & 1.061 & 0.9409 & 1.192 \\
-nursing\_ & \multirow{2}{*}{0.05047} & \multirow{2}{*}{1.054} & \multirow{2}{*}{0.9338} & \multirow{2}{*}{1.185} \\
-home\\
-vaccine\_shots & 0.03609 & 1.037 & 1.001 & 1.074 & $^*$\\
-higher\_ & \multirow{2}{*}{-0.001071}& \multirow{2}{*}{1.001}& \multirow{2}{*}{0.8780}& \multirow{2}{*}{1.136}\\ 
-education \\
-aerodrome & -0.1367 & 0.8738 & 0.7777 & 0.9779 & $^*$ \\
-sex & -0.1538 & 0.8591 & 0.7606 & 0.9662 & $^*$ \\
-median\_age & -0.2013 & 0.8192 & 0.7244 & 0.9223 &$^*$ \\
-office & -0.2455 & 0.7874 & 0.6254 & 0.9777 & $^*$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-For the hyperparameters, a value of 0.9783 is reported for the precision of the area and 5471899 for the precision of the date, A value of 0.02769 is reported for $\phi$. Hence, 2.77\% of the marginal variance is explained by the structured effect. Therefore, this model is very close to pure overdispersion.
-\begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{temporal_trend_norway.png}
-  \caption{The temporal trend of the BYM2 model.}
-  \label{temporal_trend_norway}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{posterior_norway_temporal.png}
-  \caption{Posterior mean of the area-specific risk and the posterior probability.}
-  \label{posterior_norway_temporal}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width = \textwidth]{posterior_norway_temporal_log.png}
-  \caption{Log posterior mean of the area-specific risk.}
-  \label{posterior_norway_temporal_log}
-\end{figure}
-\clearpage
-\section{Predictive Models}
-\subsection{Predictive Models for Germany}
-\subsection{Predictive Models for Norway}
+\section{Temporal models}
+\subsection{Temporal models for Germany}
+\subsection{Temporal models for Norway}

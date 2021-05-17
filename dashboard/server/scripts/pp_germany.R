@@ -193,7 +193,7 @@ germany_long <- germany_munc_long %>%
 germany_munc_long <- rbind(germany_long, germany_munc_long)
 germany_munc_long$population <- 0
 germany_munc_long[germany_munc_long$Landkreis == "Germany", ]$population <- sum(newest_numbers_germany$population)
-for(i in seq_len(401)) {
+for (i in seq_len(401)) {
   germany_munc_long[
     germany_munc_long$Landkreis == newest_numbers_germany$municipality[i],
   ]$population <- newest_numbers_germany$population[i]

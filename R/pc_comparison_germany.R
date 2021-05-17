@@ -29,17 +29,17 @@ for (i in 2:nrow(newest_numbers)) {
 
 C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 formula_besag <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
   platform + office + marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior)
 formula_bym2 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
   platform + office + marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior)
 formula_leroux <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
+pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
   Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
   platform + office + marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior)

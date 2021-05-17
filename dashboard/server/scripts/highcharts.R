@@ -60,8 +60,8 @@ output$highchart_norway_2 <- renderHighchart({
   dates <- format(unique(
     norway_munc_conf_long[
       norway_munc_conf_long$kommune_name == "Norway",
-    ]$date), "%d.%m"
-  )
+    ]$date
+  ), "%d.%m")
   if (input$inf_numbers_norway == "Total number of infections") {
     highchart() %>%
       hc_xAxis(
@@ -447,8 +447,8 @@ output$highchart_germany_2 <- renderHighchart({
   dates <- format(unique(
     germany_munc_long[
       germany_munc_long$Landkreis == "Germany",
-    ]$Date), "%d.%m"
-  )
+    ]$Date
+  ), "%d.%m")
   if (input$inf_numbers_germany == "Total number of infections") {
     highchart() %>%
       hc_xAxis(

@@ -68,7 +68,8 @@ A sufficient, but not necessary condition for a (symmetrical) matrix to be SPD i
     A $n\times n$ matrix $\pmb{A}$ is called a \textit{symmetric positive semidefinite} (SPSD) matrix. An SPSD matrix $\pmb{A}$ is sometimes denoted '$\pmb{A}\geq0$' \autocite[][18--19]{rue2005gaussian}.
 \clearpage
 \section{Basic Concepts of Bayesian Theory}
-\subsection{Bayes' Theorem}
+To understand Bayesian theory, it is helpful to first introduce a few basic concepts, first and foremost Bayes' theorem, which is introduced in Section~\ref{sec:bayes_theorem}, one of the most famous concepts in all of statistics. Other notions that are integral to the rest of this thesis are the concept of conditional independence, undirected graphs and the computation of summary statistics, the latter of which is an essential part of the analysis section of this thesis.
+\subsection{Bayes' Theorem}\label{sec:bayes_theorem}
 At the heart of Bayesian inference is \textit{Bayes' theorem}, which describes the probability of an event given prior knowledge of factors that might influence the event. \\
 Let $\pmb{y}^T=\left(y_1,...,y_n\right)$ be a vector of $n$ observations whose probability distribution $\pi\left(\pmb{y}|\pmb{\theta}\right)$ depends on the values of $k$ parameters $\pmb{\theta}^T=\left(\theta_1,...,\theta_k\right)$. Let $\pi\left(\pmb{\theta}\right)$ be the probability distribution of $\pmb{\pmb{\theta}}$. Then 
 \begin{equation}
@@ -134,6 +135,7 @@ To get the expected value given a marginal function $\pi\left(x\right)$, the exp
 \autocite[][]{aitkin1991posterior}.\\
 If necessary, e.g. if the target variable follows a (negative) binomial distribution, the value must be transformed to its original scale, as in these cases the log-likelihood is modelled. Therefore, in these cases, the expected value would have to be exponentiated to allow a clear interpretation. \\
 In practice, to obtain the credibility interval of a variable, the marginal values are first transformed to their original scale, if necessary, and then the 2.5\% quantile and the 97.5\% quantiles are calculated.
+\clearpage
 \section{Prior Selection}
 A key question in Bayesian analysis is the effect of the prior on the posterior, and how that effect can be measured. Do posterior distributions derived with different priors become very similar as more and more data is collected? It has been formally proven that under certain regularity conditions, the impact of the prior decreases with increasing sample size. From a practical point of view, it is more important to know what happens when the sample size $n$ is finite. In this section, different types of priors are introduced.
 \subsection{Conjugate Priors}
@@ -305,7 +307,7 @@ Bayesian hierarchical models have proven to be effective in capturing complex st
     \item[2.] Computation of the (simplified) Laplace approximation for selected values of $\pmb{\theta}$ to improve the Gaussian approximation.
     \item[3.] Combination of the first two parts by numerical integration.
 \end{itemize}
-$\pmb{\theta}$ is a vector of hyperparameters. The hyperparameters $\pmb{\theta}$ can be, for example, the variance in the Gaussian likelihood or the shape parameter in the likelihood of the gamma distribution. In the case of latent fields, they can be, for instance, dispersion parameters or spatial correlation parameters \autocite[][]{rue2009approximate}
+$\pmb{\theta}$ is a vector of hyperparameters. The hyperparameters $\pmb{\theta}$ can be, for example, the variance in the Gaussian likelihood or the shape parameter in the likelihood of the gamma distribution. In the case of latent fields, they can be, for instance, dispersion parameters or spatial correlation parameters \autocite[][]{rue2009approximate}.
 \subsection{Notation and Basic Properties}
 \label{sec:notation}
 For structured additive regression models, the distribution of the response variable $y_i$ is assumed to be a member of the exponential family, with the mean $\mu_i$ linked to a structured additive predictor $\eta_i$ by a link function $g\left(\cdot\right)$ such that $g\left(\mu_i\right)=\eta_i$. The predictor $\eta_i$  takes into account the effect of multiple covariates in an additive way,
@@ -578,8 +580,10 @@ with $\Delta_k$ and $\Delta_l^*$ representing the area weights corresponding to 
 To obtain the approximations for the posterior marginals for the $x_i$'s conditioned on selected values of $\theta_k$ and $\widetilde{\pi}\left(x_i|\theta_k,\pmb{y}\right)$, a Gaussian, Laplace or simplified Laplace approximation can be used. Using a Gaussian approximation derived from $\widetilde{\pi}_G\left(\pmb{x}|\pmb{\theta},\pmb{y}\right)$ is the simplest and fastest solution, but in some situations it produces errors in the location and is unable to capture skewness behaviour. Therefore, the Laplace approximation is favoured over the Gaussian approximation, although it is relatively expensive. The simplified Laplace approximation is associated with lower costs and addresses inaccuracies of the Gaussian approximation in terms of location and skewness in a satisfactory manner \autocite[][]{moraga2019geospatial}.
 \clearpage
 \section{Bayesian Spatial Models}
+Bayesian spatial models are often used in the field of disease mapping. Bayesian hierarchical
+models improve estimates of log risk by providing information about neighbouring regions in the spatially structured component as well as regional variation in the unstructured component \autocite[][]{blangiardo2015spatial}. One of the most well-known spatial models is Besags' spatial model, which is presented in Section~\ref{sec:besag}. Several models have been developed based on the Besag model, including the Besag-York-Mollié (BYM) model, introduced in Section~\ref{sec:bym}, the Leroux model, introduced in Section~\ref{sec:leroux}, and more recently the BYM2 model, introduced in Section~\ref{sec:bym2}. \\
 In general, it can be assumed that areas in close proximity to each other have a more frequent burden of disease than areas that are further away from each other. By setting up a neighbourhood structure, this "proximity" can be defined. It is assumed that $i$ and $j$ are neighbours if they share a common boundary, denoted $i\sim j$. The set of neighbours of region $i$ is denoted by $\delta_i$ and its size is given by $n_{\delta_i}$.
-\subsection{Besag Spatial Models}
+\subsection{Besag Spatial Models}\label{sec:besag}
 \subsubsection{Besags' Improper Spatial Model}
 A commonly used approach to modelling spatial correlation is the Besag model, also known as an intrinsic GMRF model. The conditional distribution for a random vector $\pmb{x}=\left(x_1,...,x_n\right)^T$ is given by
 \begin{equation}
@@ -624,7 +628,7 @@ and the diagonal parameter $d$, which is represented as
     \theta_2 = \log d.
 \end{equation}
 The priors are defined on $\theta_1$ and $\theta_2$, respectively \autocite[][]{besag1974spatial, riebler2016intuitive}.
-\subsection{The Besag-York-Mollié Model}
+\subsection{The Besag-York-Mollié Model}\label{sec:bym}
 The Besag-York-Mollié (BYM) model is a lognormal Poisson model that is a combination of a Besag model $u$ and an ordinary random effect component $v$ for non-spatial heterogeneity. It combines the regional spatial effect $\pmb{x}$ into the sum of an unstructured and a structured spatial component, so that $\pmb{x}=\pmb{v}+\pmb{u}$.\\
 $\pmb{v}\sim\mathcal{N}\left(0,\tau_v^{-1}\pmb{I}\right)$ accounts for pure overdispersion, while $\pmb{u}\sim\mathcal{N}\left(\pmb{0}, \tau_u^{-1}\pmb{Q}^{-}\right)$ is the Besag model. \\
 By using a spatial and a non-spatial error term, the overdispersion that is not modelled by the Poisson variables is taken into account. Thus, if the observed variance is not fully explained by the spatial structure of the data, the error terms explain the rest of the variance. \\
@@ -638,13 +642,13 @@ The hyperparameters of the model are the precision $\tau_u$ of the Besag model $
     \pmb{\theta}=\left(\theta_1, \theta_2\right)=\left(\log\tau_v,\log\tau_u\right)
 \end{equation}
 and the prior is defined on $\pmb{\theta}$ \autocite[][]{besag1991bayesian, riebler2016intuitive}.
-\subsection{The Leroux Model}
+\subsection{The Leroux Model}\label{sec:leroux}
 One problem with the BYM model is that the structured and unstructured components are not identifiable because they cannot be considered independently. Moreover, $\tau_v$ and $\tau_u$ do not represent variability at the same level, which makes the choice of hyperpriors difficult. The Leroux model is formulated in such a way that the compromise between the two variations is made more explicit. It is assumed that $\pmb{x}$ follows a normal distribution with zero mean and covariance matrix
 \begin{equation}
     \hbox{Var}\left(\pmb{x}|\tau_x,\phi\right)=\tau_x^{-1}\left(\left(1-\phi\right)\pmb{I}+\phi\pmb{Q}\right)^{-1},
 \end{equation}
 with $\phi\in\left[0,1\right]$ as mixing parameter. For $\phi=0$ the model reduces to pure overdispersion and for $\phi=1$ to the Besag model. The conditional expected value of $x_i$ for all other random effects is the weighted mean of the unstructured model with zero mean and the mean of the Besag model, while the conditional variance is the weighted mean of $\tau_x^{-1}$ and $\left(\tau_x\cdot\ n_{\delta_i}\right)^{-1}$ \autocite[][]{leroux2000estimation, riebler2016intuitive}.
-\subsection{The BYM2 Model}
+\subsection{The BYM2 Model}\label{sec:bym2}
 One problem that all the aforementioned models have is the lack of scaling of the spatially structured component. Scaling facilitates the assignment of hyperpriors and ensures that the interpretation of hyperpriors remains the same across different areas. \\
 Another problem is that the marginal standard deviations of the commonly used IGMRF priors can vary greatly, a fact that should be taken into account by assigning hyperpriors to the precision parameters of these models. \\
 Since the Besag model penalises a local deviation from its null space, the hyperprior will control this local deviation and thus affect the smoothness of the estimated spatial effects. If the estimate of the field is too smooth, the precision will be large and the spatial variation may be blurred. On the other hand, if the precision is too small, the model could overfit due to the large local variability. \\

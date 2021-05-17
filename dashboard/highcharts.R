@@ -24,7 +24,7 @@ highchart() %>%
   hc_add_series(
     data = norway_munc_conf_long[
       norway_munc_conf_long$kommune_name == "Norway",
-      ]$value,
+    ]$value,
     type = "line",
     name = "Total number of infections"
   )

@@ -5,10 +5,10 @@ output$map_norway <- renderMapdeck({
     zoom = 4,
     pitch = 45,
     token = token
-    )
+  )
 })
 
-output$map_germany<- renderMapdeck({
+output$map_germany <- renderMapdeck({
   mapdeck(
     style = mapdeck_style("dark"),
     location = c(11, 53),

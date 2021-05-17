@@ -345,10 +345,12 @@ colnames(vaccines)[colnames(vaccines) == missing[13]] <- "Oslo"
 colnames(vaccines)[colnames(vaccines) == missing[16]] <- "Røyrvik"
 # load the data for heroy
 heroy_more <- read_delim(
-  "norge_data/vaccination_heroy_more_2nd_may.csv", delim = ";"
+  "norge_data/vaccination_heroy_more_2nd_may.csv",
+  delim = ";"
 )
 heroy_nordland <- read_delim(
-  "norge_data/vaccination_heroy_nordland_2nd_may.csv", delim = ";"
+  "norge_data/vaccination_heroy_nordland_2nd_may.csv",
+  delim = ";"
 )
 vaccines$`Herøy (Møre og Romsdal)` <- heroy_more$`Covid-19, Herøy`
 vaccines$`Herøy (Nordland)` <- heroy_nordland$`Covid-19, Herøy`

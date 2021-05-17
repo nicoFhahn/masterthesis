@@ -40,7 +40,7 @@ covariate_tibbles_full <- lapply(
         missing_dates <- date_range[!date_range %in% y$Day]
         missing_frame <- y[rep(1, length(missing_dates)), ]
         missing_frame$Entity <- y$Entity[1]
-        missing_frame$Day <-missing_dates
+        missing_frame$Day <- missing_dates
         if (any(missing_frame$Day < min(y$Day))) {
           if (any(str_detect(colnames(y), "vaccinated"))) {
             missing_frame[missing_frame$Day < min(y$Day), 3:ncol(missing_frame)] <- 0

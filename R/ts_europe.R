@@ -15,11 +15,11 @@ ts_europe[ts_europe$id_date_1 >= 450, ]$new_cases <- NA
 link <- rep(NA, nrow(ts_europe))
 link[which(is.na(ts_europe$new_cases))] <- 1
 prior_1 <- list(
-    prec = list(
-      prior = "pc.prec",
-      param = c(1, 0.01)
-    )
+  prec = list(
+    prior = "pc.prec",
+    param = c(1, 0.01)
   )
+)
 nb <- poly2nb(ts_europe[!duplicated(ts_europe$CNTR_CODE), ])
 if (length(unique((ts_europe$Country))) == 1) nb <- poly2nb(ts_europe)
 nb2INLA("maps/map_3.adj", nb)
@@ -113,7 +113,7 @@ while (sign) {
   if (!any(VIF(mod) > 5)) {
     sign <- FALSE
   } else {
-    b[, names(VIF(mod)[, 1])[VIF(mod)[, 1] == max(VIF(mod)[, 1]) ]] <- NULL
+    b[, names(VIF(mod)[, 1])[VIF(mod)[, 1] == max(VIF(mod)[, 1])]] <- NULL
   }
 }
 ts_europe[, c(6:41)] <- NULL

@@ -8,10 +8,12 @@ ui <- dashboardPage(
         tabName = "data_explorer",
         startExpanded = TRUE,
         menuSubItem(
-          "Norway", tabName = "de_norway"
+          "Norway",
+          tabName = "de_norway"
         ),
         menuSubItem(
-          "Germany", tabName = "de_germany"
+          "Germany",
+          tabName = "de_germany"
         )
       )
     )
@@ -125,7 +127,7 @@ ui <- dashboardPage(
             selected = "LK Rosenheim"
           )
         )
-      ) 
+      )
     )
   ),
   title = "Test",

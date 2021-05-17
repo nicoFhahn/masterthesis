@@ -60,7 +60,7 @@ ts_norway$new_tests <- NULL
 ts_germany <- ts_germany[complete.cases(ts_germany), ]
 ts_norway <- ts_norway[complete.cases(ts_norway), ]
 contains_na <- which(ts_europe$new_cases %in% NA)
-for(i in contains_na) {
+for (i in contains_na) {
   if (ts_europe$Country[i - 1] == ts_europe$Country[i]) {
     ts_europe$total_cases[i] <- ts_europe$total_cases[i - 1]
     ts_europe$new_cases[i] <- 0
@@ -211,7 +211,7 @@ geom <- ts_europe$geometry
 ts_europe$geometry <- NULL
 ts_europe[, c(7:24, 27, 38, 39)] <- scale(ts_europe[, c(7:24, 27, 38, 39)])
 ts_europe$geometry <- geom
-table(ts_europe[ts_europe$expected == 0,]$Date)
+table(ts_europe[ts_europe$expected == 0, ]$Date)
 ts_europe <- ts_europe[ts_europe$Date >= "2020-02-19" & ts_europe$Date < "2021-05-14", ]
 # ts_europe <- ts_europe[ts_europe$expected > 0, ]
 ts_europe <- st_as_sf(ts_europe)

@@ -36,7 +36,7 @@ prior_1 <- list(
   )
 )
 uniques <- sapply(ts_both, function(x) length(unique(x)))
-ts_both[, names(uniques[uniques == 1]) [3:(length(uniques[uniques == 1]) - 1)]] <- NULL
+ts_both[, names(uniques[uniques == 1])[3:(length(uniques[uniques == 1]) - 1)]] <- NULL
 formula_1 <- as.formula(
   paste(
     "new_cases ~",

@@ -699,7 +699,7 @@ newest_numbers$cat_zeta <- cat_zeta
 newest_numbers$cat_zeta_log <- cat_zeta_log
 newest_numbers$prob_csi <- cat_csi
 marg_hyper < -inla.hyperpar.sample(100000, models_final[[1]][[3]])
-perc_var_u1 <- mean(marg_hyper[, 1] / ( marg_hyper[, 1] + marg_hyper[, 2]))
+perc_var_u1 <- mean(marg_hyper[, 1] / (marg_hyper[, 1] + marg_hyper[, 2]))
 perc_var_u1
 color_low <- "#20A4F3"
 color_high <- "#FF206E"
@@ -779,7 +779,7 @@ leaflet(data = newest_numbers[newest_numbers$csi >= threshold, ]) %>%
     weight = 1,
     opacity = 1,
     fillOpacity = 0.8,
-    fillColor = ~pal(rr),
+    fillColor = ~ pal(rr),
     label = paste(
       "Kommune: ", newest_numbers[newest_numbers$csi >= threshold, ]$kommune_name, "<br>",
       "Zeta: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$zeta, 2), "<br>",
@@ -806,7 +806,7 @@ leaflet(data = newest_numbers[newest_numbers$csi >= threshold, ]) %>%
     weight = 1,
     opacity = 1,
     fillOpacity = 0.8,
-    fillColor = ~pal(cat_zeta_log),
+    fillColor = ~ pal(cat_zeta_log),
     label = paste(
       "Kommune: ", newest_numbers[newest_numbers$csi >= threshold, ]$kommune_name, "<br>",
       "Zeta: ", newest_numbers[newest_numbers$csi >= threshold, ]$cat_zeta_log, "<br>",
