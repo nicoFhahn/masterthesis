@@ -5,6 +5,7 @@ library(ISOcodes)
 library(spdep)
 library(stringr)
 library(dplyr)
+library(regclass)
 library(MASS)
 source("R/preprocess_timeseries.R")
 set.seed(2354324)
@@ -27,7 +28,7 @@ g <- inla.read.graph(filename = "maps/map_3.adj")
 formula_1 <- as.formula(
   paste(
     "new_cases ~",
-    paste(colnames(ts_europe)[7:41], collapse = " + "),
+    paste(colnames(ts_europe)[c(3, 7:41)], collapse = " + "),
     "+ f(id_country_1, model = 'bym2', graph = g, scale.model = TRUE, hyper = prior_1)",
     "+ f(id_country_2, model = 'iid')",
     "+ Date"
@@ -46,9 +47,6 @@ res_1 <- inla(
   ),
   verbose = TRUE
 )
-formula_2 <- new_cases ~ 1 +
-  f(id_country_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1) +
-  Date
 formula_2 <- as.formula(
   paste(
     "new_cases ~",
@@ -195,14 +193,14 @@ predicted_5 <- c()
 predicted_6 <- c()
 # make predictions
 for (i in seq_len(nrow(ts_europe))) {
-  # predicted_1[i] <- inla.emarginal(
-  #   function(x) x * ts_europe$population[i],
-  #   res_1$marginals.fitted.values[[i]]
-  # )
-  predicted_2[i] <- inla.emarginal(
+  predicted_1[i] <- inla.emarginal(
     function(x) x * ts_europe$population[i],
-    res_2$marginals.fitted.values[[i]]
+    res_1$marginals.fitted.values[[i]]
   )
+  # predicted_2[i] <- inla.emarginal(
+  #   function(x) x * ts_europe$population[i],
+  #   res_2$marginals.fitted.values[[i]]
+  # )
   # predicted_3[i] <- inla.emarginal(
   #   function(x) x * ts_europe$population[i],
   #   res_3$marginals.fitted.values[[i]]

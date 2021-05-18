@@ -15,6 +15,19 @@ ui <- dashboardPage(
           "Germany",
           tabName = "de_germany"
         )
+      ),
+      menuItem(
+        text = "Spatial Modelling",
+        tabName = "modelling",
+        startExpanded = TRUE,
+        menuSubItem(
+          "Norway",
+          tabName = "sm_norway"
+        ),
+        menuSubItem(
+          "Germany",
+          tabName = "sm_germany"
+        )
       )
     )
   ),
@@ -127,9 +140,44 @@ ui <- dashboardPage(
             selected = "LK Rosenheim"
           )
         )
+      ),
+      tabItem(
+        tabName = "sm_norway",
+        multiInput(
+          inputId = "multi_norway",
+          label = "Select covariates",
+          choices = c(
+            "Median age",
+            "Total unemployment",
+            "Unemployed immigrants",
+            "Full-time workers",
+            "Part-time workers",
+            "Total number of immigrants",
+            "Marketplaces",
+            "Entertainment venues",
+            "Sports facilities",
+            "Clinics",
+            "Hairdressers",
+            "Shops",
+            "Places of worship",
+            "Retail stores",
+            "Nursing homes",
+            "Restaurants",
+            "Aerodromes",
+            "Offices",
+            "Public transport platforms",
+            "Kindergartens",
+            "Schools",
+            "Bakeries",
+            "Higher education",
+            "Population density",
+            "Urban density",
+            "Female to male ratio"
+          )
+        )
       )
     )
   ),
-  title = "Test",
+  title = "Covid or sth.",
   skin = "black"
 )

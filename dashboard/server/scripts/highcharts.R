@@ -1,23 +1,39 @@
 output$highchart_norway_1 <- renderHighchart({
   no_geometry_norway <- newest_numbers_norway
   no_geometry_norway$geometry <- NULL
+  selected_og <- input$picker_norway
+  selected_og_2 <- colnames_norway_actual[match(selected_og, colnames_norway_nice)]
+  selected <- colnames_norway_actual[match(selected_og, colnames_norway_nice)]
   cols <- colnames(newest_numbers_norway)[c(3, 5:30, 33:39, 41)]
+  diff_names <- cols[8:25][!cols[8:25] %in% unique(pois_norway$type)]
   part_1 <- ifelse(
-    input$picker_norway %in% cols[10:27],
+    selected %in% cols[8:25],
     "Number of buildings of type",
-    "Histogram of variable"
+    "Histogram for variable"
   )
+  part_2 <- ifelse(
+    selected %in% cols[8:25],
+    ifelse(
+      str_sub(selected_og, -1) == "s",
+      str_sub(selected_og, end = -2),
+      selected_og
+    ),
+    input$picker_norway
+  )
+  if (str_detect(part_2, "Bakerie")) part_2 <- str_replace(part_2, "Bakerie", "Bakery")
+  if (str_detect(part_2, "Places of")) part_2 <- str_replace(part_2, "Places of", "Place of")
+  if (str_detect(part_2, "facilitie")) part_2 <- str_replace(part_2, "facilitie", "facility")
   axis_title <- ifelse(
-    input$picker_norway %in% cols[10:27],
+    selected %in% cols[8:25],
     "Number of buildings",
     input$picker_norway
   )
   hchart(
-    no_geometry_norway[, input$picker_norway],
+    no_geometry_norway[, selected],
     color = "#E8D7FF"
   ) %>%
     hc_title(
-      text = paste(part_1, input$picker_norway),
+      text = paste(part_1, part_2),
       style = list(
         color = "#fff",
         fontSize = "calc(0.5em + 0.5vw)"
@@ -386,25 +402,47 @@ output$highchart_norway_2 <- renderHighchart({
 })
 
 output$highchart_germany_1 <- renderHighchart({
+  
   no_geometry_germany <- newest_numbers_germany
   no_geometry_germany$geometry <- NULL
+  selected_og <- input$picker_germany
+  selected_og_2 <- colnames_germany_actual[match(selected_og, colnames_germany_nice)]
+  selected <- colnames_germany_actual[match(selected_og, colnames_germany_nice)]
   cols <- colnames(newest_numbers_germany)[c(2:15, 17:34, 37:41, 44:46, 48)]
+  diff_names <- cols[c(16:32, 37)][!cols[c(16:32, 37)] %in% unique(pois_germany$type)]
   part_1 <- ifelse(
-    input$picker_germany %in% cols[c(16:32, 37)],
+    selected %in% cols[c(16:32, 37)],
     "Number of buildings of type",
-    "Histogram of variable"
+    "Histogram for variable"
+  )
+  part_2 <- ifelse(
+    selected %in% cols[c(16:32, 37)],
+    ifelse(
+      str_sub(selected_og, -1) == "s",
+      str_sub(selected_og, end = -2),
+      selected_og
+    ),
+    input$picker_germany
+  )
+  if (str_detect(part_2, "Bakerie")) part_2 <- str_replace(part_2, "Bakerie", "Bakery")
+  if (str_detect(part_2, "Places of")) part_2 <- str_replace(part_2, "Places of", "Place of")
+  if (str_detect(part_2, "facilitie")) part_2 <- str_replace(part_2, "facilitie", "facility")
+  part_1 <- ifelse(
+    selected %in% cols[c(16:32, 37)],
+    "Number of buildings of type",
+    "Histogram for variable"
   )
   axis_title <- ifelse(
-    input$picker_germany %in% cols[c(16:32, 37)],
+    selected %in% cols[c(16:32, 37)],
     "Number of buildings",
     input$picker_germany
   )
   hchart(
-    no_geometry_germany[, input$picker_germany],
+    no_geometry_germany[, selected],
     color = "#E8D7FF"
   ) %>%
     hc_title(
-      text = paste(part_1, input$picker_germany),
+      text = paste(part_1, part_2),
       style = list(
         color = "#fff",
         fontSize = "calc(0.5em + 0.5vw)"

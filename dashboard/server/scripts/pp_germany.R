@@ -220,4 +220,28 @@ germany_munc_long$incidence_seven <- 100000 *
 germany_munc_long$value_100k <- round(germany_munc_long$value_100k, 1)
 germany_munc_long$value_daily_100k <- round(germany_munc_long$value_daily_100k, 1)
 germany_munc_long$incidence_seven <- round(germany_munc_long$incidence_seven, 1)
-rm(list = setdiff(ls(), c("newest_numbers_germany", "germany_munc_long", "newest_numbers_norway", "norway_munc_conf_long")))
+colnames_germany_actual <- c(
+  "aerodrome", "area", "asyl_benefits", "bakeries", "clinic", "entertainment",
+  "expected_count", "sex", "hairdresser", "higher_education", "kindergarten",
+  "income_tax", "income_total", "trade_tax", "marketplace", "infections", "nursing_home", "office",
+  "place_of_worship", "population", "pop_dens", "inf_rate", "protection_seekers",
+  "platform", "residential", "restaurant", "retail", "schools", "shops", "sir",
+  "sport", "unemployed_total", "unemployed_foreigners", "urb_dens", "afd", "Union",
+  "FDP", "SPD", "Gruene", "die_linke", "welfare_recipients"
+)
+colnames_germany_nice <- sort(c(
+  "Population", "Asylum benefits", "Log trade tax", "Log total income", "Log income tax",
+  "Vote for die Union", "Vote for SPD", "Vote for the Greens", "Vote for FDP", "Vote for the Left",
+  "Vote for AfD", "Protection seekers", "Welfare recipients", "Total unemployment", "Unemployed foreigners",
+  "Marketplaces", "Entertainment venues", "Sports facilities", "Clinics", "Hairdressers", "Shops", "Places of worship",
+  "Retail stores", "Nursing homes", "Restaurants", "Aerodromes", "Offices",
+  "Public transport platforms", "Kindergartens", "Schools", "Bakeries", "Residential buildings",
+  "Higher education", "Population density", "Urban density", "Female to male ratio",
+  "Number of infections", "Expected count", "SIR", "Proportion of infected", "Area"
+))
+rm(list = setdiff(ls(), c(
+  "newest_numbers_germany", "germany_munc_long",
+  "newest_numbers_norway", "norway_munc_conf_long",
+  "colnames_germany_actual", "colnames_germany_nice",
+  "colnames_norway_actual", "colnames_norway_nice"
+  )))

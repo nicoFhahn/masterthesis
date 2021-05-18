@@ -1,12 +1,12 @@
 output$dropdown_ui_norway <- renderUI({
-  cols <- colnames(newest_numbers_norway)[c(3, 5:30, 33:39, 41)]
+  cols <- colnames(newest_numbers_norway)[c(3, 5:30, 31:37, 39)]
   pickerInput(
     inputId = "picker_norway",
     label = "Select variable",
     choices = list(
-      Infrastructure = sort(cols[10:27]),
-      Health = sort(cols[32:35]),
-      Others = sort(cols[c(1:9, 29:31)])
+      Infrastructure = colnames_norway_nice[which(colnames_norway_actual %in% cols[8:25])],
+      Health = colnames_norway_nice[which(colnames_norway_actual %in% cols[32:35])],
+      Others = colnames_norway_nice[which(colnames_norway_actual %in% cols[c(1:7, 29:31)])]
     ),
     selected = "office"
   )
@@ -18,9 +18,9 @@ output$dropdown_ui_germany <- renderUI({
     inputId = "picker_germany",
     label = "Select variable",
     choices = list(
-      Infrastructure = sort(cols[c(16:32, 37)]),
-      Health = sort(cols[38:41]),
-      Others = sort(cols[c(1:15, 33:36)])
+      Infrastructure = colnames_germany_nice[which(colnames_germany_actual %in% cols[c(16:32, 37)])],
+      Health = colnames_germany_nice[which(colnames_germany_actual %in% cols[38:41])],
+      Others = colnames_germany_nice[which(colnames_germany_actual %in% cols[c(1:15, 33:36)])]
     ),
     selected = "office"
   )

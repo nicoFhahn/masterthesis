@@ -3,14 +3,11 @@ observeEvent(
     input$picker_norway
   },
   {
-    selected <- input$picker_norway
+    selected_og <- input$picker_norway
+    selected_og_2 <- colnames_norway_actual[match(selected_og, colnames_norway_nice)]
+    selected <- colnames_norway_actual[match(selected_og, colnames_norway_nice)]
     cols <- colnames(newest_numbers_norway)[c(3, 5:30, 33:39, 41)]
-    diff_names <- cols[10:27][!cols[10:27] %in% unique(pois_norway$type)]
-    pal <- colorRamp(
-      lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
-      alpha = TRUE
-    )((1:256) / 256)
-    pal[, 4] <- 150
+    diff_names <- cols[8:25][!cols[8:25] %in% unique(pois_norway$type)]
     if (selected %in% diff_names) {
       input_names <- c(
         "bakeries", "higher_education", "nursing_home", "place_of_worship",
@@ -22,9 +19,14 @@ observeEvent(
       )
       selected <- real_names[match(selected, input_names)]
     }
+    pal <- colorRamp(
+      lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
+      alpha = TRUE
+    )((1:256) / 256)
+    pal[, 4] <- 150
     if (!is.null(input$map_type_norway)) {
       if (input$map_type_norway == "Hexagon Map") {
-        if (input$picker_norway %in% cols[10:27]) {
+        if (selected_og %in% colnames_norway_nice[which(colnames_norway_actual %in% cols[8:25])]) {
           mapdeck_update(map_id = "map_norway") %>%
             clear_hexagon(layer_id = "pois_hexagon") %>%
             clear_heatmap(layer_id = "pois_heatmap") %>%
@@ -51,7 +53,7 @@ observeEvent(
             clear_polygon(layer_id = "polygon_norway")
         }
       } else if (input$map_type_norway == "Heatmap") {
-        if (input$picker_norway %in% cols[10:27]) {
+        if (selected_og %in% colnames_norway_nice[which(colnames_norway_actual %in% cols[8:25])]) {
           mapdeck_update(map_id = "map_norway") %>%
             clear_hexagon(layer_id = "pois_hexagon") %>%
             clear_heatmap(layer_id = "pois_heatmap") %>%
@@ -73,11 +75,12 @@ observeEvent(
             clear_polygon(layer_id = "polygon_norway")
         }
       } else if (input$map_type_norway == "Choropleth") {
-        placeholder <- newest_numbers_norway[, input$picker_norway]
+        placeholder <- newest_numbers_norway[, selected_og_2]
         placeholder$geometry <- NULL
         newest_numbers_norway$tooltip <- paste(
           newest_numbers_norway$kommune_name,
           "<br>",
+          selected_og, ": ",
           unlist(placeholder[, 1])
         )
         mapdeck_update(map_id = "map_norway") %>%
@@ -86,7 +89,7 @@ observeEvent(
           clear_polygon(layer_id = "polygon_norway") %>%
           add_polygon(
             data = newest_numbers_norway,
-            fill_colour = input$picker_norway,
+            fill_colour = selected_og_2,
             legend = list(stroke_colour = FALSE, fill_colour = TRUE),
             stroke_width = 500,
             stroke_colour = "#121212",
@@ -106,15 +109,12 @@ observeEvent(
     input$map_type_norway
   },
   {
-    selected <- input$picker_norway
+    selected_og <- input$picker_norway
+    selected_og_2 <- colnames_norway_actual[match(selected_og, colnames_norway_nice)]
+    selected <- colnames_norway_actual[match(selected_og, colnames_norway_nice)]
     cols <- colnames(newest_numbers_norway)[c(3, 5:30, 33:39, 41)]
-    diff_names <- cols[10:27][!cols[10:27] %in% unique(pois_norway$type)]
-    pal <- colorRamp(
-      lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
-      alpha = TRUE
-    )((1:256) / 256)
-    pal[, 4] <- 150
-    if (!is.null(selected)) {
+    diff_names <- cols[8:25][!cols[8:25] %in% unique(pois_norway$type)]
+    if (length(selected) > 0) {
       if (selected %in% diff_names) {
         input_names <- c(
           "bakeries", "higher_education", "nursing_home", "place_of_worship",
@@ -126,9 +126,14 @@ observeEvent(
         )
         selected <- real_names[match(selected, input_names)]
       }
+      pal <- colorRamp(
+        lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
+        alpha = TRUE
+      )((1:256) / 256)
+      pal[, 4] <- 150
       if (!is.null(input$map_type_norway)) {
         if (input$map_type_norway == "Hexagon Map") {
-          if (input$picker_norway %in% cols[10:27]) {
+          if (selected_og %in% colnames_norway_nice[which(colnames_norway_actual %in% cols[8:25])]) {
             mapdeck_update(map_id = "map_norway") %>%
               clear_hexagon(layer_id = "pois_hexagon") %>%
               clear_heatmap(layer_id = "pois_heatmap") %>%
@@ -155,7 +160,7 @@ observeEvent(
               clear_polygon(layer_id = "polygon_norway")
           }
         } else if (input$map_type_norway == "Heatmap") {
-          if (input$picker_norway %in% cols[10:27]) {
+          if (selected_og %in% colnames_norway_nice[which(colnames_norway_actual %in% cols[8:25])]) {
             mapdeck_update(map_id = "map_norway") %>%
               clear_hexagon(layer_id = "pois_hexagon") %>%
               clear_heatmap(layer_id = "pois_heatmap") %>%
@@ -177,11 +182,12 @@ observeEvent(
               clear_polygon(layer_id = "polygon_norway")
           }
         } else if (input$map_type_norway == "Choropleth") {
-          placeholder <- newest_numbers_norway[, input$picker_norway]
+          placeholder <- newest_numbers_norway[, selected_og_2]
           placeholder$geometry <- NULL
           newest_numbers_norway$tooltip <- paste(
             newest_numbers_norway$kommune_name,
             "<br>",
+            selected_og, ": ",
             unlist(placeholder[, 1])
           )
           mapdeck_update(map_id = "map_norway") %>%
@@ -190,14 +196,17 @@ observeEvent(
             clear_polygon(layer_id = "polygon_norway") %>%
             add_polygon(
               data = newest_numbers_norway,
-              fill_colour = input$picker_norway,
+              fill_colour = selected_og_2,
               legend = list(stroke_colour = FALSE, fill_colour = TRUE),
               stroke_width = 500,
               stroke_colour = "#121212",
               auto_highlight = TRUE,
               palette = pal,
               tooltip = "tooltip",
-              layer_id = "polygon_norway"
+              layer_id = "polygon_norway",
+              legend_options = list(
+                selected_og_2 = list(title = selected_og)
+              )
             )
         }
       }
@@ -223,9 +232,22 @@ observeEvent(
     input$picker_germany
   },
   {
-    selected <- input$picker_germany
+    selected_og <- input$picker_germany
+    selected_og_2 <- colnames_germany_actual[match(selected_og, colnames_germany_nice)]
+    selected <- colnames_germany_actual[match(selected_og, colnames_germany_nice)]
     cols <- colnames(newest_numbers_germany)[c(2:15, 17:34, 37:41, 44:46, 48)]
     diff_names <- cols[c(16:32, 37)][!cols[c(16:32, 37)] %in% unique(pois_germany$type)]
+    if (selected %in% diff_names) {
+      input_names <- c(
+        "bakeries", "higher_education", "nursing_home", "place_of_worship",
+        "schools", "shops"
+      )
+      real_names <- c(
+        "bakery", "higher education", "nursing home", "place of worship",
+        "school", "shop"
+      )
+      selected <- real_names[match(selected, input_names)]
+    }
     pal <- colorRamp(
       lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
       alpha = TRUE
@@ -244,7 +266,7 @@ observeEvent(
     }
     if (!is.null(input$map_type_germany)) {
       if (input$map_type_germany == "Hexagon Map") {
-        if (input$picker_germany %in% cols[c(16:32, 37)]) {
+        if (selected_og %in% colnames_germany_nice[which(colnames_germany_actual %in% cols[c(16:32, 37)])]) {
           mapdeck_update(map_id = "map_germany") %>%
             clear_hexagon(layer_id = "pois_hexagon") %>%
             clear_heatmap(layer_id = "pois_heatmap") %>%
@@ -271,7 +293,7 @@ observeEvent(
             clear_polygon(layer_id = "polygon_germany")
         }
       } else if (input$map_type_germany == "Heatmap") {
-        if (input$picker_germany %in% cols[c(16:32, 37)]) {
+        if (selected_og %in% colnames_germany_nice[which(colnames_germany_actual %in% cols[c(16:32, 37)])]) {
           mapdeck_update(map_id = "map_germany") %>%
             clear_hexagon(layer_id = "pois_hexagon") %>%
             clear_heatmap(layer_id = "pois_heatmap") %>%
@@ -293,11 +315,12 @@ observeEvent(
             clear_polygon(layer_id = "polygon_germany")
         }
       } else if (input$map_type_germany == "Choropleth") {
-        placeholder <- newest_numbers_germany[, input$picker_germany]
+        placeholder <- newest_numbers_germany[, selected_og_2]
         placeholder$geometry <- NULL
         newest_numbers_germany$tooltip <- paste(
-          newest_numbers_germany$kommune_name,
+          newest_numbers_germany$municipality,
           "<br>",
+          selected_og, ": ",
           unlist(placeholder[, 1])
         )
         mapdeck_update(map_id = "map_germany") %>%
@@ -306,7 +329,7 @@ observeEvent(
           clear_polygon(layer_id = "polygon_germany") %>%
           add_polygon(
             data = newest_numbers_germany,
-            fill_colour = input$picker_germany,
+            fill_colour = selected_og_2,
             legend = list(stroke_colour = FALSE, fill_colour = TRUE),
             stroke_width = 500,
             stroke_colour = "#121212",
@@ -326,15 +349,28 @@ observeEvent(
     input$map_type_germany
   },
   {
-    selected <- input$picker_germany
+    selected_og <- input$picker_germany
+    selected_og_2 <- colnames_germany_actual[match(selected_og, colnames_germany_nice)]
+    selected <- colnames_germany_actual[match(selected_og, colnames_germany_nice)]
     cols <- colnames(newest_numbers_germany)[c(2:15, 17:34, 37:41, 44:46, 48)]
     diff_names <- cols[c(16:32, 37)][!cols[c(16:32, 37)] %in% unique(pois_germany$type)]
-    pal <- colorRamp(
-      lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
-      alpha = TRUE
-    )((1:256) / 256)
-    pal[, 4] <- 150
-    if (!is.null(selected)) {
+    if (length(selected) > 0) {
+      if (selected %in% diff_names) {
+        input_names <- c(
+          "bakeries", "higher_education", "nursing_home", "place_of_worship",
+          "schools", "shops"
+        )
+        real_names <- c(
+          "bakery", "higher education", "nursing home", "place of worship",
+          "school", "shop"
+        )
+        selected <- real_names[match(selected, input_names)]
+      }
+      pal <- colorRamp(
+        lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
+        alpha = TRUE
+      )((1:256) / 256)
+      pal[, 4] <- 150
       if (selected %in% diff_names) {
         input_names <- c(
           "bakeries", "higher_education", "nursing_home", "place_of_worship",
@@ -348,7 +384,7 @@ observeEvent(
       }
       if (!is.null(input$map_type_germany)) {
         if (input$map_type_germany == "Hexagon Map") {
-          if (input$picker_germany %in% cols[c(16:32, 37)]) {
+          if (selected_og %in% colnames_germany_nice[which(colnames_germany_actual %in% cols[c(16:32, 37)])]) {
             mapdeck_update(map_id = "map_germany") %>%
               clear_hexagon(layer_id = "pois_hexagon") %>%
               clear_heatmap(layer_id = "pois_heatmap") %>%
@@ -375,7 +411,7 @@ observeEvent(
               clear_polygon(layer_id = "polygon_germany")
           }
         } else if (input$map_type_germany == "Heatmap") {
-          if (input$picker_germany %in% cols[c(16:32, 37)]) {
+          if (selected_og %in% colnames_germany_nice[which(colnames_germany_actual %in% cols[c(16:32, 37)])]) {
             mapdeck_update(map_id = "map_germany") %>%
               clear_hexagon(layer_id = "pois_hexagon") %>%
               clear_heatmap(layer_id = "pois_heatmap") %>%
@@ -397,11 +433,12 @@ observeEvent(
               clear_polygon(layer_id = "polygon_germany")
           }
         } else if (input$map_type_germany == "Choropleth") {
-          placeholder <- newest_numbers_germany[, input$picker_germany]
+          placeholder <- newest_numbers_germany[, selected_og_2]
           placeholder$geometry <- NULL
           newest_numbers_germany$tooltip <- paste(
-            newest_numbers_germany$kommune_name,
+            newest_numbers_germany$municipality,
             "<br>",
+            selected_og, ": ",
             unlist(placeholder[, 1])
           )
           mapdeck_update(map_id = "map_germany") %>%
@@ -410,7 +447,7 @@ observeEvent(
             clear_polygon(layer_id = "polygon_germany") %>%
             add_polygon(
               data = newest_numbers_germany,
-              fill_colour = input$picker_germany,
+              fill_colour = selected_og_2,
               legend = list(stroke_colour = FALSE, fill_colour = TRUE),
               stroke_width = 500,
               stroke_colour = "#121212",
@@ -420,7 +457,7 @@ observeEvent(
               layer_id = "polygon_germany"
             )
         }
-      }
+    }
     }
   },
   priority = 96

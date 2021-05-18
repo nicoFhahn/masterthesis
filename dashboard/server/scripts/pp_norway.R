@@ -97,4 +97,26 @@ norway_munc_conf_long$incidence_seven <- 100000 *
 norway_munc_conf_long$value_100k <- round(norway_munc_conf_long$value_100k, 1)
 norway_munc_conf_long$value_daily_100k <- round(norway_munc_conf_long$value_daily_100k, 1)
 norway_munc_conf_long$incidence_seven <- round(norway_munc_conf_long$incidence_seven, 1)
-rm(list = setdiff(ls(), c("newest_numbers_norway", "norway_munc_conf_long")))
+newest_numbers_norway$construction_ft_work <- NULL
+newest_numbers_norway$construction_pt_work <- NULL
+colnames_norway_actual <- c(
+  "aerodrome", "area", "bakeries", "clinic", "entertainment", "expected_count", "sex",
+  "workers_ft_work", "hairdresser", "higher_education", "kindergarten",
+  "marketplace", "median_age", "infections", "nursing_home", "office",
+  "workers_pt_work", "place_of_worship", "population", "pop_dens", "inf_rate",
+  "platform", "residential", "restaurant", "retail", "schools", "shops", "sir",
+  "sport", "immigrants_total", "unemp_tot", "unemp_immg", "urb_dens"
+)
+colnames_norway_nice <- sort(c(
+  "Population", "Median age", "Total unemployment", "Unemployed immigrants", "Full-time workers",
+  "Part-time workers", "Total number of immigrants", "Marketplaces", "Entertainment venues",
+  "Sports facilities", "Clinics", "Hairdressers", "Shops", "Places of worship",
+  "Retail stores", "Nursing homes", "Restaurants", "Aerodromes", "Offices",
+  "Public transport platforms", "Kindergartens", "Schools", "Bakeries", "Residential buildings",
+  "Higher education", "Population density", "Urban density", "Female to male ratio",
+  "Number of infections", "Expected count", "SIR", "Proportion of infected", "Area"
+))
+rm(list = setdiff(ls(), c(
+  "newest_numbers_norway", "norway_munc_conf_long",
+  "colnames_norway_actual", "colnames_norway_nice"
+  )))

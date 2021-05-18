@@ -1,4 +1,11 @@
 library(readr)
+library(eurostat)
+library(tibble)
+library(ISOcodes)
+library(stringr)
+library(dplyr)
+library(sf)
+library(SpatialEpi)
 ts <- read_csv(
   "wrangled_data/timeseries_covid.csv",
   col_types = list(
@@ -167,6 +174,8 @@ ts_europe[ts_europe$CNTR_CODE == "MD", ]$Value <- "4,025,805"
 ts_europe <- st_as_sf(ts_europe)
 colnames(ts_europe)[42] <- "population"
 ts_europe$population <- as.numeric(str_replace_all(ts_europe$population, ",", ""))
+ts_europe <- ts_europe[ts_europe$new_cases %in% seq(100, 4000, 1), ]
+
 ts_europe_split <- split(ts_europe, ts_europe$Date)
 ts_europe_split_e <- pbapply::pblapply(
   ts_europe_split,
