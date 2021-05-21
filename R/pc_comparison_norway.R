@@ -128,61 +128,25 @@ models <- pblapply(
         control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
       ), silent = TRUE)
     }
-    predicted_besag <- c()
-    predicted_bym2 <- c()
-    predicted_leroux <- c()
-    for (i in seq_len(nrow(newest_numbers))) {
-      predicted_besag[i] <- inla.emarginal(
-        function(x) x * newest_numbers$population[i],
-        res_besag$marginals.fitted.values[[i]]
-      )
-      predicted_bym2[i] <- inla.emarginal(
-        function(x) x * newest_numbers$population[i],
-        res_bym2$marginals.fitted.values[[i]]
-      )
-      predicted_leroux[i] <- try(inla.emarginal(
-        function(x) x * newest_numbers$population[i],
-        res_leroux$marginals.fitted.values[[i]]
-      ), silent = TRUE)
-      if (class(predicted_leroux[i]) != "numeric") {
-        predicted_leroux[i] <- NA
-      }
-    }
     mae <- c(list(
-      mean(abs(predicted_besag[test] - test_value)),
-      mean(abs(predicted_bym2[test] - test_value)),
-      ifelse(
-        any(is.na(predicted_leroux)),
-        NA,
-        mean(abs(predicted_leroux[test] - test_value))
-      )
+      mean(abs(res_besag$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
+      mean(abs(res_bym2$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
+      mean(abs(res_leroux$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value))
     ))
     dic <- c(list(
       res_besag$dic$dic,
       res_bym2$dic$dic,
-      ifelse(
-        any(is.na(predicted_leroux)),
-        NA,
-        res_leroux$dic$dic
-      )
+      res_leroux$dic$dic
     ))
     waic <- c(list(
       res_besag$waic$waic,
       res_bym2$waic$waic,
-      ifelse(
-        any(is.na(predicted_leroux)),
-        NA,
-        res_leroux$waic$waic
-      )
+      res_leroux$waic$waic
     ))
     cpo <- c(list(
       sum(log(res_besag$cpo$cpo), na.rm = TRUE),
       sum(log(res_bym2$cpo$cpo), na.rm = TRUE),
-      ifelse(
-        any(is.na(predicted_leroux)),
-        NA,
-        sum(log(res_leroux$cpo$cpo), na.rm = TRUE)
-      )
+      sum(log(res_leroux$cpo$cpo), na.rm = TRUE)
     ))
     results <- tibble(
       dic = unlist(dic),

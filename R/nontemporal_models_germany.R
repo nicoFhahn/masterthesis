@@ -130,35 +130,12 @@ gof <- c(gof, list(
     cpo = sum(log(res_4$cpo$cpo), na.rm = TRUE)
   )
 ))
-predicted_1 <- c()
-predicted_2 <- c()
-predicted_3 <- c()
-predicted_4 <- c()
-# make predictions
-for (i in seq_len(nrow(newest_numbers))) {
-  predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_1$marginals.fitted.values[[i]]
-  )
-  predicted_2[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_2$marginals.fitted.values[[i]]
-  )
-  predicted_3[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_3$marginals.fitted.values[[i]]
-  )
-  predicted_4[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_4$marginals.fitted.values[[i]]
-  )
-}
 # calculate the mae
 mae <- c(mae, list(
-  mean(abs(predicted_1[test] - test_value)),
-  mean(abs(predicted_2[test] - test_value)),
-  mean(abs(predicted_3[test] - test_value)),
-  mean(abs(predicted_4[test] - test_value))
+  mean(abs(res_1$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
+  mean(abs(res_2$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
+  mean(abs(res_3$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
+  mean(abs(res_4$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value))
 ))
 models_final <- list(models, gof, mae)
 # save the models

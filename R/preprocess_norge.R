@@ -8,6 +8,7 @@ library(stringr)
 library(units)
 library(regclass)
 library(MASS)
+library(lwgeom)
 #####################################################
 # load the newest data
 norway_municipality_confirmed <- read_csv(
@@ -19,6 +20,10 @@ norway_municipality_confirmed_long <- melt(
   id.vars = colnames(norway_municipality_confirmed)[1:6],
   variable.name = "date"
 )
+norway_municipality_confirmed_long <- norway_municipality_confirmed_long[
+  norway_municipality_confirmed_long$kommune_name %in%
+    unique(norway_municipality_confirmed_long$kommune_name)[1:356],
+]
 # read the shapefile
 norge_shape <- read_sf("norge_data/shapefile_norway.shp")
 cols <- unlist(read_csv("norge_data/colnames_shapefile.csv"))

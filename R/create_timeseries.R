@@ -2,13 +2,60 @@ library(readr)
 library(tibble)
 library(dplyr)
 library(stringr)
+library(here)
+library(RSelenium)
 infections <- read_csv(
-  "timeseries/owid-covid-data.csv"
+  "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
 )
+websites <- c(
+  "https://ourworldindata.org/grapher/changes-visitors-covid",
+  "https://ourworldindata.org/grapher/covid-19-testing-policy",
+  "https://ourworldindata.org/grapher/covid-contact-tracing",
+  "https://ourworldindata.org/grapher/covid-stringency-index",
+  "https://ourworldindata.org/grapher/covid-vaccination-policy",
+  "https://ourworldindata.org/grapher/face-covering-policies-covid",
+  "https://ourworldindata.org/grapher/full-list-covid-19-tests-per-day",
+  "https://ourworldindata.org/grapher/income-support-covid",
+  "https://ourworldindata.org/grapher/internal-movement-covid",
+  "https://ourworldindata.org/grapher/international-travel-covid",
+  "https://ourworldindata.org/grapher/public-campaigns-covid",
+  "https://ourworldindata.org/grapher/public-events-covid",
+  "https://ourworldindata.org/grapher/public-gathering-rules-covid",
+  "https://ourworldindata.org/grapher/public-transport-covid",
+  "https://ourworldindata.org/grapher/school-closures-covid",
+  "https://ourworldindata.org/grapher/share-people-fully-vaccinated-covid",
+  "https://ourworldindata.org/grapher/share-people-vaccinated-covid",
+  "https://ourworldindata.org/grapher/stay-at-home-covid",
+  "https://ourworldindata.org/grapher/workplace-closures-covid"
+  
+)
+j <- 1
+download_location <- file.path(Sys.getenv("USERPROFILE"), "Downloads")
+driver <- rsDriver(
+  browser = "chrome",
+  chromever = "89.0.4389.23"
+)
+server <- driver$server
+browser <- driver$client
+for(i in websites) {
+  print(paste("Downloading website", j))
+  j <- j + 1
+  filename = paste(rev(str_split(i, "/")[[1]])[1], ".csv", sep = "")
+  browser$navigate(i)
+  Sys.sleep(5)
+  tab <- browser$findElements("download-tab-button", using = "class")
+  tab[[1]]$clickElement()
+  Sys.sleep(2)
+  buttons <- browser$findElements("btn-primary", using = "class")
+  buttons[[1]]$clickElement()
+  Sys.sleep(3)
+  file.rename(file.path(download_location, filename), here("timeseries", filename))
+}
+browser$close()
+server$stop()
 covariates <- list.files(
   "timeseries/"
 )
-covariates <- covariates[covariates != "owid-covid-data.csv"]
 covariates <- paste("timeseries/", covariates, sep = "")
 covariate_tibbles <- lapply(covariates, read_csv)
 covariate_tibbles <- lapply(
@@ -19,12 +66,11 @@ covariate_tibbles <- lapply(
   }
 )
 min_date <- as.Date("2020-01-01")
-max_date <- as.Date("2021-05-14")
+max_date <- max(infections$date)
 date_range <- seq(min_date, max_date, 1)
 countries_1 <- unique(do.call(c, lapply(covariate_tibbles, function(x) unique(x$Entity))))
 countries_2 <- unique(infections$location)
 countries <- unique(c(countries_1, countries_2))
-x <- covariate_tibbles[[5]]
 covariate_tibbles_full <- lapply(
   covariate_tibbles,
   function(x, ...) {

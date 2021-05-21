@@ -3,9 +3,13 @@ library(eurostat)
 library(tibble)
 library(ISOcodes)
 library(stringr)
+library(data.table)
 library(dplyr)
 library(sf)
 library(SpatialEpi)
+library(covidregionaldata)
+library(covid19germany)
+library(reshape2)
 ts <- read_csv(
   "wrangled_data/timeseries_covid.csv",
   col_types = list(
@@ -56,16 +60,12 @@ ts <- read_csv(
 )
 ts_europe <- ts[ts$continent == "Europe", ]
 ts_europe <- ts_europe[!is.na(ts_europe$Date), ]
-ts_germany <- ts_europe[ts_europe$Country == "Germany", ]
-ts_norway <- ts_europe[ts_europe$Country == "Norway", ]
-ts_germany$extreme_poverty <- NULL
-ts_germany$handwashing_facilities <- NULL
-ts_germany$new_tests <- NULL
-ts_norway$extreme_poverty <- NULL
-ts_norway$handwashing_facilities <- NULL
-ts_norway$new_tests <- NULL
-ts_germany <- ts_germany[complete.cases(ts_germany), ]
-ts_norway <- ts_norway[complete.cases(ts_norway), ]
+# ts_germany$extreme_poverty <- NULL
+# ts_germany$handwashing_facilities <- NULL
+# ts_germany$new_tests <- NULL
+# ts_norway$extreme_poverty <- NULL
+# ts_norway$handwashing_facilities <- NULL
+# ts_norway$new_tests <- NULL
 contains_na <- which(ts_europe$new_cases %in% NA)
 for (i in contains_na) {
   if (ts_europe$Country[i - 1] == ts_europe$Country[i]) {
@@ -121,6 +121,16 @@ ts_europe <- merge(
   iso_code,
   by = "Country"
 )
+cases <- get_national_data(unique(ts_europe$Country))
+cases <- cases[, c("date", "cases_new", "iso_code")]
+colnames(cases) <- c("Date", "cases_new", "CNTR_CODE")
+ts_europe <- merge(
+  ts_europe,
+  cases,
+  by = c("Date", "CNTR_CODE")
+)
+ts_europe$new_cases <- ts_europe$cases_new
+ts_europe$cases_new <- NULL
 europe_shapes <- get_eurostat_geospatial(nuts_level = "0")
 missing <- !unique(ts_europe$CNTR_CODE) %in% europe_shapes$CNTR_CODE
 unique(ts_europe$Country)[missing]
@@ -174,9 +184,24 @@ ts_europe[ts_europe$CNTR_CODE == "MD", ]$Value <- "4,025,805"
 ts_europe <- st_as_sf(ts_europe)
 colnames(ts_europe)[42] <- "population"
 ts_europe$population <- as.numeric(str_replace_all(ts_europe$population, ",", ""))
-ts_europe <- ts_europe[ts_europe$new_cases %in% seq(100, 4000, 1), ]
-
-ts_europe_split <- split(ts_europe, ts_europe$Date)
+# rki <- get_RKI_timeseries()
+# germany_confirmed <- group_RKI_timeseries(rki, Bundesland)
+# germany_confirmed <- germany_confirmed %>% group_by(Date) %>% summarise(new_cases = sum(NumberNewTestedIll))
+# germany_confirmed <- germany_confirmed[germany_confirmed$Date %in% ts_europe[ts_europe$Country == "Germany", ]$Date, ]
+# norway_municipality_confirmed <- read_csv(
+#   "https://raw.githubusercontent.com/thohan88/covid19-nor-data/master/data/01_infected/msis/municipality_wide.csv"
+# )
+# # turn it into long format
+# norway_municipality_confirmed_long <- melt(
+#   setDT(norway_municipality_confirmed),
+#   id.vars = colnames(norway_municipality_confirmed)[1:6],
+#   variable.name = "date"
+# )
+# norway_confirmed <- norway_municipality_confirmed_long %>% group_by(date) %>% summarise(new_cases = sum(value))
+# norway_confirmed$date <- as.Date(as.character(norway_confirmed$date))
+# norway_confirmed <- norway_confirmed[norway_confirmed$date %in% ts_europe[ts_europe$Country == "Norway", ]$Date, ]
+# ts_europe[ts_europe$Country == "Norway", ][ts_europe[ts_europe$Country == "Norway", ]$Date %in% norway_confirmed$date, ]
+ts_europe_split <- split(ts_europe, ts_europe$Country)
 ts_europe_split_e <- pbapply::pblapply(
   ts_europe_split,
   function(x) {
@@ -216,12 +241,68 @@ ts_europe <- ts_europe[order(ts_europe$Country, ts_europe$Date), ]
 ts_europe <- ts_europe[ts_europe$new_cases >= 0, ]
 ts_europe$id_date_area <- seq_len(nrow(ts_europe))
 rm(list = setdiff(ls(), "ts_europe"))
-geom <- ts_europe$geometry
+ts_norway <- ts_europe[ts_europe$Country == "Norway", ][, c(1:6, 19:49)]
+ts_germany <- ts_europe[ts_europe$Country == "Germany", ][, c(1:6, 19:49)]
+geom <- ts_norway$geometry
+ts_norway$geometry <- NULL
+ts_norway[, c(7:12, 15, 26, 27)] <- scale(ts_norway[, c(7:12, 15, 26, 27)])
+ts_norway$geometry <- geom
+ts_norway <- st_as_sf(ts_norway)
+last_0 <- which(diff(which(ts_norway$new_cases %in% 0)) > 1 %in% TRUE)[1] - 20
+ts_norway <- ts_norway[last_0:nrow(ts_norway), ]
+geom <- ts_germany$geometry
+ts_germany$geometry <- NULL
+ts_germany[, c(7:12, 15, 26, 27)] <- scale(ts_germany[, c(7:12, 15, 26, 27)])
+ts_germany$geometry <- geom
+ts_germany <- st_as_sf(ts_germany)
+last_0 <- which(diff(which(ts_germany$new_cases %in% 0)) > 1 %in% TRUE)[1] - 20
+ts_germany <- ts_germany[last_0:nrow(ts_germany), ]
 ts_europe$geometry <- NULL
 ts_europe[, c(7:24, 27, 38, 39)] <- scale(ts_europe[, c(7:24, 27, 38, 39)])
 ts_europe$geometry <- geom
-table(ts_europe[ts_europe$expected == 0, ]$Date)
-ts_europe <- ts_europe[ts_europe$Date >= "2020-02-19" & ts_europe$Date < "2021-05-14", ]
-# ts_europe <- ts_europe[ts_europe$expected > 0, ]
 ts_europe <- st_as_sf(ts_europe)
+ts_europe_split <- split(ts_europe, ts_europe$CNTR_CODE)
+ts_europe_split <- lapply(ts_europe_split, function(x) {
+  last_0 <- max(which(diff(which(x$new_cases %in% 0)) > 1 %in% TRUE)[1] - 20, 1)
+  x <- x[last_0:nrow(x), ]
+  x
+})
+ts_europe <- bind_rows(ts_europe_split)
+rki <- get_RKI_timeseries()
+# group it after municipality
+germany_confirmed <- group_RKI_timeseries(rki, Landkreis)
+germany_grouped <- germany_confirmed %>%
+  group_by(Date) %>%
+  summarise(
+    new_cases = sum(NumberNewTestedIll)
+  )
+germany_grouped <- germany_grouped[germany_grouped$Date %in% ts_germany$Date, ]
+ts_germany$new_cases <- germany_grouped$new_cases
+norway <- read_csv(
+  "https://raw.githubusercontent.com/thohan88/covid19-nor-data/master/data/01_infected/msis/municipality_wide.csv"
+)
+# turn it into long format
+norway <- melt(
+  setDT(norway),
+  id.vars = colnames(norway)[1:6],
+  variable.name = "date"
+)
+norway$date <- as.Date(as.character(norway$date))
+norway <- norway[
+  order(norway$date,
+        norway$kommune_no),
+]
+daily_cases <- norway[359:nrow(norway), ]$value - norway[1:(nrow(norway) - 358), ]$value
+daily_cases[daily_cases < 0] <- 0
+norway <-  norway[359:nrow(norway), ]
+norway$value <- daily_cases
+norway_grouped <- norway %>%
+  group_by(date) %>%
+  summarise(new_cases = sum(value))
+norway_grouped <- norway_grouped[norway_grouped$date %in% ts_norway$Date, ]
+ts_norway[ts_norway$Date %in% (seq(min(norway_grouped$date), max(norway_grouped$date), 1) + 1), ]$new_cases <- norway_grouped$new_cases
+ts_germany$geometry <- NULL
+ts_norway$geometry <- NULL
+write_csv(ts_germany, "wrangled_data/ts_germany.csv")
+write_csv(ts_norway, "wrangled_data/ts_norway.csv")
 rm(list = setdiff(ls(), c("ts_germany", "ts_norway", "ts_europe")))
