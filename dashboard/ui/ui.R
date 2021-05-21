@@ -17,6 +17,19 @@ ui <- dashboardPage(
         )
       ),
       menuItem(
+        text = "SIR",
+        tabName = "sir",
+        startExpanded = TRUE,
+        menuSubItem(
+          "Norway",
+          tabName = "sir_norway"
+        ),
+        menuSubItem(
+          "Germany",
+          tabName = "sir_germany"
+        )
+      ),
+      menuItem(
         text = "Spatial Modelling",
         tabName = "modelling",
         startExpanded = TRUE,
@@ -143,36 +156,97 @@ ui <- dashboardPage(
       ),
       tabItem(
         tabName = "sm_norway",
-        multiInput(
-          inputId = "multi_norway",
-          label = "Select covariates",
-          choices = c(
-            "Median age",
-            "Total unemployment",
-            "Unemployed immigrants",
-            "Full-time workers",
-            "Part-time workers",
-            "Total number of immigrants",
-            "Marketplaces",
-            "Entertainment venues",
-            "Sports facilities",
-            "Clinics",
-            "Hairdressers",
-            "Shops",
-            "Places of worship",
-            "Retail stores",
-            "Nursing homes",
-            "Restaurants",
-            "Aerodromes",
-            "Offices",
-            "Public transport platforms",
-            "Kindergartens",
-            "Schools",
-            "Bakeries",
-            "Higher education",
-            "Population density",
-            "Urban density",
-            "Female to male ratio"
+        column(
+          width = 4,
+          fluidRow(
+            multiInput(
+              inputId = "multi_norway_demo",
+              label = "Select demographic variables",
+              choices = colnames_norway_nice[
+                which(colnames_norway_actual %in% colnames(newest_numbers_norway)[c(3, 5:30, 31:37, 39)][c(1:7, 29:31)])
+              ]
+            ) 
+          ),
+          fluidRow(
+            multiInput(
+              inputId = "multi_norway_infra",
+              label = "Select infrastructure variables",
+              choices = colnames_norway_nice[
+                which(colnames_norway_actual %in% colnames(newest_numbers_norway)[c(3, 5:30, 31:37, 39)][c(8:25)])
+              ]
+            ),
+          ),
+          fluidRow(
+            column(
+              width = 6,
+              textInput(
+                "sigma_0_norway",
+                "Enter sigma_0",
+                1
+              )
+            ),
+            column(
+              width = 6,
+              textInput(
+                "alpha_norway",
+                "Enter alpha",
+                0.01 
+              )
+            )
+          ),
+          fluidRow(
+            actionBttn(
+              inputId = "start_norway",
+              label = "Calculate BYM2 model", 
+              style = "material-flat",
+              color = "danger"
+            )
+          )
+        ),
+        column(
+          width = 8,
+          fluidRow(
+            mapdeckOutput(
+              "model_map_norway"
+            )
+          ),
+          fluidRow(
+            column(
+              width = 4,
+              pickerInput(
+                "picker_col_var",
+                label = "Select variable",
+                choices = c(
+                  "Relative risk",
+                  "Posterior mean of the random effects",
+                  "Exceedance probability",
+                  "Spatial field unstructured component",
+                  "Spatial field structured component"
+                ),
+                selected = "Relative risk"
+              )
+            ),
+            column(
+              width = 4,
+              pickerInput(
+                inputId = "map_style_norway_2",
+                label = "Select base map",
+                choices = c(
+                  "dark", "light", "outdoors", "satellite"
+                )
+              )
+            )
+          ),
+          br(),
+          fluidRow(
+            dataTableOutput(
+              "datatable_1_norway"
+            )
+          ),
+          fluidRow(
+            dataTableOutput(
+              "datatable_2_norway"
+            )
           )
         )
       )
