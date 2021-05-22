@@ -272,7 +272,16 @@ mae <- c(mae, list(
   mean(abs(res_6$summary.fitted.values$mean[test] * ts_germany$expected[test] - test_value)),
   mean(abs(res_7$summary.fitted.values$mean[test] * ts_germany$expected[test] - test_value)),
   mean(abs(res_8$summary.fitted.values$mean[test] * ts_germany$expected[test] - test_value)),
-  mean(abs(res_9$summary.fitted.values$mean[test] * ts_germany$expected[test] - test_value))
+  mean(abs(res_9$summary.fitted.values$mean[test] * ts_germany$expected[test] - test_value)),
+  mean(abs(res_1$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test])),
+  mean(abs(res_2$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test])),
+  mean(abs(res_3$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test])),
+  mean(abs(res_4$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test])),
+  mean(abs(res_5$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test])),
+  mean(abs(res_6$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test])),
+  mean(abs(res_7$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test])),
+  mean(abs(res_8$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test])),
+  mean(abs(res_9$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test]))
 ))
 pred_tibble <- tibble(
   q025 = c(

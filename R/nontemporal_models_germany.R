@@ -135,7 +135,11 @@ mae <- c(mae, list(
   mean(abs(res_1$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
   mean(abs(res_2$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
   mean(abs(res_3$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
-  mean(abs(res_4$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value))
+  mean(abs(res_4$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
+  mean(abs(res_1$summary.fitted.values$mean[-test] * newest_numbers$expected_count[-test] - newest_numbers$value[-test])),
+  mean(abs(res_2$summary.fitted.values$mean[-test] * newest_numbers$expected_count[-test] - newest_numbers$value[-test])),
+  mean(abs(res_3$summary.fitted.values$mean[-test] * newest_numbers$expected_count[-test] - newest_numbers$value[-test])),
+  mean(abs(res_4$summary.fitted.values$mean[-test] * newest_numbers$expected_count[-test] - newest_numbers$value[-test]))
 ))
 models_final <- list(models, gof, mae)
 # save the models
