@@ -426,7 +426,7 @@ Afghanistan,AFG,2021-03-19,1
 Afghanistan,AFG,2021-03-20,1
 Afghanistan,AFG,2021-03-21,1
 Afghanistan,AFG,2021-03-22,1
-Afghanistan,AFG,2021-03-23,1
+Afghanistan,AFG,2021-03-23,0
 Afghanistan,AFG,2021-03-24,0
 Afghanistan,AFG,2021-03-25,0
 Afghanistan,AFG,2021-03-26,0
@@ -468,6 +468,24 @@ Afghanistan,AFG,2021-04-30,0
 Afghanistan,AFG,2021-05-01,0
 Afghanistan,AFG,2021-05-02,0
 Afghanistan,AFG,2021-05-03,0
+Afghanistan,AFG,2021-05-04,0
+Afghanistan,AFG,2021-05-05,0
+Afghanistan,AFG,2021-05-06,0
+Afghanistan,AFG,2021-05-07,0
+Afghanistan,AFG,2021-05-08,0
+Afghanistan,AFG,2021-05-09,0
+Afghanistan,AFG,2021-05-10,0
+Afghanistan,AFG,2021-05-11,0
+Afghanistan,AFG,2021-05-12,0
+Afghanistan,AFG,2021-05-13,0
+Afghanistan,AFG,2021-05-14,0
+Afghanistan,AFG,2021-05-15,0
+Afghanistan,AFG,2021-05-16,0
+Afghanistan,AFG,2021-05-17,0
+Afghanistan,AFG,2021-05-18,0
+Afghanistan,AFG,2021-05-19,0
+Afghanistan,AFG,2021-05-20,0
+Afghanistan,AFG,2021-05-21,0
 Albania,ALB,2020-01-21,0
 Albania,ALB,2020-01-22,0
 Albania,ALB,2020-01-23,0
@@ -941,6 +959,19 @@ Albania,ALB,2021-05-04,3
 Albania,ALB,2021-05-05,2
 Albania,ALB,2021-05-06,2
 Albania,ALB,2021-05-07,2
+Albania,ALB,2021-05-08,2
+Albania,ALB,2021-05-09,2
+Albania,ALB,2021-05-10,2
+Albania,ALB,2021-05-11,2
+Albania,ALB,2021-05-12,2
+Albania,ALB,2021-05-13,2
+Albania,ALB,2021-05-14,2
+Albania,ALB,2021-05-15,2
+Albania,ALB,2021-05-16,2
+Albania,ALB,2021-05-17,2
+Albania,ALB,2021-05-18,2
+Albania,ALB,2021-05-19,2
+Albania,ALB,2021-05-20,2
 Algeria,DZA,2020-01-21,0
 Algeria,DZA,2020-01-22,0
 Algeria,DZA,2020-01-23,0
@@ -2863,6 +2894,10 @@ Argentina,ARG,2021-05-14,3
 Argentina,ARG,2021-05-15,3
 Argentina,ARG,2021-05-16,3
 Argentina,ARG,2021-05-17,3
+Argentina,ARG,2021-05-18,3
+Argentina,ARG,2021-05-19,3
+Argentina,ARG,2021-05-20,3
+Argentina,ARG,2021-05-21,3
 Aruba,ABW,2020-01-21,0
 Aruba,ABW,2020-01-22,0
 Aruba,ABW,2020-01-23,0
@@ -3828,6 +3863,10 @@ Australia,AUS,2021-05-14,0
 Australia,AUS,2021-05-15,0
 Australia,AUS,2021-05-16,0
 Australia,AUS,2021-05-17,0
+Australia,AUS,2021-05-18,0
+Australia,AUS,2021-05-19,0
+Australia,AUS,2021-05-20,0
+Australia,AUS,2021-05-21,0
 Austria,AUT,2020-01-21,0
 Austria,AUT,2020-01-22,0
 Austria,AUT,2020-01-23,0
@@ -4311,6 +4350,10 @@ Austria,AUT,2021-05-14,2
 Austria,AUT,2021-05-15,2
 Austria,AUT,2021-05-16,2
 Austria,AUT,2021-05-17,2
+Austria,AUT,2021-05-18,2
+Austria,AUT,2021-05-19,2
+Austria,AUT,2021-05-20,2
+Austria,AUT,2021-05-21,2
 Azerbaijan,AZE,2020-01-21,0
 Azerbaijan,AZE,2020-01-22,0
 Azerbaijan,AZE,2020-01-23,0
@@ -7690,6 +7733,10 @@ Belgium,BEL,2021-05-14,1
 Belgium,BEL,2021-05-15,1
 Belgium,BEL,2021-05-16,1
 Belgium,BEL,2021-05-17,1
+Belgium,BEL,2021-05-18,1
+Belgium,BEL,2021-05-19,1
+Belgium,BEL,2021-05-20,1
+Belgium,BEL,2021-05-21,1
 Belize,BLZ,2020-01-21,0
 Belize,BLZ,2020-01-22,0
 Belize,BLZ,2020-01-23,0
@@ -12476,6 +12523,14 @@ Bulgaria,BGR,2021-05-09,2
 Bulgaria,BGR,2021-05-10,2
 Bulgaria,BGR,2021-05-11,2
 Bulgaria,BGR,2021-05-12,2
+Bulgaria,BGR,2021-05-13,2
+Bulgaria,BGR,2021-05-14,2
+Bulgaria,BGR,2021-05-15,2
+Bulgaria,BGR,2021-05-16,2
+Bulgaria,BGR,2021-05-17,2
+Bulgaria,BGR,2021-05-18,2
+Bulgaria,BGR,2021-05-19,2
+Bulgaria,BGR,2021-05-20,2
 Burkina Faso,BFA,2020-01-21,0
 Burkina Faso,BFA,2020-01-22,0
 Burkina Faso,BFA,2020-01-23,0
@@ -14863,6 +14918,10 @@ Canada,CAN,2021-05-14,3
 Canada,CAN,2021-05-15,3
 Canada,CAN,2021-05-16,3
 Canada,CAN,2021-05-17,3
+Canada,CAN,2021-05-18,3
+Canada,CAN,2021-05-19,3
+Canada,CAN,2021-05-20,3
+Canada,CAN,2021-05-21,3
 Cape Verde,CPV,2020-01-21,0
 Cape Verde,CPV,2020-01-22,0
 Cape Verde,CPV,2020-01-23,0
@@ -18693,6 +18752,12 @@ Costa Rica,CRI,2021-05-13,1
 Costa Rica,CRI,2021-05-14,1
 Costa Rica,CRI,2021-05-15,1
 Costa Rica,CRI,2021-05-16,1
+Costa Rica,CRI,2021-05-17,1
+Costa Rica,CRI,2021-05-18,1
+Costa Rica,CRI,2021-05-19,1
+Costa Rica,CRI,2021-05-20,1
+Costa Rica,CRI,2021-05-21,1
+Costa Rica,CRI,2021-05-22,1
 Cote d'Ivoire,CIV,2020-01-21,0
 Cote d'Ivoire,CIV,2020-01-22,0
 Cote d'Ivoire,CIV,2020-01-23,0
@@ -20131,6 +20196,16 @@ Cuba,CUB,2021-05-07,3
 Cuba,CUB,2021-05-08,3
 Cuba,CUB,2021-05-09,3
 Cuba,CUB,2021-05-10,3
+Cuba,CUB,2021-05-11,3
+Cuba,CUB,2021-05-12,3
+Cuba,CUB,2021-05-13,3
+Cuba,CUB,2021-05-14,3
+Cuba,CUB,2021-05-15,3
+Cuba,CUB,2021-05-16,3
+Cuba,CUB,2021-05-17,3
+Cuba,CUB,2021-05-18,3
+Cuba,CUB,2021-05-19,3
+Cuba,CUB,2021-05-20,3
 Cyprus,CYP,2020-01-21,0
 Cyprus,CYP,2020-01-22,0
 Cyprus,CYP,2020-01-23,0
@@ -21088,6 +21163,12 @@ Czechia,CZE,2021-05-13,2
 Czechia,CZE,2021-05-14,2
 Czechia,CZE,2021-05-15,2
 Czechia,CZE,2021-05-16,2
+Czechia,CZE,2021-05-17,2
+Czechia,CZE,2021-05-18,2
+Czechia,CZE,2021-05-19,2
+Czechia,CZE,2021-05-20,2
+Czechia,CZE,2021-05-21,2
+Czechia,CZE,2021-05-22,2
 Democratic Republic of Congo,COD,2020-01-21,0
 Democratic Republic of Congo,COD,2020-01-22,0
 Democratic Republic of Congo,COD,2020-01-23,0
@@ -22054,6 +22135,10 @@ Denmark,DNK,2021-05-14,3
 Denmark,DNK,2021-05-15,3
 Denmark,DNK,2021-05-16,3
 Denmark,DNK,2021-05-17,3
+Denmark,DNK,2021-05-18,3
+Denmark,DNK,2021-05-19,3
+Denmark,DNK,2021-05-20,3
+Denmark,DNK,2021-05-21,3
 Djibouti,DJI,2020-01-21,0
 Djibouti,DJI,2020-01-22,0
 Djibouti,DJI,2020-01-23,0
@@ -24933,6 +25018,12 @@ El Salvador,SLV,2021-05-13,1
 El Salvador,SLV,2021-05-14,1
 El Salvador,SLV,2021-05-15,1
 El Salvador,SLV,2021-05-16,1
+El Salvador,SLV,2021-05-17,1
+El Salvador,SLV,2021-05-18,1
+El Salvador,SLV,2021-05-19,1
+El Salvador,SLV,2021-05-20,1
+El Salvador,SLV,2021-05-21,1
+El Salvador,SLV,2021-05-22,1
 Eritrea,ERI,2020-01-21,0
 Eritrea,ERI,2020-01-22,0
 Eritrea,ERI,2020-01-23,0
@@ -25416,6 +25507,12 @@ Eritrea,ERI,2021-05-14,0
 Eritrea,ERI,2021-05-15,0
 Eritrea,ERI,2021-05-16,0
 Eritrea,ERI,2021-05-17,0
+Eritrea,ERI,2021-05-18,0
+Eritrea,ERI,2021-05-19,0
+Eritrea,ERI,2021-05-20,0
+Eritrea,ERI,2021-05-21,0
+Eritrea,ERI,2021-05-22,0
+Eritrea,ERI,2021-05-23,0
 Estonia,EST,2020-01-21,0
 Estonia,EST,2020-01-22,0
 Estonia,EST,2020-01-23,0
@@ -28281,6 +28378,10 @@ Finland,FIN,2021-05-14,2
 Finland,FIN,2021-05-15,2
 Finland,FIN,2021-05-16,2
 Finland,FIN,2021-05-17,2
+Finland,FIN,2021-05-18,2
+Finland,FIN,2021-05-19,2
+Finland,FIN,2021-05-20,2
+Finland,FIN,2021-05-21,2
 France,FRA,2020-01-21,0
 France,FRA,2020-01-22,0
 France,FRA,2020-01-23,0
@@ -28763,6 +28864,12 @@ France,FRA,2021-05-13,1
 France,FRA,2021-05-14,1
 France,FRA,2021-05-15,1
 France,FRA,2021-05-16,1
+France,FRA,2021-05-17,1
+France,FRA,2021-05-18,1
+France,FRA,2021-05-19,1
+France,FRA,2021-05-20,1
+France,FRA,2021-05-21,1
+France,FRA,2021-05-22,1
 Gabon,GAB,2020-01-21,0
 Gabon,GAB,2020-01-22,0
 Gabon,GAB,2020-01-23,0
@@ -30688,6 +30795,12 @@ Germany,DEU,2021-05-12,3
 Germany,DEU,2021-05-13,3
 Germany,DEU,2021-05-14,3
 Germany,DEU,2021-05-15,3
+Germany,DEU,2021-05-16,3
+Germany,DEU,2021-05-17,3
+Germany,DEU,2021-05-18,3
+Germany,DEU,2021-05-19,3
+Germany,DEU,2021-05-20,3
+Germany,DEU,2021-05-21,3
 Ghana,GHA,2020-01-21,0
 Ghana,GHA,2020-01-22,0
 Ghana,GHA,2020-01-23,0
@@ -32610,6 +32723,11 @@ Guam,GUM,2021-05-14,1
 Guam,GUM,2021-05-15,1
 Guam,GUM,2021-05-16,1
 Guam,GUM,2021-05-17,1
+Guam,GUM,2021-05-18,1
+Guam,GUM,2021-05-19,1
+Guam,GUM,2021-05-20,1
+Guam,GUM,2021-05-21,1
+Guam,GUM,2021-05-22,1
 Guatemala,GTM,2020-01-21,0
 Guatemala,GTM,2020-01-22,0
 Guatemala,GTM,2020-01-23,0
@@ -38869,6 +38987,9 @@ Ireland,IRL,2021-05-15,1
 Ireland,IRL,2021-05-16,1
 Ireland,IRL,2021-05-17,1
 Ireland,IRL,2021-05-18,1
+Ireland,IRL,2021-05-19,1
+Ireland,IRL,2021-05-20,1
+Ireland,IRL,2021-05-21,1
 Israel,ISR,2020-01-21,0
 Israel,ISR,2020-01-22,0
 Israel,ISR,2020-01-23,0
@@ -39352,6 +39473,10 @@ Israel,ISR,2021-05-14,1
 Israel,ISR,2021-05-15,1
 Israel,ISR,2021-05-16,1
 Israel,ISR,2021-05-17,1
+Israel,ISR,2021-05-18,1
+Israel,ISR,2021-05-19,1
+Israel,ISR,2021-05-20,1
+Israel,ISR,2021-05-21,1
 Italy,ITA,2020-01-21,0
 Italy,ITA,2020-01-22,0
 Italy,ITA,2020-01-23,0
@@ -39832,6 +39957,13 @@ Italy,ITA,2021-05-11,1
 Italy,ITA,2021-05-12,1
 Italy,ITA,2021-05-13,1
 Italy,ITA,2021-05-14,1
+Italy,ITA,2021-05-15,1
+Italy,ITA,2021-05-16,1
+Italy,ITA,2021-05-17,1
+Italy,ITA,2021-05-18,1
+Italy,ITA,2021-05-19,1
+Italy,ITA,2021-05-20,1
+Italy,ITA,2021-05-21,1
 Jamaica,JAM,2020-01-21,0
 Jamaica,JAM,2020-01-22,0
 Jamaica,JAM,2020-01-23,0
@@ -40796,6 +40928,11 @@ Japan,JPN,2021-05-14,1
 Japan,JPN,2021-05-15,1
 Japan,JPN,2021-05-16,1
 Japan,JPN,2021-05-17,1
+Japan,JPN,2021-05-18,1
+Japan,JPN,2021-05-19,1
+Japan,JPN,2021-05-20,1
+Japan,JPN,2021-05-21,1
+Japan,JPN,2021-05-22,1
 Jordan,JOR,2020-01-21,0
 Jordan,JOR,2020-01-22,0
 Jordan,JOR,2020-01-23,0
@@ -42231,6 +42368,16 @@ Kenya,KEN,2021-05-07,2
 Kenya,KEN,2021-05-08,2
 Kenya,KEN,2021-05-09,2
 Kenya,KEN,2021-05-10,2
+Kenya,KEN,2021-05-11,2
+Kenya,KEN,2021-05-12,2
+Kenya,KEN,2021-05-13,2
+Kenya,KEN,2021-05-14,2
+Kenya,KEN,2021-05-15,2
+Kenya,KEN,2021-05-16,2
+Kenya,KEN,2021-05-17,2
+Kenya,KEN,2021-05-18,2
+Kenya,KEN,2021-05-19,2
+Kenya,KEN,2021-05-20,2
 Kiribati,KIR,2020-01-21,0
 Kiribati,KIR,2020-01-22,0
 Kiribati,KIR,2020-01-23,0
@@ -48450,6 +48597,8 @@ Luxembourg,LUX,2021-05-14,1
 Luxembourg,LUX,2021-05-15,1
 Luxembourg,LUX,2021-05-16,1
 Luxembourg,LUX,2021-05-17,1
+Luxembourg,LUX,2021-05-18,1
+Luxembourg,LUX,2021-05-19,1
 Macao,MAC,2020-01-21,0
 Macao,MAC,2020-01-22,0
 Macao,MAC,2020-01-23,0
@@ -49871,6 +50020,11 @@ Malawi,MWI,2021-05-14,0
 Malawi,MWI,2021-05-15,0
 Malawi,MWI,2021-05-16,0
 Malawi,MWI,2021-05-17,0
+Malawi,MWI,2021-05-18,0
+Malawi,MWI,2021-05-19,0
+Malawi,MWI,2021-05-20,0
+Malawi,MWI,2021-05-21,0
+Malawi,MWI,2021-05-22,0
 Malaysia,MYS,2020-01-21,0
 Malaysia,MYS,2020-01-22,0
 Malaysia,MYS,2020-01-23,0
@@ -54678,6 +54832,20 @@ Morocco,MAR,2021-05-05,1
 Morocco,MAR,2021-05-06,1
 Morocco,MAR,2021-05-07,1
 Morocco,MAR,2021-05-08,1
+Morocco,MAR,2021-05-09,1
+Morocco,MAR,2021-05-10,1
+Morocco,MAR,2021-05-11,1
+Morocco,MAR,2021-05-12,1
+Morocco,MAR,2021-05-13,1
+Morocco,MAR,2021-05-14,1
+Morocco,MAR,2021-05-15,1
+Morocco,MAR,2021-05-16,1
+Morocco,MAR,2021-05-17,1
+Morocco,MAR,2021-05-18,1
+Morocco,MAR,2021-05-19,1
+Morocco,MAR,2021-05-20,1
+Morocco,MAR,2021-05-21,1
+Morocco,MAR,2021-05-22,1
 Mozambique,MOZ,2020-01-21,0
 Mozambique,MOZ,2020-01-22,0
 Mozambique,MOZ,2020-01-23,0
@@ -57076,6 +57244,12 @@ Netherlands,NLD,2021-05-12,1
 Netherlands,NLD,2021-05-13,1
 Netherlands,NLD,2021-05-14,1
 Netherlands,NLD,2021-05-15,1
+Netherlands,NLD,2021-05-16,1
+Netherlands,NLD,2021-05-17,1
+Netherlands,NLD,2021-05-18,1
+Netherlands,NLD,2021-05-19,1
+Netherlands,NLD,2021-05-20,1
+Netherlands,NLD,2021-05-21,1
 New Zealand,NZL,2020-01-21,0
 New Zealand,NZL,2020-01-22,0
 New Zealand,NZL,2020-01-23,0
@@ -59450,6 +59624,12 @@ Norway,NOR,2021-05-12,2
 Norway,NOR,2021-05-13,2
 Norway,NOR,2021-05-14,2
 Norway,NOR,2021-05-15,2
+Norway,NOR,2021-05-16,2
+Norway,NOR,2021-05-17,2
+Norway,NOR,2021-05-18,2
+Norway,NOR,2021-05-19,2
+Norway,NOR,2021-05-20,2
+Norway,NOR,2021-05-21,2
 Oman,OMN,2020-01-21,0
 Oman,OMN,2020-01-22,0
 Oman,OMN,2020-01-23,0
@@ -63754,6 +63934,14 @@ Poland,POL,2021-05-11,2
 Poland,POL,2021-05-12,2
 Poland,POL,2021-05-13,2
 Poland,POL,2021-05-14,2
+Poland,POL,2021-05-15,1
+Poland,POL,2021-05-16,1
+Poland,POL,2021-05-17,1
+Poland,POL,2021-05-18,1
+Poland,POL,2021-05-19,1
+Poland,POL,2021-05-20,1
+Poland,POL,2021-05-21,1
+Poland,POL,2021-05-22,1
 Portugal,PRT,2020-01-21,0
 Portugal,PRT,2020-01-22,0
 Portugal,PRT,2020-01-23,0
@@ -64234,6 +64422,14 @@ Portugal,PRT,2021-05-11,1
 Portugal,PRT,2021-05-12,1
 Portugal,PRT,2021-05-13,1
 Portugal,PRT,2021-05-14,1
+Portugal,PRT,2021-05-15,1
+Portugal,PRT,2021-05-16,1
+Portugal,PRT,2021-05-17,1
+Portugal,PRT,2021-05-18,1
+Portugal,PRT,2021-05-19,1
+Portugal,PRT,2021-05-20,1
+Portugal,PRT,2021-05-21,1
+Portugal,PRT,2021-05-22,1
 Puerto Rico,PRI,2020-01-21,0
 Puerto Rico,PRI,2020-01-22,0
 Puerto Rico,PRI,2020-01-23,0
@@ -65683,6 +65879,11 @@ Romania,ROU,2021-05-14,2
 Romania,ROU,2021-05-15,2
 Romania,ROU,2021-05-16,2
 Romania,ROU,2021-05-17,2
+Romania,ROU,2021-05-18,2
+Romania,ROU,2021-05-19,2
+Romania,ROU,2021-05-20,2
+Romania,ROU,2021-05-21,2
+Romania,ROU,2021-05-22,2
 Russia,RUS,2020-01-21,0
 Russia,RUS,2020-01-22,0
 Russia,RUS,2020-01-23,0
@@ -66158,6 +66359,17 @@ Russia,RUS,2021-05-06,0
 Russia,RUS,2021-05-07,0
 Russia,RUS,2021-05-08,0
 Russia,RUS,2021-05-09,0
+Russia,RUS,2021-05-10,0
+Russia,RUS,2021-05-11,0
+Russia,RUS,2021-05-12,0
+Russia,RUS,2021-05-13,0
+Russia,RUS,2021-05-14,0
+Russia,RUS,2021-05-15,0
+Russia,RUS,2021-05-16,0
+Russia,RUS,2021-05-17,0
+Russia,RUS,2021-05-18,0
+Russia,RUS,2021-05-19,0
+Russia,RUS,2021-05-20,0
 Rwanda,RWA,2020-01-21,0
 Rwanda,RWA,2020-01-22,0
 Rwanda,RWA,2020-01-23,0
@@ -69991,6 +70203,18 @@ Singapore,SGP,2021-05-06,2
 Singapore,SGP,2021-05-07,2
 Singapore,SGP,2021-05-08,2
 Singapore,SGP,2021-05-09,2
+Singapore,SGP,2021-05-10,2
+Singapore,SGP,2021-05-11,2
+Singapore,SGP,2021-05-12,2
+Singapore,SGP,2021-05-13,2
+Singapore,SGP,2021-05-14,2
+Singapore,SGP,2021-05-15,2
+Singapore,SGP,2021-05-16,2
+Singapore,SGP,2021-05-17,2
+Singapore,SGP,2021-05-18,2
+Singapore,SGP,2021-05-19,3
+Singapore,SGP,2021-05-20,3
+Singapore,SGP,2021-05-21,3
 Slovakia,SVK,2020-01-21,0
 Slovakia,SVK,2020-01-22,0
 Slovakia,SVK,2020-01-23,0
@@ -73834,6 +74058,11 @@ Spain,ESP,2021-05-14,1
 Spain,ESP,2021-05-15,1
 Spain,ESP,2021-05-16,1
 Spain,ESP,2021-05-17,1
+Spain,ESP,2021-05-18,1
+Spain,ESP,2021-05-19,1
+Spain,ESP,2021-05-20,1
+Spain,ESP,2021-05-21,1
+Spain,ESP,2021-05-22,1
 Sri Lanka,LKA,2020-01-21,0
 Sri Lanka,LKA,2020-01-22,0
 Sri Lanka,LKA,2020-01-23,0
@@ -75756,6 +75985,9 @@ Sweden,SWE,2021-05-15,1
 Sweden,SWE,2021-05-16,1
 Sweden,SWE,2021-05-17,1
 Sweden,SWE,2021-05-18,1
+Sweden,SWE,2021-05-19,1
+Sweden,SWE,2021-05-20,1
+Sweden,SWE,2021-05-21,1
 Switzerland,CHE,2020-01-21,0
 Switzerland,CHE,2020-01-22,0
 Switzerland,CHE,2020-01-23,0
@@ -76235,6 +76467,13 @@ Switzerland,CHE,2021-05-10,1
 Switzerland,CHE,2021-05-11,1
 Switzerland,CHE,2021-05-12,1
 Switzerland,CHE,2021-05-13,1
+Switzerland,CHE,2021-05-14,1
+Switzerland,CHE,2021-05-15,1
+Switzerland,CHE,2021-05-16,1
+Switzerland,CHE,2021-05-17,1
+Switzerland,CHE,2021-05-18,1
+Switzerland,CHE,2021-05-19,1
+Switzerland,CHE,2021-05-20,1
 Syria,SYR,2020-01-21,0
 Syria,SYR,2020-01-22,0
 Syria,SYR,2020-01-23,0
@@ -83833,6 +84072,20 @@ United Kingdom,GBR,2021-05-04,1
 United Kingdom,GBR,2021-05-05,1
 United Kingdom,GBR,2021-05-06,1
 United Kingdom,GBR,2021-05-07,1
+United Kingdom,GBR,2021-05-08,1
+United Kingdom,GBR,2021-05-09,1
+United Kingdom,GBR,2021-05-10,1
+United Kingdom,GBR,2021-05-11,1
+United Kingdom,GBR,2021-05-12,1
+United Kingdom,GBR,2021-05-13,1
+United Kingdom,GBR,2021-05-14,1
+United Kingdom,GBR,2021-05-15,1
+United Kingdom,GBR,2021-05-16,1
+United Kingdom,GBR,2021-05-17,1
+United Kingdom,GBR,2021-05-18,1
+United Kingdom,GBR,2021-05-19,1
+United Kingdom,GBR,2021-05-20,1
+United Kingdom,GBR,2021-05-21,1
 United States,USA,2020-01-21,0
 United States,USA,2020-01-22,0
 United States,USA,2020-01-23,0
@@ -84307,6 +84560,20 @@ United States,USA,2021-05-05,2
 United States,USA,2021-05-06,2
 United States,USA,2021-05-07,2
 United States,USA,2021-05-08,2
+United States,USA,2021-05-09,1
+United States,USA,2021-05-10,1
+United States,USA,2021-05-11,1
+United States,USA,2021-05-12,1
+United States,USA,2021-05-13,1
+United States,USA,2021-05-14,1
+United States,USA,2021-05-15,1
+United States,USA,2021-05-16,1
+United States,USA,2021-05-17,1
+United States,USA,2021-05-18,1
+United States,USA,2021-05-19,1
+United States,USA,2021-05-20,1
+United States,USA,2021-05-21,1
+United States,USA,2021-05-22,1
 United States Virgin Islands,VIR,2020-01-21,0
 United States Virgin Islands,VIR,2020-01-22,0
 United States Virgin Islands,VIR,2020-01-23,0
@@ -85738,6 +86005,11 @@ Uzbekistan,UZB,2021-05-14,2
 Uzbekistan,UZB,2021-05-15,2
 Uzbekistan,UZB,2021-05-16,2
 Uzbekistan,UZB,2021-05-17,2
+Uzbekistan,UZB,2021-05-18,2
+Uzbekistan,UZB,2021-05-19,2
+Uzbekistan,UZB,2021-05-20,2
+Uzbekistan,UZB,2021-05-21,2
+Uzbekistan,UZB,2021-05-22,2
 Vanuatu,VUT,2020-01-21,0
 Vanuatu,VUT,2020-01-22,0
 Vanuatu,VUT,2020-01-23,0
