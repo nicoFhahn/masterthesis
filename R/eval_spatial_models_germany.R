@@ -30,9 +30,9 @@ models_final[[2]][[1]]$cpo
 # get the mae
 models_final[[3]][[1]]
 # get the summary
-models_final[[1]][[1]]$summary.fixed[
+round(models_final[[1]][[1]]$summary.fixed[
   order(models_final[[1]][[1]]$summary.fixed$mean),
-]
+], 3)[, 1:2]
 sapply(
   models_final[[1]][[1]]$marginals.fixed[
     rownames(models_final[[1]][[1]]$summary.fixed[

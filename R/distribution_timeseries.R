@@ -2,6 +2,10 @@ library(fitdistrplus)
 library(qqplotr)
 library(patchwork)
 source("R/preprocess_timeseries.R")
+mean(ts_germany$new_cases)
+sd(ts_germany$new_cases)
+mean(ts_norway$new_cases)
+sd(ts_norway$new_cases)
 # create the cullen and frey graph
 set.seed(420)
 descdist(ts_germany$new_cases, discrete = TRUE)
@@ -160,76 +164,92 @@ cdf_plot_nbinom <- ggplot() +
   geom_point(
     aes(
       x = ts_germany$new_cases,
-      y = ts_germany$ecdf
+      y = ts_germany$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(ts_germany$new_cases),
-      y = sort(ecdf_nbinom(ts_germany$new_cases))
+      y = sort(ecdf_nbinom(ts_germany$new_cases)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Germany", "Negative binomial distribution")
 
 cdf_plot_normal <- ggplot() +
   geom_point(
     aes(
       x = ts_germany$new_cases,
-      y = ts_germany$ecdf
+      y = ts_germany$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(ts_germany$new_cases),
-      y = sort(ecdf_normal(ts_germany$new_cases))
+      y = sort(ecdf_normal(ts_germany$new_cases)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Germany", "Normal distribution")
 
 cdf_plot_poisson <- ggplot() +
   geom_point(
     aes(
       x = ts_germany$new_cases,
-      y = ts_germany$ecdf
+      y = ts_germany$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(x_poisson),
-      y = sort(ecdf_poisson(ts_germany$new_cases))
+      y = sort(ecdf_poisson(ts_germany$new_cases)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Germany", "Poisson distribution")
 
 cdf_plot_logistic <- ggplot() +
   geom_point(
     aes(
       x = ts_germany$new_cases,
-      y = ts_germany$ecdf
+      y = ts_germany$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(x_logistic),
-      y = sort(ecdf_poisson(ts_germany$new_cases))
+      y = sort(ecdf_poisson(ts_germany$new_cases)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Germany", "Logistic distribution")
 
 
@@ -502,76 +522,92 @@ cdf_plot_nbinom <- ggplot() +
   geom_point(
     aes(
       x = ts_norway$new_cases,
-      y = ts_norway$ecdf
+      y = ts_norway$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(ts_norway$new_cases),
-      y = sort(ecdf_nbinom(ts_norway$new_cases))
+      y = sort(ecdf_nbinom(ts_norway$new_cases)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Norway", "Negative binomial distribution")
 
 cdf_plot_normal <- ggplot() +
   geom_point(
     aes(
       x = ts_norway$new_cases,
-      y = ts_norway$ecdf
+      y = ts_norway$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(ts_norway$new_cases),
-      y = sort(ecdf_normal(ts_norway$new_cases))
+      y = sort(ecdf_normal(ts_norway$new_cases)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Norway", "Normal distribution")
 
 cdf_plot_poisson <- ggplot() +
   geom_point(
     aes(
       x = ts_norway$new_cases,
-      y = ts_norway$ecdf
+      y = ts_norway$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(x_poisson),
-      y = sort(ecdf_poisson(ts_norway$new_cases))
+      y = sort(ecdf_poisson(ts_norway$new_cases)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Norway", "Poisson distribution")
 
 cdf_plot_logistic <- ggplot() +
   geom_point(
     aes(
       x = ts_norway$new_cases,
-      y = ts_norway$ecdf
+      y = ts_norway$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(x_logistic),
-      y = sort(ecdf_poisson(ts_norway$new_cases))
+      y = sort(ecdf_poisson(ts_norway$new_cases)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Norway", "Logistic distribution")
 
 
@@ -639,13 +675,13 @@ distrplot_1 <- ggplot() +
   theme(
     legend.position = "none"
   )
-distrplot_2 <- ggplot() +
+ggplot() +
   geom_histogram(
     data = ts_norway,
     aes(new_cases, y = ..density..),
     colour = "black",
     fill = "white",
-    binwidth = 500
+    binwidth = 750
   ) +
   geom_density(
     data = distr[distr$distribution != "Poisson", ],

@@ -42,13 +42,13 @@ for(i in websites) {
   j <- j + 1
   filename = paste(rev(str_split(i, "/")[[1]])[1], ".csv", sep = "")
   browser$navigate(i)
-  Sys.sleep(5)
+  Sys.sleep(10)
   tab <- browser$findElements("download-tab-button", using = "class")
   tab[[1]]$clickElement()
-  Sys.sleep(2)
+  Sys.sleep(10)
   buttons <- browser$findElements("btn-primary", using = "class")
   buttons[[1]]$clickElement()
-  Sys.sleep(3)
+  Sys.sleep(5)
   file.rename(file.path(download_location, filename), here("timeseries", filename))
 }
 browser$close()
@@ -68,9 +68,10 @@ covariate_tibbles <- lapply(
 min_date <- as.Date("2020-01-01")
 max_date <- max(infections$date)
 date_range <- seq(min_date, max_date, 1)
-countries_1 <- unique(do.call(c, lapply(covariate_tibbles, function(x) unique(x$Entity))))
+# countries_1 <- unique(do.call(c, lapply(covariate_tibbles, function(x) unique(x$Entity))))
 countries_2 <- unique(infections$location)
-countries <- unique(c(countries_1, countries_2))
+countries <- unique(c(countries_2))
+# countries <- unique(c(countries_1, countries_2))
 covariate_tibbles_full <- lapply(
   covariate_tibbles,
   function(x, ...) {
@@ -102,7 +103,8 @@ covariate_tibbles_full <- lapply(
       }
     )
     x <- bind_rows(country_split)
-    x
+    x <- x[x$Entity %in% countries, ]
+    x[x$Day %in% date_range, ]
   }
 )
 covariates_tibble <- bind_cols(covariate_tibbles_full)

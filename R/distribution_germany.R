@@ -122,57 +122,69 @@ cdf_plot_nbinom <- ggplot() +
   geom_point(
     aes(
       x = newest_numbers$value,
-      y = newest_numbers$ecdf
+      y = newest_numbers$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(newest_numbers$value),
-      y = sort(ecdf_nbinom(newest_numbers$value))
+      y = sort(ecdf_nbinom(newest_numbers$value)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Germany", "Negative binomial distribution")
 
 cdf_plot_normal <- ggplot() +
   geom_point(
     aes(
       x = newest_numbers$value,
-      y = newest_numbers$ecdf
+      y = newest_numbers$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(newest_numbers$value),
-      y = sort(ecdf_normal(newest_numbers$value))
+      y = sort(ecdf_normal(newest_numbers$value)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Germany", "Normal distribution")
 
 cdf_plot_poisson <- ggplot() +
   geom_point(
     aes(
       x = newest_numbers$value,
-      y = newest_numbers$ecdf
+      y = newest_numbers$ecdf,
+      colour = "Emp. CDF"
     )
   ) +
   geom_line(
     aes(
       x = sort(x_poisson),
-      y = sort(ecdf_poisson(newest_numbers$value))
+      y = sort(ecdf_poisson(newest_numbers$value)),
+      colour = "Theo. CDF"
     ),
-    colour = "red",
     size = 0.8
   ) +
-  labs(x = "Number of infections", y = "CDF") +
+  labs(x = "Number of infections", y = "CDF", colour = "Type") +
   theme_minimal() +
+  scale_colour_manual(
+    values = c("red", "#2D3047")
+  ) +
   ggtitle("Emp. and theo. CDFs for Germany", "Poisson distribution")
 
 

@@ -3,7 +3,9 @@ library(SpatialEpi)
 library(MASS)
 library(regclass)
 ts_norway <- read_csv("wrangled_data/ts_norway.csv")
-test <- seq(458, 471)
+variants_to_try <- "+ main_variant + variant_20e + variant_20l"
+cutoff <- 454
+test <- seq(cutoff, nrow(ts_norway))
 test_value <- ts_norway$new_cases[test]
 ts_norway$new_cases[test] <- NA
 link <- rep(NA, nrow(ts_norway))
@@ -20,6 +22,143 @@ ts_norway$stay_home_requirements <- as.factor(ts_norway$stay_home_requirements)
 ts_norway$workplace_closures <- as.factor(ts_norway$workplace_closures)
 ts_norway$public_information_campaigns <- NULL
 ts_norway$testing_policy <- NULL
+ts_norway$people_fully_vaccinated_per_hundred <- NULL
+ts_norway$people_vaccinated_per_hundred <- NULL
+ts_norway$season <- "Winter"
+ts_norway[ts_norway$Date >= "2020-03-20", ]$season <- "Spring"
+ts_norway[ts_norway$Date >= "2020-06-20", ]$season <- "Summer"
+ts_norway[ts_norway$Date >= "2020-09-22", ]$season <- "Fall"
+ts_norway[ts_norway$Date >= "2020-12-21", ]$season <- "Winter"
+ts_norway[ts_norway$Date >= "2021-03-20", ]$season <- "Spring"
+ts_norway$main_variant <- 1
+ts_norway$variant_20a_eu2 <- 0
+ts_norway$variant_20a_s439 <- 0
+ts_norway$variant_20b <- 0
+ts_norway$variant_20c <- 0
+ts_norway$variant_20e <- 0
+ts_norway$variant_20l <- 0
+ts_norway[ts_norway$Date >= "2020-06-22", ]$main_variant <- 0.97
+ts_norway[ts_norway$Date >= "2020-07-06", ]$main_variant <- 1
+ts_norway[ts_norway$Date >= "2020-07-20", ]$main_variant <- 0.87
+ts_norway[ts_norway$Date >= "2020-08-03", ]$main_variant <- 0.29
+ts_norway[ts_norway$Date >= "2020-08-17", ]$main_variant <- 0.78
+ts_norway[ts_norway$Date >= "2020-08-31", ]$main_variant <- 0.81
+ts_norway[ts_norway$Date >= "2020-09-14", ]$main_variant <- 0.21
+ts_norway[ts_norway$Date >= "2020-09-28", ]$main_variant <- 0.26
+ts_norway[ts_norway$Date >= "2020-10-12", ]$main_variant <- 0.34
+ts_norway[ts_norway$Date >= "2020-10-26", ]$main_variant <- 0.49
+ts_norway[ts_norway$Date >= "2020-11-09", ]$main_variant <- 0.53
+ts_norway[ts_norway$Date >= "2020-11-23", ]$main_variant <- 0.69
+ts_norway[ts_norway$Date >= "2020-12-07", ]$main_variant <- 0.77
+ts_norway[ts_norway$Date >= "2020-12-21", ]$main_variant <- 0.65
+ts_norway[ts_norway$Date >= "2020-12-28", ]$main_variant <- 0.47
+ts_norway[ts_norway$Date >= "2021-01-11", ]$main_variant <- 0.57
+ts_norway[ts_norway$Date >= "2021-01-25", ]$main_variant <- 0.52
+ts_norway[ts_norway$Date >= "2021-02-08", ]$main_variant <- 0.41
+ts_norway[ts_norway$Date >= "2021-02-22", ]$main_variant <- 0.24
+ts_norway[ts_norway$Date >= "2021-03-08", ]$main_variant <- 0.13
+ts_norway[ts_norway$Date >= "2021-03-22", ]$main_variant <- 0.07
+ts_norway[ts_norway$Date >= "2021-04-05", ]$main_variant <- 0.04
+ts_norway[ts_norway$Date >= "2021-04-19", ]$main_variant <- 0.04
+ts_norway[ts_norway$Date >= "2021-05-03", ]$main_variant <- 0.10
+ts_norway[ts_norway$Date >= "2020-09-14", ]$variant_20a_eu2 <- 0.46
+ts_norway[ts_norway$Date >= "2020-09-28", ]$variant_20a_eu2 <- 0.15
+ts_norway[ts_norway$Date >= "2020-10-12", ]$variant_20a_eu2 <- 0.07
+ts_norway[ts_norway$Date >= "2020-10-26", ]$variant_20a_eu2 <- 0.10
+ts_norway[ts_norway$Date >= "2020-11-09", ]$variant_20a_eu2 <- 0.02
+ts_norway[ts_norway$Date >= "2020-11-23", ]$variant_20a_eu2 <- 0.02
+ts_norway[ts_norway$Date >= "2020-12-07", ]$variant_20a_eu2 <- 0
+ts_norway[ts_norway$Date >= "2020-12-21", ]$variant_20a_eu2 <- 0.01
+ts_norway[ts_norway$Date >= "2020-12-28", ]$variant_20a_eu2 <- 0.04
+ts_norway[ts_norway$Date >= "2021-01-11", ]$variant_20a_eu2 <- 0.04
+ts_norway[ts_norway$Date >= "2021-01-25", ]$variant_20a_eu2 <- 0.01
+ts_norway[ts_norway$Date >= "2021-02-08", ]$variant_20a_eu2 <- 0.01
+ts_norway[ts_norway$Date >= "2021-02-22", ]$variant_20a_eu2 <- 0
+ts_norway[ts_norway$Date >= "2020-06-22", ]$main_variant <- 0.97
+ts_norway[ts_norway$Date >= "2020-07-06", ]$variant_20a_s439 <- 1
+ts_norway[ts_norway$Date >= "2020-07-20", ]$variant_20a_s439 <- 0.87
+ts_norway[ts_norway$Date >= "2020-08-03", ]$variant_20a_s439 <- 0.29
+ts_norway[ts_norway$Date >= "2020-08-17", ]$variant_20a_s439 <- 0.78
+ts_norway[ts_norway$Date >= "2020-08-31", ]$variant_20a_s439 <- 0.81
+ts_norway[ts_norway$Date >= "2020-09-14", ]$variant_20a_s439 <- 0.21
+ts_norway[ts_norway$Date >= "2020-09-28", ]$variant_20a_s439 <- 0.26
+ts_norway[ts_norway$Date >= "2020-10-12", ]$variant_20a_s439 <- 0.34
+ts_norway[ts_norway$Date >= "2020-10-26", ]$variant_20a_s439 <- 0.49
+ts_norway[ts_norway$Date >= "2020-11-09", ]$variant_20a_s439 <- 0.53
+ts_norway[ts_norway$Date >= "2020-11-23", ]$variant_20a_s439 <- 0.69
+ts_norway[ts_norway$Date >= "2020-12-07", ]$variant_20a_s439 <- 0.77
+ts_norway[ts_norway$Date >= "2020-12-21", ]$variant_20a_s439 <- 0.65
+ts_norway[ts_norway$Date >= "2020-12-28", ]$variant_20a_s439 <- 0.47
+ts_norway[ts_norway$Date >= "2021-01-11", ]$variant_20a_s439 <- 0.57
+ts_norway[ts_norway$Date >= "2021-01-25", ]$variant_20a_s439 <- 0.52
+ts_norway[ts_norway$Date >= "2021-02-08", ]$variant_20a_s439 <- 0.41
+ts_norway[ts_norway$Date >= "2021-02-22", ]$variant_20a_s439 <- 0.24
+ts_norway[ts_norway$Date >= "2021-03-08", ]$variant_20a_s439 <- 0.13
+ts_norway[ts_norway$Date >= "2021-03-22", ]$variant_20a_s439 <- 0.07
+ts_norway[ts_norway$Date >= "2021-04-05", ]$variant_20a_s439 <- 0.04
+ts_norway[ts_norway$Date >= "2021-04-19", ]$variant_20a_s439 <- 0.04
+ts_norway[ts_norway$Date >= "2021-05-03", ]$variant_20a_s439 <- 0.10
+ts_norway[ts_norway$Date >= "2020-08-03", ]$variant_20b <- 0.04
+ts_norway[ts_norway$Date >= "2020-08-17", ]$variant_20b <- 0.07
+ts_norway[ts_norway$Date >= "2020-08-31", ]$variant_20b <- 0.05
+ts_norway[ts_norway$Date >= "2020-09-14", ]$variant_20b <- 0.16
+ts_norway[ts_norway$Date >= "2020-09-28", ]$variant_20b <- 0.36
+ts_norway[ts_norway$Date >= "2020-10-12", ]$variant_20b <- 0.23
+ts_norway[ts_norway$Date >= "2020-10-26", ]$variant_20b <- 0.11
+ts_norway[ts_norway$Date >= "2020-11-09", ]$variant_20b <- 0.06
+ts_norway[ts_norway$Date >= "2020-11-23", ]$variant_20b <- 0.02
+ts_norway[ts_norway$Date >= "2020-12-07", ]$variant_20b <- 0.02
+ts_norway[ts_norway$Date >= "2020-12-21", ]$variant_20b <- 0.02
+ts_norway[ts_norway$Date >= "2020-12-28", ]$variant_20b <- 0
+ts_norway[ts_norway$Date >= "2021-01-11", ]$variant_20b <- 0
+ts_norway[ts_norway$Date >= "2021-01-25", ]$variant_20b <- 0.01
+ts_norway[ts_norway$Date >= "2020-08-03", ]$variant_20c <- 0.15
+ts_norway[ts_norway$Date >= "2020-08-17", ]$variant_20c <- 0.04
+ts_norway[ts_norway$Date >= "2020-08-31", ]$variant_20c <- 0.13
+ts_norway[ts_norway$Date >= "2020-09-14", ]$variant_20c <- 0.13
+ts_norway[ts_norway$Date >= "2020-09-28", ]$variant_20c <- 0.07
+ts_norway[ts_norway$Date >= "2020-10-12", ]$variant_20c <- 0.06
+ts_norway[ts_norway$Date >= "2020-10-26", ]$variant_20c <- 0.02
+ts_norway[ts_norway$Date >= "2020-11-09", ]$variant_20c <- 0
+ts_norway[ts_norway$Date >= "2020-07-20", ]$variant_20e <- 0.13
+ts_norway[ts_norway$Date >= "2020-08-03", ]$variant_20e <- 0.52
+ts_norway[ts_norway$Date >= "2020-08-17", ]$variant_20e <- 0.07
+ts_norway[ts_norway$Date >= "2020-08-31", ]$variant_20e <- 0
+ts_norway[ts_norway$Date >= "2020-09-14", ]$variant_20e <- 0.01
+ts_norway[ts_norway$Date >= "2020-09-28", ]$variant_20e <- 0.07
+ts_norway[ts_norway$Date >= "2020-10-12", ]$variant_20e <- 0.21
+ts_norway[ts_norway$Date >= "2020-10-26", ]$variant_20e <- 0.13
+ts_norway[ts_norway$Date >= "2020-11-09", ]$variant_20e <- 0.27
+ts_norway[ts_norway$Date >= "2020-11-23", ]$variant_20e <- 0.15
+ts_norway[ts_norway$Date >= "2020-12-07", ]$variant_20e <- 0.11
+ts_norway[ts_norway$Date >= "2020-12-21", ]$variant_20e <- 0.20
+ts_norway[ts_norway$Date >= "2020-12-28", ]$variant_20e <- 0.36
+ts_norway[ts_norway$Date >= "2021-01-11", ]$variant_20e <- 0.15
+ts_norway[ts_norway$Date >= "2021-01-25", ]$variant_20e <- 0.12
+ts_norway[ts_norway$Date >= "2021-02-08", ]$variant_20e <- 0.07
+ts_norway[ts_norway$Date >= "2021-02-22", ]$variant_20e <- 0.03
+ts_norway[ts_norway$Date >= "2021-03-08", ]$variant_20e <- 0.01
+ts_norway[ts_norway$Date >= "2021-03-22", ]$variant_20e <- 0
+ts_norway[ts_norway$Date >= "2020-12-07", ]$variant_20l <- 0.06
+ts_norway[ts_norway$Date >= "2020-12-21", ]$variant_20l <- 0.10
+ts_norway[ts_norway$Date >= "2020-12-28", ]$variant_20l <- 0.10
+ts_norway[ts_norway$Date >= "2021-01-11", ]$variant_20l <- 0.12
+ts_norway[ts_norway$Date >= "2021-01-25", ]$variant_20l <- 0.27
+ts_norway[ts_norway$Date >= "2021-02-08", ]$variant_20l <- 0.51
+ts_norway[ts_norway$Date >= "2021-02-22", ]$variant_20l <- 0.73
+ts_norway[ts_norway$Date >= "2021-03-08", ]$variant_20l <- 0.85
+ts_norway[ts_norway$Date >= "2021-03-22", ]$variant_20l <- 0.93
+ts_norway[ts_norway$Date >= "2021-04-05", ]$variant_20l <- 0.95
+ts_norway[ts_norway$Date >= "2021-04-19", ]$variant_20l <- 0.95
+ts_norway[ts_norway$Date >= "2021-05-03", ]$variant_20l <- 0.90
+# ts_norway$main_variant[1:21] <- 0
+ts_norway$main_variant <- scale(ts_norway$main_variant)[, 1]
+ts_norway$variant_20a_eu2 <- scale(ts_norway$variant_20a_eu2)[, 1]
+ts_norway$variant_20a_s439 <- scale(ts_norway$variant_20a_s439)[, 1]
+ts_norway$variant_20b <- scale(ts_norway$variant_20b)[, 1]
+ts_norway$variant_20c <- scale(ts_norway$variant_20c)[, 1]
+ts_norway$variant_20e <- scale(ts_norway$variant_20e)[, 1]
+ts_norway$variant_20l <- scale(ts_norway$variant_20l)[, 1]
 set.seed(325234)
 #####################################################
 # specify penalized prior
@@ -32,9 +171,10 @@ prior_1 <- list(
 models <- list()
 gof <- list()
 mae <- list()
+formulas <- list()
 lcs <- inla.make.lincombs(
-  id_date_1 = diag(471),
-  id_date_2 = diag(471)
+  id_date_1 = diag(nrow(ts_norway)),
+  id_date_2 = diag(nrow(ts_norway))
 )
 #####################################################
 formula_1 <- new_cases ~
@@ -84,8 +224,9 @@ res_3 <- inla(
 formula_4 <- as.formula(
   paste(
     "new_cases ~",
-    paste(colnames(ts_norway)[7:27], collapse = " + "),
-    "+ f(id_date_1, model = 'rw2', hyper = prior_1)"
+    paste(colnames(ts_norway)[7:25], collapse = " + "),
+    "+ f(id_date_1, model = 'rw2', hyper = prior_1) + season",
+    variants_to_try
   )
 )
 res_4 <- inla(
@@ -103,9 +244,10 @@ res_4 <- inla(
 formula_5 <- as.formula(
   paste(
     "new_cases ~",
-    paste(colnames(ts_norway)[7:27], collapse = " + "),
+    paste(colnames(ts_norway)[7:25], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1)",
-    "+ f(id_date_2, model = 'iid')"
+    "+ f(id_date_2, model = 'iid') + season",
+    variants_to_try
   )
 )
 res_5 <- inla(
@@ -124,9 +266,10 @@ res_5 <- inla(
 formula_6 <- as.formula(
   paste(
     "new_cases ~",
-    paste(colnames(ts_norway)[c(12, 13, 16, 18, 21, 23, 25, 26)], collapse = " + "),
+    paste(colnames(ts_norway)[c(8, 12, 18, 24, 25)], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1)",
-    "+ f(id_date_2, model = 'iid')"
+    "+ f(id_date_2, model = 'iid') + season",
+    variants_to_try
   )
 )
 res_6 <- inla(
@@ -143,7 +286,7 @@ res_6 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
   
-b_1 <- ts_norway[, 6:27]
+b_1 <- ts_norway[, 6:25]
 b_1$geomety <- NULL
 b_1$new_cases[is.na(b_1$new_cases)] <- test_value
 sign <- TRUE
@@ -172,8 +315,8 @@ while (sign) {
   }
 }
 backup <- ts_norway
-ts_norway[, 7:27] <- NULL
-ts_norway <- cbind(ts_norway[, 1:6], b_1[, 2:ncol(b_1)], ts_norway[, 7:13])
+ts_norway[, 7:25] <- NULL
+ts_norway <- cbind(ts_norway[, 1:6], b_1[, 2:ncol(b_1)], ts_norway[, 7:21])
 formula_7 <- as.formula(
   paste(
     "new_cases ~",
@@ -197,7 +340,8 @@ formula_8 <- as.formula(
   paste(
     "new_cases ~",
     paste(colnames(ts_norway)[7:13], collapse = " + "),
-    "+ f(id_date_1, model = 'rw2', hyper = prior_1)"
+    "+ f(id_date_1, model = 'rw2', hyper = prior_1) + season",
+    variants_to_try
   )
 )
 res_8 <- inla(
@@ -217,7 +361,8 @@ formula_9 <- as.formula(
     "new_cases ~",
     paste(colnames(ts_norway)[7:13], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1)",
-    "+ f(id_date_2, model = 'iid')"
+    "+ f(id_date_2, model = 'iid') + season",
+    variants_to_try
   )
 )
 res_9 <- inla(
@@ -248,7 +393,7 @@ res_10 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 ts_norway <- backup
-b_2 <- ts_norway[, c(6, 12, 13, 16, 18, 21, 23, 25, 26)]
+b_2 <- ts_norway[, c(6, 8, 12, 18, 24, 25)]
 b_2$geomety <- NULL
 b_2$new_cases[is.na(b_2$new_cases)] <- test_value
 sign <- TRUE
@@ -276,12 +421,12 @@ while (sign) {
     }
   }
 }
-ts_norway[, 7:27] <- NULL
-ts_norway <- cbind(ts_norway[, 1:6], b_2[, 2:ncol(b_2)], ts_norway[, 7:13])
+ts_norway[, 7:25] <- NULL
+ts_norway <- cbind(ts_norway[, 1:6], b_2[, 2:ncol(b_2)], ts_norway[, 7:21])
 formula_11 <- as.formula(
   paste(
     "new_cases ~",
-    paste(colnames(ts_norway)[7:11], collapse = " + "),
+    paste(colnames(ts_norway)[7:10], collapse = " + "),
     "+ Date"
   )
 )
@@ -300,8 +445,9 @@ res_11 <- inla(
 formula_12 <- as.formula(
   paste(
     "new_cases ~",
-    paste(colnames(ts_norway)[7:11], collapse = " + "),
-    "+ f(id_date_1, model = 'rw2', hyper = prior_1)"
+    paste(colnames(ts_norway)[7:10], collapse = " + "),
+    "+ f(id_date_1, model = 'rw2', hyper = prior_1) + season",
+    variants_to_try
   )
 )
 res_12 <- inla(
@@ -319,9 +465,10 @@ res_12 <- inla(
 formula_13 <- as.formula(
   paste(
     "new_cases ~",
-    paste(colnames(ts_norway)[7:11], collapse = " + "),
+    paste(colnames(ts_norway)[7:10], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1)",
-    "+ f(id_date_2, model = 'iid')"
+    "+ f(id_date_2, model = 'iid') + season",
+    variants_to_try
   )
 )
 res_13 <- inla(
@@ -495,7 +642,7 @@ pred_tibble <- tibble(
     rep(13, nrow(ts_norway))
   ),
   Date = rep(ts_norway$Date, 13),
-  actual = rep(c(ts_norway$new_cases[1:457], test_value), 13)
+  actual = rep(c(ts_norway$new_cases[-test], test_value), 13)
 )
 models <- c(models, list(
   res_1,
@@ -512,6 +659,23 @@ models <- c(models, list(
   res_12,
   res_13
 ))
-models_final <- list(models, gof, mae, pred_tibble)
+formulas <- c(formulas, list(
+  formula_1,
+  formula_2,
+  formula_3,
+  formula_4,
+  formula_5,
+  formula_6,
+  formula_7,
+  formula_8,
+  formula_9,
+  formula_10,
+  formula_11,
+  formula_12,
+  formula_13
+))
+models_final <- list(models, gof, mae, pred_tibble, formulas)
 # save the models
 save(models_final, file = "models/temporal_norway.Rda")
+rm(list = ls())
+
