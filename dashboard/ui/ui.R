@@ -14,6 +14,10 @@ ui <- dashboardPage(
         menuSubItem(
           "Germany",
           tabName = "de_germany"
+        ),
+        menuSubItem(
+          "Europe",
+          tabName = "de_europe"
         )
       ),
       menuItem(
@@ -41,6 +45,14 @@ ui <- dashboardPage(
           "Germany",
           tabName = "sm_germany"
         )
+      ),
+      menuItem(
+        text = "Temporal Modelling",
+        tabName = "modelling_temporal"
+      ),
+      menuItem(
+        text = "Spatio-temporal Modelling",
+        tabName = "modelling_spatio_temporal"
       )
     )
   ),
@@ -151,6 +163,54 @@ ui <- dashboardPage(
             label = "Select municipality",
             choices = sort(unique(germany_munc_long$Landkreis)),
             selected = "LK Rosenheim"
+          )
+        )
+      ),
+      tabItem(
+        tabName = "de_europe",
+        column(
+          width = 9,
+          mapdeckOutput(outputId = "map_europe", height = "60vh"),
+          br(),
+          column(
+            width = 12,
+            highchartOutput(outputId = "highchart_europe", height = "30vh")
+          )
+        ),
+        column(
+          width = 3,
+          uiOutput("dropdown_ui_europe"),
+          dateInput(
+            "date_europe",
+            label = "Select date",
+            min = min(ts_europe$Date),
+            max = max(ts_europe$Date),
+            value = max(ts_europe$Date)
+          ),
+          pickerInput(
+            inputId = "map_style_europe",
+            label = "Select base map",
+            choices = c(
+              "dark", "light", "outdoors", "satellite"
+            )
+          ),
+          pickerInput(
+            inputId = "inf_numbers_europe",
+            label = "Select information",
+            choices = c(
+              "Daily number of infections",
+              "Daily number of infections per 100k",
+              "Total number of infections",
+              "Total number of infections per 100k",
+              "Seven day incidence"
+            ),
+            selected = "Seven day incidence"
+          ),
+          pickerInput(
+            inputId = "country_europe",
+            label = "Select country",
+            choices = sort(unique(ts_europe$Country)),
+            selected = "Germany"
           )
         )
       ),
@@ -385,6 +445,10 @@ ui <- dashboardPage(
             )
           )
         )
+      ),
+      tabItem(
+        tabName = "modelling_temporal",
+        h3("Hi")
       )
     )
   ),

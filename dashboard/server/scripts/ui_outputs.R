@@ -25,3 +25,18 @@ output$dropdown_ui_germany <- renderUI({
     selected = "Offices"
   )
 })
+
+output$dropdown_ui_europe <- renderUI({
+  cols <- colnames(ts_europe)[c(5:43)]
+  pickerInput(
+    inputId = "picker_europe",
+    label = "Select variable",
+    choices = list(
+      "General key figures" = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(3:14, 38)])]),
+      Mobility = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(15:20)])]),
+      "Government measures" = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(21:37)])]),
+      Health = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(1, 2, 39)])])
+    ),
+    selected = "Life expectancy"
+  )
+})

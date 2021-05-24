@@ -19,6 +19,10 @@ body {
  color: black;
 }
 
+#legendContainermap_europe {
+ color: black;
+}
+
 #legendContainermodel_map_norway {
  color: black;
 }
@@ -33,4 +37,22 @@ body {
 
 #legendContainersir_map_germany {
  color: black;
+}
+
+.form-control,
+.selectize-input,
+.selectize-control.single .selectize-input {
+ background: #fff;
+ color: #000;
+}
+
+table {
+ background-color:#fff;
+ color: #000;
+}
+
+.form-control:focus,
+.selectize-input.focus {
+ background: #fff;
+ color: #000;
 }

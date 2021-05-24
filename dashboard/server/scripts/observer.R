@@ -99,7 +99,8 @@ observeEvent(
             layer_id = "polygon_norway",
             legend_options = list(
               title = selected_og
-            )
+            ),
+            update_view = FALSE
           )
       }
     }
@@ -209,7 +210,8 @@ observeEvent(
               layer_id = "polygon_norway",
               legend_options = list(
                 title = selected_og
-              )
+              ),
+              update_view = FALSE
             )
         }
       }
@@ -342,7 +344,8 @@ observeEvent(
             layer_id = "polygon_germany",
             legend_options = list(
               title = selected_og
-            )
+            ),
+            update_view = FALSE
           )
       }
     }
@@ -463,7 +466,8 @@ observeEvent(
               layer_id = "polygon_germany",
               legend_options = list(
                 title = selected_og
-              )
+              ),
+              update_view = FALSE
             )
         }
       }
@@ -666,7 +670,8 @@ observeEvent(
           layer_id = "polygon_layer",
           legend_options = list(
             title = input$picker_col_var_norway
-          )
+          ),
+          update_view = FALSE
         )
     }
   },
@@ -865,7 +870,8 @@ observeEvent(
           layer_id = "polygon_layer",
           legend_options = list(
             title = input$picker_col_var_germany
-          )
+          ),
+          update_view = FALSE
         )
     }
   },
@@ -904,4 +910,75 @@ observeEvent(
       update_style(mapdeck_style(input$map_style_germany_3))
   },
   priority = 87
+)
+
+observeEvent(
+  {
+    list(input$picker_europe, input$date_europe)
+  },
+  {
+    if (!is.null(input$picker_europe)) {
+      selected_og <- input$picker_europe
+      selected_og_2 <- colnames_europe_actual[match(selected_og, colnames_europe_nice)]
+      selected <- colnames_europe_actual[match(selected_og, colnames_europe_nice)]
+      newest_numbers_europe <- ts_europe_unscaled[ts_europe_unscaled$Date == input$date_europe, ]
+      geom <- newest_numbers_europe$geometry
+      newest_numbers_europe$geometry <- NULL
+      placeholder <- newest_numbers_europe[, selected_og_2]
+      if (is.factor(newest_numbers_europe[, selected_og_2])) {
+        pal <- colorRamp(
+          lacroix_palette("Pamplemousse", type = "paired", n = length(unique(newest_numbers_europe[, selected_og_2]))),
+          alpha = TRUE
+        )((1:6) / 6)
+        pal[, 4] <- 150
+      } else {
+        pal <- colorRamp(
+          lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
+          alpha = TRUE
+        )((1:256) / 256)
+        pal[, 4] <- 150
+      }
+      newest_numbers_europe$geometry <- geom
+      newest_numbers_europe <- st_as_sf(newest_numbers_europe)
+      if (!is.factor(placeholder)) {
+        placeholder <- round(placeholder, 3)
+      }
+      newest_numbers_europe$tooltip <- paste(
+        newest_numbers_europe$Country,
+        "<br>",
+        input$picker_europe, ": ",
+        placeholder,
+        sep = ""
+      )
+      mapdeck_update(map_id = "map_europe") %>%
+        clear_polygon(layer_id = "polygon_layer") %>%
+        add_polygon(
+          data = newest_numbers_europe,
+          fill_colour = selected_og_2,
+          legend = list(stroke_colour = FALSE, fill_colour = TRUE),
+          stroke_width = 500,
+          stroke_colour = "#121212",
+          auto_highlight = TRUE,
+          palette = pal,
+          tooltip = "tooltip",
+          layer_id = "polygon_layer",
+          legend_options = list(
+            title = input$picker_europe
+          ),
+          update_view = FALSE
+        )
+    }
+  },
+  priority = 86
+)
+
+observeEvent(
+  {
+    input$map_style_europe
+  },
+  {
+    mapdeck_update(map_id = "map_europe") %>%
+      update_style(mapdeck_style(input$map_style_europe))
+  },
+  priority = 85
 )

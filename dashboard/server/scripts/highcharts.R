@@ -808,3 +808,331 @@ output$highchart_germany_2 <- renderHighchart({
       )
   }
 })
+
+output$highchart_europe <- renderHighchart({
+  ts_europe_no_geom <- ts_europe
+  ts_europe_no_geom$geometry <- NULL
+  cases_europe <- ts_europe_no_geom %>%
+    group_by(Date) %>%
+    summarise(
+      new_cases = sum(new_cases),
+      total_cases = sum(total_cases)
+    )
+  cases_europe$total_cases_100k <- round(100000 * (cases_europe$total_cases / sum(unique(ts_europe$population))))
+  cases_europe$new_cases_100k <- round(100000 * (cases_europe$new_cases / sum(unique(ts_europe$population))), 2)
+  cases_europe$new_cases_seven <- cases_europe$total_cases - c(rep(0, 7), cases_europe$total_cases[1:(nrow(cases_europe) - 7)])
+  cases_europe$incidence_seven <- round(100000 * (cases_europe$new_cases_seven / sum(unique(ts_europe$population))))
+  ts_europe_no_geom$total_cases_100k <- round(100000 * (ts_europe_no_geom$total_cases / ts_europe_no_geom$population))
+  ts_europe_no_geom$new_cases_100k <- round(100000 * (ts_europe_no_geom$new_cases / ts_europe_no_geom$population), 2)
+  ts_country <- ts_europe_no_geom[ts_europe_no_geom$Country == input$country_europe, ]
+  ts_country$new_cases_seven <- ts_country$total_cases - c(rep(0, 7), ts_country$total_cases[1:(nrow(ts_country) - 7)])
+  ts_country$incidence_seven <- round(100000 * (ts_country$new_cases_seven / sum(unique(ts_country$population))))
+  germany_munc_long$value_seven <- germany_munc_long$value -
+    c(rep(0, 402 * 7), germany_munc_long$value[1:(nrow(germany_munc_long) - (402 * 7))])
+  germany_munc_long$incidence_seven <- 100000 *
+    (germany_munc_long$value_seven / germany_munc_long$population)
+  dates <- format(unique(
+    cases_europe$Date
+  ), "%d.%m")
+  if (input$inf_numbers_europe == "Total number of infections") {
+    highchart() %>%
+      hc_xAxis(
+        categories = dates,
+        title = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_add_series(
+        data = cases_europe$total_cases,
+        type = "line",
+        name = "Europe",
+        color = "#F2C078"
+      ) %>%
+      hc_add_series(
+        data = ts_europe[ts_europe$Country == input$country_europe, ]$total_cases,
+        type = "line",
+        name = input$country_europe,
+        color = "#00F0B5"
+      ) %>%
+      hc_title(
+        text = paste("Total number of infections in", input$country_europe),
+        style = list(
+          color = "#fff",
+          fontSize = "calc(0.5em + 0.5vw)"
+        )
+      ) %>%
+      hc_yAxis(
+        title = list(
+          text = "Number of infections",
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_legend(
+        verticalAlign = "top",
+        align = "right",
+        layout = "vertical",
+        itemStyle = list(
+          color = "#fff",
+          `font-size` = "calc(0.1em + 0.5vw)"
+        )
+      )
+  } else if (input$inf_numbers_europe == "Total number of infections per 100k") {
+    highchart() %>%
+      hc_xAxis(
+        categories = dates,
+        title = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_add_series(
+        data = cases_europe$total_cases_100k,
+        type = "line",
+        name = "Europe",
+        color = "#F2C078"
+      ) %>%
+      hc_add_series(
+        data = ts_europe_no_geom[ts_europe_no_geom$Country == input$country_europe, ]$total_cases_100k,
+        type = "line",
+        name = input$country_europe,
+        color = "#00F0B5"
+      ) %>%
+      hc_title(
+        text = paste("Total number of infections per 100k in", input$country_europe),
+        style = list(
+          color = "#fff",
+          fontSize = "calc(0.5em + 0.5vw)"
+        )
+      ) %>%
+      hc_yAxis(
+        title = list(
+          text = "Number of infections",
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_legend(
+        verticalAlign = "top",
+        align = "right",
+        layout = "vertical",
+        itemStyle = list(
+          color = "#fff",
+          `font-size` = "calc(0.1em + 0.5vw)"
+        )
+      )
+  } else if (input$inf_numbers_europe == "Daily number of infections") {
+    highchart() %>%
+      hc_xAxis(
+        categories = dates[2:length(unique(ts_europe$Date))],
+        title = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_add_series(
+        data = cases_europe$new_cases[2:nrow(cases_europe)],
+        type = "line",
+        name = "Europe",
+        color = "#F2C078"
+      ) %>%
+      hc_add_series(
+        data = ts_europe_no_geom[ts_europe_no_geom$Country == input$country_europe, ]$new_cases[2:nrow(cases_europe)],
+        type = "line",
+        name = input$country_europe,
+        color = "#00F0B5"
+      ) %>%
+      hc_title(
+        text = paste("Daily number of infections in", input$country_europe),
+        style = list(
+          color = "#fff",
+          fontSize = "calc(0.5em + 0.5vw)"
+        )
+      ) %>%
+      hc_yAxis(
+        title = list(
+          text = "Number of infections",
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_legend(
+        verticalAlign = "top",
+        align = "right",
+        layout = "vertical",
+        itemStyle = list(
+          color = "#fff",
+          `font-size` = "calc(0.1em + 0.5vw)"
+        )
+      )
+  } else if (input$inf_numbers_europe == "Daily number of infections per 100k") {
+    highchart() %>%
+      hc_xAxis(
+        categories = dates[2:nrow(cases_europe)],
+        title = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_add_series(
+        data = cases_europe$new_cases_100k[2:nrow(cases_europe)],
+        type = "line",
+        name = "Europe",
+        color = "#F2C078"
+      ) %>%
+      hc_add_series(
+        data = ts_europe_no_geom[ts_europe_no_geom$Country == input$country_europe, ]$new_cases_100k[2:nrow(cases_europe)],
+        type = "line",
+        name = input$country_europe,
+        color = "#00F0B5"
+      ) %>%
+      hc_title(
+        text = paste("Daily number of infections per 100k in", input$country_europe),
+        style = list(
+          color = "#fff",
+          fontSize = "calc(0.5em + 0.5vw)"
+        )
+      ) %>%
+      hc_yAxis(
+        title = list(
+          text = "Number of infections",
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_legend(
+        verticalAlign = "top",
+        align = "right",
+        layout = "vertical",
+        itemStyle = list(
+          color = "#fff",
+          `font-size` = "calc(0.1em + 0.5vw)"
+        )
+      )
+  } else {
+    highchart() %>%
+      hc_xAxis(
+        categories = dates[8:nrow(cases_europe)],
+        title = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_add_series(
+        data = cases_europe$incidence_seven[8:nrow(cases_europe)],
+        type = "line",
+        name = "Europe",
+        color = "#F2C078"
+      ) %>%
+      hc_add_series(
+        data = ts_country$incidence_seven[8:nrow(cases_europe)],
+        type = "line",
+        name = input$country_europe,
+        color = "#00F0B5"
+      ) %>%
+      hc_title(
+        text = paste("Seven day incidence in", input$country_europe),
+        style = list(
+          color = "#fff",
+          fontSize = "calc(0.5em + 0.5vw)"
+        )
+      ) %>%
+      hc_yAxis(
+        title = list(
+          text = "Incidence",
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_legend(
+        verticalAlign = "top",
+        align = "right",
+        layout = "vertical",
+        itemStyle = list(
+          color = "#fff",
+          `font-size` = "calc(0.1em + 0.5vw)"
+        )
+      )
+  }
+})
