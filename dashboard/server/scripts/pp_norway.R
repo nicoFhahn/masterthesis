@@ -119,4 +119,4 @@ colnames_norway_nice <- sort(c(
 rm(list = setdiff(ls(), c(
   "newest_numbers_norway", "norway_munc_conf_long",
   "colnames_norway_actual", "colnames_norway_nice"
-  )))
+)))

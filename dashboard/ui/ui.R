@@ -155,6 +155,46 @@ ui <- dashboardPage(
         )
       ),
       tabItem(
+        tabName = "sir_norway",
+        column(
+          width = 2,
+          pickerInput(
+            inputId = "map_style_norway_3",
+            label = "Select base map",
+            choices = c(
+              "dark", "light", "outdoors", "satellite"
+            )
+          )
+        ),
+        column(
+          width = 10,
+          mapdeckOutput(
+            "sir_map_norway",
+            height = "60vh"
+          )
+        )
+      ),
+      tabItem(
+        tabName = "sir_germany",
+        column(
+          width = 2,
+          pickerInput(
+            inputId = "map_style_germany_3",
+            label = "Select base map",
+            choices = c(
+              "dark", "light", "outdoors", "satellite"
+            )
+          )
+        ),
+        column(
+          width = 10,
+          mapdeckOutput(
+            "sir_map_germany",
+            height = "60vh"
+          )
+        )
+      ),
+      tabItem(
         tabName = "sm_norway",
         column(
           width = 4,
@@ -165,7 +205,7 @@ ui <- dashboardPage(
               choices = colnames_norway_nice[
                 which(colnames_norway_actual %in% colnames(newest_numbers_norway)[c(3, 5:30, 31:37, 39)][c(1:7, 29:31)])
               ]
-            ) 
+            )
           ),
           fluidRow(
             multiInput(
@@ -190,14 +230,14 @@ ui <- dashboardPage(
               textInput(
                 "alpha_norway",
                 "Enter alpha",
-                0.01 
+                0.01
               )
             )
           ),
           fluidRow(
             actionBttn(
               inputId = "start_norway",
-              label = "Calculate BYM2 model", 
+              label = "Calculate BYM2 model",
               style = "material-flat",
               color = "danger"
             )
@@ -214,7 +254,7 @@ ui <- dashboardPage(
             column(
               width = 4,
               pickerInput(
-                "picker_col_var",
+                "picker_col_var_norway",
                 label = "Select variable",
                 choices = c(
                   "Relative risk",
@@ -246,6 +286,102 @@ ui <- dashboardPage(
           fluidRow(
             dataTableOutput(
               "datatable_2_norway"
+            )
+          )
+        )
+      ),
+      tabItem(
+        tabName = "sm_germany",
+        column(
+          width = 4,
+          fluidRow(
+            multiInput(
+              inputId = "multi_germany_demo",
+              label = "Select demographic variables",
+              choices = colnames_germany_nice[
+                which(colnames_germany_actual %in% colnames(newest_numbers_germany)[c(2:15, 17:34, 37:41, 44:46, 48)][c(1:15, 34:36)])
+              ]
+            )
+          ),
+          fluidRow(
+            multiInput(
+              inputId = "multi_germany_infra",
+              label = "Select infrastructure variables",
+              choices = colnames_germany_nice[
+                which(colnames_germany_actual %in% colnames(newest_numbers_germany)[c(3, 5:30, 31:37, 39)][c(16:32, 37)])
+              ]
+            ),
+          ),
+          fluidRow(
+            column(
+              width = 6,
+              textInput(
+                "sigma_0_germany",
+                "Enter sigma_0",
+                1
+              )
+            ),
+            column(
+              width = 6,
+              textInput(
+                "alpha_germany",
+                "Enter alpha",
+                0.01
+              )
+            )
+          ),
+          fluidRow(
+            actionBttn(
+              inputId = "start_germany",
+              label = "Calculate BYM2 model",
+              style = "material-flat",
+              color = "danger"
+            )
+          )
+        ),
+        column(
+          width = 8,
+          fluidRow(
+            mapdeckOutput(
+              "model_map_germany"
+            )
+          ),
+          fluidRow(
+            column(
+              width = 4,
+              pickerInput(
+                "picker_col_var_germany",
+                label = "Select variable",
+                choices = c(
+                  "Relative risk",
+                  "Posterior mean of the random effects",
+                  "Exceedance probability",
+                  "Spatial field unstructured component",
+                  "Spatial field structured component"
+                ),
+                selected = "Relative risk"
+              )
+            ),
+            column(
+              width = 4,
+              pickerInput(
+                inputId = "map_style_germany_2",
+                label = "Select base map",
+                choices = c(
+                  "dark", "light", "outdoors", "satellite"
+                )
+              )
+            )
+          ),
+          br(),
+          fluidRow(
+            dataTableOutput(
+              "datatable_1_germany"
+            )
+          ),
+          fluidRow(
+            dataTableOutput(
+              "datatable_2_germany"
             )
           )
         )

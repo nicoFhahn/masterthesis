@@ -96,7 +96,10 @@ observeEvent(
             auto_highlight = TRUE,
             palette = pal,
             tooltip = "tooltip",
-            layer_id = "polygon_norway"
+            layer_id = "polygon_norway",
+            legend_options = list(
+              title = selected_og
+            )
           )
       }
     }
@@ -205,7 +208,7 @@ observeEvent(
               tooltip = "tooltip",
               layer_id = "polygon_norway",
               legend_options = list(
-                selected_og_2 = list(title = selected_og)
+                title = selected_og
               )
             )
         }
@@ -336,7 +339,10 @@ observeEvent(
             auto_highlight = TRUE,
             palette = pal,
             tooltip = "tooltip",
-            layer_id = "polygon_germany"
+            layer_id = "polygon_germany",
+            legend_options = list(
+              title = selected_og
+            )
           )
       }
     }
@@ -454,10 +460,13 @@ observeEvent(
               auto_highlight = TRUE,
               palette = pal,
               tooltip = "tooltip",
-              layer_id = "polygon_germany"
+              layer_id = "polygon_germany",
+              legend_options = list(
+                title = selected_og
+              )
             )
         }
-    }
+      }
     }
   },
   priority = 96
@@ -508,7 +517,6 @@ observeEvent(
           "+ f(idarea_1, model = 'bym2', graph = g_norway, scale.model = TRUE, hyper = prior)"
         )
       )
-      
     } else {
       formula <- infections ~ 1 +
         f(idarea_1, model = "bym2", graph = g_norway, scale.model = TRUE, hyper = prior)
@@ -526,18 +534,12 @@ observeEvent(
       control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
     )
     model_norway$results$model <- result
-    predicted <- c()
-    for (i in seq_len(nrow(newest_numbers_norway))) {
-      predicted[i] <- inla.emarginal(
-        function(x) x * newest_numbers_norway$population[i],
-        result$marginals.fitted.values[[i]]
-      )
-    }
+    predicted <- mean(abs(result$summary.fitted.values$mean[test] * newest_numbers_norway$expected_count[test] - test_value))
     results_tibble <- tibble(
       DIC = round(result$dic$dic),
       WAIC = round(result$waic$waic),
       CPO = round(sum(log(result$cpo$cpo), na.rm = TRUE)),
-      MAE = round(mean(abs(predicted[test] - test_value))),
+      MAE = round(predicted),
       Precision = round(result$summary.hyperpar$mean[2], 2),
       Phi = round(result$summary.hyperpar$mean[3], 2),
       alpha = alpha,
@@ -618,7 +620,7 @@ observeEvent(
 
 observeEvent(
   {
-    list(input$picker_col_var, input$start_norway)
+    list(input$picker_col_var_norway, input$start_norway)
   },
   {
     result <- model_norway$results$model
@@ -641,12 +643,12 @@ observeEvent(
         alpha = TRUE
       )((1:256) / 256)
       pal[, 4] <- 150
-      placeholder <- newest_numbers_norway[, input$picker_col_var]
+      placeholder <- newest_numbers_norway[, input$picker_col_var_norway]
       placeholder$geometry <- NULL
       newest_numbers_norway$tooltip <- paste(
-        newest_numbers_norway$tooltip,
+        newest_numbers_norway$kommune_name,
         "<br>",
-        input$picker_col_var, ": ",
+        input$picker_col_var_norway, ": ",
         round(unlist(placeholder[, 1]), 2),
         sep = ""
       )
@@ -654,14 +656,17 @@ observeEvent(
         clear_polygon("polygon_layer") %>%
         add_polygon(
           data = newest_numbers_norway,
-          fill_colour = input$picker_col_var,
+          fill_colour = input$picker_col_var_norway,
           legend = list(stroke_colour = FALSE, fill_colour = TRUE),
           stroke_width = 500,
           stroke_colour = "#121212",
           auto_highlight = TRUE,
           palette = pal,
           tooltip = "tooltip",
-          layer_id = "polygon_layer"
+          layer_id = "polygon_layer",
+          legend_options = list(
+            title = input$picker_col_var_norway
+          )
         )
     }
   },
@@ -677,4 +682,226 @@ observeEvent(
       update_style(mapdeck_style(input$map_style_norway_2))
   },
   priority = 92
+)
+
+observeEvent(
+  {
+    input$start_germany
+  },
+  {
+    vars <- c(input$multi_germany_demo, input$multi_germany_infra)
+    sigma_0 <- as.numeric(input$sigma_0_germany)
+    alpha <- as.numeric(input$alpha_germany)
+    sigma_0 <- ifelse(is.na(sigma_0), 1, sigma_0)
+    alpha <- ifelse(is.na(alpha), 0.01, alpha)
+    set.seed(7918)
+    test <- sample(
+      seq_len(nrow(newest_numbers_germany)),
+      size = floor(0.2 * nrow(newest_numbers_germany))
+    )
+    test_value <- newest_numbers_germany$infections[test]
+    newest_numbers_germany$infections[test] <- NA
+    link <- rep(NA, nrow(newest_numbers_germany))
+    link[which(is.na(newest_numbers_germany$infections))] <- 1
+    prior <- list(
+      prec = list(
+        prior = "pc.prec",
+        param = c(sigma_0, alpha)
+      )
+    )
+    if (length(vars) > 0) {
+      formula <- as.formula(
+        paste(
+          "infections ~",
+          paste(colnames_germany_actual[which(colnames_germany_nice %in% vars)], collapse = "+"),
+          "+ f(idarea_1, model = 'bym2', graph = g_germany, scale.model = TRUE, hyper = prior)"
+        )
+      )
+    } else {
+      formula <- infections ~ 1 +
+        f(idarea_1, model = "bym2", graph = g_germany, scale.model = TRUE, hyper = prior)
+    }
+    result <- inla(
+      formula,
+      family = "nbinomial",
+      data = newest_numbers_germany,
+      E = expected_count,
+      control.predictor = list(
+        compute = TRUE,
+        link = link
+      ),
+      Ntrials = newest_numbers_germany$population,
+      control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+    )
+    model_germany$results$model <- result
+    predicted <- mean(abs(result$summary.fitted.values$mean[test] * newest_numbers_germany$expected_count[test] - test_value))
+    results_tibble <- tibble(
+      DIC = round(result$dic$dic),
+      WAIC = round(result$waic$waic),
+      CPO = round(sum(log(result$cpo$cpo), na.rm = TRUE)),
+      MAE = round(predicted),
+      Precision = round(result$summary.hyperpar$mean[2], 2),
+      Phi = round(result$summary.hyperpar$mean[3], 2),
+      alpha = alpha,
+      sigma_0 = sigma_0,
+      Covariates = length(vars),
+      ID = as.numeric(input$start_germany)
+    )
+    if (is.na(model_germany$results$performance_frame)) {
+      model_germany$results$performance_frame <- results_tibble
+    } else {
+      model_germany$results$performance_frame <- rbind(
+        model_germany$results$performance_frame,
+        results_tibble
+      )
+    }
+    model_germany$results$predictions <- predicted
+    conf_intervals <- sapply(
+      result$marginals.fixed[
+        rownames(result$summary.fixed[
+          order(result$summary.fixed$mean),
+        ])
+      ],
+      function(x) {
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
+            exp, x
+          )
+        )
+      }
+    )
+    means <- sapply(
+      result$marginals.fixed[
+        rownames(result$summary.fixed[
+          order(result$summary.fixed$mean),
+        ])
+      ],
+      inla.emarginal,
+      fun = exp
+    )
+    is_significant <- lapply(
+      seq_len(ncol(conf_intervals)),
+      function(x, ...) {
+        sum(conf_intervals[, x] < 1) == 2 || sum(conf_intervals[, x] > 1) == 2
+      }
+    )
+    vars_id <- lapply(colnames(conf_intervals[, unlist(is_significant)]), function(x, ...) {
+      which(colnames_germany_actual %in% x)
+    })
+    colnames_germany_nice_2 <- c(colnames_germany_nice, "(Intercept)")
+    vars_id[unlist(lapply(vars_id, length)) == 0][[1]] <- length(colnames_germany_nice_2)
+    if (length(is_significant) & length(vars_id) == 0) vars_id <- list(length(colnames_germany_nice_2))
+    # Var = colnames_germany_nice_2[unlist(vars_id)]
+    # print(conf_intervals)
+    # Q025 = round(as.numeric(conf_intervals[, unlist(is_significant)][1, ]), 3)
+    # Mean = round(as.numeric(means[unlist(is_significant)]), 3)
+    # Q975 = round(as.numeric(conf_intervals[, unlist(is_significant)][2, ]), 3)
+    # ID = as.numeric(input$start_germany)
+    sign_tibble <- tibble(
+      Var = colnames_germany_nice_2[unlist(vars_id)],
+      Q025 = round(as.numeric(as.matrix(conf_intervals[, unlist(is_significant)])[1, ]), 3),
+      Mean = round(as.numeric(means[unlist(is_significant)]), 3),
+      Q975 = round(as.numeric(as.matrix(conf_intervals[, unlist(is_significant)])[2, ]), 3),
+      ID = as.numeric(input$start_germany)
+    )
+    if (is.na(model_germany$results$sign_frame)) {
+      model_germany$results$sign_frame <- sign_tibble
+    } else {
+      model_germany$results$sign_frame <- rbind(
+        model_germany$results$sign_frame,
+        sign_tibble
+      )
+    }
+  },
+  priority = 91
+)
+
+observeEvent(
+  {
+    list(input$picker_col_var_germany, input$start_germany)
+  },
+  {
+    result <- model_germany$results$model
+    if (!is.na(result)) {
+      newest_numbers_germany$`Relative risk` <- result$summary.fitted.values$mean
+      csi <- result$marginals.random$idarea_1[
+        seq_len(nrow(newest_numbers_germany))
+      ]
+      a <- 0
+      prob_csi <- lapply(csi, function(x) {
+        1 - inla.pmarginal(a, x)
+      })
+      zeta <- lapply(csi, function(x) inla.emarginal(exp, x))
+      newest_numbers_germany$`Posterior mean of the random effects` <- round(unlist(zeta), 2)
+      newest_numbers_germany$`Exceedance probability` <- round(unlist(prob_csi), 2)
+      newest_numbers_germany$`Spatial field unstructured component` <- result$summary.random$idarea_1$mean[1:401]
+      newest_numbers_germany$`Spatial field structured component` <- result$summary.random$idarea_1$mean[402:802]
+      pal <- colorRamp(
+        lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
+        alpha = TRUE
+      )((1:256) / 256)
+      pal[, 4] <- 150
+      placeholder <- newest_numbers_germany[, input$picker_col_var_germany]
+      placeholder$geometry <- NULL
+      newest_numbers_germany$tooltip <- paste(
+        newest_numbers_germany$municipality,
+        "<br>",
+        input$picker_col_var_germany, ": ",
+        round(unlist(placeholder[, 1]), 2),
+        sep = ""
+      )
+      mapdeck_update(map_id = "model_map_germany") %>%
+        clear_polygon("polygon_layer") %>%
+        add_polygon(
+          data = newest_numbers_germany,
+          fill_colour = input$picker_col_var_germany,
+          legend = list(stroke_colour = FALSE, fill_colour = TRUE),
+          stroke_width = 500,
+          stroke_colour = "#121212",
+          auto_highlight = TRUE,
+          palette = pal,
+          tooltip = "tooltip",
+          layer_id = "polygon_layer",
+          legend_options = list(
+            title = input$picker_col_var_germany
+          )
+        )
+    }
+  },
+  priority = 90
+)
+
+observeEvent(
+  {
+    input$map_style_germany_2
+  },
+  {
+    mapdeck_update(map_id = "model_map_germany") %>%
+      update_style(mapdeck_style(input$map_style_germany_2))
+  },
+  priority = 89
+)
+
+
+observeEvent(
+  {
+    input$map_style_norway_3
+  },
+  {
+    mapdeck_update(map_id = "sir_map_norway") %>%
+      update_style(mapdeck_style(input$map_style_norway_3))
+  },
+  priority = 88
+)
+
+observeEvent(
+  {
+    input$map_style_germany_3
+  },
+  {
+    mapdeck_update(map_id = "sir_map_germany") %>%
+      update_style(mapdeck_style(input$map_style_germany_3))
+  },
+  priority = 87
 )

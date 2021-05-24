@@ -8,7 +8,7 @@ output$dropdown_ui_norway <- renderUI({
       Health = colnames_norway_nice[which(colnames_norway_actual %in% cols[32:35])],
       Others = colnames_norway_nice[which(colnames_norway_actual %in% cols[c(1:7, 29:31)])]
     ),
-    selected = "office"
+    selected = "Offices"
   )
 })
 
@@ -22,6 +22,6 @@ output$dropdown_ui_germany <- renderUI({
       Health = colnames_germany_nice[which(colnames_germany_actual %in% cols[38:41])],
       Others = colnames_germany_nice[which(colnames_germany_actual %in% cols[c(1:15, 33:36)])]
     ),
-    selected = "office"
+    selected = "Offices"
   )
 })
