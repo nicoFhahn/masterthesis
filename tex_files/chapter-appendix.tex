@@ -110,6 +110,7 @@ with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \auto
 \clearpage
 \section{Distribution Fits}
 \subsection{Distribution Fits for Germany}
+\subsubsection{Fits for the Non-Temporal Models}
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.8\textwidth]{fit_normal_germany.png}
@@ -122,7 +123,15 @@ with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \auto
     \caption{A Poisson fit to the number of cases in German municipalities}
     \label{fitPoissonGermany}
 \end{figure}
+\subsubsection{Fits for the Temporal Models}\label{sec:temp_fit_germany}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 0.8\textwidth]{fit_poisson_germany_ts.png}
+  \caption{A Poisson fit to the number of cases in German municipalities}
+  \label{fitPoissonGermany_ts}
+\end{figure}
 \subsection{Distribution Fits for Norway}
+\subsubsection{Fits for the Non-Temporal Models}\label{sec:temp_fit_norway}
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.8\textwidth]{fit_normal_norway.png}
@@ -136,6 +145,31 @@ with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \auto
     \label{fitPoissonNorway}
 \end{figure}
 \clearpage
+\subsubsection{Fits for the Temporal Models}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 0.8\textwidth]{fit_nbinom_norway_ts.png}
+  \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
+  \label{fitNegbinomNorway_ts}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 0.8\textwidth]{fit_normal_norway_ts.png}
+  \caption{A normal fit to the number of cases in Norwegian municipalities}
+  \label{fitNormalNorway_ts}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 0.8\textwidth]{fit_poisson_norway_ts.png}
+  \caption{A Poisson fit to the number of cases in Norwegian municipalities}
+  \label{fitPoissonNorway_ts}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 0.8\textwidth]{distrfit_norway_ts.png}
+  \caption{Histogram for the number of cases in Norwegian municipalities with a normal and a negative binomial distribution overlayed.}
+  \label{fitDistrNorway_ts}
+\end{figure}
 \section{Choice of Hyperpriors for Germany}
 \begin{figure}[H]
     \centering
@@ -149,6 +183,7 @@ with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \auto
     \caption{Values of the MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
     \label{comparison_germany_2}
 \end{figure}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{spatial_field_germany_1.png}
@@ -282,27 +317,6 @@ res_5 <- inla(
 \end{lstlisting}
 \subsection{Making Predictions for the Test Data}
 \begin{lstlisting}[caption={The code for making predictions in INLA.}, label={codePrediction}, language=R]
-# create a vector to save the predictions to
-predicted_1 <- c()
-predicted_2 <- c()
-# make predictions for a non-temporal model
-for (i in seq_len(nrow(newest_numbers))) {
-  predicted_1[i] <- inla.emarginal(
-    function(x) x * newest_numbers$population[i],
-    res_1$marginals.fitted.values[[i]]
-  )
-}
-# calculate the mae
-mean(abs(predicted_1[test] - test_value)),
-# make predictions for a temporal model
-for (i in seq_len(nrow(germany))) {
-  predicted_2[i] <- inla.emarginal(
-    function(x) x * germany$population[i],
-    res_5$marginals.fitted.values[[i]]
-  )
-}
-# calculate the mae
-mean(abs(predicted_2[test_temporal] - test_value_temporal)),
 \end{lstlisting}
 \subsection{Calculating the Posterior Mean}
 \begin{lstlisting}[caption={Calculating the posterior mean of a coefficent.}, label={codePosteriorMean}, language=R]
