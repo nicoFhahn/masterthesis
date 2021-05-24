@@ -402,7 +402,6 @@ output$highchart_norway_2 <- renderHighchart({
 })
 
 output$highchart_germany_1 <- renderHighchart({
-  
   no_geometry_germany <- newest_numbers_germany
   no_geometry_germany$geometry <- NULL
   selected_og <- input$picker_germany
