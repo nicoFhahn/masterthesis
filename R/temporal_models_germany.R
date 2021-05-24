@@ -107,7 +107,7 @@ lcs <- inla.make.lincombs(
 )
 #####################################################
 formula_1 <- new_cases ~
-  1 + Date
+1 + Date
 res_1 <- inla(
   formula_1,
   family = "nbinomial",
@@ -121,7 +121,7 @@ res_1 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 formula_2 <- new_cases ~
-  f(id_date_1, model = "rw2", hyper = prior_1)
+f(id_date_1, model = "rw2", hyper = prior_1)
 res_2 <- inla(
   formula_2,
   family = "nbinomial",
@@ -135,7 +135,7 @@ res_2 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 formula_3 <- new_cases ~
-  f(id_date_1, model = "rw2", hyper = prior_1) +
+f(id_date_1, model = "rw2", hyper = prior_1) +
   f(id_date_2, model = "iid")
 res_3 <- inla(
   formula_3,
@@ -223,7 +223,7 @@ b$international_travel_controls <- NULL
 b$cancel_public_events <- NULL
 i <- 1
 while (sign) {
-  print(i) 
+  print(i)
   i <- i + 1
   mod <- glm.nb(
     new_cases ~ .,
@@ -320,7 +320,7 @@ sign <- TRUE
 # multicollinearity
 i <- 1
 while (sign) {
-  print(i) 
+  print(i)
   i <- i + 1
   mod <- glm.nb(
     new_cases ~ .,

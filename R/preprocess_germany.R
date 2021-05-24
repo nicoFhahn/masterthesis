@@ -407,7 +407,8 @@ newest_numbers$geometry <- NULL
 newest_numbers[, c(2:15, 20:35, 43:46)] <- scale(
   newest_numbers[, c(2:15, 20:35, 43:46)]
 )
-b <- newest_numbers[, c(2:5, 12:15, 18, 20:35, 43:46)]
+newest_numbers$aerodrome <- NULL
+b <- newest_numbers[, c(2:5, 12:15, 18, 20:34, 42:45)]
 sign <- TRUE
 while (sign) {
   mod <- glm.nb(
@@ -420,7 +421,7 @@ while (sign) {
     b[, names(VIF(mod))[VIF(mod) == max(VIF(mod))]] <- NULL
   }
 }
-newest_numbers[, c(2:5, 12:15, 18, 20:35, 43:46)] <- NULL
+newest_numbers[, c(2:5, 12:15, 18, 20:34, 42:45)] <- NULL
 newest_numbers <- st_as_sf(cbind(b, newest_numbers, geom))
 # add the geometry again
 newest_numbers$geometry <- geom

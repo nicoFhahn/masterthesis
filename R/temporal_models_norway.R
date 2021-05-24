@@ -178,7 +178,7 @@ lcs <- inla.make.lincombs(
 )
 #####################################################
 formula_1 <- new_cases ~
-  1 + Date
+1 + Date
 res_1 <- inla(
   formula_1,
   family = "nbinomial",
@@ -192,7 +192,7 @@ res_1 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 formula_2 <- new_cases ~
-  f(id_date_1, model = "rw2", hyper = prior_1)
+f(id_date_1, model = "rw2", hyper = prior_1)
 res_2 <- inla(
   formula_2,
   family = "nbinomial",
@@ -206,7 +206,7 @@ res_2 <- inla(
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
 formula_3 <- new_cases ~
-  f(id_date_1, model = "rw2", hyper = prior_1) +
+f(id_date_1, model = "rw2", hyper = prior_1) +
   f(id_date_2, model = "iid")
 res_3 <- inla(
   formula_3,
@@ -285,7 +285,7 @@ res_6 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-  
+
 b_1 <- ts_norway[, 6:25]
 b_1$geomety <- NULL
 b_1$new_cases[is.na(b_1$new_cases)] <- test_value
@@ -293,7 +293,7 @@ sign <- TRUE
 # multicollinearity
 i <- 1
 while (sign) {
-  print(i) 
+  print(i)
   i <- i + 1
   mod <- glm.nb(
     new_cases ~ .,
@@ -400,7 +400,7 @@ sign <- TRUE
 # multicollinearity
 i <- 1
 while (sign) {
-  print(i) 
+  print(i)
   i <- i + 1
   mod <- glm.nb(
     new_cases ~ .,
@@ -678,4 +678,3 @@ models_final <- list(models, gof, mae, pred_tibble, formulas)
 # save the models
 save(models_final, file = "models/temporal_norway.Rda")
 rm(list = ls())
-

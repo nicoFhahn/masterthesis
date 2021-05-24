@@ -27,7 +27,6 @@ websites <- c(
   "https://ourworldindata.org/grapher/share-people-vaccinated-covid",
   "https://ourworldindata.org/grapher/stay-at-home-covid",
   "https://ourworldindata.org/grapher/workplace-closures-covid"
-  
 )
 j <- 1
 download_location <- file.path(Sys.getenv("USERPROFILE"), "Downloads")
@@ -37,10 +36,10 @@ driver <- rsDriver(
 )
 server <- driver$server
 browser <- driver$client
-for(i in websites) {
+for (i in websites) {
   print(paste("Downloading website", j))
   j <- j + 1
-  filename = paste(rev(str_split(i, "/")[[1]])[1], ".csv", sep = "")
+  filename <- paste(rev(str_split(i, "/")[[1]])[1], ".csv", sep = "")
   browser$navigate(i)
   Sys.sleep(10)
   tab <- browser$findElements("download-tab-button", using = "class")

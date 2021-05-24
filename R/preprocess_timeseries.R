@@ -289,12 +289,14 @@ norway <- melt(
 )
 norway$date <- as.Date(as.character(norway$date))
 norway <- norway[
-  order(norway$date,
-        norway$kommune_no),
+  order(
+    norway$date,
+    norway$kommune_no
+  ),
 ]
 daily_cases <- norway[359:nrow(norway), ]$value - norway[1:(nrow(norway) - 358), ]$value
 daily_cases[daily_cases < 0] <- 0
-norway <-  norway[359:nrow(norway), ]
+norway <- norway[359:nrow(norway), ]
 norway$value <- daily_cases
 norway_grouped <- norway %>%
   group_by(date) %>%

@@ -30,17 +30,17 @@ for (i in 2:nrow(newest_numbers)) {
 C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 formula_besag <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
+  Union + afd + clinic + place_of_worship + nursing_home +
   platform + office + marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior)
 formula_bym2 <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
+  Union + afd + clinic + place_of_worship + nursing_home +
   platform + office + marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior)
 formula_leroux <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  Union + afd + clinic + place_of_worship + nursing_home + aerodrome +
+  Union + afd + clinic + place_of_worship + nursing_home +
   platform + office + marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior)
 models <- pblapply(
@@ -88,7 +88,7 @@ models <- pblapply(
       Ntrials = newest_numbers$population,
       control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
     )
-    while (class(res_bym2) != "inla") {
+    while (class(res_bym2) != "inla" | any(is.nan(res_bym2$marginals.fixed$`(Intercept)`))) {
       print("bruh")
       prior <- list(
         prec = list(
@@ -182,7 +182,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$place_of_worship
+            exp, res_bym2$marginals.fixed$higher_education
           )
         )[1],
         inla.qmarginal(
@@ -194,19 +194,13 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$higher_education
+            exp, res_bym2$marginals.fixed$place_of_worship
           )
         )[1],
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
             exp, res_bym2$marginals.fixed$office
-          )
-        )[1],
-        inla.qmarginal(
-          c(0.025, 0.975),
-          inla.tmarginal(
-            exp, res_bym2$marginals.fixed$SPD
           )
         )[1],
         inla.qmarginal(
@@ -224,6 +218,12 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
+            exp, res_bym2$marginals.fixed$SPD
+          )
+        )[1],
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
             exp, res_bym2$marginals.fixed$urb_dens
           )
         )[1],
@@ -231,12 +231,6 @@ models <- pblapply(
           c(0.025, 0.975),
           inla.tmarginal(
             exp, res_bym2$marginals.fixed$marketplace
-          )
-        )[1],
-        inla.qmarginal(
-          c(0.025, 0.975),
-          inla.tmarginal(
-            exp, res_bym2$marginals.fixed$aerodrome
           )
         )[1],
         inla.qmarginal(
@@ -289,7 +283,7 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$place_of_worship
+          res_bym2$marginals.fixed$higher_education
         ),
         inla.emarginal(
           exp,
@@ -297,15 +291,11 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
-          res_bym2$marginals.fixed$higher_education
+          res_bym2$marginals.fixed$place_of_worship
         ),
         inla.emarginal(
           exp,
           res_bym2$marginals.fixed$office
-        ),
-        inla.emarginal(
-          exp,
-          res_bym2$marginals.fixed$SPD
         ),
         inla.emarginal(
           exp,
@@ -317,15 +307,15 @@ models <- pblapply(
         ),
         inla.emarginal(
           exp,
+          res_bym2$marginals.fixed$SPD
+        ),
+        inla.emarginal(
+          exp,
           res_bym2$marginals.fixed$urb_dens
         ),
         inla.emarginal(
           exp,
           res_bym2$marginals.fixed$marketplace
-        ),
-        inla.emarginal(
-          exp,
-          res_bym2$marginals.fixed$aerodrome
         ),
         inla.emarginal(
           exp,
@@ -376,7 +366,7 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$place_of_worship
+            exp, res_bym2$marginals.fixed$higher_education
           )
         )[2],
         inla.qmarginal(
@@ -388,19 +378,13 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
-            exp, res_bym2$marginals.fixed$higher_education
+            exp, res_bym2$marginals.fixed$place_of_worship
           )
         )[2],
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
             exp, res_bym2$marginals.fixed$office
-          )
-        )[2],
-        inla.qmarginal(
-          c(0.025, 0.975),
-          inla.tmarginal(
-            exp, res_bym2$marginals.fixed$SPD
           )
         )[2],
         inla.qmarginal(
@@ -418,6 +402,12 @@ models <- pblapply(
         inla.qmarginal(
           c(0.025, 0.975),
           inla.tmarginal(
+            exp, res_bym2$marginals.fixed$SPD
+          )
+        )[2],
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
             exp, res_bym2$marginals.fixed$urb_dens
           )
         )[2],
@@ -425,12 +415,6 @@ models <- pblapply(
           c(0.025, 0.975),
           inla.tmarginal(
             exp, res_bym2$marginals.fixed$marketplace
-          )
-        )[2],
-        inla.qmarginal(
-          c(0.025, 0.975),
-          inla.tmarginal(
-            exp, res_bym2$marginals.fixed$aerodrome
           )
         )[2],
         inla.qmarginal(
@@ -469,16 +453,15 @@ models <- pblapply(
         rep("Greens", 1),
         rep("The left", 1),
         rep("FDP", 1),
-        rep("Place of Worship", 1),
-        rep("Sex", 1),
         rep("Higher education", 1),
+        rep("Sex", 1),
+        rep("Place of Worship", 1),
         rep("Office", 1),
-        rep("SPD", 1),
         rep("Clinic", 1),
         rep("Nursing home", 1),
+        rep("SPD", 1),
         rep("Urban density", 1),
         rep("Marketplace", 1),
-        rep("Aerodrome", 1),
         rep("Platform", 1),
         rep("Die Union", 1),
         rep("Logarithmic trade tax", 1),
@@ -502,6 +485,8 @@ save(models, file = "priors/priors_germany.Rda")
 results <- do.call(rbind, lapply(models, function(x) x$results))
 hyperpar_frame <- do.call(rbind, lapply(models, function(x) x$hyperpar_frame))
 marginal_frame <- do.call(rbind, lapply(models, function(x) x$marginal_frame))
+results$waic[results$waic == 0] <- NA
+results$cpo[results$cpo == 0] <- NA
 plot_1 <- ggplot(
   results,
   aes(

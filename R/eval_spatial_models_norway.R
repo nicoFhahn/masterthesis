@@ -26,12 +26,12 @@ models_final[[2]][[1]]$waic
 # get the cpo
 models_final[[2]][[1]]$cpo
 # get the mae
-models_final[[3]][[1]]
+models_final[[3]][c(5, 1)]
 # get the summary
-models_final[[1]][[1]]$summary.fixed[
+a <- round(models_final[[1]][[1]]$summary.fixed[
   order(models_final[[1]][[1]]$summary.fixed$mean),
-]
-sapply(
+], 3)[, 1]
+b <- round(sapply(
   models_final[[1]][[1]]$marginals.fixed[
     rownames(models_final[[1]][[1]]$summary.fixed[
       order(models_final[[1]][[1]]$summary.fixed$mean),
@@ -39,8 +39,8 @@ sapply(
   ],
   inla.emarginal,
   fun = exp
-)
-sapply(
+), 3)
+c <- round(sapply(
   models_final[[1]][[1]]$marginals.fixed[
     rownames(models_final[[1]][[1]]$summary.fixed[
       order(models_final[[1]][[1]]$summary.fixed$mean),
@@ -54,7 +54,8 @@ sapply(
       )
     )
   }
-)
+), 3)
+cbind(a, b, t(c))
 # now the models with a spatial component
 # get the dic values
 # first besag, then bym2, then leroux
@@ -70,9 +71,9 @@ models_final[[2]][[2]]$cpo
 models_final[[2]][[3]]$cpo
 models_final[[2]][[4]]$cpo
 # now the mae
-models_final[[3]][[2]]
-models_final[[3]][[3]]
-models_final[[3]][[4]]
+models_final[[3]][c(6, 2)]
+models_final[[3]][c(7, 3)]
+models_final[[3]][c(8, 4)]
 options(scipen = 10)
 # create a tibble with the credibility intervals and posterior coefficients
 # for the bym2 model and the model without the spatial component
@@ -117,18 +118,6 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$aerodrome
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$aerodrome
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$median_age
       )
     )[1],
@@ -153,18 +142,6 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$nursing_home
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$nursing_home
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$higher_education
       )
     )[1],
@@ -177,37 +154,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$platform
+        exp, models_final[[1]][[1]]$marginals.fixed$nursing_home
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$platform
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$marketplace
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$marketplace
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$vaccine_shots
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$vaccine_shots
+        exp, models_final[[1]][[3]]$marginals.fixed$nursing_home
       )
     )[1],
     inla.qmarginal(
@@ -225,13 +178,49 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$immigrants_total
+        exp, models_final[[1]][[1]]$marginals.fixed$marketplace
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$immigrants_total
+        exp, models_final[[1]][[3]]$marginals.fixed$marketplace
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$platform
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$platform
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$vaccine_shots
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$vaccine_shots
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
       )
     )[1],
     inla.qmarginal(
@@ -249,13 +238,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[1]]$marginals.fixed$immigrants_total
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[3]]$marginals.fixed$immigrants_total
       )
     )[1]
   ),
@@ -286,14 +275,6 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$aerodrome
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[3]]$marginals.fixed$aerodrome
-    ),
-    inla.emarginal(
-      exp,
       models_final[[1]][[1]]$marginals.fixed$median_age
     ),
     inla.emarginal(
@@ -310,14 +291,6 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$nursing_home
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[3]]$marginals.fixed$nursing_home
-    ),
-    inla.emarginal(
-      exp,
       models_final[[1]][[1]]$marginals.fixed$higher_education
     ),
     inla.emarginal(
@@ -326,27 +299,11 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$platform
+      models_final[[1]][[1]]$marginals.fixed$nursing_home
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[3]]$marginals.fixed$platform
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[1]]$marginals.fixed$marketplace
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[3]]$marginals.fixed$marketplace
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[1]]$marginals.fixed$vaccine_shots
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[3]]$marginals.fixed$vaccine_shots
+      models_final[[1]][[3]]$marginals.fixed$nursing_home
     ),
     inla.emarginal(
       exp,
@@ -358,11 +315,35 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$immigrants_total
+      models_final[[1]][[1]]$marginals.fixed$marketplace
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[3]]$marginals.fixed$immigrants_total
+      models_final[[1]][[3]]$marginals.fixed$marketplace
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[1]]$marginals.fixed$platform
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[3]]$marginals.fixed$platform
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[1]]$marginals.fixed$vaccine_shots
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[3]]$marginals.fixed$vaccine_shots
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[1]]$marginals.fixed$urb_dens
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[3]]$marginals.fixed$urb_dens
     ),
     inla.emarginal(
       exp,
@@ -374,11 +355,11 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$urb_dens
+      models_final[[1]][[1]]$marginals.fixed$immigrants_total
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[3]]$marginals.fixed$urb_dens
+      models_final[[1]][[3]]$marginals.fixed$immigrants_total
     )
   ),
   upper = c(
@@ -421,18 +402,6 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$aerodrome
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$aerodrome
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$median_age
       )
     )[2],
@@ -457,18 +426,6 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$nursing_home
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$nursing_home
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$higher_education
       )
     )[2],
@@ -481,37 +438,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$platform
+        exp, models_final[[1]][[1]]$marginals.fixed$nursing_home
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$platform
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$marketplace
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$marketplace
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$vaccine_shots
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$vaccine_shots
+        exp, models_final[[1]][[3]]$marginals.fixed$nursing_home
       )
     )[2],
     inla.qmarginal(
@@ -529,13 +462,49 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$immigrants_total
+        exp, models_final[[1]][[1]]$marginals.fixed$marketplace
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$immigrants_total
+        exp, models_final[[1]][[3]]$marginals.fixed$marketplace
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$platform
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$platform
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$vaccine_shots
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$vaccine_shots
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
       )
     )[2],
     inla.qmarginal(
@@ -553,13 +522,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[1]]$marginals.fixed$immigrants_total
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$urb_dens
+        exp, models_final[[1]][[3]]$marginals.fixed$immigrants_total
       )
     )[2]
   ),
@@ -567,21 +536,20 @@ marginal_frame <- tibble(
     rep("Intercept", 2),
     rep("Sex", 2),
     rep("Office", 2),
-    rep("Aerodrome", 2),
     rep("Median age", 2),
     rep("Place of worship", 2),
-    rep("Nursing home", 2),
     rep("Higher education", 2),
-    rep("Platform", 2),
-    rep("Marketplace", 2),
-    rep("Vaccinations", 2),
+    rep("Nursing home", 2),
     rep("Total unemployment", 2),
-    rep("Total immigrants", 2),
+    rep("Marketplace", 2),
+    rep("Platform", 2),
+    rep("Vaccinations", 2),
+    rep("Urban density", 2),
     rep("Unemployed immigrants", 2),
-    rep("Urban density", 2)
+    rep("Total immigrants", 2)
   ),
   model = rep(
-    c("No spatial", "BYM2"), 15
+    c("No spatial", "BYM2"), 14
   )
 )
 # order the variable
@@ -634,11 +602,11 @@ ggplot(
     )
   )
 # get the summary of the bym2 model
-models_final[[1]][[3]]$summary.fixed[
+a <- round(models_final[[1]][[3]]$summary.fixed[
   order(models_final[[1]][[3]]$summary.fixed$mean),
-]
+], 3)[, 1]
 # get the exponentiated coefficients
-sapply(
+b <- round(sapply(
   models_final[[1]][[3]]$marginals.fixed[
     rownames(models_final[[1]][[3]]$summary.fixed[
       order(models_final[[1]][[3]]$summary.fixed$mean),
@@ -646,9 +614,9 @@ sapply(
   ],
   inla.emarginal,
   fun = exp
-)
+), 3)
 # and the credibility intervals
-sapply(
+c <- round(sapply(
   models_final[[1]][[3]]$marginals.fixed[
     rownames(models_final[[1]][[3]]$summary.fixed[
       order(models_final[[1]][[3]]$summary.fixed$mean),
@@ -662,7 +630,8 @@ sapply(
       )
     )
   }
-)
+), 3)
+cbind(a, b, t(c))
 # add new variable for the relative risk
 newest_numbers$rr <- models_final[[1]][[3]]$summary.fitted.values$mean
 # now calculate the posterior probability
@@ -698,7 +667,7 @@ cat_zeta_log <- cut(
 newest_numbers$cat_zeta <- cat_zeta
 newest_numbers$cat_zeta_log <- cat_zeta_log
 newest_numbers$prob_csi <- cat_csi
-marg_hyper < -inla.hyperpar.sample(100000, models_final[[1]][[3]])
+marg_hyper <- inla.hyperpar.sample(100000, models_final[[1]][[3]])
 perc_var_u1 <- mean(marg_hyper[, 1] / (marg_hyper[, 1] + marg_hyper[, 2]))
 perc_var_u1
 color_low <- "#20A4F3"
@@ -707,7 +676,7 @@ color_high <- "#FF206E"
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = rr)) +
   ggtitle(
-    label = "Relative risk",
+    label = "Relative risk according to the BYM2 model",
     subtitle = "Norway"
   ) +
   scale_fill_gradient2(
@@ -763,7 +732,7 @@ plot_4 <- ggplot(data = newest_numbers) +
   )
 plot_4 + plot_3
 # get the summary of the hyperparameters
-models_final[[1]][[3]]$summary.hyperpar
+round(models_final[[1]][[3]]$summary.hyperpar, 3)
 newest_numbers$zeta <- unlist(zeta)
 pal <- colorNumeric(
   "YlOrRd",

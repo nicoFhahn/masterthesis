@@ -5,11 +5,11 @@ library(patchwork)
 source("R/preprocess_norge.R")
 newest_numbers$geometry <- NULL
 feature_names <- tibble(
-  ugly = colnames(newest_numbers[, 2:15]),
+  ugly = colnames(newest_numbers[, 2:14]),
   noice = c(
     "Median age", "Total unemployment", "Unemployed immigrants",
     "Total immigrants", "Marketplace", "Place of worship", "Nursing home",
-    "Aerodrome", "Office", "Platform", "Higher education", "Urban density",
+    "Office", "Platform", "Higher education", "Urban density",
     "Sex", "Vaccinations"
   )
 )
@@ -22,7 +22,7 @@ newest_numbers_train <- newest_numbers[-test, ]
 newest_numbers_test <- newest_numbers[test, ]
 task <- makeRegrTask(
   id = "demographic",
-  data = newest_numbers_train[, 1:15],
+  data = newest_numbers_train[, 1:14],
   target = "value"
 )
 learners <- list(
@@ -122,7 +122,7 @@ tunes <- list()
 parallelMap::parallelStartSocket(7)
 for (x in 1:5) {
   print(x)
-  if(class(hyper_pars[[x]]) == "ParamSet") {
+  if (class(hyper_pars[[x]]) == "ParamSet") {
     tunes <- c(
       tunes, list(try(
         tuneParams(
@@ -131,9 +131,10 @@ for (x in 1:5) {
           rdesc,
           par.set = hyper_pars[[x]],
           control = ctrl
-        ), silent = TRUE
-      )
-    ))
+        ),
+        silent = TRUE
+      ))
+    )
   } else {
     tunes <- c(
       tunes,
@@ -163,7 +164,7 @@ models <- lapply(
 predictions_test <- lapply(
   models,
   function(x, ...) {
-    try(predict(x, newdata = newest_numbers_test[, 1:15]), silent = TRUE)
+    try(predict(x, newdata = newest_numbers_test[, 1:14]), silent = TRUE)
   }
 )
 

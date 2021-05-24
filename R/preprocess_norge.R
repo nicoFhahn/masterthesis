@@ -387,9 +387,10 @@ colnames(newest_numbers)[5] <- "value"
 newest_numbers$vaccine_shots <- newest_numbers$vaccine_shots /
   newest_numbers$population
 newest_numbers$vaccine_shots <- scale(newest_numbers$vaccine_shots)[, 1]
+newest_numbers$aerodrome <- NULL
 b <- newest_numbers
 b$geometry <- NULL
-b <- b[, c(5:29, 31, 38:41)]
+b <- b[, c(5:28, 30, 37:40)]
 sign <- TRUE
 while (sign) {
   mod <- glm.nb(
@@ -402,7 +403,7 @@ while (sign) {
     b[, names(VIF(mod))[VIF(mod) == max(VIF(mod))]] <- NULL
   }
 }
-newest_numbers[, c(5:29, 31, 38:41)] <- NULL
+newest_numbers[, c(5:28, 30, 37:40)] <- NULL
 newest_numbers <- st_as_sf(cbind(b, newest_numbers))
 
 rm(list = setdiff(ls(), c("newest_numbers", "backup")))

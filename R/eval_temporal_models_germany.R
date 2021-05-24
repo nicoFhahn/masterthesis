@@ -48,13 +48,15 @@ ggplot(data = incidence_tibble) +
   )
 ggplot(data = pred_tibble[pred_tibble$model == 12, ]) +
   geom_ribbon(
-    aes(ymin = q025, ymax = q975, x = Date), fill = "grey70"
+    aes(ymin = q025, ymax = q975, x = Date),
+    fill = "grey70"
   ) +
   geom_line(aes(x = Date, y = mean)) +
   geom_point(
-    aes(x = Date, y = actual), alpha = 0.4,
+    aes(x = Date, y = actual),
+    alpha = 0.4,
     colour = "#3E92CC"
-  ) + 
+  ) +
   geom_vline(xintercept = ts_germany$Date[483]) +
   theme_minimal() +
   xlab(
@@ -69,13 +71,15 @@ ggplot(data = pred_tibble[pred_tibble$model == 12, ]) +
 
 ggplot(data = pred_tibble[pred_tibble$model == 12, ][483:nrow(ts_germany), ]) +
   geom_ribbon(
-    aes(ymin = q025, ymax = q975, x = Date), fill = "grey70"
+    aes(ymin = q025, ymax = q975, x = Date),
+    fill = "grey70"
   ) +
   geom_line(aes(x = Date, y = mean)) +
   geom_point(
-    aes(x = Date, y = actual), size = 3,
+    aes(x = Date, y = actual),
+    size = 3,
     colour = "#3E92CC"
-  ) + 
+  ) +
   theme_minimal() +
   xlab(
     "Date"

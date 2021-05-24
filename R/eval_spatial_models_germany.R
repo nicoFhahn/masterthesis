@@ -28,12 +28,12 @@ models_final[[2]][[1]]$waic
 # get the cpo
 models_final[[2]][[1]]$cpo
 # get the mae
-models_final[[3]][[1]]
+models_final[[3]][c(1,4)]
 # get the summary
 round(models_final[[1]][[1]]$summary.fixed[
   order(models_final[[1]][[1]]$summary.fixed$mean),
 ], 3)[, 1:2]
-sapply(
+round(sapply(
   models_final[[1]][[1]]$marginals.fixed[
     rownames(models_final[[1]][[1]]$summary.fixed[
       order(models_final[[1]][[1]]$summary.fixed$mean),
@@ -41,8 +41,8 @@ sapply(
   ],
   inla.emarginal,
   fun = exp
-)
-sapply(
+), 3)
+round(sapply(
   models_final[[1]][[1]]$marginals.fixed[
     rownames(models_final[[1]][[1]]$summary.fixed[
       order(models_final[[1]][[1]]$summary.fixed$mean),
@@ -56,7 +56,7 @@ sapply(
       )
     )
   }
-)
+), 3)
 # now the models with a spatial component
 # get the dic values
 # first besag, then bym2, then leroux
@@ -72,9 +72,9 @@ models_final[[2]][[2]]$cpo
 models_final[[2]][[3]]$cpo
 models_final[[2]][[4]]$cpo
 # now the mae
-models_final[[3]][[2]]
-models_final[[3]][[3]]
-models_final[[3]][[4]]
+models_final[[3]][c(6, 2)]
+models_final[[3]][c(7, 3)]
+models_final[[3]][c(8, 4)]
 options(scipen = 10)
 # create a tibble with the credibility intervals and posterior coefficients
 # for the bym2 model and the model without the spatial component
@@ -131,13 +131,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[1]]$marginals.fixed$higher_education
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[3]]$marginals.fixed$higher_education
       )
     )[1],
     inla.qmarginal(
@@ -155,13 +155,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$higher_education
+        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
       )
     )[1],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$higher_education
+        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
       )
     )[1],
     inla.qmarginal(
@@ -174,18 +174,6 @@ marginal_frame <- tibble(
       c(0.025, 0.975),
       inla.tmarginal(
         exp, models_final[[1]][[3]]$marginals.fixed$office
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$SPD
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$SPD
       )
     )[1],
     inla.qmarginal(
@@ -215,6 +203,18 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$SPD
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$SPD
+      )
+    )[1],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
       )
     )[1],
@@ -234,18 +234,6 @@ marginal_frame <- tibble(
       c(0.025, 0.975),
       inla.tmarginal(
         exp, models_final[[1]][[3]]$marginals.fixed$marketplace
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$aerodrome
-      )
-    )[1],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$aerodrome
       )
     )[1],
     inla.qmarginal(
@@ -344,11 +332,11 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$place_of_worship
+      models_final[[1]][[1]]$marginals.fixed$higher_education
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[3]]$marginals.fixed$place_of_worship
+      models_final[[1]][[3]]$marginals.fixed$higher_education
     ),
     inla.emarginal(
       exp,
@@ -360,11 +348,11 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[1]]$marginals.fixed$higher_education
+      models_final[[1]][[1]]$marginals.fixed$place_of_worship
     ),
     inla.emarginal(
       exp,
-      models_final[[1]][[3]]$marginals.fixed$higher_education
+      models_final[[1]][[3]]$marginals.fixed$place_of_worship
     ),
     inla.emarginal(
       exp,
@@ -373,14 +361,6 @@ marginal_frame <- tibble(
     inla.emarginal(
       exp,
       models_final[[1]][[3]]$marginals.fixed$office
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[1]]$marginals.fixed$SPD
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[3]]$marginals.fixed$SPD
     ),
     inla.emarginal(
       exp,
@@ -400,6 +380,14 @@ marginal_frame <- tibble(
     ),
     inla.emarginal(
       exp,
+      models_final[[1]][[1]]$marginals.fixed$SPD
+    ),
+    inla.emarginal(
+      exp,
+      models_final[[1]][[3]]$marginals.fixed$SPD
+    ),
+    inla.emarginal(
+      exp,
       models_final[[1]][[1]]$marginals.fixed$urb_dens
     ),
     inla.emarginal(
@@ -413,14 +401,6 @@ marginal_frame <- tibble(
     inla.emarginal(
       exp,
       models_final[[1]][[3]]$marginals.fixed$marketplace
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[1]]$marginals.fixed$aerodrome
-    ),
-    inla.emarginal(
-      exp,
-      models_final[[1]][[3]]$marginals.fixed$aerodrome
     ),
     inla.emarginal(
       exp,
@@ -515,13 +495,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[1]]$marginals.fixed$higher_education
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
+        exp, models_final[[1]][[3]]$marginals.fixed$higher_education
       )
     )[2],
     inla.qmarginal(
@@ -539,13 +519,13 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$higher_education
+        exp, models_final[[1]][[1]]$marginals.fixed$place_of_worship
       )
     )[2],
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$higher_education
+        exp, models_final[[1]][[3]]$marginals.fixed$place_of_worship
       )
     )[2],
     inla.qmarginal(
@@ -558,18 +538,6 @@ marginal_frame <- tibble(
       c(0.025, 0.975),
       inla.tmarginal(
         exp, models_final[[1]][[3]]$marginals.fixed$office
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$SPD
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$SPD
       )
     )[2],
     inla.qmarginal(
@@ -599,6 +567,18 @@ marginal_frame <- tibble(
     inla.qmarginal(
       c(0.025, 0.975),
       inla.tmarginal(
+        exp, models_final[[1]][[1]]$marginals.fixed$SPD
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
+        exp, models_final[[1]][[3]]$marginals.fixed$SPD
+      )
+    )[2],
+    inla.qmarginal(
+      c(0.025, 0.975),
+      inla.tmarginal(
         exp, models_final[[1]][[1]]$marginals.fixed$urb_dens
       )
     )[2],
@@ -618,18 +598,6 @@ marginal_frame <- tibble(
       c(0.025, 0.975),
       inla.tmarginal(
         exp, models_final[[1]][[3]]$marginals.fixed$marketplace
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[1]]$marginals.fixed$aerodrome
-      )
-    )[2],
-    inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp, models_final[[1]][[3]]$marginals.fixed$aerodrome
       )
     )[2],
     inla.qmarginal(
@@ -698,16 +666,15 @@ marginal_frame <- tibble(
     rep("Greens", 2),
     rep("The left", 2),
     rep("FDP", 2),
-    rep("Place of Worship", 2),
-    rep("Sex", 2),
     rep("Higher education", 2),
+    rep("Sex", 2),
+    rep("Place of Worship", 2),
     rep("Office", 2),
-    rep("SPD", 2),
     rep("Clinic", 2),
     rep("Nursing home", 2),
+    rep("SPD", 2),
     rep("Urban density", 2),
     rep("Marketplace", 2),
-    rep("Aerodrome", 2),
     rep("Platform", 2),
     rep("Die Union", 2),
     rep("Logarithmic trade tax", 2),
@@ -715,7 +682,7 @@ marginal_frame <- tibble(
     rep("AfD", 2)
   ),
   model = rep(
-    c("No spatial", "BYM2"), 19
+    c("No spatial", "BYM2"), 18
   )
 )
 # order the variable
@@ -768,11 +735,11 @@ ggplot(
     )
   )
 # get the summary of the bym2 model
-models_final[[1]][[3]]$summary.fixed[
+a <- round(models_final[[1]][[3]]$summary.fixed[
   order(models_final[[1]][[3]]$summary.fixed$mean),
-]
+], 3)[, 1]
 # get the exponentiated coefficients
-sapply(
+b <- round(sapply(
   models_final[[1]][[3]]$marginals.fixed[
     rownames(models_final[[1]][[3]]$summary.fixed[
       order(models_final[[1]][[3]]$summary.fixed$mean),
@@ -780,9 +747,9 @@ sapply(
   ],
   inla.emarginal,
   fun = exp
-)
+), 3)
 # and the credibility intervals
-sapply(
+c <- round(sapply(
   models_final[[1]][[3]]$marginals.fixed[
     rownames(models_final[[1]][[3]]$summary.fixed[
       order(models_final[[1]][[3]]$summary.fixed$mean),
@@ -796,7 +763,8 @@ sapply(
       )
     )
   }
-)
+), 3)
+cbind(a, b, t(c))
 # add new variable for the relative risk
 newest_numbers$rr <- models_final[[1]][[3]]$summary.fitted.values$mean
 # now calculate the posterior probability
@@ -847,7 +815,7 @@ library(ggplot2)
 plot_1 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = rr)) +
   ggtitle(
-    label = "Relative risk based on all variables",
+    label = "Relative risk according to the BYM2 model",
     subtitle = "Germany"
   ) +
   scale_fill_gradient2(
@@ -889,4 +857,4 @@ plot_3
 plot_2 + plot_3
 plot_1
 # get the summary of the hyperparameters
-models_final[[1]][[3]]$summary.hyperpar
+round(models_final[[1]][[3]]$summary.hyperpar, 3)
