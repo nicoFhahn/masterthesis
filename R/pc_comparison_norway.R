@@ -1,33 +1,40 @@
+# this is the script used for prior comparison for norway
 library(ggplot2)
-library(patchwork)
-library(readr)
-library(sf)
-library(spdep)
 library(INLA)
-library(tibble)
 library(latex2exp)
 library(pbapply)
+library(tibble)
+library(sf)
+library(spdep)
 source("R/preprocess_norge.R")
 set.seed(7918)
+# draw the test sample
 test <- sample(
   seq_len(nrow(newest_numbers)),
   size = floor(0.2 * nrow(newest_numbers))
 )
+# get the test values
 test_value <- newest_numbers$value[test]
+# set to NA
 newest_numbers$value[test] <- NA
+# create the link functino
 link <- rep(NA, nrow(newest_numbers))
 link[which(is.na(newest_numbers$value))] <- 1
+# create the nb matrix
 nb <- poly2nb(newest_numbers)
 # save the matrix
 nb2INLA("maps/map_1.adj", nb)
+# load it
 g <- inla.read.graph(filename = "maps/map_1.adj")
+# create the diagonal matrix for the leroux model
 Q <- Diagonal(x = sapply(nb, length))
 for (i in 2:nrow(newest_numbers)) {
   Q[i - 1, i] <- -1
   Q[i, i - 1] <- -1
 }
-
+# create the c matrix for the leroux model
 C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
+# define the formulas for all three models
 formula_besag <- value ~
 urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
   marketplace + place_of_worship + nursing_home + 
@@ -43,15 +50,18 @@ formula_leroux <- value ~ vaccine_shots +
   marketplace + place_of_worship + nursing_home + 
   office + platform + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior)
+# now for each value in 0.1, 0.11, ..., 2 do:
 models <- pblapply(
   seq(0.1, 2, 0.01),
   function(x, ...) {
+    # define the prior
     prior <- list(
       prec = list(
         prior = "pc.prec",
         param = c(x, 0.01)
       )
     )
+    # calculate the three models
     res_besag <- inla(
       formula_besag,
       family = "nbinomial",
@@ -88,6 +98,7 @@ models <- pblapply(
       Ntrials = newest_numbers$population,
       control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
     ), silent = TRUE)
+    # if the bym calculation failed, slightly alter the value for the pc prior
     while (class(res_bym2) != "inla") {
       prior <- list(
         prec = list(
@@ -95,6 +106,7 @@ models <- pblapply(
           param = c(x + runif(1, -0.01, 0.01), 0.01)
         )
       )
+      # and try again
       res_bym2 <- try(inla(
         formula_bym2,
         family = "nbinomial",
@@ -108,6 +120,7 @@ models <- pblapply(
         control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
       ), silent = TRUE)
     }
+    # same with the leroux
     while (class(res_leroux) != "inla") {
       prior <- list(
         prec = list(
@@ -128,26 +141,31 @@ models <- pblapply(
         control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
       ), silent = TRUE)
     }
+    # calculate the maes
     mae <- c(list(
       mean(abs(res_besag$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
       mean(abs(res_bym2$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
       mean(abs(res_leroux$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value))
     ))
+    # get the dic values
     dic <- c(list(
       res_besag$dic$dic,
       res_bym2$dic$dic,
       res_leroux$dic$dic
     ))
+    # get the waic values
     waic <- c(list(
       res_besag$waic$waic,
       res_bym2$waic$waic,
       res_leroux$waic$waic
     ))
+    # get the cpo values
     cpo <- c(list(
       sum(log(res_besag$cpo$cpo), na.rm = TRUE),
       sum(log(res_bym2$cpo$cpo), na.rm = TRUE),
       sum(log(res_leroux$cpo$cpo), na.rm = TRUE)
     ))
+    # save everything in a tibble
     results <- tibble(
       dic = unlist(dic),
       waic = unlist(waic),
@@ -157,6 +175,7 @@ models <- pblapply(
       U = rep(x, 3),
       alpha = rep(0.01, 3)
     )
+    # get all the hyperpar values and save in a tibble
     hyperpar_frame <- tibble(
       precision = c(
         res_besag$summary.hyperpar$mean[2],
@@ -172,6 +191,7 @@ models <- pblapply(
       U = rep(x, 3),
       alpha = rep(0.01, 3)
     )
+    # get and save the confidence intervals of each coefficient
     marginal_frame <- tibble(
       lower = c(
         inla.qmarginal(
@@ -425,6 +445,7 @@ models <- pblapply(
       marginal_frame$variable,
       levels = unique(marginal_frame$variable)
     )
+    # put everything in a list
     list(
       results = results,
       hyperpar_frame = hyperpar_frame,
@@ -432,11 +453,14 @@ models <- pblapply(
     )
   }
 )
+# save everything
 save(models, file = "priors/priors_norway.Rda")
 results <- do.call(rbind, lapply(models, function(x) x$results))
 hyperpar_frame <- do.call(rbind, lapply(models, function(x) x$hyperpar_frame))
 marginal_frame <- do.call(rbind, lapply(models, function(x) x$marginal_frame))
 results$waic[results$waic %in% range(results$waic)] <- NA
+# now plot of the measures change
+# DIC
 plot_1 <- ggplot(
   results,
   aes(
@@ -465,6 +489,7 @@ plot_1 <- ggplot(
   theme(
     legend.position = "none"
   )
+# WAIC
 plot_2 <- ggplot(
   results,
   aes(
@@ -490,6 +515,7 @@ plot_2 <- ggplot(
     x = TeX("$\\sigma_0$"),
     y = "WAIC"
   )
+# CPO
 plot_3 <- ggplot(
   results,
   aes(
@@ -518,6 +544,7 @@ plot_3 <- ggplot(
   theme(
     legend.position = "none"
   )
+# MAE
 plot_4 <- ggplot(
   results,
   aes(
@@ -546,6 +573,7 @@ plot_4 <- ggplot(
 plot_1 + plot_2
 plot_3 + plot_4
 plot_4
+# now plot of the confidence intervals of the variables change
 marginal_frame$U <- as.factor(marginal_frame$U)
 ggplot(
   data = marginal_frame[marginal_frame$U %in% c(0.1, 1, 2), ]
@@ -597,14 +625,14 @@ ggplot(
       title = "Model"
     )
   )
-color_low <- "#20A4F3"
-color_high <- "#FF206E"
+# now plot the spatial field of each model for sigma_0 = 1
 prior <- list(
   prec = list(
     prior = "pc.prec",
     param = c(1, 0.01)
   )
 )
+# compute the models
 res_besag <- inla(
   formula_besag,
   family = "nbinomial",
@@ -641,6 +669,7 @@ res_leroux <- inla(
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# add the values of the spatial field to the frame
 newest_numbers$random_besag <- res_besag$summary.random$idarea_1$mean
 newest_numbers$random_bym2_unstructured <-
   res_bym2$summary.random$idarea_1$mean[1:356]
@@ -649,6 +678,7 @@ newest_numbers$random_bym2_structured <-
 newest_numbers$random_leroux <- res_leroux$summary.random$idarea_1$mean
 color_low <- "#20A4F3"
 color_high <- "#FF206E"
+# plot for besag
 plot_7 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = random_besag)) +
   ggtitle(
@@ -665,6 +695,7 @@ plot_7 <- ggplot(data = newest_numbers) +
   theme(
     legend.position = "none"
   )
+# plot for leroux
 plot_8 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = random_leroux)) +
   ggtitle(
@@ -678,6 +709,7 @@ plot_8 <- ggplot(data = newest_numbers) +
     limits = c(-2, 3)
   ) +
   theme_minimal()
+# plot for bym2 unstructured
 plot_9 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = random_bym2_unstructured)) +
   ggtitle(
@@ -695,6 +727,7 @@ plot_9 <- ggplot(data = newest_numbers) +
   theme(
     legend.position = "none"
   )
+# plot for bym2 structured
 plot_10 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = random_bym2_structured)) +
   ggtitle(
@@ -711,6 +744,7 @@ plot_10 <- ggplot(data = newest_numbers) +
   theme_minimal()
 plot_7 + plot_8
 plot_9 + plot_10
+# now spatial field of the bym2 for sigma0 = 0.1 and sigma0 = 2
 prior <- list(
   prec = list(
     prior = "pc.prec",
@@ -747,6 +781,7 @@ res_bym2_2 <- inla(
   Ntrials = newest_numbers$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# plot structured sigma_0 = 0.1
 plot_11 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = res_bym2_01$summary.random$idarea_1$mean[357:712])) +
   ggtitle(
@@ -764,7 +799,7 @@ plot_11 <- ggplot(data = newest_numbers) +
   theme(
     legend.position = "none"
   )
-
+# plot structured sigma_0 = 2
 plot_12 <- ggplot(data = newest_numbers) +
   geom_sf(aes(fill = res_bym2_2$summary.random$idarea_1$mean[357:712])) +
   ggtitle(

@@ -1,13 +1,14 @@
+# this is the script used for preprocessing the data for the spatial models for norway
+library(covid19germany)
 library(data.table)
 library(dplyr)
+library(MASS)
 library(readr)
+library(regclass)
 library(sf)
 library(SpatialEpi)
 library(stringr)
 library(units)
-library(covid19germany)
-library(regclass)
-library(MASS)
 # download the newest RKI data
 rki <- get_RKI_timeseries()
 # group it after municipality
@@ -408,6 +409,9 @@ newest_numbers[, c(2:15, 20:35, 43:46)] <- scale(
   newest_numbers[, c(2:15, 20:35, 43:46)]
 )
 newest_numbers$aerodrome <- NULL
+# this the process for removing variables with a VIF > 5
+# first calculate the glm, the remove the variable with the highest
+# continue till no variables with VIF > 5 remain
 b <- newest_numbers[, c(2:5, 12:15, 18, 20:34, 42:45)]
 sign <- TRUE
 while (sign) {

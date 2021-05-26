@@ -1,14 +1,15 @@
+# this is the script used for preprocessing the data for the spatial models for norway
 library(data.table)
-library(readr)
 library(dplyr)
+library(lwgeom)
+library(MASS)
+library(readr)
+library(regclass)
 library(reshape2)
 library(sf)
 library(SpatialEpi)
 library(stringr)
 library(units)
-library(regclass)
-library(MASS)
-library(lwgeom)
 #####################################################
 # load the newest data
 norway_municipality_confirmed <- read_csv(
@@ -388,6 +389,9 @@ newest_numbers$vaccine_shots <- newest_numbers$vaccine_shots /
   newest_numbers$population
 newest_numbers$vaccine_shots <- scale(newest_numbers$vaccine_shots)[, 1]
 newest_numbers$aerodrome <- NULL
+# this the process for removing variables with a VIF > 5
+# first calculate the glm, the remove the variable with the highest
+# continue till no variables with VIF > 5 remain
 b <- newest_numbers
 b$geometry <- NULL
 b <- b[, c(5:28, 30, 37:40)]

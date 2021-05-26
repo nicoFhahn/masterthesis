@@ -1,33 +1,34 @@
+# this script is used for calculating the temporal models for germany
 library(INLA)
-library(SpatialEpi)
 library(MASS)
+library(readr)
 library(regclass)
+library(tibble)
+# load the timeseries
 ts_germany <- read_csv("wrangled_data/ts_germany.csv")
+# set the cutoff day
 cutoff <- 483
+# get the test ids
 test <- seq(cutoff, nrow(ts_germany))
+# get the test values
 test_value <- ts_germany$new_cases[test]
+# set to NA in dataset
 ts_germany$new_cases[test] <- NA
+# create the link function
 link <- rep(NA, nrow(ts_germany))
 link[which(is.na(ts_germany$new_cases))] <- 1
-ts_germany$testing_policy <- as.factor(ts_germany$testing_policy)
-ts_germany$contact_tracing <- as.factor(ts_germany$contact_tracing)
-ts_germany$vaccination_policy <- as.factor(ts_germany$vaccination_policy)
-ts_germany$facial_coverings <- as.factor(ts_germany$facial_coverings)
-ts_germany$international_travel_controls <- as.factor(ts_germany$international_travel_controls)
-ts_germany$public_information_campaigns <- as.factor(ts_germany$public_information_campaigns)
-ts_germany$restriction_gatherings <- as.factor(ts_germany$restriction_gatherings)
-ts_germany$close_public_transport <- as.factor(ts_germany$close_public_transport)
-ts_germany$stay_home_requirements <- as.factor(ts_germany$stay_home_requirements)
-ts_germany$workplace_closures <- as.factor(ts_germany$workplace_closures)
+# add the season variable
 ts_germany$season <- "Winter"
 ts_germany[ts_germany$Date >= "2020-03-20", ]$season <- "Spring"
 ts_germany[ts_germany$Date >= "2020-06-20", ]$season <- "Summer"
 ts_germany[ts_germany$Date >= "2020-09-22", ]$season <- "Fall"
 ts_germany[ts_germany$Date >= "2020-12-21", ]$season <- "Winter"
 ts_germany[ts_germany$Date >= "2021-03-20", ]$season <- "Spring"
+# add the variables for the variant
 ts_germany$main_variant <- 1
 ts_germany$variant_20e <- 0
 ts_germany$variant_20l <- 0
+# set the values according to covariants.org
 ts_germany[ts_germany$Date >= "2020-05-11", ]$main_variant <- 0.99
 ts_germany[ts_germany$Date >= "2020-05-25", ]$main_variant <- 0.97
 ts_germany[ts_germany$Date >= "2020-06-08", ]$main_variant <- 1
@@ -82,14 +83,15 @@ ts_germany[ts_germany$Date >= "2021-03-22", ]$variant_20l <- 0.87
 ts_germany[ts_germany$Date >= "2021-04-05", ]$variant_20l <- 0.92
 ts_germany[ts_germany$Date >= "2021-04-19", ]$variant_20l <- 0.95
 ts_germany[ts_germany$Date >= "2021-05-03", ]$variant_20l <- 0.94
+# scale the variant variables
 ts_germany$main_variant <- scale(ts_germany$main_variant)[, 1]
 ts_germany$variant_20e <- scale(ts_germany$variant_20e)[, 1]
 ts_germany$variant_20l <- scale(ts_germany$variant_20l)[, 1]
+# remove some variables
 ts_germany$people_fully_vaccinated_per_hundred <- NULL
 ts_germany$people_vaccinated_per_hundred <- NULL
 ts_germany$school_closures <- NULL
 set.seed(325234)
-#####################################################
 # specify penalized prior
 prior_1 <- list(
   prec = list(
@@ -97,17 +99,20 @@ prior_1 <- list(
     param = c(1, 0.01)
   )
 )
+# create lists for saving everything
 models <- list()
 gof <- list()
 mae <- list()
 formulas <- list()
+# create the linear combination
 lcs <- inla.make.lincombs(
   id_date_1 = diag(nrow(ts_germany)),
   id_date_2 = diag(nrow(ts_germany))
 )
-#####################################################
+# define the formula
 formula_1 <- new_cases ~
 1 + Date
+# run the model
 res_1 <- inla(
   formula_1,
   family = "nbinomial",
@@ -120,8 +125,10 @@ res_1 <- inla(
   Ntrials = ts_germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_2 <- new_cases ~
 f(id_date_1, model = "rw2", hyper = prior_1)
+# run the model
 res_2 <- inla(
   formula_2,
   family = "nbinomial",
@@ -134,9 +141,11 @@ res_2 <- inla(
   Ntrials = ts_germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_3 <- new_cases ~
 f(id_date_1, model = "rw2", hyper = prior_1) +
   f(id_date_2, model = "iid")
+# run the model
 res_3 <- inla(
   formula_3,
   family = "nbinomial",
@@ -150,6 +159,7 @@ res_3 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_4 <- as.formula(
   paste(
     "new_cases ~",
@@ -158,6 +168,7 @@ formula_4 <- as.formula(
     "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_4 <- inla(
   formula_4,
   family = "nbinomial",
@@ -170,6 +181,7 @@ res_4 <- inla(
   Ntrials = ts_germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_5 <- as.formula(
   paste(
     "new_cases ~",
@@ -179,6 +191,7 @@ formula_5 <- as.formula(
     "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_5 <- inla(
   formula_5,
   family = "nbinomial",
@@ -192,6 +205,7 @@ res_5 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_6 <- as.formula(
   paste(
     "new_cases ~",
@@ -201,6 +215,7 @@ formula_6 <- as.formula(
     "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
@@ -213,30 +228,38 @@ res_6 <- inla(
   Ntrials = ts_germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-backup <- ts_germany
+# next, do some variable selection by removing variables with a VIF of above 5
+# create this frame with all the variables of interest
 b <- ts_germany[, 6:26]
+# create a backup of the original frame
+backup <- ts_germany
+# remove the geometry column
 b$geomety <- NULL
+# add the original case numbers again
 b$new_cases[is.na(b$new_cases)] <- test_value
 sign <- TRUE
-# multicollinearity
+# remove these variables due to high correlation
 b$international_travel_controls <- NULL
 b$cancel_public_events <- NULL
 i <- 1
 while (sign) {
-  print(i)
-  i <- i + 1
+  # calculate a glm
   mod <- glm.nb(
     new_cases ~ .,
     data = b
   )
+  # if the are variables with a VIF > 5 they will be removed, else we are done
   if (!any(VIF(mod)[, 1] > 5)) {
     sign <- FALSE
   } else {
     b[, names(VIF(mod)[, 1][VIF(mod)[, 1] == max(VIF(mod)[, 1])])] <- NULL
   }
 }
+# remove the variables from the original frame
 ts_germany[, 7:26] <- NULL
+# add only the relevant variables
 ts_germany <- cbind(ts_germany[, 1:6], b[, 2:ncol(b)], ts_germany[, 7:17])
+# define the formula
 formula_7 <- as.formula(
   paste(
     "new_cases ~",
@@ -244,6 +267,7 @@ formula_7 <- as.formula(
     "+ Date"
   )
 )
+# run the model
 res_7 <- inla(
   formula_7,
   family = "nbinomial",
@@ -256,6 +280,7 @@ res_7 <- inla(
   Ntrials = ts_germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_8 <- as.formula(
   paste(
     "new_cases ~",
@@ -264,6 +289,7 @@ formula_8 <- as.formula(
     "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_8 <- inla(
   formula_8,
   family = "nbinomial",
@@ -276,6 +302,7 @@ res_8 <- inla(
   Ntrials = ts_germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_9 <- as.formula(
   paste(
     "new_cases ~",
@@ -285,6 +312,7 @@ formula_9 <- as.formula(
     "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_9 <- inla(
   formula_9,
   family = "nbinomial",
@@ -298,8 +326,10 @@ res_9 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_10 <- new_cases ~ 1 +
   f(id_date_1, model = "ar1")
+# run the model
 res_10 <- inla(
   formula_10,
   family = "nbinomial",
@@ -312,16 +342,14 @@ res_10 <- inla(
   Ntrials = ts_germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# now the VIF procedure again, this time using select variables
 ts_germany <- backup
 b_2 <- ts_germany[, c(6, 12, 14, 17, 19, 23, 25)]
 b_2$geomety <- NULL
 b_2$new_cases[is.na(b_2$new_cases)] <- test_value
 sign <- TRUE
-# multicollinearity
 i <- 1
 while (sign) {
-  print(i)
-  i <- i + 1
   mod <- glm.nb(
     new_cases ~ .,
     data = b_2
@@ -343,6 +371,7 @@ while (sign) {
 }
 ts_germany[, 7:26] <- NULL
 ts_germany <- cbind(ts_germany[, 1:6], b_2[, 2:ncol(b_2)], ts_germany[, 7:17])
+# define the formula
 formula_11 <- as.formula(
   paste(
     "new_cases ~",
@@ -350,6 +379,7 @@ formula_11 <- as.formula(
     "+ Date"
   )
 )
+# run the model
 res_11 <- inla(
   formula_11,
   family = "nbinomial",
@@ -362,6 +392,7 @@ res_11 <- inla(
   Ntrials = ts_germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_12 <- as.formula(
   paste(
     "new_cases ~",
@@ -370,6 +401,7 @@ formula_12 <- as.formula(
     "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_12 <- inla(
   formula_12,
   family = "nbinomial",
@@ -382,7 +414,7 @@ res_12 <- inla(
   Ntrials = ts_germany$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
+# define the formula
 formula_13 <- as.formula(
   paste(
     "new_cases ~",
@@ -392,6 +424,7 @@ formula_13 <- as.formula(
     "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_13 <- inla(
   formula_13,
   family = "nbinomial",
@@ -405,6 +438,7 @@ res_13 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# get all the GOF measures
 gof <- c(gof, list(
   list(
     dic = res_1$dic$dic,
@@ -472,7 +506,7 @@ gof <- c(gof, list(
     cpo = sum(log(res_13$cpo$cpo), na.rm = TRUE)
   )
 ))
-# calculate the mae
+# calculate the mae for test and train
 mae <- c(mae, list(
   mean(abs(res_1$summary.fitted.values$mean[test] * ts_germany$expected[test] - test_value)),
   mean(abs(res_2$summary.fitted.values$mean[test] * ts_germany$expected[test] - test_value)),
@@ -501,6 +535,7 @@ mae <- c(mae, list(
   mean(abs(res_12$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test])),
   mean(abs(res_13$summary.fitted.values$mean[-test] * ts_germany$expected[-test] - ts_germany$new_cases[-test]))
 ))
+# create a df containing the confidence intervals of the predictions
 pred_tibble <- tibble(
   q025 = c(
     res_1$summary.fitted.values$`0.025quant` * ts_germany$expected,
@@ -563,9 +598,9 @@ pred_tibble <- tibble(
     rep(13, nrow(ts_germany))
   ),
   Date = rep(ts_germany$Date, 13),
-  # actual = rep(c(ts_germany$new_cases[1:(cutoff - 1)], test_value), 13),
   actual = rep(c(ts_germany$new_cases[-test], test_value), 13)
 )
+# get all the models
 models <- c(models, list(
   res_1,
   res_2,
@@ -581,6 +616,7 @@ models <- c(models, list(
   res_12,
   res_13
 ))
+# get all the formulas
 formulas <- c(formulas, list(
   formula_1,
   formula_2,
@@ -596,6 +632,7 @@ formulas <- c(formulas, list(
   formula_12,
   formula_13
 ))
+# add everything to a list
 models_final <- list(models, gof, mae, pred_tibble, formulas)
 # save the models
 save(models_final, file = "models/temporal_germany.Rda")

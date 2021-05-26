@@ -1,35 +1,35 @@
+# this script is used for calculating the temporal models for norway
 library(INLA)
-library(SpatialEpi)
 library(MASS)
+library(readr)
 library(regclass)
+library(tibble)
+# load the timeseries
 ts_norway <- read_csv("wrangled_data/ts_norway.csv")
-variants_to_try <- "+ main_variant + variant_20e + variant_20l"
+# set the cutoff day
 cutoff <- 454
+# get the test ids
 test <- seq(cutoff, nrow(ts_norway))
+# get the test values
 test_value <- ts_norway$new_cases[test]
+# set to NA in dataset
 ts_norway$new_cases[test] <- NA
+# create the link function
 link <- rep(NA, nrow(ts_norway))
 link[which(is.na(ts_norway$new_cases))] <- 1
-ts_norway$testing_policy <- as.factor(ts_norway$testing_policy)
-ts_norway$contact_tracing <- as.factor(ts_norway$contact_tracing)
-ts_norway$vaccination_policy <- as.factor(ts_norway$vaccination_policy)
-ts_norway$facial_coverings <- as.factor(ts_norway$facial_coverings)
-ts_norway$international_travel_controls <- as.factor(ts_norway$international_travel_controls)
-ts_norway$public_information_campaigns <- as.factor(ts_norway$public_information_campaigns)
-ts_norway$restriction_gatherings <- as.factor(ts_norway$restriction_gatherings)
-ts_norway$close_public_transport <- as.factor(ts_norway$close_public_transport)
-ts_norway$stay_home_requirements <- as.factor(ts_norway$stay_home_requirements)
-ts_norway$workplace_closures <- as.factor(ts_norway$workplace_closures)
+# remove some variables
 ts_norway$public_information_campaigns <- NULL
 ts_norway$testing_policy <- NULL
 ts_norway$people_fully_vaccinated_per_hundred <- NULL
 ts_norway$people_vaccinated_per_hundred <- NULL
+# add the season variable
 ts_norway$season <- "Winter"
 ts_norway[ts_norway$Date >= "2020-03-20", ]$season <- "Spring"
 ts_norway[ts_norway$Date >= "2020-06-20", ]$season <- "Summer"
 ts_norway[ts_norway$Date >= "2020-09-22", ]$season <- "Fall"
 ts_norway[ts_norway$Date >= "2020-12-21", ]$season <- "Winter"
 ts_norway[ts_norway$Date >= "2021-03-20", ]$season <- "Spring"
+# add the variables for the variant
 ts_norway$main_variant <- 1
 ts_norway$variant_20a_eu2 <- 0
 ts_norway$variant_20a_s439 <- 0
@@ -37,6 +37,7 @@ ts_norway$variant_20b <- 0
 ts_norway$variant_20c <- 0
 ts_norway$variant_20e <- 0
 ts_norway$variant_20l <- 0
+# set the values according to covariants.org
 ts_norway[ts_norway$Date >= "2020-06-22", ]$main_variant <- 0.97
 ts_norway[ts_norway$Date >= "2020-07-06", ]$main_variant <- 1
 ts_norway[ts_norway$Date >= "2020-07-20", ]$main_variant <- 0.87
@@ -151,7 +152,7 @@ ts_norway[ts_norway$Date >= "2021-03-22", ]$variant_20l <- 0.93
 ts_norway[ts_norway$Date >= "2021-04-05", ]$variant_20l <- 0.95
 ts_norway[ts_norway$Date >= "2021-04-19", ]$variant_20l <- 0.95
 ts_norway[ts_norway$Date >= "2021-05-03", ]$variant_20l <- 0.90
-# ts_norway$main_variant[1:21] <- 0
+# scale the variant variables
 ts_norway$main_variant <- scale(ts_norway$main_variant)[, 1]
 ts_norway$variant_20a_eu2 <- scale(ts_norway$variant_20a_eu2)[, 1]
 ts_norway$variant_20a_s439 <- scale(ts_norway$variant_20a_s439)[, 1]
@@ -160,7 +161,6 @@ ts_norway$variant_20c <- scale(ts_norway$variant_20c)[, 1]
 ts_norway$variant_20e <- scale(ts_norway$variant_20e)[, 1]
 ts_norway$variant_20l <- scale(ts_norway$variant_20l)[, 1]
 set.seed(325234)
-#####################################################
 # specify penalized prior
 prior_1 <- list(
   prec = list(
@@ -168,17 +168,21 @@ prior_1 <- list(
     param = c(1, 0.01)
   )
 )
+# create lists for saving everything
 models <- list()
 gof <- list()
 mae <- list()
 formulas <- list()
+# create the linear combination
 lcs <- inla.make.lincombs(
   id_date_1 = diag(nrow(ts_norway)),
   id_date_2 = diag(nrow(ts_norway))
 )
 #####################################################
+# define the formula
 formula_1 <- new_cases ~
 1 + Date
+# run the model
 res_1 <- inla(
   formula_1,
   family = "nbinomial",
@@ -191,8 +195,10 @@ res_1 <- inla(
   Ntrials = ts_norway$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_2 <- new_cases ~
 f(id_date_1, model = "rw2", hyper = prior_1)
+# run the model
 res_2 <- inla(
   formula_2,
   family = "nbinomial",
@@ -205,9 +211,11 @@ res_2 <- inla(
   Ntrials = ts_norway$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_3 <- new_cases ~
 f(id_date_1, model = "rw2", hyper = prior_1) +
   f(id_date_2, model = "iid")
+# run the model
 res_3 <- inla(
   formula_3,
   family = "nbinomial",
@@ -221,14 +229,16 @@ res_3 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_4 <- as.formula(
   paste(
     "new_cases ~",
     paste(colnames(ts_norway)[7:25], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1) + season",
-    variants_to_try
+    "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_4 <- inla(
   formula_4,
   family = "nbinomial",
@@ -241,15 +251,17 @@ res_4 <- inla(
   Ntrials = ts_norway$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_5 <- as.formula(
   paste(
     "new_cases ~",
     paste(colnames(ts_norway)[7:25], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1)",
     "+ f(id_date_2, model = 'iid') + season",
-    variants_to_try
+    "+ main_variant + variant_20e + variant_20l"    
   )
 )
+# run the model
 res_5 <- inla(
   formula_5,
   family = "nbinomial",
@@ -263,15 +275,17 @@ res_5 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_6 <- as.formula(
   paste(
     "new_cases ~",
     paste(colnames(ts_norway)[c(8, 12, 18, 24, 25)], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1)",
     "+ f(id_date_2, model = 'iid') + season",
-    variants_to_try
+    "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_6 <- inla(
   formula_6,
   family = "nbinomial",
@@ -285,20 +299,23 @@ res_6 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
-
+# next, do some variable selection by removing variables with a VIF of above 5
+# create this frame with all the variables of interest
 b_1 <- ts_norway[, 6:25]
+# create a backup of the original frame
+backup <- ts_norway
+# remove the geometry column
 b_1$geomety <- NULL
+# add the original cases numbers again
 b_1$new_cases[is.na(b_1$new_cases)] <- test_value
 sign <- TRUE
-# multicollinearity
-i <- 1
 while (sign) {
-  print(i)
-  i <- i + 1
+  # calculate a glm
   mod <- glm.nb(
     new_cases ~ .,
     data = b_1
   )
+  # if the are variables with a VIF > 5 they will be removed, else we are done
   vif_try <- try(VIF(mod)[, 1], silent = TRUE)
   if (class(vif_try) != "try-error") {
     if (!any(VIF(mod)[, 1] > 5)) {
@@ -314,9 +331,11 @@ while (sign) {
     }
   }
 }
-backup <- ts_norway
+# remove the variables from the original frame
 ts_norway[, 7:25] <- NULL
+# add only the relevant variables
 ts_norway <- cbind(ts_norway[, 1:6], b_1[, 2:ncol(b_1)], ts_norway[, 7:21])
+# define the formula
 formula_7 <- as.formula(
   paste(
     "new_cases ~",
@@ -324,6 +343,7 @@ formula_7 <- as.formula(
     "+ Date"
   )
 )
+# run the model
 res_7 <- inla(
   formula_7,
   family = "nbinomial",
@@ -336,14 +356,16 @@ res_7 <- inla(
   Ntrials = ts_norway$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_8 <- as.formula(
   paste(
     "new_cases ~",
     paste(colnames(ts_norway)[7:13], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1) + season",
-    variants_to_try
+    "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_8 <- inla(
   formula_8,
   family = "nbinomial",
@@ -356,15 +378,17 @@ res_8 <- inla(
   Ntrials = ts_norway$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_9 <- as.formula(
   paste(
     "new_cases ~",
     paste(colnames(ts_norway)[7:13], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1)",
     "+ f(id_date_2, model = 'iid') + season",
-    variants_to_try
+    "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_9 <- inla(
   formula_9,
   family = "nbinomial",
@@ -378,8 +402,10 @@ res_9 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_10 <- new_cases ~ 1 +
   f(id_date_1, model = "ar1")
+# run the model
 res_10 <- inla(
   formula_10,
   family = "nbinomial",
@@ -392,16 +418,13 @@ res_10 <- inla(
   Ntrials = ts_norway$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# now the VIF procedure again, this time using select variables
 ts_norway <- backup
 b_2 <- ts_norway[, c(6, 8, 12, 18, 24, 25)]
 b_2$geomety <- NULL
 b_2$new_cases[is.na(b_2$new_cases)] <- test_value
 sign <- TRUE
-# multicollinearity
-i <- 1
 while (sign) {
-  print(i)
-  i <- i + 1
   mod <- glm.nb(
     new_cases ~ .,
     data = b_2
@@ -423,6 +446,7 @@ while (sign) {
 }
 ts_norway[, 7:25] <- NULL
 ts_norway <- cbind(ts_norway[, 1:6], b_2[, 2:ncol(b_2)], ts_norway[, 7:21])
+# define the formula
 formula_11 <- as.formula(
   paste(
     "new_cases ~",
@@ -430,6 +454,7 @@ formula_11 <- as.formula(
     "+ Date"
   )
 )
+# run the model
 res_11 <- inla(
   formula_11,
   family = "nbinomial",
@@ -442,14 +467,16 @@ res_11 <- inla(
   Ntrials = ts_norway$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_12 <- as.formula(
   paste(
     "new_cases ~",
     paste(colnames(ts_norway)[7:10], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1) + season",
-    variants_to_try
+    "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_12 <- inla(
   formula_12,
   family = "nbinomial",
@@ -462,15 +489,17 @@ res_12 <- inla(
   Ntrials = ts_norway$population,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# define the formula
 formula_13 <- as.formula(
   paste(
     "new_cases ~",
     paste(colnames(ts_norway)[7:10], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1)",
     "+ f(id_date_2, model = 'iid') + season",
-    variants_to_try
+    "+ main_variant + variant_20e + variant_20l"
   )
 )
+# run the model
 res_13 <- inla(
   formula_13,
   family = "nbinomial",
@@ -484,6 +513,7 @@ res_13 <- inla(
   lincomb = lcs,
   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
 )
+# get all the GOF measures
 gof <- c(gof, list(
   list(
     dic = res_1$dic$dic,
@@ -551,7 +581,7 @@ gof <- c(gof, list(
     cpo = sum(log(res_13$cpo$cpo), na.rm = TRUE)
   )
 ))
-# calculate the mae
+# calculate the mae for test and train
 mae <- c(mae, list(
   mean(abs(res_1$summary.fitted.values$mean[test] * ts_norway$expected[test] - test_value)),
   mean(abs(res_2$summary.fitted.values$mean[test] * ts_norway$expected[test] - test_value)),
@@ -580,6 +610,7 @@ mae <- c(mae, list(
   mean(abs(res_12$summary.fitted.values$mean[-test] * ts_norway$expected[-test] - ts_norway$new_cases[-test])),
   mean(abs(res_13$summary.fitted.values$mean[-test] * ts_norway$expected[-test] - ts_norway$new_cases[-test]))
 ))
+# create a df containing the confidence intervals of the predictions
 pred_tibble <- tibble(
   q025 = c(
     res_1$summary.fitted.values$`0.025quant` * ts_norway$expected,
@@ -644,6 +675,7 @@ pred_tibble <- tibble(
   Date = rep(ts_norway$Date, 13),
   actual = rep(c(ts_norway$new_cases[-test], test_value), 13)
 )
+# get all the models
 models <- c(models, list(
   res_1,
   res_2,
@@ -659,6 +691,7 @@ models <- c(models, list(
   res_12,
   res_13
 ))
+# get all the formulas
 formulas <- c(formulas, list(
   formula_1,
   formula_2,
@@ -674,7 +707,8 @@ formulas <- c(formulas, list(
   formula_12,
   formula_13
 ))
+# add everything to a list
 models_final <- list(models, gof, mae, pred_tibble, formulas)
-# save the models
+# and save it
 save(models_final, file = "models/temporal_norway.Rda")
 rm(list = ls())

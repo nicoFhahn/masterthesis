@@ -1,9 +1,10 @@
+# this is the script for computing the predictive models for norway
 library(mlr)
 library(tibble)
-library(iml)
-library(patchwork)
 source("R/preprocess_norge.R")
+# remove the geometry column
 newest_numbers$geometry <- NULL
+# get nicer feature names for plotting later
 feature_names <- tibble(
   ugly = colnames(newest_numbers[, 2:14]),
   noice = c(
@@ -14,17 +15,21 @@ feature_names <- tibble(
   )
 )
 set.seed(7918)
+# draw the test sample
 test <- sample(
   seq_len(nrow(newest_numbers)),
   size = floor(0.2 * nrow(newest_numbers))
 )
+# create the training and test data
 newest_numbers_train <- newest_numbers[-test, ]
 newest_numbers_test <- newest_numbers[test, ]
+# create the task
 task <- makeRegrTask(
   id = "demographic",
   data = newest_numbers_train[, 1:14],
   target = "value"
 )
+# define the learners
 learners <- list(
   makeLearner("regr.fnn"),
   makeLearner("regr.nnet"),
@@ -32,6 +37,7 @@ learners <- list(
   makeLearner("regr.rpart"),
   makeLearner("regr.xgboost")
 )
+# define the param sets used for tuning
 hyper_pars <- list(
   makeParamSet(
     makeIntegerParam(
@@ -114,104 +120,81 @@ hyper_pars <- list(
     )
   )
 )
+# use 3-fold cv for resampling
 rdesc <- makeResampleDesc("CV", iters = 3)
+# use irace as tune control
 ctrl <- makeTuneControlIrace(maxExperiments = 300)
-# 385k
-# remove node harvest, 31
+# create a list for the tunes
 tunes <- list()
+# use parallel computing for faster tuning
 parallelMap::parallelStartSocket(7)
+# do the tuning
 for (x in 1:5) {
-  print(x)
-  if (class(hyper_pars[[x]]) == "ParamSet") {
-    tunes <- c(
-      tunes, list(try(
-        tuneParams(
-          learners[[x]],
-          task,
-          rdesc,
-          par.set = hyper_pars[[x]],
-          control = ctrl
-        ),
-        silent = TRUE
-      ))
+  tunes <- c(
+    tunes, list(
+      tuneParams(
+        learners[[x]],
+        task,
+        rdesc,
+        par.set = hyper_pars[[x]],
+        control = ctrl
+      )
     )
-  } else {
-    tunes <- c(
-      tunes,
-      NA
-    )
-  }
+  )
 }
+# stop parallel computing
 parallelMap::parallelStop()
+# set the parameter values for the learners
 learners <- lapply(
   1:5,
   function(x, ...) {
-    if (class(tunes[[x]]) %in% c("logical", "try-error")) {
-      learners[[x]]
-    } else {
-      setHyperPars(learners[[x]], par.vals = tunes[[x]]$x)
-    }
+    setHyperPars(learners[[x]], par.vals = tunes[[x]]$x)
   }
 )
-
+# train the models
 models <- lapply(
   learners,
-  function(x, ...) {
-    try(train(x, task), silent = TRUE)
-  }
+  train,
+  task
 )
-
+# predict using the test data
 predictions_test <- lapply(
   models,
-  function(x, ...) {
-    try(predict(x, newdata = newest_numbers_test[, 1:14]), silent = TRUE)
-  }
+  predict,
+  newdata = newest_numbers_test[, 1:14]
 )
-
-all_positive <- lapply(
-  predictions_test,
-  function(x) {
-    all(x$data$response > 0)
-  }
-)
-
-pos_predictions_test <- predictions_test[unlist(all_positive)]
-
+# predict using the train data
 predictions_train <- lapply(
   models,
-  function(x, ...) {
-    try(predict(x, task), silent = TRUE)
-  }
+  predict,
+  task
 )
-
-pos_predictions_train <- predictions_train[unlist(all_positive)]
-
-pos_learners <- learners[unlist(all_positive)]
-
+# calculate the mae for train
 mae_train <- lapply(
-  pos_predictions_train,
+  predictions_train,
   function(x) {
     mean(abs(x$data$truth - x$data$response))
   }
 )
+# calculate the mae for test
 mae_test <- lapply(
-  pos_predictions_test,
+  predictions_test,
   function(x) {
     mean(abs(x$data$truth - x$data$response))
   }
 )
-
+# get the learner names
 learner_names <- lapply(
-  pos_learners,
+  learners,
   function(x) x$id
 )
-
+# create tibble with all the results saved
 results_tibble <- tibble(
   learner = unlist(learner_names),
   mae_train = unlist(mae_train),
   mae_test = unlist(mae_test)
 )
-results_tibble[order(results_tibble$mae_test), ]
+# and save everything in a nice list
 model_list <- list(
   results_tibble = results_tibble,
   models = models,
