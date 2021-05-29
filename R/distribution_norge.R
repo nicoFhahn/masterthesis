@@ -1,6 +1,7 @@
+# this is the script used for fitting distributions to the german numbers
 library(fitdistrplus)
-library(qqplotr)
 library(patchwork)
+library(qqplotr)
 library(tibble)
 source("R/preprocess_norge.R")
 # create the cullen and frey graph
@@ -10,9 +11,10 @@ descdist(newest_numbers$value, discrete = TRUE)
 fit_poisson <- fitdist(newest_numbers$value, "pois")
 fit_nbinomial <- fitdist(newest_numbers$value, "nbinom")
 fit_normal <- fitdist(newest_numbers$value, "norm")
-# plot the fits
+# get the ecdf function
 ecdf_value <- ecdf(newest_numbers$value)
 newest_numbers$ecdf <- ecdf_value(newest_numbers$value)
+# draw a sample based on the estimates
 x_nbinom <- rnbinom(
   nrow(newest_numbers),
   size = fit_nbinomial$estimate[1],
@@ -27,9 +29,11 @@ x_poisson <- rpois(
   nrow(newest_numbers),
   lambda = fit_poisson$estimate[1]
 )
+# get the ecdf functions
 ecdf_nbinom <- ecdf(x_nbinom)
 ecdf_normal <- ecdf(x_normal)
 ecdf_poisson <- ecdf(x_poisson)
+# create the qq plots
 qqplot_nbinom <- ggplot(
   data = newest_numbers,
   mapping = aes(
@@ -60,7 +64,7 @@ qqplot_nbinom <- ggplot(
   labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
   theme_minimal() +
   ggtitle("QQ-Plot for Norway", "Negative binomial distribution")
-
+# create the cdf plots
 qqplot_normal <- ggplot(
   data = newest_numbers,
   mapping = aes(
@@ -189,14 +193,15 @@ cdf_plot_poisson <- ggplot() +
   ) +
   ggtitle("Emp. and theo. CDFs for Norway", "Poisson distribution")
 
-
+# combine both plots
 qqplot_nbinom + cdf_plot_nbinom
 qqplot_normal + cdf_plot_normal
 qqplot_poisson + cdf_plot_poisson
-# compare aic
+# get the aics
 fit_poisson$aic
 fit_nbinomial$aic
 fit_normal$aic
+# draw distribution based on estimates
 x_nbinom <- rnbinom(
   10 * nrow(newest_numbers),
   size = fit_nbinomial$estimate[1],
@@ -211,7 +216,7 @@ x_poisson <- rpois(
   10 * nrow(newest_numbers),
   lambda = fit_poisson$estimate[1]
 )
-
+# tibble for plotting
 distr <- tibble(
   value = c(x_nbinom, x_normal, x_poisson),
   distribution = c(
@@ -220,6 +225,7 @@ distr <- tibble(
     rep("Poisson", 3560)
   )
 )
+# plot the distributions
 distrplot_1 <- ggplot() +
   geom_histogram(
     data = newest_numbers,

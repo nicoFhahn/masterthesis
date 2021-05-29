@@ -1,10 +1,11 @@
+# this is the script for evaluating the non-temporal models for norway
 library(ggplot2)
+library(INLA)
 library(patchwork)
 library(readr)
 library(sf)
 library(tibble)
-library(INLA)
-# source("R/nontemporal_models_norway.R")
+# load the data
 newest_numbers <- read_csv("eval_data/newest_numbers_norway_may2.csv")
 norge_sf <- read_sf("wrangled_data/shapes_norge.shp")
 newest_numbers <- merge(
@@ -18,7 +19,7 @@ load("models/nontemporal_norway.RDa")
 newest_numbers[
   order(newest_numbers$value, decreasing = TRUE),
 ][1:5, c("kommune_name", "population", "value", "vaccine_shots")]
-####################### Model with no spatial component
+# first model with no spatial component
 # get the dic
 models_final[[2]][[1]]$dic
 # get the waic
@@ -733,59 +734,3 @@ plot_4 <- ggplot(data = newest_numbers) +
 plot_4 + plot_3
 # get the summary of the hyperparameters
 round(models_final[[1]][[3]]$summary.hyperpar, 3)
-newest_numbers$zeta <- unlist(zeta)
-pal <- colorNumeric(
-  "YlOrRd",
-  newest_numbers$rr
-)
-newest_numbers$csi <- unlist(prob_csi)
-threshold <- 0.75
-library(leaflet)
-leaflet(data = newest_numbers[newest_numbers$csi >= threshold, ]) %>%
-  addProviderTiles("CartoDB.DarkMatter") %>%
-  addPolygons(
-    color = "black",
-    weight = 1,
-    opacity = 1,
-    fillOpacity = 0.8,
-    fillColor = ~ pal(rr),
-    label = paste(
-      "Kommune: ", newest_numbers[newest_numbers$csi >= threshold, ]$kommune_name, "<br>",
-      "Zeta: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$zeta, 2), "<br>",
-      "Xi: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$csi, 2), "<br>",
-      "RR: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$rr, 2), "<br>",
-      "Number of infections: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$value, 2), "<br>",
-      "Urban density: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$urb_dens, 2), "<br>",
-      "Unemployed immigrants: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$unemp_immg, 2), "<br>",
-      "Total immigrants: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$immigrants_total, 2), "<br>",
-      "Expected count: ", newest_numbers[newest_numbers$csi >= threshold, ]$expected_count
-    ) %>%
-      lapply(htmltools::HTML)
-  )
-threshold <- 0
-pal <- colorFactor(
-  "inferno",
-  newest_numbers$cat_zeta_log
-)
-threshold <- 0
-leaflet(data = newest_numbers[newest_numbers$csi >= threshold, ]) %>%
-  addProviderTiles("CartoDB.DarkMatter") %>%
-  addPolygons(
-    color = "black",
-    weight = 1,
-    opacity = 1,
-    fillOpacity = 0.8,
-    fillColor = ~ pal(cat_zeta_log),
-    label = paste(
-      "Kommune: ", newest_numbers[newest_numbers$csi >= threshold, ]$kommune_name, "<br>",
-      "Zeta: ", newest_numbers[newest_numbers$csi >= threshold, ]$cat_zeta_log, "<br>",
-      "Xi: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$csi, 2), "<br>",
-      "RR: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$rr, 2), "<br>",
-      "Number of infections: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$value, 2), "<br>",
-      "Urban density: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$urb_dens, 2), "<br>",
-      "Unemployed immigrants: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$unemp_immg, 2), "<br>",
-      "Total immigrants: ", round(newest_numbers[newest_numbers$csi >= threshold, ]$immigrants_total, 2), "<br>",
-      "Expected count: ", newest_numbers[newest_numbers$csi >= threshold, ]$expected_count
-    ) %>%
-      lapply(htmltools::HTML)
-  )

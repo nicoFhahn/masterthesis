@@ -97,22 +97,22 @@ ts_europe <- ts_europe[ts_europe$Country != "Liechtenstein", ]
 # first we get the ids for each country, then we impute the values
 park_na <- which(is.na(ts_europe[ts_europe$Country == "Estonia", ]$parks))
 mean_decline <- (ts_europe[ts_europe$Country == "Estonia", ]$parks[park_na[1] - 1] -
-                   ts_europe[ts_europe$Country == "Estonia", ]$parks[park_na[14] + 1]) / 15
+  ts_europe[ts_europe$Country == "Estonia", ]$parks[park_na[14] + 1]) / 15
 ts_europe[ts_europe$Country == "Estonia", ]$parks[park_na] <- ts_europe[ts_europe$Country == "Estonia", ]$parks[park_na[1] - 1] -
   seq_len(14) * mean_decline
 park_na <- which(is.na(ts_europe[ts_europe$Country == "Luxembourg", ]$parks))
 mean_decline <- (ts_europe[ts_europe$Country == "Luxembourg", ]$parks[park_na[1] - 1] -
-                   ts_europe[ts_europe$Country == "Luxembourg", ]$parks[park_na[23] + 1]) / 24
+  ts_europe[ts_europe$Country == "Luxembourg", ]$parks[park_na[23] + 1]) / 24
 ts_europe[ts_europe$Country == "Luxembourg", ]$parks[park_na] <- ts_europe[ts_europe$Country == "Luxembourg", ]$parks[park_na[1] - 1] -
   seq_len(23) * mean_decline
 park_na <- which(is.na(ts_europe[ts_europe$Country == "Malta", ]$parks))
 mean_decline <- (ts_europe[ts_europe$Country == "Malta", ]$parks[park_na[1] - 1] -
-                   ts_europe[ts_europe$Country == "Malta", ]$parks[park_na[4] + 1]) / 5
+  ts_europe[ts_europe$Country == "Malta", ]$parks[park_na[4] + 1]) / 5
 ts_europe[ts_europe$Country == "Malta", ]$parks[park_na] <- ts_europe[ts_europe$Country == "Malta", ]$parks[park_na[1] - 1] -
   seq_len(4) * mean_decline
 park_na <- which(is.na(ts_europe[ts_europe$Country == "Slovenia", ]$parks))
 mean_decline <- (ts_europe[ts_europe$Country == "Slovenia", ]$parks[park_na[1] - 1] -
-                   ts_europe[ts_europe$Country == "Slovenia", ]$parks[park_na[10] + 1]) / 11
+  ts_europe[ts_europe$Country == "Slovenia", ]$parks[park_na[10] + 1]) / 11
 ts_europe[ts_europe$Country == "Slovenia", ]$parks[park_na] <- ts_europe[ts_europe$Country == "Slovenia", ]$parks[park_na[1] - 1] -
   seq_len(10) * mean_decline
 # no data for north macedonia

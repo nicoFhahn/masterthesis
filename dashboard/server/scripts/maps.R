@@ -29,26 +29,34 @@ output$sir_map_norway <- renderMapdeck({
     newest_numbers_norway$kommune_name,
     "<br>",
     "Expected count: ",
-    newest_numbers_norway$expected_count)
+    newest_numbers_norway$expected_count,
+    "<br>",
+    "Actual count: ",
+    newest_numbers_norway$infections,
+    "<br>",
+    "SIR: ",
+    newest_numbers_norway$sir
+  )
   mapdeck(
     style = mapdeck_style("dark"),
     location = c(13, 63),
-    zoom = 5,
+    zoom = 4,
     pitch = 45,
     token = token
   ) %>%
     add_polygon(
       data = newest_numbers_norway,
-      fill_colour = "expected_count",
+      fill_colour = "sir",
       legend = list(stroke_colour = FALSE, fill_colour = TRUE),
       stroke_width = 500,
       stroke_colour = "#121212",
       auto_highlight = TRUE,
+      update_view = FALSE,
       palette = pal,
       tooltip = "tooltip",
       layer_id = "polygon_layer",
       legend_options = list(
-        title = "Expected count"
+        title = "SIR"
       )
     )
 })
@@ -61,29 +69,37 @@ output$sir_map_germany <- renderMapdeck({
   pal[, 4] <- 150
   newest_numbers_germany$expected_count <- round(newest_numbers_germany$expected_count)
   newest_numbers_germany$tooltip <- paste(
-    newest_numbers_germany$kommune_name,
+    newest_numbers_germany$municipality,
     "<br>",
     "Expected count: ",
-    newest_numbers_germany$expected_count)
+    newest_numbers_germany$expected_count,
+    "<br>",
+    "Actual count: ",
+    newest_numbers_germany$infections,
+    "<br>",
+    "SIR: ",
+    newest_numbers_germany$sir
+  )
   mapdeck(
     style = mapdeck_style("dark"),
-    location = c(11, 53),
+    location = c(11, 52),
     zoom = 5,
     pitch = 45,
     token = token
   ) %>%
     add_polygon(
       data = newest_numbers_germany,
-      fill_colour = "expected_count",
+      fill_colour = "sir",
       legend = list(stroke_colour = FALSE, fill_colour = TRUE),
       stroke_width = 500,
       stroke_colour = "#121212",
       auto_highlight = TRUE,
+      update_view = FALSE,
       palette = pal,
       tooltip = "tooltip",
       layer_id = "polygon_layer",
       legend_options = list(
-        title = "Expected count"
+        title = "SIR"
       )
     )
 })
@@ -91,17 +107,17 @@ output$sir_map_germany <- renderMapdeck({
 output$map_germany <- renderMapdeck({
   mapdeck(
     style = mapdeck_style("dark"),
-    location = c(11, 53),
+    location = c(10.39238, 51.11017),
     zoom = 4,
     pitch = 45,
     token = token
   )
 })
 
-output$model_map_germany<- renderMapdeck({
+output$model_map_germany <- renderMapdeck({
   mapdeck(
     style = mapdeck_style("dark"),
-    location = c(11, 53),
+    location = c(10.39238, 51.11017),
     zoom = 4,
     pitch = 45,
     token = token
@@ -112,7 +128,7 @@ output$model_map_germany<- renderMapdeck({
 output$map_europe <- renderMapdeck({
   mapdeck(
     style = mapdeck_style("dark"),
-    location = c(11, 53),
+    location = c(10.39238, 51.11017),
     zoom = 3,
     pitch = 45,
     token = token

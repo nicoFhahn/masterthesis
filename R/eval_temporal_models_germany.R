@@ -1,35 +1,59 @@
+# this is the script for evaluating the temporal models for germany
 library(readr)
 library(INLA)
 library(latex2exp)
 library(tibble)
 library(ggplot2)
+# load the timeseries
 ts_germany <- read_csv("wrangled_data/ts_germany.csv")
+# load the models
 load("models/temporal_germany.Rda")
+# get all the things
 models <- models_final[[1]]
 gof <- models_final[[2]]
 mae <- models_final[[3]]
 pred_tibble <- models_final[[4]]
 formulas <- models_final[[5]]
+# get the goodness-of-fit measures
 gof[c(1, 2, 10, 12)]
+# get the train MAE
 mae[c(14, 15, 23, 25)]
+# get the test MAE
 mae[c(1, 2, 10, 12)]
 new_cases_seven <- c()
 new_cases_predicted_seven <- c()
-ts_germany$new_cases_predicted <- round(pred_tibble$mean[pred_tibble$model == 12])
+# get the predicted infection numbers
+ts_germany$new_cases_predicted <- round(
+  pred_tibble$mean[pred_tibble$model == 12]
+)
+# get the numbers needed for the seven day incidence
 for (i in seq_len(nrow(ts_germany))) {
   start <- max(i - 6, 1)
   new_cases_seven[i] <- sum(ts_germany$new_cases[seq(start, i)])
-  new_cases_predicted_seven[i] <- sum(ts_germany$new_cases_predicted[seq(start, i)])
+  new_cases_predicted_seven[i] <- sum(
+    ts_germany$new_cases_predicted[seq(start, i)]
+  )
 }
 ts_germany$new_cases_seven <- new_cases_seven
 ts_germany$new_cases_predicted_seven <- new_cases_predicted_seven
-ts_germany$incidence_seven <- 100000 * ts_germany$new_cases_seven / ts_germany$population
-ts_germany$incidence_predicted_seven <- 100000 * ts_germany$new_cases_predicted_seven / ts_germany$population
+# calculate the seven day incidence
+ts_germany$incidence_seven <- 100000 *
+  ts_germany$new_cases_seven / ts_germany$population
+ts_germany$incidence_predicted_seven <- 100000 *
+  ts_germany$new_cases_predicted_seven / ts_germany$population
+# create a tibble for plotting
 incidence_tibble <- tibble(
-  incidence = c(ts_germany$incidence_seven, ts_germany$incidence_predicted_seven),
+  incidence = c(
+    ts_germany$incidence_seven,
+    ts_germany$incidence_predicted_seven
+  ),
   Date = rep(ts_germany$Date, 2),
-  Type = c(rep("Actual 7-Day incidence", nrow(ts_germany)), rep("Predicted 7-Day incidence", nrow(ts_germany)))
+  Type = c(
+    rep("Actual 7-Day incidence", nrow(ts_germany)),
+    rep("Predicted 7-Day incidence", nrow(ts_germany))
+  )
 )
+# plot the seven day incidence
 ggplot(data = incidence_tibble) +
   geom_line(aes(x = Date, y = incidence, colour = Type), size = 1) +
   theme_minimal() +
@@ -46,6 +70,7 @@ ggplot(data = incidence_tibble) +
   scale_colour_manual(
     values = c("#357DED", "#DF2935")
   )
+# plot the predictions for training and test
 ggplot(data = pred_tibble[pred_tibble$model == 12, ]) +
   geom_ribbon(
     aes(ymin = q025, ymax = q975, x = Date),
@@ -68,7 +93,7 @@ ggplot(data = pred_tibble[pred_tibble$model == 12, ]) +
   ggtitle(
     "Predicted number of infections vs. actual number of infections"
   )
-
+# plot the predictions for test only
 ggplot(data = pred_tibble[pred_tibble$model == 12, ][483:nrow(ts_germany), ]) +
   geom_ribbon(
     aes(ymin = q025, ymax = q975, x = Date),
@@ -91,6 +116,7 @@ ggplot(data = pred_tibble[pred_tibble$model == 12, ][483:nrow(ts_germany), ]) +
     "Predicted number of infections",
     subtitle = "Test data"
   )
+# get the temporal effects of the models
 temporal_cars <- lapply(
   c(2, 3, 4, 5, 6, 8, 9, 10, 12, 13),
   function(x, ...) {
@@ -115,6 +141,7 @@ ts_germany$temporal_car_9 <- unlist(temporal_cars[[7]])
 ts_germany$temporal_car_10 <- unlist(temporal_cars[[8]])
 ts_germany$temporal_car_12 <- unlist(temporal_cars[[9]])
 ts_germany$temporal_car_13 <- unlist(temporal_cars[[10]])
+# plot the temporal effect
 ggplot(data = ts_germany) +
   geom_line(aes(x = Date, y = temporal_car_12)) +
   theme_minimal() +
@@ -128,8 +155,8 @@ ggplot(data = ts_germany) +
     "Posterior temporal trend for the number of infections"
   )
 
+# now get all the coefficients
 models[[12]]$summary.fixed
-# get the summary of the bym2 model
 round(models[[12]]$summary.fixed[
   order(models[[12]]$summary.fixed$mean), 1:2
 ], 3)
@@ -158,3 +185,12 @@ round(sapply(
     )
   }
 ), 3)
+# and for the other models
+load("models/temporal_germany_2.Rda")
+mae <- models_final[[3]]
+mae[c(14, 15, 23, 25)]
+mae[c(1, 2, 10, 12)]
+load("models/temporal_germany_3.Rda")
+mae <- models_final[[3]]
+mae[c(14, 15, 23, 25)]
+mae[c(1, 2, 10, 12)]

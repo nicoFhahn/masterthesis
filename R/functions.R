@@ -1,11 +1,11 @@
+# this script contains the function used to download osm data
 library(dplyr)
 library(sf)
 library(osmdata)
 library(rlist)
 library(stringr)
-library(leaflet)
-library(readr)
-############## DOWNLOAD KEY DATA  ##############
+library(furrr)
+# said function
 download_key_data <- function(cities, key, value = NULL, df = TRUE,
                               cityname = NULL) {
   Sys.sleep(1)
@@ -222,20 +222,10 @@ download_key_data <- function(cities, key, value = NULL, df = TRUE,
   }
 }
 
-
-
+# function to capitalize the first letter of each word
 simple_cap <- function(x) {
   s <- strsplit(x, " ")[[1]]
   paste(toupper(substring(s, 1, 1)), substring(s, 2),
     sep = "", collapse = " "
   )
-}
-
-geo_code2 <- function(x) {
-  coded <- geocodeHERE_simple(
-    x,
-    App_id = "g3OqrYH2RijQ8La2hDrN",
-    App_code = "aZ1EHzB8zjCUG_63k3xcEg"
-  )
-  as.numeric(rev(unlist(coded)))
 }

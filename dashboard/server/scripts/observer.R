@@ -596,12 +596,6 @@ observeEvent(
     colnames_norway_nice_2 <- c(colnames_norway_nice, "(Intercept)")
     vars_id[unlist(lapply(vars_id, length)) == 0][[1]] <- length(colnames_norway_nice_2)
     if (length(is_significant) & length(vars_id) == 0) vars_id <- list(length(colnames_norway_nice_2))
-    # Var = colnames_norway_nice_2[unlist(vars_id)]
-    # print(conf_intervals)
-    # Q025 = round(as.numeric(conf_intervals[, unlist(is_significant)][1, ]), 3)
-    # Mean = round(as.numeric(means[unlist(is_significant)]), 3)
-    # Q975 = round(as.numeric(conf_intervals[, unlist(is_significant)][2, ]), 3)
-    # ID = as.numeric(input$start_norway)
     sign_tibble <- tibble(
       Var = colnames_norway_nice_2[unlist(vars_id)],
       Q025 = round(as.numeric(as.matrix(conf_intervals[, unlist(is_significant)])[1, ]), 3),
@@ -609,7 +603,6 @@ observeEvent(
       Q975 = round(as.numeric(as.matrix(conf_intervals[, unlist(is_significant)])[2, ]), 3),
       ID = as.numeric(input$start_norway)
     )
-    print(sign_tibble)
     if (is.na(model_norway$results$sign_frame)) {
       model_norway$results$sign_frame <- sign_tibble
     } else {
@@ -797,12 +790,6 @@ observeEvent(
     colnames_germany_nice_2 <- c(colnames_germany_nice, "(Intercept)")
     vars_id[unlist(lapply(vars_id, length)) == 0][[1]] <- length(colnames_germany_nice_2)
     if (length(is_significant) & length(vars_id) == 0) vars_id <- list(length(colnames_germany_nice_2))
-    # Var = colnames_germany_nice_2[unlist(vars_id)]
-    # print(conf_intervals)
-    # Q025 = round(as.numeric(conf_intervals[, unlist(is_significant)][1, ]), 3)
-    # Mean = round(as.numeric(means[unlist(is_significant)]), 3)
-    # Q975 = round(as.numeric(conf_intervals[, unlist(is_significant)][2, ]), 3)
-    # ID = as.numeric(input$start_germany)
     sign_tibble <- tibble(
       Var = colnames_germany_nice_2[unlist(vars_id)],
       Q025 = round(as.numeric(as.matrix(conf_intervals[, unlist(is_significant)])[1, ]), 3),
@@ -927,13 +914,13 @@ observeEvent(
       placeholder <- newest_numbers_europe[, selected_og_2]
       if (is.factor(newest_numbers_europe[, selected_og_2])) {
         pal <- colorRamp(
-          lacroix_palette("Pamplemousse", type = "paired", n = length(unique(newest_numbers_europe[, selected_og_2]))),
+          lacroix_palette("CranRaspberry", type = "paired", n = length(unique(newest_numbers_europe[, selected_og_2]))),
           alpha = TRUE
         )((1:6) / 6)
         pal[, 4] <- 150
       } else {
         pal <- colorRamp(
-          lacroix_palette("Pamplemousse", type = "continuous", n = 60)[45:1],
+          lacroix_palette("CranRaspberry", type = "continuous", n = 60)[45:1],
           alpha = TRUE
         )((1:256) / 256)
         pal[, 4] <- 150
@@ -981,4 +968,150 @@ observeEvent(
       update_style(mapdeck_style(input$map_style_europe))
   },
   priority = 85
+)
+
+observeEvent(
+  {
+    input$start_europe
+  },
+  {
+    vars <- c(input$multi_europe_mobility, input$multi_europe_government, input$multi_europe_health)
+    sigma_0 <- as.numeric(input$sigma_0_europe)
+    alpha <- as.numeric(input$alpha_europe)
+    sigma_0 <- ifelse(is.na(sigma_0), 1, sigma_0)
+    alpha <- ifelse(is.na(alpha), 0.01, alpha)
+    ts_country <- ts_europe[ts_europe$Country == input$temporal_country, ]
+    ts_country$geometry <- NULL
+    model_europe$results$actual_numbers <- ts_country$new_cases
+    test_size <- as.numeric(input$test_size_temporal)
+    test_size <- ifelse(is.na(test_size), 21, test_size)
+    cutoff_value <- nrow(ts_country) - test_size + 1
+    cutoff_value <- ifelse(cutoff_value <= 21, nrow(ts_country) - 20, cutoff_value)
+    test <- seq(cutoff_value, nrow(ts_country))
+    test_value <- ts_country$new_cases[test]
+    ts_country$new_cases[test] <- NA
+    link <- rep(NA, nrow(ts_country))
+    link[which(is.na(ts_country$new_cases))] <- 1
+    prior <- list(
+      prec = list(
+        prior = "pc.prec",
+        param = c(sigma_0, alpha)
+      )
+    )
+    if (length(vars) > 0) {
+      formula <- as.formula(
+        paste(
+          "new_cases ~",
+          paste(colnames_europe_actual[which(colnames_europe_nice %in% vars)], collapse = "+"),
+          " + f(id_date_1, model = input$temporal_term, hyper = prior)"
+        )
+      )
+    } else {
+      formula <- new_cases ~ 1 +
+        f(id_date_1, model = input$temporal_term, hyper = prior)
+    }
+    result <- inla(
+      formula,
+      family = "nbinomial",
+      data = ts_country,
+      E = expected,
+      control.predictor = list(
+        compute = TRUE,
+        link = link
+      ),
+      Ntrials = ts_country$population,
+      control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+    )
+    model_europe$results$model <- result
+    predicted <- mean(abs(result$summary.fitted.values$mean[test] * ts_country$expected[test] - test_value))
+    results_tibble <- tibble(
+      DIC = round(result$dic$dic),
+      WAIC = round(result$waic$waic),
+      CPO = round(sum(log(result$cpo$cpo), na.rm = TRUE)),
+      MAE = round(predicted),
+      alpha = alpha,
+      sigma_0 = sigma_0,
+      Covariates = length(vars),
+      ID = as.numeric(input$start_europe)
+    )
+    if (is.na(model_europe$results$performance_frame)) {
+      model_europe$results$performance_frame <- results_tibble
+    } else {
+      model_europe$results$performance_frame <- rbind(
+        model_europe$results$performance_frame,
+        results_tibble
+      )
+    }
+    model_europe$results$predictions <- predicted
+    predictions_tibble <- as_tibble(result$summary.fitted.values[, c(1, 3, 5)] * ts_country$expected)
+    model_europe$results$predictions_tibble <- predictions_tibble
+    marg <- lapply(
+      result$marginals.random$id_date_1,
+      function(x) {
+        marg <- inla.tmarginal(
+          function(y) exp(y), x
+        )
+        inla.emarginal(mean, marg)
+      }
+    )
+    model_europe$results$car <- unlist(marg)
+    conf_intervals <- sapply(
+      result$marginals.fixed[
+        rownames(result$summary.fixed[
+          order(result$summary.fixed$mean),
+        ])
+      ],
+      function(x) {
+        inla.qmarginal(
+          c(0.025, 0.975),
+          inla.tmarginal(
+            exp, x
+          )
+        )
+      }
+    )
+    means <- sapply(
+      result$marginals.fixed[
+        rownames(result$summary.fixed[
+          order(result$summary.fixed$mean),
+        ])
+      ],
+      inla.emarginal,
+      fun = exp
+    )
+    is_significant <- lapply(
+      seq_len(ncol(conf_intervals)),
+      function(x, ...) {
+        sum(conf_intervals[, x] < 1) == 2 || sum(conf_intervals[, x] > 1) == 2
+      }
+    )
+    names_coefficient <- names(means)[unlist(is_significant)]
+    names_coefficient <- lapply(
+      names_coefficient,
+      function(x, ...) {
+        y <- str_replace(x, colnames_europe_actual[str_detect(x, colnames_europe_actual)], paste(colnames_europe_nice[str_detect(x, colnames_europe_actual)], "<br>", sep = ""))
+        HTML(ifelse(length(y) == 0, x, y))
+      }
+    )
+    names_coefficient <- unlist(names_coefficient) #
+    sign_tibble <- tibble(
+      Var = names_coefficient,
+      Q025 = round(as.numeric(as.matrix(conf_intervals[, unlist(is_significant)])[1, ]), 3),
+      Mean = round(as.numeric(means[unlist(is_significant)]), 3),
+      Q975 = round(as.numeric(as.matrix(conf_intervals[, unlist(is_significant)])[2, ]), 3),
+      ID = as.numeric(input$start_europe)
+    )
+    if (is.na(model_europe$results$sign_frame)) {
+      if (nrow(sign_tibble) > 0) {
+        model_europe$results$sign_frame <- sign_tibble
+      }
+    } else {
+      model_europe$results$sign_frame <- rbind(
+        model_europe$results$sign_frame,
+        sign_tibble
+      )
+    }
+    model_europe$results$ts_country <- ts_country
+  },
+  priority = 84
 )

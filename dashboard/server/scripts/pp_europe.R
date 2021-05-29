@@ -242,7 +242,7 @@ colnames_europe_actual <- c(
 )
 colnames_europe_nice <- c(
   "Proportion of population over 65", "Proportion of population over 70", "Cancellation public events",
-  "Cardiovascular death rate", "Cancellation public events", "Contact tracing", "Diabetes prevalence", "Expected count",
+  "Cardiovascular death rate", "Closing of public transport", "Contact tracing", "Diabetes prevalence", "Expected count",
   "Facial coverings", "Female smokers", "GDP per capita", "Mobility grocery and pharmacy",
   "Hospital beds per thousand", "Human development index", "Income support",
   "International travel controls", "Life expectancy", "Male smokers", "Median age",

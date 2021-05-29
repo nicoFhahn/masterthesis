@@ -258,7 +258,7 @@ formula_5 <- as.formula(
     paste(colnames(ts_norway)[7:25], collapse = " + "),
     "+ f(id_date_1, model = 'rw2', hyper = prior_1)",
     "+ f(id_date_2, model = 'iid') + season",
-    "+ main_variant + variant_20e + variant_20l"    
+    "+ main_variant + variant_20e + variant_20l"
   )
 )
 # run the model

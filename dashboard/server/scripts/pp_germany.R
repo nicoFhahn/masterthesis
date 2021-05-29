@@ -170,12 +170,12 @@ expected_count <- expected(
 newest_numbers_germany$expected_count <- expected_count
 # calculate the SIR
 newest_numbers_germany$sir <- newest_numbers_germany$CumNumberTestedIll / newest_numbers_germany$expected_count
-newest_numbers_germany$sir <- round(newest_numbers_germany$sir, 1)
-newest_numbers_germany$expected_count <- round(expected_count, 1)
+newest_numbers_germany$sir <- round(newest_numbers_germany$sir, 2)
+newest_numbers_germany$expected_count <- round(expected_count, 2)
 newest_numbers_germany <- st_as_sf(newest_numbers_germany)
 st_crs(newest_numbers_germany) <- 4326
 # calculate the proportion of infected people
-newest_numbers_germany$inf_rate <- round(newest_numbers_germany$CumNumberTestedIll / newest_numbers_germany$population, 1)
+newest_numbers_germany$inf_rate <- round(newest_numbers_germany$CumNumberTestedIll / newest_numbers_germany$population, 2)
 rownames(newest_numbers_germany) <- NULL
 colnames(newest_numbers_germany)[44] <- "infections"
 germany_long <- germany_munc_long %>%

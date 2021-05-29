@@ -1,16 +1,21 @@
+# this is the script for computing the non-temporal models for germany
 library(INLA)
 library(spdep)
+# load the data
 source("R/preprocess_germany.R")
 set.seed(14523)
+# draw a sample
 test <- sample(
   seq_len(nrow(newest_numbers)),
   size = floor(0.2 * nrow(newest_numbers))
 )
+# get the test values
 test_value <- newest_numbers$value[test]
+# set to NA
 newest_numbers$value[test] <- NA
+# create the link function
 link <- rep(NA, nrow(newest_numbers))
 link[which(is.na(newest_numbers$value))] <- 1
-#####################################################
 # specify penalized prior
 prior_1 <- list(
   prec = list(
@@ -21,8 +26,7 @@ prior_1 <- list(
 models <- list()
 gof <- list()
 mae <- list()
-#
-# create the neighbordhood matrix
+# create the neighborhood matrix
 nb <- poly2nb(newest_numbers)
 # save the matrix
 nb2INLA("maps/map_2.adj", nb)
@@ -32,29 +36,29 @@ for (i in 2:nrow(newest_numbers)) {
   Q[i - 1, i] <- -1
   Q[i, i - 1] <- -1
 }
-
+# create the c matrix
 C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 # formula for the non spatial model
 formula_1 <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  Union + afd + clinic + place_of_worship + nursing_home + 
+  Union + afd + clinic + place_of_worship + nursing_home +
   platform + office + marketplace + higher_education
 # formula for the besag model
 formula_2 <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  Union + afd + clinic + place_of_worship + nursing_home + 
+  Union + afd + clinic + place_of_worship + nursing_home +
   platform + office + marketplace + higher_education +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
 # formula for the bym2 model
 formula_3 <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  Union + afd + clinic + place_of_worship + nursing_home + 
+  Union + afd + clinic + place_of_worship + nursing_home +
   platform + office + marketplace + higher_education +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior_1)
 # formula for the leroux model
 formula_4 <- value ~
 pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP + die_linke +
-  Union + afd + clinic + place_of_worship + nursing_home + 
+  Union + afd + clinic + place_of_worship + nursing_home +
   platform + office + marketplace + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
 # compute the models
@@ -132,14 +136,54 @@ gof <- c(gof, list(
 ))
 # calculate the mae
 mae <- c(mae, list(
-  mean(abs(res_1$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
-  mean(abs(res_2$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
-  mean(abs(res_3$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
-  mean(abs(res_4$summary.fitted.values$mean[test] * newest_numbers$expected_count[test] - test_value)),
-  mean(abs(res_1$summary.fitted.values$mean[-test] * newest_numbers$expected_count[-test] - newest_numbers$value[-test])),
-  mean(abs(res_2$summary.fitted.values$mean[-test] * newest_numbers$expected_count[-test] - newest_numbers$value[-test])),
-  mean(abs(res_3$summary.fitted.values$mean[-test] * newest_numbers$expected_count[-test] - newest_numbers$value[-test])),
-  mean(abs(res_4$summary.fitted.values$mean[-test] * newest_numbers$expected_count[-test] - newest_numbers$value[-test]))
+  mean(
+    abs(
+      res_1$summary.fitted.values$mean[test] *
+        newest_numbers$expected_count[test] - test_value
+    )
+  ),
+  mean(
+    abs(
+      res_2$summary.fitted.values$mean[test] *
+        newest_numbers$expected_count[test] - test_value
+    )
+  ),
+  mean(
+    abs(
+      res_3$summary.fitted.values$mean[test] *
+        newest_numbers$expected_count[test] - test_value
+    )
+  ),
+  mean(
+    abs(
+      res_4$summary.fitted.values$mean[test] *
+        newest_numbers$expected_count[test] - test_value
+    )
+  ),
+  mean(
+    abs(
+      res_1$summary.fitted.values$mean[-test] *
+        newest_numbers$expected_count[-test] - newest_numbers$value[-test]
+    )
+  ),
+  mean(
+    abs(
+      res_2$summary.fitted.values$mean[-test] *
+        newest_numbers$expected_count[-test] - newest_numbers$value[-test]
+    )
+  ),
+  mean(
+    abs(
+      res_3$summary.fitted.values$mean[-test] *
+        newest_numbers$expected_count[-test] - newest_numbers$value[-test]
+    )
+  ),
+  mean(
+    abs(
+      res_4$summary.fitted.values$mean[-test] *
+        newest_numbers$expected_count[-test] - newest_numbers$value[-test]
+    )
+  )
 ))
 models_final <- list(models, gof, mae)
 # save the models

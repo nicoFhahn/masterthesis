@@ -1,3 +1,5 @@
+# this is the script showing which data was download from OpenStreetMap
+# pretty selfexplanatory
 library(pbapply)
 source("R/functions.R")
 # create a dummy frame

@@ -1,10 +1,11 @@
+# this is the script for evaluating the non-temporal models for germany
 library(readr)
 library(sf)
 library(INLA)
 library(ggplot2)
 library(patchwork)
 library(tibble)
-# source("R/nontemporal_models_germany.R")
+# load the data
 newest_numbers <- read_csv("eval_data/newest_numbers_germany_may2.csv")
 germany_sf <- read_sf("wrangled_data/shapes_germany.shp")
 newest_numbers <- merge(
@@ -20,7 +21,7 @@ load("models/nontemporal_germany.Rda")
 newest_numbers[
   order(newest_numbers$value, decreasing = TRUE),
 ][1:5, c("municipality", "population", "value")]
-####################### Model with no spatial component
+# first model with no spatial component
 # get the dic
 models_final[[2]][[1]]$dic
 # get the waic
@@ -28,7 +29,7 @@ models_final[[2]][[1]]$waic
 # get the cpo
 models_final[[2]][[1]]$cpo
 # get the mae
-models_final[[3]][c(1,4)]
+models_final[[3]][c(1, 4)]
 # get the summary
 round(models_final[[1]][[1]]$summary.fixed[
   order(models_final[[1]][[1]]$summary.fixed$mean),

@@ -1,21 +1,20 @@
+# this is the script used for fitting distributions to the german numbers
 library(fitdistrplus)
-library(qqplotr)
 library(patchwork)
+library(qqplotr)
 source("R/preprocess_timeseries.R")
-mean(ts_germany$new_cases)
-sd(ts_germany$new_cases)
-mean(ts_norway$new_cases)
-sd(ts_norway$new_cases)
 # create the cullen and frey graph
 set.seed(420)
 descdist(ts_germany$new_cases, discrete = TRUE)
-# try poission, negative binomial and normal distribution
+# try poission, negative binomial, logistic and normal distribution
 fit_poisson <- fitdist(ts_germany$new_cases, "pois")
 fit_nbinomial <- fitdist(ts_germany$new_cases, "nbinom")
 fit_normal <- fitdist(ts_germany$new_cases, "norm")
 fit_logistic <- fitdist(ts_germany$new_cases, "logis")
+# get the ecdf function
 ecdf_new_cases <- ecdf(ts_germany$new_cases)
 ts_germany$ecdf <- ecdf_new_cases(ts_germany$new_cases)
+# draw a sample based on the estimates
 x_nbinom <- rnbinom(
   nrow(ts_germany),
   size = fit_nbinomial$estimate[1],
@@ -35,6 +34,11 @@ x_logistic <- rlogis(
   location = fit_logistic$estimate[1],
   scale = fit_logistic$estimate[2]
 )
+# get the ecdf functions
+ecdf_nbinom <- ecdf(x_nbinom)
+ecdf_normal <- ecdf(x_normal)
+ecdf_poisson <- ecdf(x_poisson)
+# create the qq plots
 ecdf_nbinom <- ecdf(x_nbinom)
 ecdf_normal <- ecdf(x_normal)
 ecdf_poisson <- ecdf(x_poisson)
@@ -159,7 +163,7 @@ qqplot_logistic <- ggplot(
   labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
   theme_minimal() +
   ggtitle("QQ-Plot for Germany", "Logistic distribution")
-
+# create the cdf plots
 cdf_plot_nbinom <- ggplot() +
   geom_point(
     aes(
@@ -252,16 +256,16 @@ cdf_plot_logistic <- ggplot() +
   ) +
   ggtitle("Emp. and theo. CDFs for Germany", "Logistic distribution")
 
-
+# combine both plots
 qqplot_nbinom + cdf_plot_nbinom
 qqplot_normal + cdf_plot_normal
 qqplot_poisson + cdf_plot_poisson
 qqplot_logistic + cdf_plot_logistic
-# plot the fits
-# compare aic
+# get the aics
 fit_poisson$aic
 fit_nbinomial$aic
 fit_normal$aic
+# draw distribution based on estimates
 x_nbinom <- rnbinom(
   10 * nrow(ts_germany),
   size = fit_nbinomial$estimate[1],
@@ -276,7 +280,7 @@ x_poisson <- rpois(
   10 * nrow(ts_germany),
   lambda = fit_poisson$estimate[1]
 )
-
+# tibble for plotting
 distr <- tibble(
   new_cases = c(x_nbinom, x_normal, x_poisson),
   distribution = c(
@@ -285,6 +289,7 @@ distr <- tibble(
     rep("Poisson", 10 * nrow(ts_germany))
   )
 )
+# plot the distributions
 distrplot_1 <- ggplot() +
   geom_histogram(
     data = ts_germany,

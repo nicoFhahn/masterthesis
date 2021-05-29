@@ -37,17 +37,17 @@ C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
 # define the formulas for all three models
 formula_besag <- value ~
 urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
-  marketplace + place_of_worship + nursing_home + 
+  marketplace + place_of_worship + nursing_home +
   office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "besagproper", graph = g, hyper = prior)
 formula_bym2 <- value ~
 urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
-  marketplace + place_of_worship + nursing_home + 
+  marketplace + place_of_worship + nursing_home +
   office + platform + higher_education + vaccine_shots +
   f(idarea_1, model = "bym2", graph = g, scale.model = TRUE, hyper = prior)
 formula_leroux <- value ~ vaccine_shots +
   urb_dens + median_age + unemp_tot + unemp_immg + immigrants_total + sex +
-  marketplace + place_of_worship + nursing_home + 
+  marketplace + place_of_worship + nursing_home +
   office + platform + higher_education +
   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior)
 # now for each value in 0.1, 0.11, ..., 2 do:

@@ -34,8 +34,8 @@ output$dropdown_ui_europe <- renderUI({
     choices = list(
       "General key figures" = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(3:14, 38)])]),
       Mobility = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(15:20)])]),
-      "Government measures" = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(21:37)])]),
-      Health = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(1, 2, 39)])])
+      "Government measures" = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(21:33, 36, 37)])]),
+      Health = sort(colnames_europe_nice[which(colnames_europe_actual %in% cols[c(1, 2, 34, 35, 39)])])
     ),
     selected = "Life expectancy"
   )

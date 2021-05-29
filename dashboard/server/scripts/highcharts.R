@@ -834,6 +834,11 @@ output$highchart_europe <- renderHighchart({
   dates <- format(unique(
     cases_europe$Date
   ), "%d.%m")
+  missing_dates <- cases_europe$Date[!cases_europe$Date %in% ts_country$Date]
+  missing_tibble <- ts_country[1:length(missing_dates), ]
+  missing_tibble[, 49:52] <- 0
+  missing_tibble$Date <- missing_dates
+  ts_country <- rbind(missing_tibble, ts_country)
   if (input$inf_numbers_europe == "Total number of infections") {
     highchart() %>%
       hc_xAxis(
@@ -1113,6 +1118,145 @@ output$highchart_europe <- renderHighchart({
       hc_yAxis(
         title = list(
           text = "Incidence",
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_legend(
+        verticalAlign = "top",
+        align = "right",
+        layout = "vertical",
+        itemStyle = list(
+          color = "#fff",
+          `font-size` = "calc(0.1em + 0.5vw)"
+        )
+      )
+  }
+})
+
+output$highchart_europe_1 <- renderHighchart({
+  if (!is.na(model_europe$results$ts_country)) {
+    dates <- format(
+      model_europe$results$ts_country$Date, "%d.%m"
+    )
+    highchart() %>%
+      hc_xAxis(
+        categories = dates,
+        title = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_add_series(
+        data = round(as.matrix(model_europe$results$predictions_tibble[, 2:3]), 3),
+        type = "arearange",
+        color = "#7BD389",
+        fillOpacity = 0.3,
+        name = "95% conf.",
+        tooltip = list(
+          enabled = FALSE
+        )
+      ) %>%
+      hc_add_series(
+        data = model_europe$results$actual_numbers,
+        type = "line",
+        name = "Truth",
+        color = "#FF3F38",
+        opacity = 0.6
+      ) %>%
+      hc_add_series(
+        data = round(model_europe$results$predictions_tibble$mean),
+        type = "line",
+        name = "Prediction",
+        color = "#3cbc38"
+      ) %>%
+      hc_title(
+        text = paste("Predicted infection numbers in", model_europe$results$ts_country$Country[1]),
+        style = list(
+          color = "#fff",
+          fontSize = "calc(0.5em + 0.5vw)"
+        )
+      ) %>%
+      hc_yAxis(
+        title = list(
+          text = "Value",
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_legend(
+        verticalAlign = "top",
+        align = "right",
+        layout = "vertical",
+        itemStyle = list(
+          color = "#fff",
+          `font-size` = "calc(0.1em + 0.5vw)"
+        )
+      )
+  }
+})
+
+output$highchart_europe_2 <- renderHighchart({
+  if (!is.na(model_europe$results$ts_country)) {
+    dates <- format(
+      model_europe$results$ts_country$Date, "%d.%m"
+    )
+    highchart() %>%
+      hc_xAxis(
+        categories = dates,
+        title = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
+        )
+      ) %>%
+      hc_add_series(
+        data = round(as.numeric(model_europe$results$car)),
+        type = "line",
+        name = "Temporal trend",
+        color = "#1BB6AF"
+      ) %>%
+      hc_title(
+        text = paste("Posterior temporal trend in", model_europe$results$ts_country$Country[1]),
+        style = list(
+          color = "#fff",
+          fontSize = "calc(0.5em + 0.5vw)"
+        )
+      ) %>%
+      hc_yAxis(
+        title = list(
+          text = "Value",
           style = list(
             color = "#fff",
             `font-size` = "calc(0.3em + 0.5vw)"

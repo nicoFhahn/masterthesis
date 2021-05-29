@@ -1,3 +1,5 @@
+# this is the script for evaluating the temporal models for germany
+# for a commented version see germany
 library(readr)
 library(INLA)
 library(latex2exp)
@@ -15,20 +17,29 @@ mae[c(14, 15, 23, 25)]
 mae[c(1, 2, 10, 12)]
 new_cases_seven <- c()
 new_cases_predicted_seven <- c()
-ts_norway$new_cases_predicted <- round(pred_tibble$mean[pred_tibble$model == 12])
+ts_norway$new_cases_predicted <- round(
+  pred_tibble$mean[pred_tibble$model == 12]
+)
 for (i in seq_len(nrow(ts_norway))) {
   start <- max(i - 6, 1)
   new_cases_seven[i] <- sum(ts_norway$new_cases[seq(start, i)])
-  new_cases_predicted_seven[i] <- sum(ts_norway$new_cases_predicted[seq(start, i)])
+  new_cases_predicted_seven[i] <- sum(
+    ts_norway$new_cases_predicted[seq(start, i)]
+  )
 }
 ts_norway$new_cases_seven <- new_cases_seven
 ts_norway$new_cases_predicted_seven <- new_cases_predicted_seven
-ts_norway$incidence_seven <- 100000 * ts_norway$new_cases_seven / ts_norway$population
-ts_norway$incidence_predicted_seven <- 100000 * ts_norway$new_cases_predicted_seven / ts_norway$population
+ts_norway$incidence_seven <- 100000 *
+  ts_norway$new_cases_seven / ts_norway$population
+ts_norway$incidence_predicted_seven <- 100000 *
+  ts_norway$new_cases_predicted_seven / ts_norway$population
 incidence_tibble <- tibble(
   incidence = c(ts_norway$incidence_seven, ts_norway$incidence_predicted_seven),
   Date = rep(ts_norway$Date, 2),
-  Type = c(rep("Actual 7-Day incidence", nrow(ts_norway)), rep("Predicted 7-Day incidence", nrow(ts_norway)))
+  Type = c(
+    rep("Actual 7-Day incidence", nrow(ts_norway)),
+    rep("Predicted 7-Day incidence", nrow(ts_norway))
+  )
 )
 ggplot(data = incidence_tibble) +
   geom_line(aes(x = Date, y = incidence, colour = Type), size = 1) +
@@ -128,11 +139,9 @@ ggplot(data = ts_norway) +
     "Posterior temporal trend for the number of infections"
   )
 
-# get the summary of the bym2 model
 round(models[[12]]$summary.fixed[
   order(models[[12]]$summary.fixed$mean), 1:2
 ], 3)
-# get the exponentiated coefficients
 round(sapply(
   models[[12]]$marginals.fixed[
     rownames(models[[12]]$summary.fixed[

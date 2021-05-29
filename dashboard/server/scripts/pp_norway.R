@@ -56,12 +56,12 @@ expected_count <- expected(
 newest_numbers_norway$expected_count <- expected_count
 # calculate the SIR
 newest_numbers_norway$sir <- newest_numbers_norway$value / newest_numbers_norway$expected_count
-newest_numbers_norway$sir <- round(newest_numbers_norway$sir, 1)
-newest_numbers_norway$expected_count <- round(expected_count, 1)
+newest_numbers_norway$sir <- round(newest_numbers_norway$sir, 2)
+newest_numbers_norway$expected_count <- round(expected_count, 2)
 newest_numbers_norway <- st_as_sf(newest_numbers_norway)
 st_crs(newest_numbers_norway) <- 4326
 # calculate the proportion of infected people
-newest_numbers_norway$inf_rate <- round(newest_numbers_norway$value / newest_numbers_norway$population, 1)
+newest_numbers_norway$inf_rate <- round(newest_numbers_norway$value / newest_numbers_norway$population, 2)
 rownames(newest_numbers_norway) <- NULL
 colnames(newest_numbers_norway)[37] <- "infections"
 norway_munc_conf_long <- norway_munc_conf_long[

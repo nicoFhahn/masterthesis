@@ -49,10 +49,6 @@ ui <- dashboardPage(
       menuItem(
         text = "Temporal Modelling",
         tabName = "modelling_temporal"
-      ),
-      menuItem(
-        text = "Spatio-temporal Modelling",
-        tabName = "modelling_spatio_temporal"
       )
     )
   ),
@@ -230,7 +226,7 @@ ui <- dashboardPage(
           width = 10,
           mapdeckOutput(
             "sir_map_norway",
-            height = "60vh"
+            height = "80vh"
           )
         )
       ),
@@ -250,7 +246,7 @@ ui <- dashboardPage(
           width = 10,
           mapdeckOutput(
             "sir_map_germany",
-            height = "60vh"
+            height = "80vh"
           )
         )
       ),
@@ -295,11 +291,14 @@ ui <- dashboardPage(
             )
           ),
           fluidRow(
-            actionBttn(
-              inputId = "start_norway",
-              label = "Calculate BYM2 model",
-              style = "material-flat",
-              color = "danger"
+            column(
+              width = 12,
+              actionBttn(
+                inputId = "start_norway",
+                label = "Calculate BYM2 model",
+                style = "material-flat",
+                color = "danger"
+              )
             )
           )
         ),
@@ -339,12 +338,14 @@ ui <- dashboardPage(
           ),
           br(),
           fluidRow(
-            dataTableOutput(
+            DTOutput(
               "datatable_1_norway"
             )
           ),
+          br(),
+          br(),
           fluidRow(
-            dataTableOutput(
+            DTOutput(
               "datatable_2_norway"
             )
           )
@@ -391,11 +392,14 @@ ui <- dashboardPage(
             )
           ),
           fluidRow(
-            actionBttn(
-              inputId = "start_germany",
-              label = "Calculate BYM2 model",
-              style = "material-flat",
-              color = "danger"
+            column(
+              width = 12,
+              actionBttn(
+                inputId = "start_germany",
+                label = "Calculate BYM2 model",
+                style = "material-flat",
+                color = "danger"
+              )
             )
           )
         ),
@@ -435,12 +439,14 @@ ui <- dashboardPage(
           ),
           br(),
           fluidRow(
-            dataTableOutput(
+            DTOutput(
               "datatable_1_germany"
             )
           ),
+          br(),
+          br(),
           fluidRow(
-            dataTableOutput(
+            DTOutput(
               "datatable_2_germany"
             )
           )
@@ -448,10 +454,139 @@ ui <- dashboardPage(
       ),
       tabItem(
         tabName = "modelling_temporal",
-        h3("Hi")
+        column(
+          width = 3,
+          fluidRow(
+            multiInput(
+              inputId = "multi_europe_mobility",
+              label = "Select demographic variables",
+              choices = sort(colnames_europe_nice[which(colnames_europe_actual %in% colnames(ts_europe)[5:43][c(15:20)])]),
+              width = "100%"
+            )
+          ),
+          fluidRow(
+            multiInput(
+              inputId = "multi_europe_government",
+              label = "Select government measure variables",
+              choices = sort(colnames_europe_nice[which(colnames_europe_actual %in% colnames(ts_europe)[5:43][c(21:33, 36, 37)])]),
+              width = "100%"
+            ),
+          ),
+          fluidRow(
+            multiInput(
+              inputId = "multi_europe_health",
+              label = "Select vaccination variables",
+              choices = sort(colnames_europe_nice[which(colnames_europe_actual %in% colnames(ts_europe)[5:43][c(34:35)])]),
+              width = "100%"
+            ),
+          )
+        ),
+        column(
+          width = 3,
+          fluidRow(
+            column(
+              width = 6,
+              textInput(
+                "sigma_0_europe",
+                "Enter sigma_0",
+                1
+              )
+            ),
+            column(
+              width = 6,
+              textInput(
+                "alpha_europe",
+                "Enter alpha",
+                0.01
+              )
+            )
+          ),
+          fluidRow(
+            column(
+              width = 12,
+              pickerInput(
+                inputId = "temporal_term",
+                label = "Select type of temporal term",
+                choices = c(
+                  "iid",
+                  "rw1",
+                  "rw2",
+                  "ar1",
+                  "ou"
+                ),
+                width = "100%"
+              )
+            )
+          ),
+          fluidRow(
+            column(
+              width = 12,
+              pickerInput(
+                inputId = "temporal_country",
+                label = "Select country",
+                choices = sort(unique(ts_europe$Country)),
+                selected = "Norway",
+                width = "100%"
+              )
+            )
+          ),
+          fluidRow(
+            column(
+              width = 12,
+              textInput(
+                inputId = "test_size_temporal",
+                label = "Select test size",
+                value = 21,
+                width = "100%"
+              )
+            )
+          ),
+          fluidRow(
+            column(
+              width = 12,
+              actionBttn(
+                inputId = "start_europe",
+                label = "Calculate temporal model",
+                style = "material-flat",
+                color = "danger"
+              )
+            )
+          )
+        ),
+        column(
+          width = 6,
+          fluidRow(
+            column(
+              width = 12,
+              highchartOutput(
+                "highchart_europe_1"
+              )
+            )
+          ),
+          fluidRow(
+            column(
+              width = 12,
+              highchartOutput(
+                "highchart_europe_2"
+              )
+            )
+          ),
+          fluidRow(
+            DTOutput(
+              "datatable_1_europe"
+            )
+          ),
+          br(),
+          br(),
+          fluidRow(
+            DTOutput(
+              "datatable_2_europe"
+            )
+          )
+        )
       )
     )
   ),
-  title = "Covid or sth.",
+  title = "Covid-19 Dashboard",
   skin = "black"
 )
