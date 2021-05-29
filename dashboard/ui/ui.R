@@ -585,7 +585,8 @@ ui <- dashboardPage(
           )
         )
       )
-    )
+    ),
+    add_busy_spinner(color = "#F95738")
   ),
   title = "Covid-19 Dashboard",
   skin = "black"

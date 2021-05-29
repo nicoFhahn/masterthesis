@@ -22,13 +22,13 @@ library(spdep)
 library(stringr)
 library(tibble)
 local <- TRUE
-if (!local) {
-  source(file.path("server", "scripts/pp_europe.R"), local = TRUE)$value
-  source(file.path("server", "scripts/pp_norway.R"), local = TRUE)$value
-  source(file.path("server", "scripts/pp_germany.R"), local = TRUE)$value
-} else {
-  load("local_files.RData")
-}
+# if (!local) {
+#   source(file.path("server", "scripts/pp_europe.R"), local = TRUE)$value
+#   source(file.path("server", "scripts/pp_norway.R"), local = TRUE)$value
+#   source(file.path("server", "scripts/pp_germany.R"), local = TRUE)$value
+# } else {
+#   load("local_files.RData")
+# }
 pois_norway <- read_csv("server/data/norge_all.csv")
 pois_germany <- read_csv("server/data/germany_all.csv")
 token <- "pk.eyJ1Ijoibmljb2hhaG4iLCJhIjoiY2p2YzU4ZWNiMWY4ZTQ2cGZsZHB5cDJzZiJ9.Sg3fJKvEhfkuhKx7aBBjZA"
