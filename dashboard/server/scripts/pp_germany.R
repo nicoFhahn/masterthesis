@@ -173,6 +173,8 @@ newest_numbers_germany$sir <- newest_numbers_germany$CumNumberTestedIll / newest
 newest_numbers_germany$sir <- round(newest_numbers_germany$sir, 2)
 newest_numbers_germany$expected_count <- round(expected_count, 2)
 newest_numbers_germany <- st_as_sf(newest_numbers_germany)
+newest_numbers_germany$pop_dens <- round(newest_numbers_germany$pop_dens)
+newest_numbers_germany$urb_dens <- round(newest_numbers_germany$urb_dens)
 st_crs(newest_numbers_germany) <- 4326
 # calculate the proportion of infected people
 newest_numbers_germany$inf_rate <- round(newest_numbers_germany$CumNumberTestedIll / newest_numbers_germany$population, 2)

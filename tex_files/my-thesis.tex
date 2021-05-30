@@ -36,8 +36,19 @@
 \usepackage{svg}
 \usepackage{multirow}
 \usepackage[symbols,nogroupskip,sort=none]{glossaries-extra}
+\usepackage{pdfpages}
 \input{tikz.tikzstyles}
-
+\usetikzlibrary{positioning,arrows.meta}
+\newdimen\nodeDist
+\nodeDist=35mm
+\newcounter{algsubstate}
+\renewcommand{\thealgsubstate}{\alph{algsubstate}}
+\newenvironment{algsubstates}
+  {\setcounter{algsubstate}{0}%
+   \renewcommand{\State}{%
+     \stepcounter{algsubstate}%
+     \Statex {\footnotesize\thealgsubstate:}\space}}
+  {}
 
 % **************************************************
 % Setup YOUR thesis document in this file !
@@ -98,8 +109,10 @@
 %\input{acknowledgement} % INCLUDE: acknowledgement
 \cleardoublepage
 %
+\includepdf[fitpaper=true, pages=-]{titlepage-1.pdf}
 \currentpdfbookmark{\contentsname}{toc}
 \setcounter{tocdepth}{2}		% define depth of toc
+\input{abstract}
 \tableofcontents				% display table of contents
 \cleardoublepage
 \printunsrtglossary[type=symbols,style=long]
@@ -109,13 +122,14 @@
 % --------------------------
 \pagenumbering{arabic}			% arabic page numbering
 \setcounter{page}{1}			% set page counter
-\pagestyle{scrheadings}			% header and footer style
-
+\pagestyle{scrheadings}			% header and footer style#
 \input{chapter-introduction}
 \input{chapter-bayes}
 \input{chapter-geodata}
+\input{chapter-ml}
 \input{chapter-datacollection}
 \input{chapter-analysis}
+\input{chapter-shiny}
 \input{chapter-discussion}
 \input{chapter-conclusion}
 \input{chapter-appendix}
@@ -137,18 +151,15 @@
 \listoftables
 \cleardoublepage
 
-\lstlistoflistings
+%\lstlistoflistings
 \cleardoublepage
 
 \appendix\cleardoublepage
 %\input{chapter-appendix}       % INCLUDE: appendix
 \cleardoublepage
-%\input{declaration}
+\input{declaration}
 \clearpage
-
-\newpage
-\mbox{}
-
+\includepdf[fitpaper=true, pages=-]{titlepage-3.pdf}
 % **************************************************
 % End of Document CONTENT
 % **************************************************

@@ -20,56 +20,58 @@ output$highchart_norway_1 <- renderHighchart({
     ),
     input$picker_norway
   )
-  if (str_detect(part_2, "Bakerie")) part_2 <- str_replace(part_2, "Bakerie", "Bakery")
-  if (str_detect(part_2, "Places of")) part_2 <- str_replace(part_2, "Places of", "Place of")
-  if (str_detect(part_2, "facilitie")) part_2 <- str_replace(part_2, "facilitie", "facility")
-  axis_title <- ifelse(
-    selected %in% cols[8:25],
-    "Number of buildings",
-    input$picker_norway
-  )
-  hchart(
-    no_geometry_norway[, selected],
-    color = "#E8D7FF"
-  ) %>%
-    hc_title(
-      text = paste(part_1, part_2),
-      style = list(
-        color = "#fff",
-        fontSize = "calc(0.5em + 0.5vw)"
-      )
+  if (length(selected) > 0) {
+    if (str_detect(part_2, "Bakerie")) part_2 <- str_replace(part_2, "Bakerie", "Bakery")
+    if (str_detect(part_2, "Places of")) part_2 <- str_replace(part_2, "Places of", "Place of")
+    if (str_detect(part_2, "facilitie")) part_2 <- str_replace(part_2, "facilitie", "facility")
+    axis_title <- ifelse(
+      selected %in% cols[8:25],
+      "Number of buildings",
+      input$picker_norway
+    )
+    hchart(
+      no_geometry_norway[, selected],
+      color = "#E8D7FF"
     ) %>%
-    hc_xAxis(
-      title = list(
-        text = axis_title,
+      hc_title(
+        text = paste(part_1, part_2),
         style = list(
           color = "#fff",
-          `font-size` = "calc(0.3em + 0.5vw)"
+          fontSize = "calc(0.5em + 0.5vw)"
         )
-      ),
-      labels = list(
-        style = list(
-          color = "#fff",
-          `font-size` = "calc(0.1em + 0.5vw)"
+      ) %>%
+      hc_xAxis(
+        title = list(
+          text = axis_title,
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
         )
-      )
-    ) %>%
-    hc_yAxis(
-      title = list(
-        text = "Frequency",
-        style = list(
-          color = "#fff",
-          `font-size` = "calc(0.3em + 0.5vw)"
+      ) %>%
+      hc_yAxis(
+        title = list(
+          text = "Frequency",
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.3em + 0.5vw)"
+          )
+        ),
+        labels = list(
+          style = list(
+            color = "#fff",
+            `font-size` = "calc(0.1em + 0.5vw)"
+          )
         )
-      ),
-      labels = list(
-        style = list(
-          color = "#fff",
-          `font-size` = "calc(0.1em + 0.5vw)"
-        )
-      )
-    ) %>%
-    hc_legend(enabled = FALSE)
+      ) %>%
+      hc_legend(enabled = FALSE) 
+  }
 })
 
 output$highchart_norway_2 <- renderHighchart({

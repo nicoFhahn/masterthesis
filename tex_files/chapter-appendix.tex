@@ -197,155 +197,311 @@ with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \auto
     \label{comparison_germany_7}
 \end{figure}
 \clearpage
-\section{Code Examples}
-\subsection{Specifying the Different Types of Models}
-\begin{lstlisting}[caption={Specifying different models in INLA.}, label={codeModels}, language=R]
-# set the seed
-set.seed(420)
-# draw a sample
-test <- sample(
-    seq_len(nrow(newest_numbers)),
-    size = floor(0.2 * nrow(newest_numbers))
-  )
-# get the number of infections for the test data
-test_value <- newest_numbers$value[test]
-# set the number of infections to NA in the train data
-newest_numbers$value[test] <- NA
-# define the link function
-link <- rep(NA, nrow(newest_numbers))
-link[which(is.na(newest_numbers$value))] <- 1
-# for the temporal model every 5th day is taken
-germany <- germany[
-  germany$Date %in% seq(
-    from = min(germany$Date),
-    to = max(germany$Date),
-    by = 5
-  ),
-]
-# draw a sample
-test_temporal <- sample(
-  seq_len(nrow(germany)),
-  size = floor(0.2 * nrow(germany))
-)
-test_value_temporal <- germany$value[test_temporal]
-germany$value[test_temporal] <- NA
-link_temporal <- rep(NA, nrow(germany))
-link_temporal[which(is.na(germany$value))] <- 1
-# define the penalised prior
-prior_1 <- list(
-  prec = list(
-    prior = "pc.prec",
-    param = c(1, 0.01)
-  )
-)
-# create the neighbordhood matrix
-nb <- poly2nb(newest_numbers)
-# save the matrix
-nb2INLA("maps/map.adj", nb)
-g <- inla.read.graph(filename = "maps/map.adj")
-# define the C matrix for the Leroux model
-Q <- Diagonal(x = sapply(nb, length))
-for (i in 2:nrow(newest_numbers)) {
-  Q[i - 1, i] <- -1
-  Q[i, i - 1] <- -1
-}
+% \section{Code Examples}
+% \subsection{Specifying the Different Types of Models}
+% \begin{lstlisting}[caption={Specifying different models in INLA.}, label={codeModels}, language=R]
+% # set the seed
+% set.seed(420)
+% # draw a sample
+% test <- sample(
+%     seq_len(nrow(newest_numbers)),
+%     size = floor(0.2 * nrow(newest_numbers))
+%   )
+% # get the number of infections for the test data
+% test_value <- newest_numbers$value[test]
+% # set the number of infections to NA in the train data
+% newest_numbers$value[test] <- NA
+% # define the link function
+% link <- rep(NA, nrow(newest_numbers))
+% link[which(is.na(newest_numbers$value))] <- 1
+% # for the temporal model every 5th day is taken
+% germany <- germany[
+%   germany$Date %in% seq(
+%     from = min(germany$Date),
+%     to = max(germany$Date),
+%     by = 5
+%   ),
+% ]
+% # draw a sample
+% test_temporal <- sample(
+%   seq_len(nrow(germany)),
+%   size = floor(0.2 * nrow(germany))
+% )
+% test_value_temporal <- germany$value[test_temporal]
+% germany$value[test_temporal] <- NA
+% link_temporal <- rep(NA, nrow(germany))
+% link_temporal[which(is.na(germany$value))] <- 1
+% # define the penalised prior
+% prior_1 <- list(
+%   prec = list(
+%     prior = "pc.prec",
+%     param = c(1, 0.01)
+%   )
+% )
+% # create the neighbordhood matrix
+% nb <- poly2nb(newest_numbers)
+% # save the matrix
+% nb2INLA("maps/map.adj", nb)
+% g <- inla.read.graph(filename = "maps/map.adj")
+% # define the C matrix for the Leroux model
+% Q <- Diagonal(x = sapply(nb, length))
+% for (i in 2:nrow(newest_numbers)) {
+%   Q[i - 1, i] <- -1
+%   Q[i, i - 1] <- -1
+% }
 
-C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
-# formula for the model without the spatial component
-formula_1 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
-  die_linke + clinic + place_of_worship + nursing_home +
-  aerodrome + platform + office + marketplace + higher_education
-# formula for the besag model
-formula_2 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
-  die_linke + clinic + place_of_worship + nursing_home +
-  aerodrome + platform + office + marketplace + higher_education +
-  f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
-# formula for the bym2 model
-formula_3 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
-  die_linke + clinic + place_of_worship + nursing_home +
-  aerodrome + platform + office + marketplace + higher_education +
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  )
-# formula for the leroux model
-formula_4 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
-  die_linke + clinic + place_of_worship + nursing_home +
-  aerodrome + platform + office + marketplace + higher_education +
-  f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
-# formula for the temporal bym2 model
-formula_5 <- value ~
-  pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
-  die_linke + clinic + place_of_worship + nursing_home +
-  aerodrome + platform + office + marketplace + higher_education +
-  f(
-    idarea_1, model = "bym2", graph = g,
-    scale.model = TRUE, hyper = prior_1
-  ) +
-  f(id_date_1, model = "rw2", hyper = prior_1)
-# compute the models
-# for the non-temporal models the code looks like this
-res_1 <- inla(
-  formula_1,
-  family = "nbinomial",
-  data = newest_numbers,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link
-  ),
-  Ntrials = newest_numbers$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-# for the temporal models the code looks like this
-res_5 <- inla(
-  formula_5,
-  family = "nbinomial",
-  data = germany,
-  E = expected_count,
-  control.predictor = list(
-    compute = TRUE,
-    link = link_temporal
-  ),
-  Ntrials = germany$population,
-  control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
-)
-\end{lstlisting}
-\subsection{Making Predictions for the Test Data}
-\begin{lstlisting}[caption={The code for making predictions in INLA.}, label={codePrediction}, language=R]
-\end{lstlisting}
-\subsection{Calculating the Posterior Mean}
-\begin{lstlisting}[caption={Calculating the posterior mean of a coefficent.}, label={codePosteriorMean}, language=R]
-inla.emarginal(
-      exp,
-      res_1$marginals.fixed$`(Intercept)`
-)
-\end{lstlisting}
-\subsection{Calculating a Credibility Interval}
-\begin{lstlisting}[caption={Extracting the credibility interval for a coefficient}, label={codeCredibility}, language=R]
-inla.qmarginal(
-      c(0.025, 0.975),
-      inla.tmarginal(
-        exp,
-        res_1$marginals.fixed$`(Intercept)`
-      )
-)
-\end{lstlisting}
-\subsection{Calculating the Temporal Trend}
-\begin{lstlisting}[caption={Calculating the Temporal Trend of a Model}, label={codeTemporal}, language=R]
-temporal_car <- lapply(
-  res_5$marginals.random$id_date_1,
-  function(x) {
-    marg <- inla.tmarginal(
-      function(y) exp(y),
-      x
-    )
-    inla.emarginal(mean, marg)
-  }
-)
-\end{lstlisting}
+% C <- Diagonal(x = 1, n = nrow(newest_numbers)) - Q
+% # formula for the model without the spatial component
+% formula_1 <- value ~
+%   pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+%   die_linke + clinic + place_of_worship + nursing_home +
+%   aerodrome + platform + office + marketplace + higher_education
+% # formula for the besag model
+% formula_2 <- value ~
+%   pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+%   die_linke + clinic + place_of_worship + nursing_home +
+%   aerodrome + platform + office + marketplace + higher_education +
+%   f(idarea_1, model = "besagproper", graph = g, hyper = prior_1)
+% # formula for the bym2 model
+% formula_3 <- value ~
+%   pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+%   die_linke + clinic + place_of_worship + nursing_home +
+%   aerodrome + platform + office + marketplace + higher_education +
+%   f(
+%     idarea_1, model = "bym2", graph = g,
+%     scale.model = TRUE, hyper = prior_1
+%   )
+% # formula for the leroux model
+% formula_4 <- value ~
+%   pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+%   die_linke + clinic + place_of_worship + nursing_home +
+%   aerodrome + platform + office + marketplace + higher_education +
+%   f(idarea_1, model = "generic1", Cmatrix = C, hyper = prior_1)
+% # formula for the temporal bym2 model
+% formula_5 <- value ~
+%   pop_dens + urb_dens + sex + trade_tax + SPD + Gruene + FDP +
+%   die_linke + clinic + place_of_worship + nursing_home +
+%   aerodrome + platform + office + marketplace + higher_education +
+%   f(
+%     idarea_1, model = "bym2", graph = g,
+%     scale.model = TRUE, hyper = prior_1
+%   ) +
+%   f(id_date_1, model = "rw2", hyper = prior_1)
+% # compute the models
+% # for the non-temporal models the code looks like this
+% res_1 <- inla(
+%   formula_1,
+%   family = "nbinomial",
+%   data = newest_numbers,
+%   E = expected_count,
+%   control.predictor = list(
+%     compute = TRUE,
+%     link = link
+%   ),
+%   Ntrials = newest_numbers$population,
+%   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+% )
+% # for the temporal models the code looks like this
+% res_5 <- inla(
+%   formula_5,
+%   family = "nbinomial",
+%   data = germany,
+%   E = expected_count,
+%   control.predictor = list(
+%     compute = TRUE,
+%     link = link_temporal
+%   ),
+%   Ntrials = germany$population,
+%   control.compute = list(dic = TRUE, waic = TRUE, cpo = TRUE)
+% )
+% \end{lstlisting}
+% \subsection{Making Predictions for the Test Data}
+% \begin{lstlisting}[caption={The code for making predictions in INLA.}, label={codePrediction}, language=R]
+% \end{lstlisting}
+% \subsection{Calculating the Posterior Mean}
+% \begin{lstlisting}[caption={Calculating the posterior mean of a coefficent.}, label={codePosteriorMean}, language=R]
+% inla.emarginal(
+%       exp,
+%       res_1$marginals.fixed$`(Intercept)`
+% )
+% \end{lstlisting}
+% \subsection{Calculating a Credibility Interval}
+% \begin{lstlisting}[caption={Extracting the credibility interval for a coefficient}, label={codeCredibility}, language=R]
+% inla.qmarginal(
+%       c(0.025, 0.975),
+%       inla.tmarginal(
+%         exp,
+%         res_1$marginals.fixed$`(Intercept)`
+%       )
+% )
+% \end{lstlisting}
+% \subsection{Calculating the Temporal Trend}
+% \begin{lstlisting}[caption={Calculating the Temporal Trend of a Model}, label={codeTemporal}, language=R]
+% temporal_car <- lapply(
+%   res_5$marginals.random$id_date_1,
+%   function(x) {
+%     marg <- inla.tmarginal(
+%       function(y) exp(y),
+%       x
+%     )
+%     inla.emarginal(mean, marg)
+%   }
+% )
+% \end{lstlisting}
+
 \clearpage
+\section{OpenStreetMap Key-Value Pairs}\label{sec:kv}
+\begin{table}[H]
+\caption{A list of all the key-value pairs used to query OpenStreetMap, except the ones used for residential buildings \label{OSM}}
+\begin{tabular}{l l l}
+\toprule
+\textbf{Key} & \textbf{Value} & \textbf{Description} \\
+\midrule
+\multirow{21}{*}{amenity} & cinema & A place where films are shown \\
+& \multirow{2}{*}{clinic} & A medium-sized medical facility \\
+& & or health centre. \\
+& \multirow{2}{*}{college} & Campus or buildings of an institute \\
+& & of Further Education \\
+& dentist & A dentist practice / surgery \\
+& doctors &  A doctor's practice / surgery \\
+& \multirow{2}{*}{hospital} & A hospital providing in-patient \\
+& & medical treatment \\
+& kindergarten & For children too young for a regular school \\
+& \multirow{2}{*}{marketplace} & A marketplace where goods and services \\
+& & are traded daily or weekly \\
+& nightclub & A place to drink and dance \\
+& nursing\_home & A home for disabled or elderly persons \\
+& place\_of\_worship &  A church, mosque, or temple, etc. \\
+& restaurant & A restaurant \\
+& \multirow{2}{*}{school} & School and grounds - primary, middle \\
+& & and secondary schools \\
+& theatre & A theatre or opera house \\
+& \multirow{2}{*}{university} & An university campus: an institute \\
+& & of higher education\\
+\midrule 
+\multirow{3}{*}{building} & office & An office building \\
+& \multirow{2}{*}{retail} & A building primarily used for selling goods \\
+& & that are sold to the public \\
+\midrule
+\multirow{3}{*}{leisure} & fitness\_centre & Fitness centre, health club or gym \\
+& \multirow{2}{*}{sports\_centre} & Facility where sports take place within \\
+& & an enclosed area \\
+\midrule
+public\_transport & platform & Public transport platforms \\
+\midrule
+\multirow{7}{*}{shop} & bakery & Shop focused on selling bread	\\
+& \multirow{2}{*}{chemist} & Shop focused on selling articles of personal \\
+& & hygiene, cosmetics, household products \\
+& \multirow{2}{*}{convenience} & A small local shop carrying a small subset \\
+& & of the items you would find in a supermarket	\\
+& hairdresser & Here you can get your hair cut, coloured \\
+& supermarket & A large store with groceries and other items \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[H]
+\caption{A list of all the key-value pairs used to query OpenStreetMap for residential buildings \label{OSM_2}}
+\begin{tabular}{l l l}
+\toprule
+\textbf{Key} & \textbf{Value} & \textbf{Description} \\
+\midrule
+\multirow{21}{*}{building} & \multirow{2}{*}{apartments} & A building arranged into individual dwellings, \\
+& & often on separate floors \\
+& bungalow & A single-storey detached small house \\
+& cabin & A small, roughly built house \\
+& detached & A free-standing residential building \\
+& \multirow{2}{*}{dormitory} & A shared building intended for college/\\
+& & university students \\
+& farm & A residential building on a farm \\
+& \multirow{2}{*}{ger} & A permanent or seasonal round yurt or \\
+& & ger used as dwelling \\
+& \multirow{2}{*}{hotel} & A building designed with separate rooms \\
+& & available for overnight accommodation \\
+& house & A dwelling unit inhabited by a single household \\
+& houseboat & A boat used primarily as a home\\
+& residential & A building used primarily for residential purposes \\
+& \multirow{2}{*}{semidetached\_house} & A residential house that shares a common wall \\
+& & with another on one side \\
+& \multirow{2}{*}{static caravan} & A mobile home (semi)permanently left \\
+& & on a single site \\
+& terrace & A linear row of residential dwellings \\
+\bottomrule
+\end{tabular}
+\end{table}
+\subsection*{Combination of Key-Value Pairs}
+The following table shows which key-value pairs were combined, due to their similarity.
+\begin{table}[H]
+\caption{A list of all the key-value pairs that were combined to create variables \label{OSM_3}}
+\begin{tabular}{l l l}
+\toprule
+\textbf{Key} & \textbf{Value} & \textbf{Variable} \\
+\midrule
+\multirow{3}{*}{amenity} & cinema & \multirow{3}{*}{Entertainment} \\
+& nightclub \\
+& theatre \\
+\midrule
+\multirow{3}{*}{amenity} & clinic & \multirow{3}{*}{Clinic} \\
+& dentist \\
+& doctors \\
+\midrule
+\multirow{2}{*}{amenity} & college & \multirow{2}{*}{Higher Education} \\
+& university \\
+\midrule
+\multirow{2}{*}{leisure} & fitness\_centre & \multirow{2}{*}{Sports} \\
+& sports\_centre \\
+\midrule
+\multirow{3}{*}{shop} & chemist & \multirow{3}{*}{Shop} \\
+& convenience \\
+& supermarket \\
+\bottomrule
+\end{tabular}
+\end{table}
+\clearpage
+\section{Software Used}
+All the analysis that was carried out was done so using the 4.1 version of the statistical software R \autocite[][]{baser}. The following packages were used as part of the analysis:
+\begin{itemize}
+    \item \texttt{covid19germany} \autocite[][]{covid19germany}
+    \item \texttt{covidregionaldata} \autocite[][]{covidregionaldata}
+    \item \texttt{data.table} \autocite[][]{data.table}
+    \item \texttt{dashboardthemes} \autocite[][]{dashboardthemes}
+    \item \texttt{dplyr} \autocite[][]{dplyr}
+    \item \texttt{DT} \autocite[][]{DT}
+    \item \texttt{eurostat} \autocite[][]{eurostat}
+    \item \texttt{fitdistrplus} \autocite[][]{fitdistrplus}
+    \item \texttt{furrr} \autocite[][]{furrr}
+    \item \texttt{geosphere} \autocite[][]{geosphere}
+    \item \texttt{ggplot2} \autocite[][]{ggplot2}
+    \item \texttt{here} \autocite[][]{here}
+    \item \texttt{highcharter} \autocite[][]{highcharter}
+    \item \texttt{iml} \autocite[][]{iml}
+    \item \texttt{INLA} \autocite[][]{INLA}
+    \item \texttt{ISOcodes} \autocite[][]{ISOcodes}
+    \item \texttt{LaCroixColoR} \autocite[][]{LaCroixColoR}
+    \item \texttt{lwgeom} \autocite[][]{lwgeom}
+    \item \texttt{latex2exp} \autocite[][]{latex2exp}
+    \item \texttt{mapdeck} \autocite[][]{mapdeck}
+    \item \texttt{MASS} \autocite[][]{MASS}
+    \item \texttt{mlr} \autocite[][]{mlr}
+    \item \texttt{osmdata} \autocite[][]{osmdata}
+    \item \texttt{parallelMap} \autocite[][]{parallelMap}
+    \item \texttt{patchwork} \autocite[][]{patchwork}
+    \item \texttt{pbapply} \autocite[][]{pbapply}
+    \item \texttt{qqplotr} \autocite[][]{qqplotr}
+    \item \texttt{readr} \autocite[][]{readr}
+    \item \texttt{regclass} \autocite[][]{regclass}
+    \item \texttt{reshape2} \autocite[][]{reshape2}
+    \item \texttt{rlist} \autocite[][]{rlist}
+    \item \texttt{RSelenium} \autocite[][]{RSelenium}
+    \item \texttt{sass} \autocite[][]{sass}
+    \item \texttt{sf} \autocite[][]{sf}
+    \item \texttt{shiny} \autocite[][]{shiny}
+    \item \texttt{shinybusy} \autocite[][]{shinybusy}
+    \item \texttt{shinydashboard} \autocite[][]{shinydashboard}
+    \item \texttt{shinyWidgets} \autocite[][]{shinyWidgets}
+    \item \texttt{SpatialEpi} \autocite[][]{SpatialEpi}
+    \item \texttt{spdep} \autocite[][]{spdep}
+    \item \texttt{stringr} \autocite[][]{stringr}
+    \item \texttt{tibble} \autocite[][]{tibble}
+    \item \texttt{units} \autocite[][]{units}
+    \item \texttt{waiter} \autocite[][]{waiter}
+\end{itemize}

@@ -2,7 +2,7 @@
 %
 \chapter{Data Analysis}
 \label{sec:analysis}
-This chapter will focus on the analysis of the research question. First, it will take a look at the standardised incidence rate in each country. Next, the relationship between the number of infections and several factors of interest will be analysed. For this analysis, a probability must be found that fits the data reasonably well. One way to do this is presented in Section~\ref{sec:likelihood}. Thereafter, two different types of models are calculated; models without a spatial component and models with a spatial component. Section~\ref{sec:nospatial} contains the results of the models without a spatial component and Section~\ref{ch:spatial} contains the results of the models with the spatial component. Next, it is analysed how the performance of the spatial models changes when changing the value for the standard deviation $\sigma_0$ in Equation~\ref{pcprec}.
+This chapter focuses on the analysis of the research questions. First, a look is taken at the standardized incidence ratio in each country. Next, the relationship between the number of infections and several factors of interest is analysed. For this analysis, a probability must be found that fits the data reasonably well. One way to do this is presented in Section~\ref{sec:likelihood}. Thereafter, two different types of models are calculated; models without a spatial component and models with a spatial component. Section~\ref{sec:nospatial} contains the results of the models without a spatial component and Section~\ref{ch:spatial} contains the results of the models with the spatial component. Next, it is analysed how the performance of the spatial models changes when changing the value for the standard deviation $\sigma_0$ in Equation~\ref{pcprec}. Next, predictive models calculated using the methodology described in chapter~\ref{ch:ml} are shown and compared with the spatial models. Finally, a look is taken at temporal models in Section~\ref{sec:temporal}.
 \clearpage
 \section{Standardised Incidence Ratio (SIR)}
 This section takes a brief look at the SIR for the countries of interest. Recall from Equation~\ref{eq:sir}, that the SIR is defined as the ratio of observed counts to expected counts.
@@ -15,7 +15,7 @@ When looking at the SIR for Germany in Figure~\ref{sirgermany}, it is noticeable
  \label{sirgermany}
 \end{figure}
 \subsection{SIR for Norway}
-Looking at the standardised incidence rate for Norway in Figure~\ref{sirnorway}, a standardised incidence rate of less than 1 can be seen for most municipalities north of Trondheim. In the southern parts of Norway there are several municipalities with a rate above 1, for example the standardised incidence rate around the capital Oslo is around 2. However, the two small municipalities, Hyllestad and Ulvik, have the highest standardised incidence rate in Norway. In Hyllestad, 95 of 1328 people have been infected with Covid-19 so far, while in Ulvik, 134 of 1080 people have been infected so far. \\
+Looking at the standardized incidence ratio for Norway in Figure~\ref{sirnorway}, a standardized incidence ratio of less than 1 can be seen for most municipalities north of Trondheim. In the southern parts of Norway there are several municipalities with a ratio above 1, for example the standardized incidence ratio around the capital Oslo is around 2. However, the two small municipalities, Hyllestad and Ulvik, have the highest standardized incidence ratio in Norway. In Hyllestad, 95 of 1328 people are infected with Covid-19 so far, while in Ulvik, 134 of 1080 people are infected so far. \\
 The SIR in Hyllestad is around 3.4, following an outbreak in a shipyard in autumn 2020 \autocite[][]{newspaper1}, while Ulvik has a ratio of around 5.7, following an outbreak of the UK variant of Covid-19. According to the head of the municipality, Hans Petter Thorbjørnsen, the infections are thought to have spread through children \autocite[][]{newspaper2}.
 \begin{figure}[H]
  \centering
@@ -32,45 +32,44 @@ Because the high numbers from two small municipalities complicate the interpreta
 \end{figure}
 \clearpage
 \section{Data Modelling}
-After looking at the standardised incidence rates for the countries of interest, the next step is to take a closer look at the current figures for the respective countries. Spatial models are used to try to extract the factors that cause some populations to be at higher risk than populations in other geographical regions. Three different types of models are used for each country:
+After looking at the standardized incidence ratios for the countries of interest, the next step is to take a closer look at the current figures for the respective countries. Spatial models are used to try to extract the factors that cause some populations to be at higher risk than populations in other geographical regions. Three different types of models are used for each country:
 \begin{itemize}
   \item[1.] Besags Proper Spatial Model
   \item[2.] A Leroux Model
   \item[3.] A BYM2 Model
 \end{itemize}
 All of these models are computed using the INLA \autocite[][]{rinla} R package. \\
-To specify each type of model, the code shown in Listing~\ref{codeModels} can be used. \\
 The measures introduced in Section~\ref{sec:performance}, namely the DIC, the WAIC, the CPO and the mean absolute error (MAE), are used to compare the models.\\
-In addition to specifying what type of spatial model to use, if any, there is also the option of specifying a prior. \\
+In addition to specifying what type of spatial model to use, if any, there is the option of specifying a prior. \\
 As can be seen in Section~\ref{sec:pc_prior}, a pc prior can be specified for the precision parameter $\tau$, which is what is done here. \\
 For the parameters $\sigma_0$ and $\alpha$ in Equation~\ref{eq:pc_prior_prec} the values 1 and 0.01 are chosen. \\
-The models are compared using the mean absolute error. For this, 20\% of the observations are removed from the training set and used for testing instead. The predicted number of infections for these municipalities is then compared to the actual numbers.
+The models are compared using the mean absolute error. For this, 20\% of the observations are removed from the training set and used for testing instead. The predicted number of infections for these municipalities is compared to the actual numbers.
 \subsection{Choice of Likelihood}\label{sec:likelihood}
 Before the models are computed, however, the distribution that fits the number of cases must first be found. One way to do this, the function \texttt{descdist()} from the \texttt{fitdistrplus} R package is used. The Cullen and Frey graph illustrates how "close" a sample is to a theoretical distribution based on the kurtosis and the square of the skewness, defined in Equation~\ref{eq:kurtosis} and Equation~\ref{eq:skewness}. It can be used to get a preliminary idea of which distributions fit the data, in this case the number of infections, reasonably well. \\
 The plots for Germany and Norway can be seen in Figure~\ref{cf_germany} and Figure~\ref{cf_norway}. The blue dot represents the data, the star a theoretical normal distribution, the dashed line a theoretical Poisson distribution and the grey area a theoretical negative binomial distribution. In both cases, the blue dot is relatively far from the star and lies in the region of a negative binomial distribution. For the Norwegian sample shown in Figure~\ref{cf_norway}, the sample is closer to a Poisson distribution than is the case for the German sample in Figure~\ref{cf_germany}.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{cf_germany.png}
+  \includegraphics[width = \textwidth]{cf_germany.png}
   \caption{The Cullen and Frey graph for Germany}
   \label{cf_germany}
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{cf_norway.png}
+  \includegraphics[width = \textwidth]{cf_norway.png}
   \caption{The Cullen and Frey graph for Norway}
   \label{cf_norway}
 \end{figure}
 Next, a negative binomial distribution, a normal distribution, and a Poisson distribution are fitted to the data using the maximum likelihood method. The negative binomial fits for both countries can be seen in Figure~\ref{fitNegbinomGermany} and Figure~\ref{fitNegbinomNorway}. The fits for the normal and Poisson distribution for both countries, are shown in the Appendix in Figure~\ref{fitNormalGermany}, Figure~\ref{fitPoissonGermany}, Figure~\ref{fitNormalNorway} and Figure~\ref{fitPoissonNorway}. \\
-The QQ-plot for Germany and Norway looks quite similar, as there appears to be a linear relationship between the theoretical quantile and the sample quantiles, up to a certain point where the sample quantiles have a higher value than the theoretical quantiles, indicating that the distribution is right skewed. Since there are many municipalities with relatively few cases and few municipalities with a large number of cases, this is to be expected. It can also be seen that the empirical cumulative density function closely follows the theoretical cumulative density function.
+The QQ-plot for Germany and Norway looks quite similar, as there appears to be a linear relationship between the theoretical quantile and the sample quantiles, up to a certain point where the sample quantiles have a higher value than the theoretical quantiles, indicating that the distribution is right skewed. Since there are many municipalities with relatively few cases and few municipalities with many cases, this is to be expected. It can be seen that the empirical cumulative density function closely follows the theoretical cumulative density function.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{fit_nbinom_germany.png}
+  \includegraphics[width = \textwidth]{fit_nbinom_germany.png}
   \caption{A negative binomial fit to the number of cases in German municipalities}
   \label{fitNegbinomGermany}
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{fit_nbinom_norway.png}
+  \includegraphics[width = \textwidth]{fit_nbinom_norway.png}
   \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
   \label{fitNegbinomNorway}
 \end{figure}
@@ -94,13 +93,13 @@ The poor fit for the Poisson distribution can be explained by looking at the ran
 Looking at a histogram for the confirmed number of cases and overlaying the densities of a normal, Poisson and a negative binomial distribution helps to confirm the choice of a negative binomial distribution as the distribution that the data most closely resembles. Figure~\ref{fitDistrGermany} and Figure~\ref{fitDistrNorway} both show that a negative binomial distribution fits the data better than a normal distribution. Due to the high values for the AIC, the Poisson distribution is excluded from these graphics.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{distrfit_germany.png}  
+  \includegraphics[width = \textwidth]{distrfit_germany.png}  
   \caption{Histogram for the number of cases in German municipalities with a normal and a negative binomial distribution overlayed.}
   \label{fitDistrGermany}
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{distrfit_norway.png}
+  \includegraphics[width = \textwidth]{distrfit_norway.png}
   \caption{Histogram for the number of cases in Norwegian municipalities with a normal and a negative binomial distribution overlayed.}
   \label{fitDistrNorway}
 \end{figure}
@@ -108,8 +107,8 @@ Looking at a histogram for the confirmed number of cases and overlaying the dens
 \section{Models without a Spatial Component}\label{sec:nospatial}
 To establish a baseline, a look is first taken at models that do not include a spatial effect. This way, it can be observed how the means and credibility intervals of the covariates change when a spatial effect is added to a model and how the performance of the model changes with respect to the goodness-of-fit indicators introduced in Section~\ref{sec:performance}. \\
 Before computing the models, using the $\hbox{VIF}$ introduced in Section~\ref{sec:vif}, predictors are removed if their $\hbox{VIF}$ is above 5. To do this, a GLM is first run on all variables, followed by the calculation of $\hbox{VIF}$. Then the variable with the highest value is removed before running the model again with all remaining variables. This process is repeated until only variables with a $\hbox{VIF}$ of less than 5 remain. \\
-In sections~\ref{sec:nospatial_germany} and~\ref{sec:nospatial_norway} the results of these models are presented. Their goodness-of-fit indicators as well as the coefficients together with their credibility intervals calculated as in section~\ref{sec:mean_iv} are reported. \\
-These models are based on data from 2 May 2021, when 3,428,487 people were infected with Covid-19 in Germany, while 87,537 people were infected in Norway. The five municipalities with the most infections in Germany are shown in Table~\ref{top5germany} and in Table~\ref{top5norway} for Norway.
+In sections~\ref{sec:nospatial_germany} and~\ref{sec:nospatial_norway} the results of these models are presented. Their goodness-of-fit indicators as well as the coefficients together with their credibility intervals calculated as in Section~\ref{sec:mean_iv} are reported. \\
+These models are based on data from 2 May 2021, when 3,428,487 people are infected with Covid-19 in Germany, while 87,537 people are infected in Norway. The five municipalities with the most infections in Germany are shown in Table~\ref{top5germany} and in Table~\ref{top5norway} for Norway.
 \begin{table}[H] 
 \caption{The German municipalities with the most infections as of May 2nd 2021. \label{top5germany}}
 \begin{tabular}{l r r}
@@ -224,8 +223,8 @@ Sex & -0.175 & 0.840 & 0.748 & 0.941 & $^*$ \\
 \end{table}
 \clearpage
 \section{Spatial Models}\label{ch:spatial}
-Looking at the SIR value for Germany in Figure~\ref{sirgermany} and the SIR value for Norway in Figure~\ref{sirnorway} and Figure~\ref{sirnorwaylog}, it clearly looks like there is a correlation between the SIR and the spatial units. For Germany, the SIR is higher in eastern Germany than in the rest of the country and in Norway the risk seems to be mainly concentrated around the Oslo region. \\
-To check whether there is spatial autocorrelation, Moran's I, introduced in Section~\ref{sec:moran}, can be calculated and the Moran test can then be used to tell whether there is spatial autocorrelation. Under the null hypothesis of no spatial autocorrelation, a p-value greater than 0.05 would be expected. The results of the test are presented in Table~\ref{moranTest}. Looking at the p-value for both countries, it can be seen that the number of infections in a municipality and the spatial units are correlated.
+Looking at the SIR value for Germany in Figure~\ref{sirgermany} and the SIR value for Norway in Figure~\ref{sirnorway} and Figure~\ref{sirnorwaylog}, it clearly looks like there is a correlation between the SIR and the spatial units. For Germany, the SIR is higher in Eastern Germany than in the rest of the country and in Norway the risk seems to be mainly concentrated around the Oslo region. \\
+To check whether there is spatial autocorrelation, Moran's I, introduced in Section~\ref{sec:moran}, can be calculated and the Moran test can be used to tell whether there is spatial autocorrelation. Under the null hypothesis of no spatial autocorrelation, a p-value greater than 0.05 would be expected. The results of the test are presented in Table~\ref{moranTest}. Looking at the p-value for both countries, it can be seen that the number of infections in a municipality and the spatial units are correlated.
 \begin{table}[H] 
 \caption{Results of the Moran test for Germany and Norway. \label{moranTest}}
 \begin{tabular}{l r r r r}
@@ -237,10 +236,10 @@ Norway & 0.110 & -0.003 & < 0.01 \\
 \bottomrule
 \end{tabular}
 \end{table}
-Therefore, after the models without spatial effect have been calculated and established as baseline models, a spatial term is added to the models calculated in Section~\ref{sec:nospatial} , in order to model this spatial correlation.
+Therefore, after the models without spatial effect have been calculated and established as baseline models, a spatial term is added to the models calculated in Section~\ref{sec:nospatial}, in order to model this spatial correlation.
 \subsection{Spatial Models for Germany}\label{sec:spatial_germany}
 Looking at the performance of the spatial models and the model with the spatial component shown in Table~\ref{allGermany}, it can be seen that the spatial models perform better in terms of the DIC, WAIC and MAE, while they perform equally well or better in terms of the CPO. \\
-The best performance of all models, in terms of MAE, was observed for the Besag model, just ahead of the BYM2 model.
+The best performance of all models, in terms of MAE, is observed for the Besag model, just ahead of the BYM2 model.
 \begin{table}[H] 
 \caption{The performance measures for the best performing model of each type. \label{allGermany}}
 \begin{tabular}{l r r r r r}
@@ -248,7 +247,7 @@ The best performance of all models, in terms of MAE, was observed for the Besag 
 \textbf{Model}	& \textbf{DIC}	& \textbf{WAIC} & \textbf{CPO} & \textbf{$\hbox{MAE}_{\hbox{train}}$} & \textbf{$\hbox{MAE}_{\hbox{test}}$}\\
 \midrule
 No spatial & 5593 & 5596 & -2814 & 1434 & 1284 \\
-Besag& 4842 & 4897 & -2784 & 143 & 1027\\
+Besag & 4842 & 4897 & -2784 & 143 & 1027\\
 BYM2 & 4747 & 4806 & -2781 & 103 & 1043\\
 Leroux & 4830 & 4843 & -2966 & 88 & 1264 \\
 \bottomrule
@@ -294,9 +293,9 @@ Greens & -0.045 & 0.958 & 0.844 & 1.082 \\
 \bottomrule
 \end{tabular}
 \end{table}
-For the hyperparameters, a value of 19.75 is reported for the precision and a value of 0.929 for $\phi$. Hence, 92.9\% of the marginal variance is explained by the structured effect. Therefore, this model is far from reducing to pure overdispersion and comes close to a Besag model, which is also reflected in the similar values of the goodness-of-fit indicators in Table~\ref{allGermany}.
+For the hyperparameters, a value of 19.75 is reported for the precision and a value of 0.929 for $\phi$. Hence, 92.9\% of the marginal variance is explained by the structured effect. Therefore, this model is far from reducing to pure overdispersion and comes close to a Besag model, which is reflected in the similar values of the goodness-of-fit indicators in Table~\ref{allGermany}.
 \subsection{Spatial Models for Norway}\label{sec:spatial_norway}
-Comparing the performance of the models in Table~\ref{allNorway}, the spatial models again showed better performance in terms of DIC and WAIC and this time also significantly better performance in terms of CPO. The best performance in terms of MAE was observed for the Leroux model, but the MAE was quite close for all models.
+Comparing the performance of the models in Table~\ref{allNorway}, the spatial models again showed better performance in terms of DIC and WAIC and this time significantly better performance in terms of CPO. The best performance in terms of MAE is observed for the Leroux model, but the MAE is quite close for all models.
 \begin{table}[H] 
 \caption{The performance measures for the best performing model of each type. \label{allNorway}}
 \begin{tabular}{l r r r r r}
@@ -310,7 +309,7 @@ Leroux & 2382 & 2373 & -7949 & 10 & 81\\
 \bottomrule
 \end{tabular}
 \end{table}
-Looking at the differences between the coefficients and credibility intervals in Figure~\ref{intervalNorway}, the picture is similar to Figure~\ref{intervalGermany}. This time, however, all significant effects of the model without the spatial component are still significant. This again shows that the spatial effect is weaker in Norway than in Germany, as no new variables turn out to be significant and no variables lose their significance when the spatial term is added.
+Looking at the differences between the coefficients and credibility intervals in Figure~\ref{intervalNorway}, the picture is similar to Figure~\ref{intervalGermany}. This time, however, all significant effects of the model without the spatial component are still significant. This again shows that the spatial effect is weaker in Norway than in Germany, as no new variables turn out to be significant, and no variables lose their significance when the spatial term is added.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{intervals_norway.png}
@@ -351,9 +350,9 @@ For the hyperparameters, a value of 7.668 is reported for the precision and a va
 \clearpage
 \section{Choice of Hyperpriors}\label{sec:hyperprios}
 As can be seen in Equation~\ref{pcprec}, there is flexibility when it comes to choosing the values for the standard deviation $\sigma_0$ as well as the probability $\alpha$. Therefore, an upper bound for the standard deviation can be chosen as well as the weight placed on this "tail event", describing how informative the resulting prior is. \\
-Some of the issues that come with the choice of these hyperpriors were already discussed in Section~\ref{sec:issues}. \\
-In the following, an assessment is made of how the performance of a Besag model, a BYM2 model and a Leroux model changes when playing around with the value for the standard deviation $\sigma_0$. To create these plots, models were calculated with $\sigma_0$ values of $\pmb{\sigma_0}=\left(0.1,0.11,0.12,...,5\right)$.\\
-In Figure~\ref{comparison_norway_1} it can be seen that when choosing a higher value for $\sigma_0$, the DIC and WAIC is lower in the case of the Besag model and the BYM2 model. For the Leroux model, on the other hand, the WAIC gets lower until about 2 before it rises until around $\sigma_0 = 2.5$ and then flattens out. It is a positive sign that this is not the case with the BYM2 model, as it was designed to avoid exactly this kind of thing. \\
+Some of the issues that come with the choice of these hyperpriors are already discussed in Section~\ref{sec:issues}. \\
+In the following, an assessment is made of how the performance of a Besag model, a BYM2 model and a Leroux model changes when playing around with the value for the standard deviation $\sigma_0$. To create these plots, models are calculated with $\sigma_0$ values of $\pmb{\sigma_0}=\left(0.1,0.11,0.12,...,5\right)$.\\
+In Figure~\ref{comparison_norway_1} it can be seen that when choosing a higher value for $\sigma_0$, the DIC and WAIC is lower in the case of the Besag model and the BYM2 model. For the Leroux model, on the other hand, the WAIC gets lower until about 2 before it rises until around $\sigma_0 = 2.5$ and then flattens out. It is a positive sign that this is not the case with the BYM2 model, as it is designed to avoid exactly this kind of thing. \\
 For the MAE in Figure~\ref{comparison_norway_2}, it can be seen that for all model types, a higher value for $\sigma_0$ leads to a lower MAE, however not by much.
 \begin{figure}[H]
   \centering
@@ -367,9 +366,9 @@ For the MAE in Figure~\ref{comparison_norway_2}, it can be seen that for all mod
   \caption{Value of the MAE when changing the value for $\sigma_0$. The black line highlights the values for $\sigma_0$ = 1.}
   \label{comparison_norway_2}
 \end{figure}
-By allowing the precision to be greater, the variance is forced to be smaller. Hence, choosing a lower value for the precision leads to lower values for the WAIC. While this indicates a better fit to the training data, Figure~\ref{comparison_norway_2} also shows that the MAE increases when a higher value for $\sigma_0$ is chosen, as the models overfit on the training data and therefore make worse predictions. \\
+By allowing the precision to be greater, the variance is forced to be smaller. Hence, choosing a lower value for the precision leads to lower values for the WAIC. While this indicates a better fit to the training data, Figure~\ref{comparison_norway_2} shows that the MAE increases when a higher value for $\sigma_0$ is chosen, as the models overfit on the training data and therefore make worse predictions. \\
 The corresponding figures for Germany are shown in Figure~\ref{comparison_germany_1} and Figure~\ref{comparison_germany_2} in the Appendix. \\
-Figure~\ref{comparison_norway_5} shows how the credibility intervals of the coefficients of a BYM2 model change when the value for $\sigma_0$ is increased. The values of the coefficients tend to remain relatively similar most of the time, especially when the value of the coefficient is close to 1. However, a few times, for example for the variables immigrants\_total, platform and unemp\_immg, the values differ. Furthermore, the coefficients for $\sigma_0 = 1$ and $\sigma_0 = 2$ are more closer to 1 than the ones for $\sigma_0=0.1$.
+Figure~\ref{comparison_norway_5} shows how the credibility intervals of the coefficients of a BYM2 model change when the value for $\sigma_0$ is increased. The values of the coefficients tend to remain relatively similar most of the time, especially when the value of the coefficient is close to 1. However, a few times, for example for the total number of immigrants and the number of unemployed immigrants, the values differ.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{intervals_prior_norway.png}
@@ -415,7 +414,7 @@ Looking at Figure~\ref{comparison_germany_8}, there are hardly any differences i
 \end{figure}
 
 \clearpage
-\section{Predictive models}
+\section{Predictive models}\label{sec:predictive}
 Another way to determine whether calculating a Bayesian spatial model is the right approach for this research question is to compare the calculated models with a completely different class of models, namely predictive models calculated using machine learning methods. The algorithms used in this chapter do not assume any kind of prior distributions or assumptions about the likelihood of the data.\\
 The approach used to calculate these models is described in detail below.
 \begin{itemize}
@@ -431,10 +430,9 @@ The approach used to calculate these models is described in detail below.
     \item[3.] Train each model using the parameters determined during the tuning process.
     \item[4.] Make predictions on the data.
 \end{itemize}
-The remainder of this chapter presents the results of the models calculated for Norway and Germany and provides some insights into how different factors influence infection rates. \\
-I will add a small theory chapter on these models as well as the theory behind the interpretable ml stuff.
+The remainder of this chapter presents the results of the models calculated for Norway and Germany and provides some insights into how different factors influence infection rates.
 \subsection{Predictive models for Germany}
-A look at Table~\ref{pred_perf} shows that the random forest had the lowest MAE of all the predictive models for both the training and test data, but still underperformed compared to the BYM2 model from Section~\ref{sec:spatial_germany}. In the remainder of this section, the random forest model is evaluated in more detail to gain an understanding of which variables influence infection rates according to the model.
+A look at Table~\ref{pred_perf} shows that the random forest had the lowest MAE of all the predictive models for both the training and test data, but still underperforms compared to the BYM2 model from Section~\ref{sec:spatial_germany}. In the remainder of this section, the random forest model is evaluated in more detail to gain an understanding of which variables influence infection rates according to the model.
 \begin{table}[H] 
 \caption{The MAE for the BYM2 model and the predictive models. \label{pred_perf}}
 \begin{tabular}{l r r}
@@ -450,17 +448,14 @@ eXtreme Gradient Boosting & 1941 & 3036 \\
 \bottomrule
 \end{tabular}
 \end{table}
-Looking at the feature importance of the variables in Figure~\ref{importance_rf_germany}, it can be seen that log trade tax is the most important feature, followed by the number of clinics, platforms and marketplaces in a municipality. \\
-Concept behind feature importance:  We measure the importance of a feature by calculating the increase in the model's prediction error after permuting the feature. A feature is "important" if shuffling its values increases the model error, because in this case the model relied on the feature for the prediction. A feature is "unimportant" if shuffling its values leaves the model error unchanged, because in this case the model ignored the feature for the prediction.
+Looking at the feature importance of the variables in Figure~\ref{importance_rf_germany}, it can be seen that log trade tax is the most important feature, followed by the number of clinics, platforms and marketplaces in a municipality. The next most important characteristic is the number of places of worship, but there is quite a large difference between the importance of this characteristic and the importance of the number of marketplaces. The graph shows the confidence interval for each feature and in this case each confidence interval is narrow, suggesting that these are robust estimates of importance. Comparing the most important features of the random forest with the coefficients of the BYM2 model in Table~\ref{FixedAllGermany_spatial}, the logarithmic trade tax appears to be the only feature that is important in both types of models, as it is a significant coefficient in the BYM2 model and the most important feature in the random forest model. The number of clinics, platforms and marketplaces are not significant in the BYM2 model, while the share of the vote for the AfD and population density are significant in the BYM2 model, but are only the 7th and 9th most important features in the random forest, respectively.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{importance_rf_germany.png}
   \caption{The variable importance plots for the random forest.}
   \label{importance_rf_germany}
 \end{figure}
-To get a better idea of how the features influence the predicted outcome, the partial dependence plots for the two most important features are shown in Figure~\ref{pdp_rf_germany_1}, while Figure~\ref{pdp_rf_germany_3} shows how the two most important parties, the AfD and the Greens, influence the predicted outcome. For the logarithmic trade tax, a slow increase up until 0.5 can be seen before a steeper incline sets in, which eventually turns into a linear slope. For the number of clinic, it starts with a steep slope before changing to a less steep linear relationship and eventually flattening out. In general, however, the higher either value is, the higher the predicted outcome. Looking at the plots for the political parties, it can be seen that the higher the share of the vote for the AfD, the higher the predicted number of infections, while a higher share of the vote for the Greens leads to a lower predicted number of infections. The same relationship was observed in the BYM2 model, as can be seen in Table~\ref{FixedAllGermany_spatial}, but the effect for the Greens was not significant in this case. \\
-Concept behind partial dependence plots:
-The partial dependence plot (short PDP or PD plot) shows the marginal effect one or two features have on the predicted outcome of a machine learning model. A partial dependence plot can show whether the relationship between the target and a feature is linear, monotonic or more complex.
+To get a better idea of how the features influence the predicted outcome, the partial dependence plots for the two most important features are shown in Figure~\ref{pdp_rf_germany_1}, while Figure~\ref{pdp_rf_germany_3} shows how the two most important parties, the AfD and the Greens, influence the predicted outcome. For the logarithmic trade tax, a slow increase up until 0.5 can be seen before a steeper incline sets in, which eventually turns into a linear slope. For the number of clinic, it starts with a steep slope before changing to a less steep linear relationship and eventually flattening out. In general, however, the higher either value is, the higher the predicted outcome. Looking at the plots for the political parties, it can be seen that the higher the share of the vote for the AfD, the higher the predicted number of infections, while a higher share of the vote for the Greens leads to a lower predicted number of infections. The same relationship is observed in the BYM2 model, as can be seen in Table~\ref{FixedAllGermany_spatial}, but the effect for the Greens is not significant in this case.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{pdp_rf_germany_1.png}
@@ -473,8 +468,7 @@ The partial dependence plot (short PDP or PD plot) shows the marginal effect one
   \caption{The partial dependence plots for the share of the vote the AfD and the Greens get.}
   \label{pdp_rf_germany_3}
 \end{figure}
-To check whether there are any interactions that could distort the relationship between the features shown in Figure~\ref{pdp_rf_germany_1} and Figure~\ref{pdp_rf_germany_3}, the ICE plots of these variables in Figure~\ref{ice_rf_germany_1} and Figure~\ref{ice_rf_germany_3} can be looked at. All curves seem to follow the same course, so there are no obvious interactions. This means that the PDP already represents a good summary of the relationships between the displayed features and the predicted number of infections. \\
-Concept behind ice curves: Individual Conditional Expectation (ICE) plots display one line per instance that shows how the instance's prediction changes when a feature changes. The partial dependence plot for the average effect of a feature is a global method because it does not focus on specific instances, but on an overall average. The equivalent to a PDP for individual data instances is called individual conditional expectation (ICE) plot. What is the point of looking at individual expectations instead of partial dependencies? Partial dependence plots can obscure a heterogeneous relationship created by interactions.
+To check whether there are any interactions that could distort the relationship between the features shown in Figure~\ref{pdp_rf_germany_1} and Figure~\ref{pdp_rf_germany_3}, the ICE plots of these variables in Figure~\ref{ice_rf_germany_1} and Figure~\ref{ice_rf_germany_3} can be looked at. All curves seem to follow the same course, so there are no obvious interactions. This means that the PDP already represents a good summary of the relationships between the displayed features and the predicted number of infections.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{ice_rf_germany_1.png}
@@ -487,17 +481,15 @@ Concept behind ice curves: Individual Conditional Expectation (ICE) plots displa
   \caption{The individual conditional expectation for the share of the vote the AfD and the Greens get.}
   \label{ice_rf_germany_3}
 \end{figure}
-Lastly, looking at the Shapley values for the region of Hannover in Figure~\ref{shapley_rf_germany}, the prediction is nearly 50,000 above the average prediction. The number of marketplaces in the region increased the prediction the most, followed by the logarithmic trade tax and the number of offices in the region. For the city of Munich it was the same three features, however this time the logarithmic trade tax increased the prediction the most, followed by the number of offices and the number of marketplaces. For Munich, the actual prediction was around 33,000 above the average prediction. \\
-Concept behind the shapley value: The Shapley value of a feature value is not the difference of the predicted value after removing the feature from the model training. The interpretation of the Shapley value is: Given the current set of feature values, the contribution of a feature value to the difference between the actual prediction and the mean prediction is the estimated Shapley value.
+Lastly, looking at the Shapley values for the region of Hannover in Figure~\ref{shapley_rf_germany}, the prediction is nearly 50,000 above the average prediction. The number of marketplaces in the region increases the prediction the most, followed by the logarithmic trade tax and the number of offices in the region. For the city of Munich it is the same three features, however this time the logarithmic trade tax increases the prediction the most, followed by the number of offices and the number of marketplaces. For Munich, the actual prediction is around 33,000 above the average prediction.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{shapley_rf_germany.png}
   \caption{Shapley values for the cities of Munich and Hannover.}
   \label{shapley_rf_germany}
 \end{figure}
-%https://christophm.github.io/interpretable-ml-book/pdp.html
 \subsection{Predictive models for Norway}
-Looking at the performance of the different algorithms in Table~\ref{pred_perf_norway}, again, the random forest model had the lowest MAE of all the predictive models for the training and test data, but performed worse than the BYM2 model from Section~\ref{sec:spatial_norway}. Therefore, the random forest model is again evaluated in more detail to gain an understanding of which variables influence the infection rates according to the model.
+Looking at the performance of the different algorithms in Table~\ref{pred_perf_norway}, again, the random forest model had the lowest MAE of all the predictive models for the training and test data, but performs worse than the BYM2 model from Section~\ref{sec:spatial_norway}. Therefore, the random forest model is evaluated in more detail to gain an understanding of which variables influence the infection rates according to the model.
 \begin{table}[H] 
 \caption{The MAE for the BYM2 model and the predictive models. \label{pred_perf_norway}}
 \begin{tabular}{l r r}
@@ -513,14 +505,15 @@ eXtreme Gradient Boosting & 251 & 196 \\
 \bottomrule
 \end{tabular}
 \end{table}
-Looking at the feature importance of the variables in Figure~\ref{importance_rf_norway}, the most important feature is the number of places of worship in a municipality, followed by the number of offices and the number of public transport platform. \\
+Looking at the feature importance of the variables in Figure~\ref{importance_rf_norway}, the most important feature is the number of places of worship in a municipality, followed by the number of offices, the number of public transport platforms, the number of higher education buildings and the urban density. After that, the difference in feature importance clearly increases between urban density and the total number of immigrants. Again, all confidence intervals in the plot are narrow, indicating robustness. \\
+Comparing the important features with the fixed effects of the BYM2 model in Table~\ref{fixedAllNorway_spatial}, urban density appears to be the only feature that is relevant in both models, being the fifth most important feature in the random forest and a significant effect in the BYM2 model. The four most important features in Figure~\ref{importance_rf_norway} are all non-significant in the BYM2 model, while the other three significant effects in the BYM2 model, the total number of immigrants, the number of unemployed immigrants and the proportion of females are the 11th and 8th and 12th most important features in the random forest model, respectively.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{importance_rf_norway.png}
   \caption{The variable importance plots for the random forest.}
   \label{importance_rf_norway}
 \end{figure}
-Figure~\ref{pdp_rf_norway_1} shows how the predicted number of infections changes as the number of places of worship and offices in a community increases. For places of worship, a slow increase is seen until 3, followed by a steep increase that continues until 7 and then ends in a plateau. For the number of offices, it is a slow increase until about 2.5, followed by a steep increase until about 6 before ending on a plateau.
+Figure~\ref{pdp_rf_norway_1} shows how the predicted number of infections changes as the number of places of worship and offices in a community increases. For places of worship, a slow increase is seen until 3, followed by a steep increase that continues until 7 and ends in a plateau. For the number of offices, it is a slow increase until about 2.5, followed by a steep increase until about 6 before ending on a plateau.
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{pdp_rf_norway_1.png}
@@ -539,36 +532,36 @@ For Nordre Follo, the prediction is about 1,000 above the average prediction, wi
 \begin{figure}[H]
   \centering
   \includegraphics[width = \textwidth]{shapley_rf_norway.png}
-  \caption{Shapley values for the municipalties of Tromsø and Nordre Follo.}
+  \caption{Shapley values for the municipalities of Tromsø and Nordre Follo.}
   \label{shapley_rf_norway}
 \end{figure}
 \clearpage
-\section{Temporal models}
-I will write some kind of introduction here relating to temporal effects such as government measures or waves of covid. i will also write sth about baseline temporal models used for comparison
+\section{Temporal models}\label{sec:temporal}
+Since the previous sections have focused only on a fixed point in time, this section will address the research question from a temporal perspective. The first step for this is again to find a likelihood that describes the data reasonably well. After identifying such a likelihood, Section~\ref{sec:temp_ger} and Section~\ref{sec:temp_nor} present the results of temporal modelling of Covid-19 infection numbers in Germany and Norway, respectively.
 \subsection{Choice of Likelihood}
 As with the non-temporal models calculated in Section~\ref{sec:nospatial} and Section~\ref{ch:spatial}, a probability must first be found that describes the distribution of the daily number of infections in each country. Returning to the Cullen and Frey graph, Figure~\ref{cf_germany_ts} and Figure~\ref{cf_norway_ts} show that the observations do not actually follow a normal, negative binomial or Poisson distribution.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{cf_germany_ts.png}
+  \includegraphics[width = \textwidth]{cf_germany_ts.png}
   \caption{The Cullen and Frey graph for Germany}
   \label{cf_germany_ts}
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{cf_norway_ts.png}
+  \includegraphics[width = \textwidth]{cf_norway_ts.png}
   \caption{The Cullen and Frey graph for Norway}
   \label{cf_norway_ts}
 \end{figure}
-After fitting all three distributions to the data using the maximum likelihood method, QQ-plots and the empirical and theoretical cumulative density function can be used to help decide which likelihood to choose. The QQ-plots in Figure~\ref{fitNegbinomGermany_ts} and Figure~\ref{fitNormalGermany_ts} clearly show that there is no linear relationship between the theoretical quantiles and the sample quantiles for both distributions, while the empirical CDF roughly follows the theoretical CDF in both cases. The plots for the Poisson distribution as well as all plots for the Norwegian municipalities are in Section~\ref{sec:temp_fit_germany} and section~\ref{sec:temp_fit_norway} in the Appendix.
+After fitting all three distributions to the data using the maximum likelihood method, QQ-plots and the empirical and theoretical cumulative density function can be used to help decide which likelihood to choose. The QQ-plots in Figure~\ref{fitNegbinomGermany_ts} and Figure~\ref{fitNormalGermany_ts} clearly show that there is no linear relationship between the theoretical quantiles and the sample quantiles for both distributions, while the empirical CDF roughly follows the theoretical CDF in both cases. The plots for the Poisson distribution as well as all plots for the Norwegian municipalities are in Section~\ref{sec:temp_fit_germany} and Section~\ref{sec:temp_fit_norway} in the Appendix.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{fit_nbinom_germany_ts.png}
+  \includegraphics[width = \textwidth]{fit_nbinom_germany_ts.png}
   \caption{A negative binomial fit to the number of cases in German municipalities}
   \label{fitNegbinomGermany_ts}
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{fit_normal_germany_ts.png}
+  \includegraphics[width = \textwidth]{fit_normal_germany_ts.png}
   \caption{A normal fit to the number of cases in German municipalities}
   \label{fitNormalGermany_ts}
 \end{figure}
@@ -588,16 +581,16 @@ Norway & Negative Binomial & 6076 \\
 \bottomrule
 \end{tabular}
 \end{table}
-Overlaying the number of infections with a negative binomial distribution and a normal distribution using the estimated parameters, as shown in Figure~\ref{fitDistrGermany_ts}, reinforces the assumption of the negative binomial distribution, which is then used as the assumed probability of the data for the models calculated in this chapter. The graph for Norway can be seen in Figure~\ref{fitDistrNorway_ts}.
+Overlaying the number of infections with a negative binomial distribution and a normal distribution using the estimated parameters, as shown in Figure~\ref{fitDistrGermany_ts}, reinforces the assumption of the negative binomial distribution, which is used as the assumed probability of the data for the models calculated in this chapter. The graph for Norway can be seen in Figure~\ref{fitDistrNorway_ts}.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{distrfit_germany_ts.png}  
+  \includegraphics[width = \textwidth]{distrfit_germany_ts.png}  
   \caption{Histogram for the number of cases in German municipalities with a normal and a negative binomial distribution overlayed.}
   \label{fitDistrGermany_ts}
 \end{figure}
 \clearpage
-\subsection{Temporal models for Germany}
-For Germany, 502 data points are available, starting on 7 January 2020 and ending on 22 May 2021. Of these 502 data points, the first 482 are used for model training, while the last 20 are used for the analysis. Due to the temporal effect, a random split would not make sense as this may lead to a look-ahead bias as the model would use information that was not yet known or available during the analysed period. After removing variables using the VIF method already used for the non-temporal models, the trained model used the following variables:
+\subsection{Temporal models for Germany}\label{sec:temp_ger}
+For Germany, 502 data points are available, starting on 7 January 2020 and ending on 22 May 2021. Of these 502 data points, the first 482 are used for model training, while the last 20 are used for the analysis. Due to the temporal effect, a random split would not make sense as this may lead to a look-ahead bias as the model would use information that is not yet known or available during the analysed period. After removing variables using the VIF method already used for the non-temporal models, the trained model uses the following variables:
 \begin{itemize}
     \item Measures taken in relation to contact tracing.
     \item Measures taken in relation to restrictions on internal movement.
@@ -605,11 +598,14 @@ For Germany, 502 data points are available, starting on 7 January 2020 and endin
     \item Measures taken in relation to the requirement to remain at home.
     \item The mobility at workplaces.
     \item The season of the year.
-    \item The relative frequency of the main strain of Covid-19.
-    \item The relative frequency of variant 20E.
-    \item The relative abundance of variant 20L, also known as B.1.1.7
+    \item The relative frequency of variant 20E, the most prevalent in Western Europe in the summer of 2020
+    \item The relative frequency of variant 20L, also known as B.1.1.7
+    \item The relative frequency of the other strains, that are not tracked
+    \begin{itemize}
+        \item The relative frequencies of the variant variables do not add up to 1 because the CoVariants tracks numerous variants and combines all untracked variants into one group. This group is predominant in each country at the beginning of the pandemic.
+    \end{itemize}
 \end{itemize}
-A second-order random walk is chosen for the temporal effect. The performance measures of this model and the temporal baseline models are shown in Table~\ref{germany_temporal}. While the AR(1) process has by far the lowest MAE in training, it has the second highest MAE in testing. The temporal model, besides the AR(1), has the lowest MAE during training and the overall lowest MAE during testing, indicating that the model fits the data best.
+A second-order random walk is chosen for the temporal effect. The performance measures of this model and the temporal baseline models are shown in Table~\ref{germany_temporal}. While the AR(1) process has by far the lowest MAE in training, it has the second-highest MAE in testing. The temporal model, besides the AR(1), has the lowest MAE during training and the overall lowest MAE during testing, indicating that the model fits the data best.
 \begin{table}[H] 
 \caption{The performance measures for different types of temporal models for Germany. \label{germany_temporal}}
 \begin{tabular}{l r r r r r}
@@ -623,30 +619,30 @@ Temporal model &  7524 & 7521 & -3777 & 1931 & 5821 \\
 \bottomrule
 \end{tabular}
 \end{table}
-Looking at the predicted number of infections from the temporal model in Figure~\ref{predictions_1_germany}, it can be seen that the predictions for the training data follow roughly the same path as the actual numbers, as three waves can be clearly seen. For the test data depicted more clearly in Figure~\ref{predictions_2_germany}, the predicted number of cases shows a very slow increase and it can also be seen that the "weekend effect", which means that fewer infections are reported on the weekend, has not been captured. Furthermore, the more recent a data point is in the test set, the greater the uncertainty associated with the prediction.
+Looking at the predicted number of infections from the temporal model in Figure~\ref{predictions_1_germany}, it can be seen that the predictions for the training data follow roughly the same path as the actual numbers, as three waves can be clearly seen. For the test data depicted more clearly in Figure~\ref{predictions_2_germany}, the predicted number of cases shows a very slow increase, and it can be seen that the "weekend effect", which means that fewer infections are reported on the weekend, has not been captured. Furthermore, the more recent a data point is in the test set, the greater the uncertainty associated with the prediction.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{predictions_1_germany.png}
+  \includegraphics[width = \textwidth]{predictions_1_germany.png}
   \caption{The predicted number of infections in Germany according to the temporal model. The vertical line indicates where the test data begins.}
   \label{predictions_1_germany}
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{predictions_2_germany.png}
+  \includegraphics[width = \textwidth]{predictions_2_germany.png}
   \caption{The predicted number of infections in Germany according to the temporal model.}
   \label{predictions_2_germany}
 \end{figure}
 Another way to look at the predictions is to compare the 7-day incidence of the actual number of infections and the predicted number of infections, as daily variations such as the "weekend effect" should be smoothed out. Figure~\ref{incidence_germany} shows that the predicted 7-day incidence again follows the actual data very well, even a little for the test data. However, this is because for the first few days of test data, the incidence depends on the predicted number of infections for a few days of training data. Once it is only test data, the 7-day decline slowly stops before a steep slope starts, in contrast to the actual 7-day incidence, which is still falling.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{incidence_germany.png}  
+  \includegraphics[width = \textwidth]{incidence_germany.png}  
   \caption{The 7-day incidence of the actual number of infections and the predicted number of infections. The vertical line indicates where the test data begins.}
   \label{incidence_germany}
 \end{figure}
 Looking at the posterior temporal trend for Germany in Figure~\ref{trend_germany}, the first two waves are clearly visible, with the second wave having two peaks, the first in early November 2020 and the second in mid-December 2020. The peak of the first and third waves is in late March 2020 and mid-April 2021, respectively. After the third peak, a steep increase sets in, as with the 7-day incidence in Figure~\ref{incidence_germany}, which is clearly not the case when looking at the actual data.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{temp_trend_germany.png}  
+  \includegraphics[width = \textwidth]{temp_trend_germany.png}  
   \caption{The posterior temporal trend for the number of infections.}
   \label{trend_germany}
 \end{figure}
@@ -682,14 +678,14 @@ movement \\
 Recommended \\
 Contact tracing & \multirow{2}{*}{-0.047} & \multirow{2}{*}{0.976} & \multirow{2}{*}{0.630} & \multirow{2}{*}{1.454} \\
 Limited tracing \\
-Main variant & -0.134 & 0.920 & 0.470 & 1.622 \\
+Other variants & -0.134 & 0.920 & 0.470 & 1.622 \\
 Season summer & -0.341 & 0.739 & 0.412 & 1.216 \\
 Contact tracing & \multirow{2}{*}{-2.095} & \multirow{2}{*}{0.228} & \multirow{2}{*}{0.010} & \multirow{2}{*}{1.035} \\
 No tracing \\
 \bottomrule
 \end{tabular}
 \end{table}
-\subsection{Temporal models for Norway}
+\subsection{Temporal models for Norway}\label{sec:temp_nor}
 For Norway, 473 data points are available, starting on 5 February 2020 and ending on 22 May 2021. Of these 473 data points, the first 453 are used for model training, while the last 20 are used for the analysis. After the removal of some variables, the following features remained:
 \begin{itemize}
     \item Measures taken in relation to restrictions on internal movement.
@@ -697,11 +693,14 @@ For Norway, 473 data points are available, starting on 5 February 2020 and endin
     \item The mobility at workplaces.
     \item The mobility at groceries and pharmacies.
     \item The season of the year.
-    \item The relative frequency of the main strain of Covid-19.
-    \item The relative frequency of variant 20E.
-    \item The relative abundance of variant 20L, also known as B.1.1.7
+    \item The relative frequency of variant 20E, the most prevalent in Western Europe in the summer of 2020
+    \item The relative frequency of variant 20L, also known as B.1.1.7
+    \item The relative frequency of the other strains, that are not tracked
+    \begin{itemize}
+        \item The relative frequencies of the variant variables do not add up to 1 because the CoVariants tracks numerous variants and combines all untracked variants into one group. This group is predominant in each country at the beginning of the pandemic.
+    \end{itemize}
 \end{itemize}
-Again, a second-order random walk is chosen for the temporal effect. The performance measures of this model and the temporal baseline models are shown in Table~\ref{norway_temporal}. The lowest MAE during training was again observed for the AR(1) process, followed by the temporal model and the second-order random walk. The temporal model then showed the best performance in terms of MAE for the test set, followed by the second-order random walk and the AR(1) process.
+Again, a second-order random walk is chosen for the temporal effect. The performance measures of this model and the temporal baseline models are shown in Table~\ref{norway_temporal}. The lowest MAE during training is again observed for the AR(1) process, followed by the temporal model and the second-order random walk. The temporal model shows the best performance in terms of MAE for the test set, followed by the second-order random walk and the AR(1) process.
 \begin{table}[H] 
 \caption{The performance measures for different types of temporal models for Norway. \label{norway_temporal}}
 \begin{tabular}{l r r r r r}
@@ -715,30 +714,30 @@ Temporal model &  4613 & 4613 & -2432 & 53 & 100 \\
 \bottomrule
 \end{tabular}
 \end{table}
-For the predicted number of infections shown in Figure~\ref{predictions_1_norway}, 4 peaks are seen for the training data, just like for the actual data. The rest of the predicted infection numbers also follow the actual infection numbers very closely, which is not too surprising given the low MAE shown in Table~\ref{norway_temporal}. For the test data shown in Figure~\ref{predictions_2_norway}, it is very similar to the graph for Germany in Figure~\ref{predictions_2_germany}, as the "weekend effect" is not captured, a slow increase in the predicted infection numbers can be seen, as well as an increasing uncertainty in the predictions.
+For the predicted number of infections shown in Figure~\ref{predictions_1_norway}, 4 peaks are seen for the training data, just like for the actual data. The rest of the predicted infection numbers follow the actual infection numbers very closely, which is not too surprising given the low MAE shown in Table~\ref{norway_temporal}. For the test data shown in Figure~\ref{predictions_2_norway}, it is very similar to the graph for Germany in Figure~\ref{predictions_2_germany}, as the "weekend effect" is not captured, a slow increase in the predicted infection numbers can be seen, as well as an increasing uncertainty in the predictions.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{predictions_1_norway.png}
+  \includegraphics[width = \textwidth]{predictions_1_norway.png}
   \caption{The predicted number of infections in Norway according to the temporal model. The vertical line indicates where the test data begins.}
   \label{predictions_1_norway}
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{predictions_2_norway.png}
+  \includegraphics[width = \textwidth]{predictions_2_norway.png}
   \caption{The predicted number of infections in Norway according to the temporal model.}
   \label{predictions_2_norway}
 \end{figure}
 Comparing the 7-day incidence of the predicted data and the actual data in Figure~\ref{incidence_norway}, the incidences of the training data and the actual data follow the same pattern. However, the predicted 7-day incidence for the test data initially falls before rising, while the actual 7-day incidence initially rises and then falls before rising again. Although still not ideal, the predicted incidence for Norway looks slightly better than that for Germany, which can be seen in Figure~\ref{incidence_germany}.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{incidence_norway.png}  
+  \includegraphics[width = \textwidth]{incidence_norway.png}  
   \caption{The 7-day incidence of the actual number of infections and the predicted number of infections. The vertical line indicates where the test data begins.}
   \label{incidence_norway}
 \end{figure}
-The posterior temporal trend for Norway in Figure~\ref{trend_norway} clearly shows all three waves, including the double peak of the second wave. It can also be seen that the third wave is clearly the worst in terms of infection numbers. On the other hand, however, the first and second waves appear to be equally bad in this graphic, while in reality the second wave in Norway was worse than the first. Just as with Germany in Figure~\ref{trend_germany}, a steep increase sets in after the third wave.
+The posterior temporal trend for Norway in Figure~\ref{trend_norway} clearly shows all three waves, including the double peak of the second wave. It can be seen that the third wave is clearly the worst in terms of infection numbers. On the other hand, however, the first and second waves appear to be equally bad in this graphic, while in reality the second wave in Norway was worse than the first. Just as with Germany in Figure~\ref{trend_germany}, a steep increase sets in after the third wave.
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{temp_trend_norway.png}  
+  \includegraphics[width = \textwidth]{temp_trend_norway.png}  
   \caption{The posterior temporal trend for the number of infections.}
   \label{trend_norway}
 \end{figure}
@@ -752,7 +751,7 @@ The covariates of the model are presented in Table~\ref{fixed_norway_temporal}. 
 (Intercept) & -0.926 & 0.408 & 0.249 & 0.631 & $^*$ \\
 Workplace mobility & 0.179 & 1.201 & 1.011 & 1.417 & $^*$ \\
 Season winter & 0.109 & 1.159 & 0.645 & 1.924 \\
-Main variant & 0.056 & 1.073 & 0.760 & 1.482 \\
+Other variants & 0.056 & 1.073 & 0.760 & 1.482 \\
 Variant 20E & 0.041 & 1.043 & 0.942 & 1.149 \\
 Restrictions internal & \multirow{3}{*}{0.012} & \multirow{3}{*}{1.063} & \multirow{3}{*}{0.545}& \multirow{3}{*}{1.854}\\
 movement \\

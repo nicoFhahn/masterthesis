@@ -61,6 +61,8 @@ ui <- dashboardPage(
         css
       )
     ),
+    use_waiter(),
+    waiter_show_on_load(spin_3circles()),
     tabItems(
       tabItem(
         tabName = "de_norway",
@@ -154,11 +156,8 @@ ui <- dashboardPage(
             ),
             selected = "Seven day incidence"
           ),
-          pickerInput(
-            inputId = "municipality_germany",
-            label = "Select municipality",
-            choices = sort(unique(germany_munc_long$Landkreis)),
-            selected = "LK Rosenheim"
+          uiOutput(
+            outputId = "municipality_germany_ui"
           )
         )
       ),
@@ -176,12 +175,8 @@ ui <- dashboardPage(
         column(
           width = 3,
           uiOutput("dropdown_ui_europe"),
-          dateInput(
-            "date_europe",
-            label = "Select date",
-            min = min(ts_europe$Date),
-            max = max(ts_europe$Date),
-            value = max(ts_europe$Date)
+          uiOutput(
+            "date_europe_ui"
           ),
           pickerInput(
             inputId = "map_style_europe",
@@ -202,11 +197,8 @@ ui <- dashboardPage(
             ),
             selected = "Seven day incidence"
           ),
-          pickerInput(
-            inputId = "country_europe",
-            label = "Select country",
-            choices = sort(unique(ts_europe$Country)),
-            selected = "Germany"
+          uiOutput(
+            "country_europe_ui"
           )
         )
       ),
@@ -254,23 +246,8 @@ ui <- dashboardPage(
         tabName = "sm_norway",
         column(
           width = 4,
-          fluidRow(
-            multiInput(
-              inputId = "multi_norway_demo",
-              label = "Select demographic variables",
-              choices = colnames_norway_nice[
-                which(colnames_norway_actual %in% colnames(newest_numbers_norway)[c(3, 5:30, 31:37, 39)][c(1:7, 29:31)])
-              ]
-            )
-          ),
-          fluidRow(
-            multiInput(
-              inputId = "multi_norway_infra",
-              label = "Select infrastructure variables",
-              choices = colnames_norway_nice[
-                which(colnames_norway_actual %in% colnames(newest_numbers_norway)[c(3, 5:30, 31:37, 39)][c(8:25)])
-              ]
-            ),
+          uiOutput(
+            "ui_multi_norway"
           ),
           fluidRow(
             column(
@@ -355,23 +332,8 @@ ui <- dashboardPage(
         tabName = "sm_germany",
         column(
           width = 4,
-          fluidRow(
-            multiInput(
-              inputId = "multi_germany_demo",
-              label = "Select demographic variables",
-              choices = colnames_germany_nice[
-                which(colnames_germany_actual %in% colnames(newest_numbers_germany)[c(2:15, 17:34, 37:41, 44:46, 48)][c(1:15, 34:36)])
-              ]
-            )
-          ),
-          fluidRow(
-            multiInput(
-              inputId = "multi_germany_infra",
-              label = "Select infrastructure variables",
-              choices = colnames_germany_nice[
-                which(colnames_germany_actual %in% colnames(newest_numbers_germany)[c(3, 5:30, 31:37, 39)][c(16:32, 37)])
-              ]
-            ),
+          uiOutput(
+            "ui_multi_germany"
           ),
           fluidRow(
             column(
@@ -456,29 +418,8 @@ ui <- dashboardPage(
         tabName = "modelling_temporal",
         column(
           width = 3,
-          fluidRow(
-            multiInput(
-              inputId = "multi_europe_mobility",
-              label = "Select demographic variables",
-              choices = sort(colnames_europe_nice[which(colnames_europe_actual %in% colnames(ts_europe)[5:43][c(15:20)])]),
-              width = "100%"
-            )
-          ),
-          fluidRow(
-            multiInput(
-              inputId = "multi_europe_government",
-              label = "Select government measure variables",
-              choices = sort(colnames_europe_nice[which(colnames_europe_actual %in% colnames(ts_europe)[5:43][c(21:33, 36, 37)])]),
-              width = "100%"
-            ),
-          ),
-          fluidRow(
-            multiInput(
-              inputId = "multi_europe_health",
-              label = "Select vaccination variables",
-              choices = sort(colnames_europe_nice[which(colnames_europe_actual %in% colnames(ts_europe)[5:43][c(34:35)])]),
-              width = "100%"
-            ),
+          uiOutput(
+            "ui_multi_europe"
           )
         ),
         column(
@@ -521,12 +462,8 @@ ui <- dashboardPage(
           fluidRow(
             column(
               width = 12,
-              pickerInput(
-                inputId = "temporal_country",
-                label = "Select country",
-                choices = sort(unique(ts_europe$Country)),
-                selected = "Norway",
-                width = "100%"
+              uiOutput(
+                "temporal_country_ui"
               )
             )
           ),

@@ -1,12 +1,12 @@
 % !TEX root = ../my-thesis.tex
 %
 \chapter{Dataset Collection}
-As is often the case with statisticians, the construction of the dataset used to analyse a research question is an essential task and frequently involves the merging of multiple data sources to create a dataset. This was the case in this thesis and in the following chapter a brief overview of the data sources used, their pre-processing and how they were combined is given. All of the data that is used in this work is openly available, either through government sources or Github.
+As is often the case with statisticians, the construction of the dataset used to analyse a research question is an essential task and frequently involves the merging of multiple data sources to create a dataset. This is the case in this thesis and in the following chapter a brief overview of the data sources used, their pre-processing and how they are combined is given. All the data that is used in this work is openly available, either through government sources, GitHub or the use of R packages.
 \label{sec:datacollection}
 \clearpage
 \section{Covid-19 Data}
 \subsection{Covid-19 Data for Norway}
-The Covid-19 data for Norway comes from a dataset made available to the public via the a repository on the website \href{https://www.github.com}{Github.com}, created by the user thohan88. The repository contains a daily updated dataset that is the result of combining several data sources, which include the Institute of Public Health and the Norwegian Directorate of Health. According to the author of the repository, the project is "an open-source effort to make data about the Covid-19 situation in Norway available to the public in a timely and coherent manner" \autocite[][]{thohan88}. \\
+The Covid-19 data for Norway comes from a dataset made available to the public via a repository on the website \href{https://www.github.com}{GitHub.com}, created by the user thohan88. The repository contains a daily updated dataset that is the result of combining several data sources, which include the Institute of Public Health and the Norwegian Directorate of Health. According to the author of the repository, the project is "an open-source effort to make data about the Covid-19 situation in Norway available to the public in a timely and coherent manner" \autocite[][]{thohan88}. \\
 A few sample data points from this dataset are displayed in Table~\ref{datasetNorge}.\\
 \begin{table}[H] 
 \caption{An excerpt from the Covid-19 data for Norway. Does not contain all variables. The number of infections are the cumulative number of infections. \label{datasetNorge}}
@@ -22,9 +22,8 @@ A few sample data points from this dataset are displayed in Table~\ref{datasetNo
 \end{tabular}
 \end{table}
 \subsection{Covid-19 Data for Germany}
-In Germany, the Robert Koch Institute publishes daily situation reports in which the number of new cases is published at NUTS 3 level. These reports are available as pdf files via the Institute's website. They can be downloaded and grouped via the R package \texttt{covid19germany}\autocite[][]{covid19germany}, as was done for this work.\\
-A few sample data points from this dataset are displayed in Table~\ref{datasetGermany}.\\
-The variable \textit{CumNumberTestedIll} contains the cumulative number of people that have tested positive for Covid-19.
+In Germany, the Robert Koch Institute publishes daily situation reports in which the number of new cases is published at NUTS 3 level. These reports are available as PDF files via the Institute's website. They can be downloaded and grouped via the R package \texttt{covid19germany}\autocite[][]{covid19germany}, as is done for this work.\\
+A few sample data points from this dataset are displayed in Table~\ref{datasetGermany}.
 \begin{table}[H] 
 \caption{An excerpt from the Covid-19 data for Germany. Does not contain all variables.\label{datasetGermany}}
 \begin{tabular}{l l r r r}
@@ -42,40 +41,49 @@ LK Rosenheim & 2020-03-10 & 6 & 260983 \\
 \end{table}
 \clearpage
 \section{Vaccination Data}
-At the end of 2020, the first countries began vaccinating against Covid-19. Vaccination leads to a milder course of the disease, but it is not yet known whether vaccinated people can continue to transmit Covid-19, as of early May 2021. By including the proportion of people vaccinated, one can give an indication of the extent to which vaccination helps prevent the spread of Covid-19. These data are available for Norway at the municipality level via the statistics database of the National Institute of Health, FHI \autocite[][]{fhi}. For Germany, these data are only available at the state level and are therefore not used.
+At the end of 2020, the first countries began vaccinating against Covid-19. Vaccination leads to a milder course of the disease, but it is not yet known whether vaccinated people can continue to transmit Covid-19, as of early May 2021. By including the proportion of people vaccinated, an indication as to how much vaccination helps prevent the spread of Covid-19 can potentially be given. These data are available for Norway at the municipality level via the statistics database of the National Institute of Health, FHI \autocite[][]{fhi}. For Germany, these data are only available at the state level and are therefore not used.
 \clearpage
 \section{Demographic Data}
-As demographics tend to differ between different geographic units, the decision was made to include demographic variables in the analysis of the research question to see if the risk for infection may be higher when a certain characteristic is present in the population.
+As demographics tend to differ between different geographic units, the decision is made to include demographic variables in the analysis of the research question to see if the risk for infection may be higher when a certain characteristic is present in the population.
 \subsection{Demographic Data for Norway}
-The demographic data collected for Norway comes from Statistisk Sentralbyrå and is made available to the public through their online database, StatBank\autocite[][]{ssb}. \\
-The first characteristic collected was the age of the population in a given municipality. For each age, starting at 0 and ending at 105, the number of people of that age is known. \\
-Next, unemployment data were collected for a given municipality. For each municipality, the percentage of all people out of work is known, as well as the percentage of all immigrants out of work. \\
-Other data collected include data related to the number of workers in a particular industry, as well as immigration data. Since there is discussion about whether workers from certain industries, in this case construction, contribute to the spread of Covid-19, the decision was made to collect this type of data. For each community, the number of workers across all industries is known, as well as the number of workers in the construction industry. Workers, in this case, are individuals employed in a given municipality who are between the ages of 20 and 66. It is also known how many people work full-time and how many work part-time. \\
-Finally, for immigration data, it is known how many immigrants live in a given municipality and how many Norwegians were born to immigrant parents. These figures are known in terms of the percentage of the population in 2020.
+The demographic data that is collected for Norway comes from Statistisk Sentralbyrå and is made available to the public through their online database, StatBank\autocite[][]{ssb}. \\
+The first characteristic collected is the age of the population in a given municipality. For each age, starting at 0 and ending at 105, the number of people of that age is known. \\
+Next, unemployment data are collected for a given municipality. For each municipality, the percentage of all people out of work is known, as well as the percentage of all immigrants out of work. \\
+Other data that is collected includes data related to the number of workers in a particular industry, as well as immigration data. Since there is discussion about whether workers from certain industries, in this case construction, contribute to the spread of Covid-19, the decision is made to collect this type of data. For each community, the number of workers across all industries is known, as well as the number of workers in the construction industry. Workers, in this case, are individuals employed in a given municipality who are between the ages of 20 and 66. It is known how many people work full-time and how many people work part-time. \\
+Finally, for immigration data, it is known how many immigrants live in a given municipality and how many Norwegians are born to immigrant parents. These figures are known in terms of the percentage of the population in 2020.
 \subsection{Demographic Data for Germany}
-The demographic data collected for Germany comes from the federal and state statistical offices and is made available to the public through their online database, Regionaldatenbank Deutschland \autocite[][]{rdb}. \\
-The first characteristic collected was unemployment data at the NUTS 3 level. For each municipality, the number of unemployed people as well as the number of unemployed foreigners was collected. \\
-Next, data related to the European elections in 2019 were collected. In each municipality, it is known how many people voted in total, how many people voted for the six largest parties, and how many votes the remaining parties received combined. \\
-Data was also collected in relation to people seeking protection, welfare recipients and in relation to asylum seeker benefits. It is known how many people sought protection in Germany, how many received social welfare and how many received asylum seeker benefits. \\
-Finally, trade tax, income tax, and payroll tax data were collected for each municipality. 
+The demographic data that is collected for Germany comes from the federal and state statistical offices and is made available to the public through their online database, Regionaldatenbank Deutschland \autocite[][]{rdb}. \\
+The first characteristic that is collected is unemployment data at the NUTS 3 level. For each municipality, the number of unemployed people as well as the number of unemployed foreigners is collected. \\
+Next, data related to the European elections in 2019 are collected. In each municipality, it is known how many people voted in total, how many people voted for the six largest parties, and how many votes the remaining parties received combined. \\
+Data is collected in relation to people seeking protection, welfare recipients and in relation to asylum seeker benefits. It is known how many people seek protection in Germany, how many receive social welfare and how many receive asylum seeker benefits. \\
+Finally, trade tax, income tax, and payroll tax data are collected for each municipality. 
 \clearpage
 \section{Shapefiles}
-In addition to numeric variables, the dataset also contains a geographic variable containing the geographic boundaries of a given municipality or city/district.
+In addition to numeric variables, the dataset contains a geographic variable containing the geographic boundaries of a given municipality or city/district.
 \subsection{Shapefiles for Norway}
-The data for the Norwegian shapefiles comes from Geonorge \autocite[][]{geonorge} and is downloaded from a Github repository, as the data there was in a cleaner state \autocite[][]{shapeGithub}. In addition to the geographic shape, the dataset also includes a variable that contains the ID of each municipality.
+The data for the Norwegian shapefiles comes from Geonorge \autocite[][]{geonorge} and is downloaded from a GitHub repository, as the data there is in a cleaner state \autocite[][]{shapeGithub}. In addition to the geographic shape, the dataset includes a variable that contains the ID of each municipality.
 \subsection{Shapefiles for Germany}
 The data for the German shapefiles comes from Esri Germany \autocite[][]{esri}.
 \clearpage
 \section{OpenStreetMap Data}
-OpenStreetMap (OSM) is a free project that collects, structures and stores freely usable geodata in a database for use by anyone (Open Data). This data is available under a free license, the Open Database License. The core of the project is therefore an openly accessible database of all contributed geoinformation \autocite[][]{OpenStreetMap}. \\
-In R, the OpenStreetMap API can be queried using the R package \texttt{osmdata} \autocite[][]{osmdata}. To download all locations of a given type in a given region, a shape or bounding box must be specified along with a key and optionally a value. These key-value pairs are used to specify the type of location, for example, the "amenity" key is used for all facilities used by visitors and residents. If you use the "biergarten" value together with the "amenity" key, the locations of all beer gardens in a given geographic region will be downloaded. \\
-OpenStreetMap users have the option to map a location as either \texttt{POINT}, \texttt{POLYGON}, \texttt{MULTIPOLYGON}, \texttt{LINESTRING}, or \texttt{MULTILINESTRING}. Conventionally, the first three are used. Therefore, only sites mapped as one of these were used for this work. If a location was mapped as either \texttt{POLYGON} or \texttt{MULTIPOLYGON}, the centroid of the location was calculated. \\
-A complete list of all key-value pairs used for this work can be found in the Appendix. 
+OpenStreetMap (OSM) is a free project that collects, structures and stores freely usable geodata in a database for use by anyone (Open Data). This data is available under a free licence, the Open Database Licence. The core of the project is therefore an openly accessible database of all contributed geoinformation \autocite[][]{OpenStreetMap}. \\
+In R, the OpenStreetMap API can be queried using the R package \texttt{osmdata} \autocite[][]{osmdata}. To download all locations of a given type in a given region, a shape or bounding box must be specified along with a key and optionally a value. These key-value pairs are used to specify the type of location, for example, the "amenity" key is used for all facilities used by visitors and residents. If the "biergarten" value is used together with the "amenity" key, the locations of all beer gardens in a given geographic region is downloaded. \\
+OpenStreetMap's users have the option to map a location as either \texttt{POINT}, \texttt{POLYGON}, \texttt{MULTIPOLYGON}, \texttt{LINESTRING}, or \texttt{MULTILINESTRING}. Conventionally, the first three are used. Therefore, only sites mapped as one of these are used for this work. If a location is mapped as either \texttt{POLYGON} or \texttt{MULTIPOLYGON}, the centroid of the location is calculated. \\
+A complete list of all key-value pairs used for this work can be found in Section~\ref{sec:kv} in the Appendix. 
+\clearpage
+\section{Government Response and Mobility Data}
+Our World in Data (OWID) is an online publication that provides information on the historical development of human living conditions. It looks at demographic, developmental economic, geographical and cultural aspects, among others. Our World in Data often takes a historical perspective and provides information on the historical development of humanity's living conditions. \\
+OWID is structured according to problem areas. Each article discusses a global problem - from health problems, to hunger, poverty, war, education, to environmental issues. Depending on the completeness of the entry, these present the historical development of an aspect, the causes and consequences of this development, and the quality of the underlying data. All topics are also presented graphically. \\
+On their website, they provide statistics on governments' policy responses to the coronavirus pandemic. These statistics come from the Oxford Coronavirus Government Response Tracker (OxCGRT), which contains data from public sources collected by a team of over a hundred Oxford University students and staff from around the world. The tracker contains 17 indicators ranging from containment and closure policies, e.g. school closures, to economic policies such as income support and health system policies, e.g. testing regimes. 9 of these indicators are used to calculate a Government Stringency Index, which scales from 0 to 100, with 100 denoting the most stringent government policies \autocite[][]{hale2020variation, ritchie2020coronavirus}. \\
+Besides government responses, another type of data available through OWID, are the mobility reports by Google. The mobility reports are designed to provide information on what has changed as a result of the regulations to address the Corona crisis. The reports present movement trends broken down by geographic regions and place categories - for example, retail and recreation, grocery shops, parks, public transport stations and stops, places of work and places of residence. To do this, Google measures the number of visitors to these locations each day and compares them to a pre-pandemic base day. A base day represents a normal value for that day of the week, given as a median value over the five-week period from 3 January 2020 to 6 February 2020 \autocite[][]{googlemobility, ritchie2020coronavirus}
+\clearpage
+\section{Covid-19 Variants Data}
+The last data source is the open source project CoVariants. The project provides an overview of SARS-CoV-2 variants and mutations of interest. It tracks for different countries the proportion of the total number of sequences (not cases) over time that fall into defined variant groups, such as the B.1.1.7. variant, better known as the UK variant of Covid-19. In addition to the prevalence of the different variants, the project also provides data on the common mutations between the different strains, but this is not of interest in this work \autocite[][]{hodcroft2021covariants}.
 \clearpage
 \section{Data Wrangling}
-The final step before analysing the research question at hand is to combine all of these data sources into one dataset. This section will show how this was achieved.
+The final step before analysing the research question at hand is to combine all of these data sources into one dataset. This section shows how this is achieved.
 \subsection{Data Wrangling for Norway}
-The initial step in creating the final dataset was to convert the data from a wide format, as seen in Table~\ref{datasetNorge}, to a long format. This was done using the function \texttt{melt()} from the R package \texttt{reshape2} \autocite[][]{reshape2}. The long version of the dataset is shown in Table~\ref{norwayLong}.
+The initial step in creating the final dataset is to convert the data from a wide format, as seen in Table~\ref{datasetNorge}, to a long format. This is done using the function \texttt{melt()} from the R package \texttt{reshape2} \autocite[][]{reshape2}. The long version of the dataset is shown in Table~\ref{norwayLong}.
 \begin{table}[H] 
 \caption{An excerpt from the long version of the Norwegian Covid-19 data. Does not contain all variables.\label{norwayLong}}
 \begin{tabular}{l l r r r}
@@ -89,16 +97,16 @@ The initial step in creating the final dataset was to convert the data from a wi
 \bottomrule
 \end{tabular}
 \end{table}
-Next, the demographic data for Norway was loaded and processed. Since the age data contains the number of people of a certain age, the median age was calculated for each region based on how many people of each age group live in each region. \\
-The other demographic variables are left unchanged. To combine the demographic data with the Covid-19 data, the municipality IDs were extracted using the \texttt{str\_extract()} function from the \texttt{stringr} \autocite[][]{stringr} R package using the regular expression \texttt{[0-9]\{4\}}. Next, all demographic datasets and the Covid-19 dataset were merged using the \texttt{merge()} function. \\
-Using the \texttt{st\_intersects()} function from the \texttt{sf} \autocite[][]{sf} R package, the number of points of interest downloaded via OpenStreetMap was calculated for each municipality. Since the shapefiles contain the ID for each community, these data were then merged with the data containing the demographic and Covid-19 data. \\
-For each numeric variable, e.g. the number of schools or the number of employees, this number was scaled. \\
-If there were missing values in the covariates, these values were imputed using the median of the respective variable. \\
-Next, the vaccination data for Norway was loaded. As the daily number of vaccinated persons for each municipality is included in the data, these numbers only needed to be cumulated before being merged with the rest of the data based on municipality name and date. \\
-Finally, seven new variables were created:
+Next, the demographic data for Norway is loaded and processed. Since the age data contains the number of people of a certain age, the median age is calculated for each region based on how many people of each age group live in each region. \\
+The other demographic variables are left unchanged. To combine the demographic data with the Covid-19 data, the municipality IDs are extracted using the \texttt{str\_extract()} function from the \texttt{stringr} \autocite[][]{stringr} R package using the regular expression \texttt{[0-9]\{4\}}. Next, all demographic datasets and the Covid-19 dataset are merged using the \texttt{merge()} function. \\
+Using the \texttt{st\_intersects()} function from the \texttt{sf} \autocite[][]{sf} R package, the number of points of interest downloaded via OpenStreetMap is calculated for each municipality. Since the shapefiles contain the ID for each community, these data are merged with the data containing the demographic and Covid-19 data. \\
+For each numeric variable, e.g. the number of schools or the number of employees, this number is scaled. \\
+If there are missing values in the covariates, these values are imputed using the median of the respective variable. \\
+Next, the vaccination data for Norway is loaded. As the daily number of vaccinated persons for each municipality is included in the data, these numbers only need to be cumulated before being merged with the rest of the data based on municipality name and date. \\
+Finally, seven new variables are created:
 \begin{itemize}
     \item[1.] Expected count, which is the expected number of cases in each municipality.
-    \item[2.] SIR, which is the standardised incidence ratio in each municipality.
+    \item[2.] SIR, which is the standardized incidence ratio in each municipality.
     \item[3.] An area ID, which is a unique ID given to each municipality.
     \item[4.] Higher education, which counts the number of universities and colleges in a given area.
     \item[5.] Sex, which gives the proportion of females living in a given area.
@@ -152,7 +160,7 @@ Residential & The number of residential buildings & None \\
 \multirow{2}{*}{Higher education} & The number of colleges & \multirow{2}{*}{scaled} \\
 & and universities \\
 Expected count & The expected number of infections & None \\
-SIR & The standardised incidence ratio & None \\
+SIR & The standardized incidence ratio & None \\
 Area Id & A unique ID & None \\
 Area & The area in km$^2$ & None \\
 Population density & People per km$^2$ & scaled\\
@@ -163,8 +171,8 @@ Vaccinations & The proportion of vaccinated & scaled \\
 \end{tabular}
 \end{table}
 \subsection{Data Wrangling for Germany}
-The data processing procedure for Germany is identical to that for Norway. First, all demographic variables were loaded and left unchanged before being merged with the Covid-19 data prior to calculating the spatial intersections between the points of interest and the NUTS-3 areas. After merging all the data, the scaled numbers were calculated for the numeric variables. For the variables containing the number of people who voted for a particular political party, the relative percentage of votes the party received was calculated. Again, missing values were imputed using the median.
-Finally, the same seven new variables were created. 
+The data processing procedure for Germany is identical to that for Norway. First, all demographic variables are loaded and left unchanged before being merged with the Covid-19 data prior to calculating the spatial intersections between the points of interest and the NUTS-3 areas. After merging all the data, the scaled numbers are calculated for the numeric variables. For the variables containing the number of people who voted for a particular political party, the relative percentage of votes the party received is calculated. Again, missing values are imputed using the median.
+Finally, the same seven new variables are created. 
 The final dataset contains the variables shown in Table~\ref{finalGermany}.
 \begin{table}[H] 
 \caption{The variables contained in the final dataset.\label{finalGermany}}
@@ -191,7 +199,7 @@ SPD & Percentage of vote for SPD & scaled\\
 Greens & Percentage of vote for the Greens & scaled\\
 FDP & Percentage of vote for FDP & scaled\\
 The left & Percentage of vote for the left & scaled\\
-AfD & Percentage of vote voted for AfD & scaled \\
+AfD & Percentage of vote for AfD & scaled \\
 Marketplace & The number of marketplaces & scaled \\
 Entertainment & The number of entertainment venues & scaled \\
 Sport & The number of sports amenities & scaled \\
@@ -213,12 +221,80 @@ Residential & The number of residential buildings & None \\
 \multirow{2}{*}{Higher education} & The number of colleges & \multirow{2}{*}{scaled} \\
 & and universities \\
 Expected count & The expected number of infections & None \\
-SIR & The standardised incidence ratio & None \\
+SIR & The standardized incidence ratio & None \\
 Area Id & A unique ID & None \\
 Area & The area in km$^2$ & None \\
 Population density & People per km$^2$ & scaled  \\
 \multirow{1}{*}{Urban density} & Residential buildings per km$^2$  & scaled\\
 Sex & The proportion of females & scaled \\
+\bottomrule
+\end{tabular}
+\end{table}
+\subsection{Data Wrangling for the Temporal Models}
+Obtaining data for the temporal models is simple. OWID provides a dataset that includes case numbers for over 200 countries, along with vaccination numbers for that country, among other variables. Next, all data related to government response and mobility data are loaded. As these data are not available over the same time period for each country, some assumptions are made to minimize missing data. These assumptions are
+\begin{itemize}
+    \item If vaccination data before the administration of the first vaccine dose in a country are missing, no people were vaccinated at these points in time.
+    \item If vaccination data are missing for time points after the last available data, the vaccination rate has remained the same.
+    \item If government policy data are missing before the first recorded government response to a particular policy, then the policy is "No response".
+    \item If government policy data are missing after the last tracked government response to a particular policy, then the policy has remained the same since that time.
+    \item If mobility data is missing between points in time, then a constant decline / slope is assumed for this data.
+\end{itemize}
+After imputing all missing values, the next step is to merge these data. This can be done simply by using the unique combinations between the date and the country variable. In the last step, instead of using the infection figures provided by OWID, which mostly come from Johns Hopkins University, the infection figures that are also used for the spatial models are used, as these come from official government sources. \\
+The final dataset contains the variables shown in Table~\ref{datasetTimeseries}.
+\begin{table}[H] 
+\caption{The variables contained in the final dataset.\label{datasetTimeseries}}
+\begin{tabular}{l l l}
+\toprule
+\textbf{Variable Name}	& \textbf{Explanation}	& \textbf{Scale}\\
+\midrule
+Country Code & The iso2 code of a country & None \\
+Country & The name of a country & None \\
+Population & Population in a municipality & None \\
+Date & The date of the data used & None \\
+Infections & The number of infected people & None \\
+Mobility retail \& recreation & The change in mobility in retail \& recreation & scaled \\
+Mobility grocery \&& The change in mobility in & \multirow{2}{*}{scaled} \\
+pharmacies & groceries \& pharmacies \\
+Mobility residential & The change in mobility in residential areas & scaled \\
+Mobility transport stations  & The change in mobility at public transport areas & scaled \\
+Mobility parks  & The change in mobility in parks & scaled \\
+Mobility workplaces  & The change in mobility in workplaces & scaled \\
+Testing policy & Policies implemented related to testing & factor \\
+Contact tracing & Policies implemented related to contact tracing & factor \\
+Vaccination policy & Policies implemented related to vaccination & factor \\
+Facial coverings policy & Policies implemented related to facial coverings & factor \\
+Income support & Policies implemented related to income support & factor \\
+Restrictions on  & Policies implemented related to &  \multirow{2}{*}{factor} \\
+internal movement & the restriction on internal movement \\
+International travel & Policies implemented related to& \multirow{2}{*}{factor} \\
+controls & international travel controls \\
+Public information & Public information campaigns \multirow{2}{*}{factor} \\
+campaigns & on Covid-19 \\
+Cancellation of & Policies implemented related to & \multirow{2}{*}{factor} \\
+public events & the cancellation of public events \\
+\multirow{2}{*}{Restriction of gatherings} & Policies implemented related to & \multirow{2}{*}{factor} \\
+& the restriction of gatherings \\
+\multirow{2}{*}{Closing of public transport} & Policies implemented related to & \multirow{2}{*}{factor} \\
+& the closing of public transport \\
+\multirow{2}{*}{Closing of schools} & Policies implemented related to& \multirow{2}{*}{factor} \\
+& the closing of schools \\
+\multirow{2}{*}{Closing of workplaces} & Policies implemented related to& \multirow{2}{*}{factor} \\
+& the closing of workplaces \\
+\multirow{2}{*}{Stay home requirements} & Policies implemented related to& \multirow{2}{*}{factor} \\
+& stay home requirements \\
+Stringency index & The government stringency index  & scaled \\
+People vaccinated &  The proportion of people who have received   & scaled \\
+per hundred  & at least 1 dose of a vaccine\\
+People fully vaccinated & \multirow{2}{*}{The proportion of fully vaccinated people} &  \multirow{2}{*}{scaled} \\
+per hundred \\
+\multirow{2}{*}{Variant 20E} & The proportion of the total number of& \multirow{2}{*}{scaled} \\
+& sequences of the 20E variant \\
+\multirow{2}{*}{Variant 20L} & The proportion of the total number of& \multirow{2}{*}{scaled} \\
+& sequences of the 20L variant \\
+\multirow{2}{*}{Other variants} & The proportion of the total number of& \multirow{2}{*}{scaled} \\
+& sequences that are not tracked \\
+Season & The season of the date & factor \\
+Expected count & The expected number of infections & None \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -204,7 +204,6 @@ ts_europe <- merge(
 ts_europe <- ts_europe[order(ts_europe$Country, ts_europe$Date), ]
 ts_europe <- ts_europe[ts_europe$new_cases >= 0, ]
 ts_europe$id_date_area <- seq_len(nrow(ts_europe))
-rm(list = setdiff(ls(), "ts_europe"))
 geom <- ts_europe$geometry
 ts_europe$geometry <- NULL
 ts_europe_unscaled <- ts_europe
@@ -227,6 +226,7 @@ ts_europe_unscaled_split <- lapply(ts_europe_unscaled_split, function(x) {
   x
 })
 ts_europe_unscaled <- bind_rows(ts_europe_unscaled_split)
+ts_europe_unscaled$population_density <- round(ts_europe_unscaled$population_density)
 colnames_europe_actual <- c(
   "aged_65_older", "aged_70_older", "cancel_public_events", "cardiovasc_death_rate",
   "close_public_transport", "contact_tracing", "diabetes_prevalence", "expected",
@@ -253,4 +253,14 @@ colnames_europe_nice <- c(
   "Testing policy", "Total infections", "Mobility transit stations", "Vaccination policy",
   "Workplace closures", "Mobility workplaces"
 )
-rm(list = setdiff(ls(), c("ts_europe", "ts_europe_unscaled", "colnames_europe_actual", "colnames_europe_nice")))
+rm(list = setdiff(
+  ls(), c(
+    "newest_numbers_germany", "germany_munc_long",
+    "newest_numbers_norway", "norway_munc_conf_long",
+    "colnames_germany_actual", "colnames_germany_nice",
+    "colnames_norway_actual", "colnames_norway_nice",
+    "ts_europe", "ts_europe_unscaled",
+    "colnames_europe_actual", "colnames_europe_nice"
+    )
+  )
+)
