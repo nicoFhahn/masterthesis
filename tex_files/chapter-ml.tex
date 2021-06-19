@@ -1,29 +1,27 @@
 % !TEX root = ../my-thesis.tex
 %
 \chapter{Short Introduction to Machine Learning}\label{ch:ml}
-Machine learning is a generic term for the "artificial" generation of knowledge from experience: an artificial system learns from examples and can generalize these after the learning phase is complete. To do this, machine learning algorithms build a statistical model based on training data. This means that the examples are not simply learned by heart, but patterns and regularities are recognized in the learning data. In this way, the system can also assess unknown data or fail to learn unknown data. This chapter gives a short overview over some commonly used algorithms in machine learning and show how these can be optimized using hyperparameter tuning. A relatively new area of machine learning, interpretable machine learning, and some of the methods used in this area are introduced in the final parts of the chapter.
+Machine learning is a generic term for the "artificial" generation of knowledge from experience: an artificial system learns from examples and can generalize these after the learning phase is complete. To do this, machine learning algorithms build a statistical model based on training data. This means that the examples are not simply learned by heart, but patterns and regularities are recognized in the learning data. In this way, the system can also assess unknown data or fail to learn unknown data. This chapter gives a short overview of some commonly used algorithms in machine learning and show how these can be optimized using hyperparameter tuning. A relatively new area of machine learning, interpretable machine learning, and some of the methods used in this area are introduced in the final parts of the chapter.
 \section{Common Machine Learning Algorithms}\label{sec:algo}
-In the following sections, the algorithms that are used to compute the predictive models in Section~\ref{sec:predictive} are introduced.
+In the following sections, the algorithms that are used to fit the non-parametric models in Section~\ref{sec:predictive} are introduced.
 \subsection{K-Nearest Neighbours}
 The k-nearest neighbour algorithm (knn) is a non-parametric method in which class assignment is performed considering the $k$ nearest neighbours. \\
-In the simplest case, the classification of an object $x\in\mathbb{R}^n$ is done by majority vote. The $k$ nearest already classified objects of $x$ participate in this voting. To determine which neighbour is closest, many distance measures can be used. Among the most common is the Euclidean distance, defined as
+In the simplest case, the classification of an object $x\in\mathbb{R}^n$ is done by majority vote. The $k$ nearest already classified objects of $x$ participate in this voting. To determine which neighbour is closest, many distance measures can be used. Among the most common is the Euclidean distance, following \cite{danielsson1980euclidean} defined as
 \begin{equation}
-    d\left(x,y\right)=\left|\left|x-y\right|\right|=\sqrt{\sum_{i=1}^n\left(x_i-y_i\right)^2}
-\end{equation}
-\autocite[][]{danielsson1980euclidean}.\\
-Another commonly used distance metric is the Manhattan distance, which defines the distance $d$ between two points $x$ and $y$ as the sum of the absolute difference of the individual coordinates or features,
+    d\left(x,y\right)=\left|\left|x-y\right|\right|=\sqrt{\sum_{i=1}^n\left(x_i-y_i\right)^2}.
+\end{equation} \clearpage
+Another commonly used distance metric is the Manhattan distance, following \cite{krause1986taxicab} defined as the distance $d$ between two points $x$ and $y$ as the sum of the absolute difference of the individual coordinates or features,
 \begin{equation}
-    .d\left(x, y\right) = \sum_{i=1}^n\left|x_i-y_i\right|
+    d\left(x, y\right) = \sum_{i=1}^n\left|x_i-y_i\right|.
 \end{equation}
-\autocite[][]{krause1986taxicab}. \\
 $x$ is assigned to the class that occurs most frequently among the $k$ neighbours. To avoid ties between two classes, an odd value can be chosen for $k$. 
 If the value of $k$ is small, there is a risk that noise in the training data can lead to worse classification results, while a value that is too large risks including points with a large distance to $x$ in the decision. \\
 The algorithm can be used for regression problems to estimate continuous variables. While in knn classification the output is the class membership, in knn regression the output is the average value of the $k$ nearest neighbours \autocite[][]{altman1992introduction}
 \subsection{Neural Networks}
-Artificial neural networks, usually referred to simply as neural networks, are computer systems vaguely inspired by the biological neural networks that make up the brains of living things. Neural networks, however, are more about an abstraction (modelling) of information processing, less about replicating biological neural networks and neurons, which is more the subject of computational neuroscience. Motivated by biology, modelling is now so good that many tasks are performed much better than by humans. \\
+Artificial neural networks, usually referred to simply as neural networks, are computer systems vaguely inspired by the biological neural networks that make up the brains of living creatures. Neural networks, however, are more about an abstraction (modelling) of information processing, less about replicating biological neural networks and neurons, which is more the subject of computational neuroscience. Motivated by biology, modelling is now so good that many tasks are performed much better than by humans. \\
 In artificial neural networks, topology refers to the structure of the network. This generally means how many artificial neurons are located on how many layers and how they are connected to each other. Artificial neurons can be connected in many ways to form an artificial neural network. In many models, neurons are arranged in layers; a network with only one trainable neuron layer is called a single-layer network. 
 Using a graph, the neurons can be represented as nodes and their connections as edges. The inputs are occasionally represented as nodes. 
-The backmost layer of the network, whose neuron outputs are usually the only ones visible outside the network, is called the output layer. Layers before this are referred to as the hidden layer. Figure~\ref{fig:nnet} shows the architecture of a single-layer neural network.
+The backmost layer of the network, whose neuron outputs are usually the only ones visible outside the network, is called the output layer. Layers before this are referred to as the hidden layer. Figure~\ref{fig:nnet} shows the architecture of a single-layer neural network. \clearpage
 \begin{figure}[H]
     \centering
     \def\layersep{2.5cm}
@@ -67,10 +65,10 @@ The backmost layer of the network, whose neuron outputs are usually the only one
     \caption{A single-layer neural network.}
     \label{fig:nnet}
 \end{figure}
-While neural networks are mainly known for their use in deep learning and modelling complex problems such as image recognition, they can be easily adapted for regression problems. In supervised learning, the neural network is given an input pattern and the output produced by the neural network in its current state is compared with the value it is supposed to output. By comparing the target and actual output, it is possible to infer the changes to be made to the network configuration \autocite[][]{ripley2007pattern}.
+While neural networks are mainly known for their use in deep learning and modelling complex problems such as image recognition, they can be easily adapted for regression problems. In supervised learning, the neural network is given an input pattern and the output produced by the neural network in its current state is compared with the value it is supposed to output. By taking a look at the residuals, it is possible to infer the changes to be made to the network configuration \autocite[][]{ripley2007pattern}.
 \subsection{Classification and Regression Trees}
 Classification and regression trees (CART) is an approach to classification or regression problems. A significant feature of the CART algorithm is that only binary trees can be generated, which means that there are always exactly two branches at each node. The central element of this algorithm is therefore finding an optimal binary separation.
-In the CART algorithm, attribute selection is controlled by maximizing the information content. CARTs are characterized by optimally separating the data in terms of classification. This is achieved with a threshold value that is searched for each attribute. The information content of an attribute is considered high if a classification can be made with a high hit rate by evaluating the attribute characteristics resulting from the division via the threshold values. For the decision trees calculated by the CART algorithm, the following applies: The higher the information content of an attribute in relation to the target variable, the higher up in the tree this attribute is found. Figure~\ref{fig:tree} shows an example of a decision tree.
+In the CART algorithm, attribute selection is controlled by maximizing the information content. CARTs are characterized by optimally separating the data in terms of classification. This is achieved with a threshold value that is searched for each attribute. The information content of an attribute is considered high if a classification can be made with a high hit rate by evaluating the attribute characteristics resulting from the division via the threshold values. For the decision trees fit by the CART algorithm, the following applies: The higher the information content of an attribute in relation to the target variable, the higher up in the tree this attribute is found. Figure~\ref{fig:tree} shows an example of a decision tree.\clearpage
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}[
@@ -102,14 +100,15 @@ In regression analysis, trees are built by a collection of rules based on the av
 \end{itemize}
 Each branch of the tree culminates in a terminal node. Each observation falls into exactly one terminal node, and each terminal node defined by a unique set of rules \autocite[][]{breiman1984classification}.
 \subsection{Gradient Boosting}
-CART are considered weak learners, meaning that their predictive performance is only slightly better than chance. Boosting is a method that can be used to convert weak learners into strong learners. Gradient boosting in particular uses CART as a weak learner. Here, each new tree is an adaptation to a modified version of the original tree. After the first tree is grown, the error residuals, defined as the difference between the target value and the predicted target value, are calculated. A new tree is fitted using the error residuals as the target variable while still using the same input variables. The predicted residuals are added to the previous predictions. This procedure is repeated for the remaining residuals until the loss reaches an acceptable level or no longer improves on an external validation set. \\
+CART are considered weak learners, meaning that their predictive performance is only slightly better than chance. Boosting is a method that can be used to convert weak learners into strong learners. Gradient boosting in particular uses CART as a weak learner. Here, each new tree is an adaptation to a modified version of the original tree. After the first tree is grown, the error residuals, defined as the difference between the target value and the predicted target value, are calculated. A new tree is fitted using the error residuals as the target variable while still using the same input variables. The predicted residuals are added to the previous predictions. \clearpage
+This procedure is repeated for the remaining residuals until the loss reaches an acceptable level or no longer improves on an external validation set. \\
 Trees are added one at a time and existing trees in the model are not changed. After calculating the loss, a tree must be added that reduces the loss (i.e. follows the gradient). The mathematical version of the algorithm can be seen in Algorithm~\ref{alg:gradient}.
 \begin{algorithm}[H]
 \caption{The Gradient Boosting Algorithm}
   \label{alg:gradient}
 \begin{algorithmic}[1]
 \Statex Given a training set $\lbrace\left(x_i,y_i\right)\rbrace_{i=1}^n$, a differentiable loss function $L\left(y, F(x)\right)$ and the number of iterations $M$,
-\State Initialization: Compute a model with a constant value:
+\State Initialization: Fit a model with a constant value $\gamma$:
 \begin{equation*}
     F_0\left(x\right)=\underset{\gamma}{\arg\min}\sum_{i=1}^nL\left(y_i,\gamma\right).
 \end{equation*}
@@ -134,7 +133,7 @@ Trees are added one at a time and existing trees in the model are not changed. A
 Gradient boosting of CART produces robust and interpretable models for both regression and classification that achieve high predictive accuracy \autocite[][]{friedman2001greedy}.
 \subsection{Random Forests}
 A Random Forest is a classification and regression procedure consisting of several uncorrelated decision trees. All decision trees are grown under a certain type of randomization during the learning process. For a classification, each tree in that forest is allowed to make a decision and the class with the most votes decides the final classification. Random forests can be used for regression. Random forest uses bagging, a meta-algorithm that can be used to improve the stability and accuracy of machine learning algorithms, for instance CART. \\
-Using $B$ samples of size $n$, $B$ models $F_i(x), i = 1,..., B$ are computed. For each $x$, $B$ predictions $m_{i}(x), i = 1,...B$ exist then. The predicted value is given by
+Using $B$ samples of size $n$, $B$ models $F_i(x), i = 1,..., B$ are fitted. For each $x$, $B$ predictions $m_{i}(x), i = 1,...B$ exist then. The predicted value is given by
 \begin{equation}
     m^B(x)=\frac{1}{B}\sum_{i=1}^B\left(m_i(x)\right).
 \end{equation}
@@ -156,9 +155,9 @@ After introducing some common machine learning algorithms, this section shows ho
 \subsection{Tuning of Machine Learning Models}
 In the field of machine learning, hyperparameter optimization, also known as hyperparameter tuning, refers to the search for optimal hyperparameters. A hyperparameter is a parameter that is used to control the training algorithm and whose value, unlike other parameters, must be set before the actual training of the model. There exists a variety of methods when it comes to the algorithms used to explore the hyperparameter space, from simple methods like a grid search to Bayesian optimization or more advanced methods like iterated F-racing.
 \subsubsection*{Cross-Validation}
-Cross-validation is a procedure for evaluating the performance of an algorithm in machine learning. Using new datasets that were not used during the training phase, the goodness of the prediction is examined. This is done by partitioning the known dataset into subsets for training and testing the algorithm and the remaining data.
+Cross-validation is a procedure for evaluating the performance of an algorithm in statistical learning. Using new datasets that were not used during the training phase, the goodness of the prediction is examined. This is done by partitioning the known dataset into subsets for training and testing the algorithm and the remaining data.
 Each run of cross-validation involves randomly partitioning the original dataset into a training set and a test set. The training data set is used to train a supervised learning algorithm and the test data set is used to evaluate its performance. This process is repeated several times and the mean cross-validation error is used as a performance indicator.
-When training a model, it is important not to overfit it with complex algorithms or underfit it with simple algorithms. The choice of training and testing set is critical to reducing this risk. However, it is difficult to split the dataset in a way that maximizes learning and the validity of the test results. This is where cross-validation comes in. To find the best algorithm for the model, cross-validation offers different techniques that split the data differently. \\
+When training a model, it is important not to overfit it with complex algorithms or underfit it with simple algorithms. The choice of training and testing set is critical to reducing this risk. However, it is difficult to split the dataset in a way that maximizes learning and the validity of the test results. This is where cross-validation comes in. To find the best algorithm for the model, cross-validation offers different techniques that split the data differently. \clearpage
 A commonly used cross-validation procedure is k-fold cross-validation. In this method, after splitting the original dataset into a training and a test dataset, the training set is split into $k$ subsets called folds. Cross-validation iterates through each fold, using one of the $k$ folds as the validation set at each iteration, while all the remaining folds are used as the training set. This process is repeated until every fold has been used as a validation set. \\
 Cross-validation helps to select the best performing model by calculating the error using the test set that is not used for training. The test set is used to calculate model accuracy and show how it generalizes with future data \autocite[][]{fushiki2011estimation}. Figure~\ref{fig:cv} shows an example of 10-fold cross validation.
 \begin{figure}[H]
@@ -185,7 +184,7 @@ Cross-validation helps to select the best performing model by calculating the er
     {
         \foreach \y in {0,1,...,4}
         {
-            \draw (\x*11,0) +(0,-\y*1) node[fullset,anchor=west] {};
+            \draw (\x*11,0) +(0,-\y*2) node[fullset,anchor=west] {};
             \draw (\x*11,0) +(\x*5+\y,-\y*2) node[oneblock,draw,anchor=west,fill=lightgray] {};
         }
     }

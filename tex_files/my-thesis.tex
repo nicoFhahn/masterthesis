@@ -3,7 +3,7 @@
 % **************************************************
 \documentclass[%
     paper=A4,               % paper size --> A4 is default in Germany
-    twoside=false,           % onesite or twoside printing
+    twoside=true,           % onesite or twoside printing
     openright,              % doublepage cleaning ends up right side
     parskip=half,           % spacing value / method for paragraphs
     chapterprefix=true,     % prefix for chapter marks
@@ -98,22 +98,27 @@
 % --------------------------
 % Front matter
 % --------------------------
+\includepdf[fitpaper=true, pages=-]{titlepage-1.pdf}
+\cleardoublepage
 \pagenumbering{roman}			% roman page numbing (invisible for empty page style)
 \pagestyle{empty}				% no header or footers
 \cleardoublepage
 
 \pagestyle{plain}				% display just page numbers
-%\input{abstract}		% INCLUDE: the abstracts (english and german)
+\input{abstract}		% INCLUDE: the abstracts (english and german)
 \cleardoublepage
 %
-%\input{acknowledgement} % INCLUDE: acknowledgement
+\input{acknowledgement} % INCLUDE: acknowledgement
 \cleardoublepage
 %
-\includepdf[fitpaper=true, pages=-]{titlepage-1.pdf}
 \currentpdfbookmark{\contentsname}{toc}
 \setcounter{tocdepth}{2}		% define depth of toc
-\input{abstract}
 \tableofcontents				% display table of contents
+\cleardoublepage
+\listoffigures
+\cleardoublepage
+
+\listoftables
 \cleardoublepage
 \printunsrtglossary[type=symbols,style=long]
 
@@ -145,20 +150,12 @@
 }
 \cleardoublepage
 
-\listoffigures
-\cleardoublepage
-
-\listoftables
-\cleardoublepage
-
 %\lstlistoflistings
 \cleardoublepage
 
 \appendix\cleardoublepage
 %\input{chapter-appendix}       % INCLUDE: appendix
 \cleardoublepage
-\input{declaration}
-\clearpage
 \includepdf[fitpaper=true, pages=-]{titlepage-3.pdf}
 % **************************************************
 % End of Document CONTENT

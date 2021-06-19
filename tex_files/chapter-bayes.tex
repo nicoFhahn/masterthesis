@@ -2,15 +2,10 @@
 %
 \chapter{Introduction to Bayesian Inference}
 \label{sec:bayes}
-Bayesian inference is a branch of statistics that uses the Bayesian concept of probability and Bayes' theorem to investigate questions of stochastics. \\
-Characteristic for Bayesian statistics is the consistent use of probability distributions or marginal distributions, whose form conveys the accuracy of the procedures or reliability of the data and the procedure. \\
-The Bayesian concept of probability does not presuppose infinitely repeatable random experiments, so that Bayesian methods can be used even with small data sets. A small amount of data leads to a broad probability distribution, which is not strongly localized. \\ 
-In the Bayesian approach, the parameters of interest are treated as random variables that are governed by their parameters, for instance the mean and standard deviation, and distributions. \\
-Bayesian inference is an essential technique in mathematical statistics and the polar opposite of the frequentist approach, in which a hypothesis is tested without being assigned a probability. \\
-In the Bayesian approach a \textit{prior} distribution $\pi\left(\pmb{\theta}\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about $\pmb{\theta}$ prior to obtaining the data. Using the prior distribution, the likelihood function $\pi\left(\pmb{y}|\pmb{\theta}\right)$, and the observed data $\pmb{y}$, it is possible to calculate the probability distribution $\pi\left(\pmb{\theta}\right|\pmb{y})$ of $\pmb{\theta}$ given the data $\pmb{y}$. This distribution is called the \textit{posterior} distribution of $\pmb{\theta}$ and is used to make inferences about the parameters \autocite[][6]{box2011bayesian}.
+Bayesian inference is a branch of statistics that uses the Bayesian concept of probability and Bayes' theorem to investigate questions of stochastics.  Characteristic for Bayesian statistics is the consistent use of probability distributions or marginal distributions, whose form conveys the accuracy of the procedures or reliability of the data and the procedure. The Bayesian concept of probability does not presuppose infinitely repeatable random experiments, so that Bayesian methods can be used even with small data sets. A small amount of data leads to a broad probability distribution, which is not strongly localized. In the Bayesian approach, the parameters of interest are treated as random variables that are governed by their parameters, for instance the mean and standard deviation, and distributions. Bayesian inference is an essential technique in mathematical statistics and the polar opposite of the frequentist approach, in which a hypothesis is tested without being assigned a probability. In the Bayesian approach a \textit{prior} distribution $\pi\left(\pmb{\theta}\right)$ is introduced as part of the model. This distribution is intended to express a state of knowledge or ignorance about the parameters $\pmb{\theta}$ prior to obtaining the data. Using the prior distribution, the likelihood function $\pi\left(\pmb{y}|\pmb{\theta}\right)$, and the observed data $\pmb{y}$, most of the time it is possible to calculate the probability distribution $\pi\left(\pmb{\theta}\right|\pmb{y})$ of $\pmb{\theta}$ given the data $\pmb{y}$. This distribution is called the \textit{posterior} distribution of $\pmb{\theta}$ and is used to make inferences about the parameters \autocite[][6]{box2011bayesian}.
 \clearpage
 \section{Preliminaries}
-This work follows strict notation rules to easily represent different elements such as matrices or graphs and contains frequently used abbreviations. These and some other basic concepts used in this work are introduced below. The notation follows the one used by Rue and Held \autocite[][14--19]{rue2005gaussian}.
+This work follows strict notation rules to easily represent different elements such as matrices or graphs and contains frequently used abbreviations. These and some other basic concepts used in this work are introduced below. The notation follows the one used by \cite{rue2005gaussian}.
 \subsection{Matrices and Vectors}
 Vectors and matrices are indicated by bold notation, such as $\pmb{x}$ and $\pmb{A}$. The transpose of $\pmb{A}$ is denoted by $\pmb{A}^T$. The element in the \textit{i}th row and \textit{j}th column of $\pmb{A}$ is referenced by $A_{ij}$. This notation is used for vectors and $x_i$ denotes the \textit{i}th element of a vector. The vector $\left(x_i,x_{i+1},...,x_j\right)^T$ is abbreviated to $\pmb{x}_{i:j}$. If the columns $\pmb{A}_1, \pmb{A}_2,...,\pmb{A}_m$ of a $n\times m$ matrix $\pmb{A}$ are stacked on top of each other, this is denoted by $\hbox{vec}\left(\pmb{A}\right)=\left(\pmb{A}_1^T,\pmb{A}_2^T,...,\pmb{A}_m^T\right)$. Deleting rows and/or columns from $\pmb{A}$ creates a \textit{submatrix}. If a submatrix of a $n\times n$ matrix $\pmb{A}$ can be obtained by removing rows and columns of the same index, it is called a \textit{principal submatrix}. If this matrix can be obtained by deleting the last $n-r$ rows and columns, it is called a \textit{leading principal submatrix} of \pmb{A}. \\
 A diagonal $n\times n$ matrix $\pmb{A}$ is denoted by $\hbox{diag}\left(\pmb{A}\right)$ and has the following structure:
@@ -24,48 +19,9 @@ A diagonal $n\times n$ matrix $\pmb{A}$ is denoted by $\hbox{diag}\left(\pmb{A}\
 The identity matrix is denoted by $\pmb{I}$. \\
 If $A_{ij}=0$ for $i<j$ or $A_{ij} = 0$ where $i>j$, then $\pmb{A}$ is called \textit{upper triangular} and \textit{lower triangular} respectively. The \textit{bandwidth} of a matrix $\pmb{A}$ is defined as $\max\left\lbrace|i-j|:A_{ij}\neq0\right\rbrace$. The \textit{lower bandwidth} is given by $\max\lbrace|i-j|:A_{ij}\neq $ $0\hbox{ and } i > j\rbrace$. $|\pmb{A}|$ denotes the \textit{determinant} of a $n\times n$ matrix $\pmb{A}$ and is equal to the product of the eigenvalues of $\pmb{A}$. The \textit{rank} of $\pmb{A}$, referenced by $\hbox{rank}\left(\pmb{A}\right)$, is the number of linearly independent rows or columns of $\pmb{A}$. The sum of the diagonal elements is called \textit{trace} of $\pmb{A}$, $\hbox{trace}\left(\pmb{A}\right)=\sum_{i}A_{ii}$.\\
 Finally, '$\odot$' denotes the element-wise multiplication of two matrices of size $n\times m$, '$\oslash$' denotes the element-wise division and raising each element of a matrix $\pmb{A}$ to a scalar power uses the symbol '$\owedge$'  \autocite[][14--15]{rue2005gaussian}.
-\subsection{Lattice and Torus}
-$\mathcal{I}_{\pmb{n}}$ denotes a (regular) \textbf{lattice} (or grid) of size $\pmb{n}=\left(n_1, n_2\right)$ (in the two-dimensional case). $\pmb{y}$ can take values on $\mathcal{I}_{\pmb{n}}$ and $y_{i,j}$ denotes the value of $\pmb{y}$ at location $ij$, for $i=1,...,n_1$ and $j=1,...,n_2$. For easier reading this is shortened to $y_{ij}$. On an \textit{infinite lattice} $\mathcal{I}_{\pmb{\infty}}$, $ij$ are numbered as $i=0,\pm1,\pm2,...,$ and $j=0,\pm1,\pm2,...$. \\
-A lattice with cyclic or toroidal boundary conditions is referred to as \textit{torus} and is denoted by $\mathcal{I}_{\pmb{\infty}}$. The dimension is $\pmb{n}=\left(n_1,n_2\right)$ (in the two-dimensional case) and all indices are modulus $\pmb{n}$ and run from 0 to $n_1-1$ or $n_2-1$. If a GMRF $\pmb{y}$ is defined on $\mathcal{I}_{\pmb{n}}$, the toroidal boundary conditions imply that $y_{-2,n_2}$ is equal to $y_{n_1-2,0}$ since $-2\mod n_1$ is equal to $n_1-2$ and $n_2\mod n_2$ is equal to 0.\\
-An \textit{irregular lattice} refers to a spatial configuration of regions $i=1,...,n$ where the regions (mostly) have common boundaries, for instance the states of a nation \autocite[][15--16]{rue2005gaussian}. An example of an irregular lattice is shown in Figure~\ref{fig:lattice}.
-\begin{figure}[H]
-   \centering
-       \includegraphics[page=1,width=\textwidth]{switzerland.pdf}
- \caption{The cantons of Switzerland, an example of an irregular lattice.}
- \label{fig:lattice}
-\end{figure}
 \subsection{General Notation and Abbreviations}
 For $C\in\mathcal{I}=\left\lbrace1,...,n\right\rbrace$ let $\pmb{y}_C=\left\lbrace y_i:i\in C\right\rbrace$. $-C$ denotes the set $\mathcal{I-C}$ such that $\pmb{y}_{-C}=\left\lbrace y_i:i\notin C\right\rbrace$. For two sets $A$ and $B$, $A\setminus B=\left\lbrace i:i\in A \hbox{ and } i \notin B\right\rbrace$. \\
 $\pi\left(\cdot\right)$ denotes the density of its arguments, for example $\pi\left(\pmb{y}\right)$ for the density of $\pmb{y}$ and $\pi\left(\pmb{y}_A|\pmb{y}_{-A}\right)$ for the conditional density of $\pmb{y}_A$, given $\pmb{y}_{-A}$. '$\sim$' is used when a variable is 'distributed' according to the law $l$ \autocite[][16]{rue2005gaussian}.
-\subsection{Symmetric Positive Definite Matrices}
-An $n \times n$ matrix $\pmb{A}$ is \textit{positive definite} exactly if
-\begin{equation*}
-    \pmb{x}^T\pmb{A}\pmb{x}>0,\hspace{20pt}\forall\pmb{x}\neq\pmb{0}.
-\end{equation*}
-If $\pmb{A}$ is also symmetric, it is called a symmetric positive definite (SPD) matrix. Only SPD matrices are considered and sometimes the notation '$\pmb{A}>0$' is used for an SPD matrix $\pmb{A}$. \\
-An SPD matrix $\pmb{A}$ has some of the following properties.
-\begin{itemize}
-    \item[1.] $\hbox{rank}\left(\pmb{A}\right)=n$.
-    \item[2.] $|\pmb{A}|>0$.
-    \item[3.] $A_{ii}>0$.
-    \item[4.] $A_{ii}A_{jj}-A_{ij}^2>0$, for $i\neq j$.
-    \item[5.] $A_{ii} + A_{jj}-2|A_{ij}|>0$ for $i\neq j$.
-    \item[6.] $\max A_{ii}>\max_{i\neq j}|A_{ij}|$.
-    \item[7.] $\pmb{A}^{-1}$ is SPD.
-    \item[8.] All principal submatrices of $\pmb{A}$ are SPD.
-\end{itemize}
-If $\pmb{A}$ and $\pmb{B}$ are SPD, $\pmb{A}+\pmb{B}$ is SPD, but the reverse is generally not true. Additionally, if $\pmb{AB}=\pmb{BA}$, $\pmb{AB}$ is SPD. \\
-The following conditions are all sufficient and necessary for a symmetric matrix $\pmb{A}$ to be SPD:
-\begin{itemize}
-    \item[1.] All eigenvalues $\lambda_1,...,\lambda_n$ of $\pmb{A}$ are strictly positive.
-    \item[2.] There exists such a matrix $\pmb{C}$ that $\pmb{A}=\pmb{CC}^T$. If $\pmb{C}$ is lower triangular, it is called the \textit{Cholesky triangle} of $\pmb{A}$.
-    \item[3.] All leading principal submatrices have strictly positive determinants.
-\end{itemize}    
-A sufficient, but not necessary condition for a (symmetrical) matrix to be SPD is the criterion of \textit{diagonal dominance}:
-    \begin{equation*}
-        A_{ii}-\sum_{j:j\neq i}|A_{ij}|>0,\hspace{20pt}\forall i.
-    \end{equation*}
-    A $n\times n$ matrix $\pmb{A}$ is called a \textit{symmetric positive semidefinite} (SPSD) matrix. An SPSD matrix $\pmb{A}$ is sometimes denoted '$\pmb{A}\geq0$' \autocite[][18--19]{rue2005gaussian}.
 \clearpage
 \section{Basic Concepts of Bayesian Theory}
 To understand Bayesian theory, it is helpful to first introduce a few basic concepts, first and foremost Bayes' theorem, which is introduced in Section~\ref{sec:bayes_theorem}, one of the most famous concepts in all of statistics. Other notions that are integral to the rest of this thesis are the concept of conditional independence, undirected graphs and the computation of summary statistics, the latter of which is an essential part of the analysis section of this thesis.
@@ -77,7 +33,7 @@ Let $\pmb{y}^T=\left(y_1,...,y_n\right)$ be a vector of $n$ observations whose p
 \end{equation}
 Given the observed data $\pmb{y}$, the conditional distribution of $\pmb{\theta}$ is
 \begin{equation}
-    \pi\left(\pmb{\theta}|\pmb{y}\right)=\frac{p\left(\pmb{y}|\pmb{\theta}\right)\pi\left(\pmb{\theta}\right)}{\pi\left(\pmb{y}\right)}.
+    \pi\left(\pmb{\theta}|\pmb{y}\right)=\frac{\pi\left(\pmb{y}|\pmb{\theta}\right)\pi\left(\pmb{\theta}\right)}{\pi\left(\pmb{y}\right)}.
 \end{equation}
 This last statement is known as Bayes' theorem \autocite[][]{bayes1763lii}. The \textit{prior} distribution $\pi\left(\pmb{\theta}\right)$ contains knowledge about $\pmb{\theta}$ without knowledge of the data. $\pi\left(\pmb{\theta}|\pmb{y}\right)$ contains what is known about $\pmb{\theta}$ given knowledge of the data and is the \textit{posterior} distribution of $\pmb{\theta}$ given $\pmb{y}$. \\
 If $\pi\left(\pmb{y}|\pmb{\theta}\right)$ is considered as a function of $\pmb{\theta}$ instead of $\pmb{y}$, it is called the \textit{likelihood function} of $\pmb{\theta}$ given $\pmb{y}$ and can be written as $l\left(\pmb{\theta}|\pmb{y}\right)$. Thus, Bayes' theorem can be written as
@@ -87,8 +43,134 @@ If $\pi\left(\pmb{y}|\pmb{\theta}\right)$ is considered as a function of $\pmb{\
 It is evident that the posterior distribution of $\pmb{\theta}$ given the data $\pmb{y}$ is proportional to the product of the distribution of $\pmb{\theta}$ prior to observing the data and the likelihood function of $\pmb{\theta}$ given $\pmb{y}$. Therefore,
 \begin{equation*}
     \hbox{posterior distribution} \propto  \hbox{likelihood}\times\hbox{prior distribution}.
+\end{equation*} \clearpage
+The data $\pmb{y}$ modifies the prior knowledge of $\pmb{\theta}$ through the likelihood function, and thus can be regarded as a representation of the information about $\pmb{\theta}$ derived from the data \autocite[][]{box2011bayesian}.
+\subsection{Calculation of Summary Statistics}\label{sec:mean_iv}
+As the posterior mean and the credibility intervals of coefficient are of interest, calculation of these is performed later on. This allows a better interpretation of the results. \\
+To receive the posterior mean of the unknown parameter set $\pmb{\theta}$, the following estimator is used,
+\begin{equation}
+    \int \pmb{\theta}\pi\left(\pmb{\theta}|\pmb{x}\right)d\pmb{\theta}
+\end{equation}
+\autocite[][]{jaynes2003probability}.\\
+If necessary, e.g. if the target variable follows a (negative) binomial distribution, the values of $\pmb{x}$ must be transformed to its original scale, as in these instances the log-likelihood is modelled. Therefore, in these cases, the expected value would have to be exponentiated to allow a clear interpretation. \\
+In practice, to obtain the credibility interval of a variable, the marginal values are first transformed to their original scale, if necessary, and the 2.5\% quantile and the 97.5\% quantiles are calculated.
+\clearpage
+\section{Prior Selection}
+A key question in Bayesian analysis is the effect of the prior on the posterior, and how that effect can be measured. Do posterior distributions derived with different priors become similar as more and more data is collected? It has been formally proven that under certain regularity conditions, the impact of the prior decreases with increasing sample size \autocite[][]{ghaderinezhad2019impact}. From a practical point of view, it is more important to know what happens when the sample size $n$ is finite. In this section, conjugate priors and penalized complexity priors are introduced. 
+\subsection{Conjugate Priors}
+One property of exponential families is that they have conjugate priors \autocite[][]{diaconis1979conjugate}, which is an important property in Bayesian statistics. If the posterior distribution $\pi\left(\pmb{\theta}|\pmb{y}\right)$ and the prior distribution $\pi\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $\pi\left(\pmb{y}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. These priors were first discussed and formalized by \cite{raiffaapplied}. \\
+The construction of a conjugate prior is done by factorizing the likelihood function into two parts. One part must be independent of the parameter(s) of interest but can be dependent on the data, while the other factor is a function that depends on the parameter(s) of interest and is dependent on the data only through the sufficient statistics. The family of conjugate priors is by definition proportional to the second factor. The posterior distribution resulting from the conjugate prior is itself a member of the same family as the conjugate prior \autocite[][]{raiffaapplied}. In cases where the prior and posterior distributions are part of the same family, the prior is said to be closed under sampling. Furthermore, since the data are only incorporated into the posterior distribution through the sufficient statistics, there exist relatively simple formulas for updating the prior into the posterior.\\
+For an example of the construction of a conjugated prior, see \cite{fink1997compendium}.\\
+A drawback of conjugated priors is that the a priori known information about $\pmb{\theta}$ may be insufficient for determining both parameters or may be inconsistent with the structure imposed by conjugacy \autocite[][]{robert2010bayesian}. Moreover, these priors can be too restrictive and not every belief about the prior can be described \autocite[][]{irwin2005prior}. \\
+Thus, although conjugate priors are easy to handle both mathematically and computationally \autocite[][]{irwin2005prior}, they are not often used in practice because of these drawbacks.
+\subsection{Penalized Complexity Priors}\label{sec:pc_prior}
+One issue when selecting the prior distribution of a particular parameter is that it is not always intuitive when it comes to understanding and interpreting this distribution, something that is essential to ensure that it behaves as intended by the user. This problem can be addressed by using \textit{penalized complexity priors}, which is a methodology that penalizes the complexity of model components in relation to deviation from simple base model formulations.\\
+PC priors provide a systematic and unified approach to calculating prior distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterized by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalizing the deviation from the flexible model to the fixed base model, the PC prior is calculated \autocite[][]{sorbye2017penalised}.
+\subsubsection{The Principles Behind PC Priors}
+Four main principles should be followed to calculate priors consistently and to understand their properties.
+\subsubsection*{Support to Occam's Razor} 
+Let $\pi\left(x|\xi\right)$ denote the density of a model component $x$ and $\xi$ the parameter to which a prior distribution is to be assigned. The base model is characterized by a density $\pi\left(x|\xi=\xi_0\right)$, where $\xi_0$ is a fixed value. The prior for $\xi$ should be such that proper shrinkage is given to $\xi_0$. The simplicity of the model is therefore prioritized over the complexity of the model, preventing overfitting \autocite[][]{sorbye2017penalised}. \clearpage
+\subsubsection*{Penalisation of Model Complexity} 
+Let $f_1=\pi\left(x|\xi\right)$ and $f_0\left(x|\xi=\xi_0\right)$ denote the flexible model and the base model respectively. The complexity of $f_1$ compared to $f_0$ is characterized using the Kullback-Leibler divergence \autocite[][]{kullback1951information} to calculate a measure of complexity between the two models,
+\begin{equation}
+    \hbox{KLD}\left(f_1||f_2\right) = \int f_1\left(x\right)\log\left(\frac{f_1\left(x\right)}{f_0\left(x\right)}\right)dx.
+\end{equation}
+This can be used to measure the information that is lost when $f_1$ is approximated by the simpler model $f_0$. For multinormal densities with zero mean, the calculation simplifies to
+\begin{equation}
+    \hbox{KLD}\left(f_1||f_0\right) = \frac{1}{2}\left(\hbox{trace}\left(\pmb{\Sigma}_0^{-1}\pmb{\Sigma}_1\right)-n-\log\left(\frac{\left|\pmb{\Sigma}_1\right|}{\left|\pmb{\Sigma}_0\right|}\right)\right),
+\end{equation}
+where $f_i\sim\mathcal{N}\left(0,\pmb{\Sigma}_i\right), i=0,1$, while $n$ represents the dimension. For easier interpretation, the Kullback-Leibler divergence is transformed into a unidirectional distance measure
+\begin{equation}
+    d\left(\xi\right) = d\left(f_1||f_0\right)=\sqrt{2\hbox{KLD}\left(f_1||f_0\right)}
+\end{equation}
+which can be interpreted as a measure of distance from $f_1$ to $f_0$ \autocite[][]{sorbye2017penalised}.
+\subsubsection*{Constant Rate Penalisation}
+The derivation of the PC prior can be based on a system of constant rate penalization, given by
+\begin{equation}
+    \frac{\pi_d\left(d\left(\xi\right)+\delta\right)}{\pi_d\left(d\left(\xi\right)\right)}=r^{\delta}, \hspace{20pt} d\left(\xi\right),\delta\geq0.
+\end{equation}
+$r\in\left(0,1\right)$ represents the constant decay rate and thus implies that the relative change in the prior distribution for $d\left(\xi\right)$ is independent of the actual distance. Therefore, $d\left(\xi\right)$ is exponentially distributed with density $\pi\left(d\left(\xi\right)\right)=\lambda\exp\left(-\lambda d\left(\xi\right)\right)$ and rate $\lambda = -\ln\left(r\right)$. By a standard variable change transformation, the corresponding PC prior for $\xi$ is given \autocite[][]{sorbye2017penalised}. \clearpage
+\subsubsection*{User-Defined Scaling}
+Since $\lambda$ characterizes the shrinkage properties of the prior, it is important that the rate can be chosen in an intuitive and interpretable way. One possibility is to determine $\lambda$ by including a probability statement of tail events, for example
+\begin{equation}\label{eq:pcprior}
+    \mathbb{P}\left(Q\left(\xi\right) > U\right)=\alpha,
+\end{equation}
+where $U$ represents an assumed upper bound for an interpretable transformation $Q\left(\xi\right)$ and $\alpha$ denotes a small probability \autocite[][]{sorbye2017penalised}.
+\clearpage
+\section{Markov-Chain-Monte-Carlo-Methods}
+The main problem with the posterior distribution of a parameter is how to find it effectively. Since an analytical calculation is not possible, sampling from the posterior distribution can be an effective way to find this distribution. The traditional way to do this is to use Markov-Chain-Monte-Carlo methods, also known as MCMC methods. They are a set of algorithms that enable sampling from probability distributions based on the construction of Markov chains. After a sufficient number of iterations, the stationary distribution of a Markov chain can be taken as the desired distribution, with the quality of this distribution improving as the number of iterations increases. Most of the time, the construction of such a chain is relatively simple; the challenge is to determine how many steps are needed before convergence towards the stationary distribution is achieved. MCMC methods are mostly used to compute numerical approximations of multidimensional integrals, for instance in Bayesian statistics or computational biology. The two main concepts used in MCMC methods are Monte Carlo integration and the aforementioned Markov chains, hence the name Markov Chain Monte Carlo.
+\subsection{Monte Carlo Integration}
+\textit{Monte Carlo integration} is a technique that uses the generation of random numbers for numerical computation of definite integrals and is especially useful for higher-dimensional integrals. The problem the method addresses is the computation of the integral
+\begin{equation}
+    \mathbb{E}_f\left[h\left(X\right)\right]=\int_\chi h(x)f(x)dx.
+\end{equation}
+The integral can be approximated by using a sample $\left(X_1,...,X_m\right)$ generated from $f$ and calculating the arithmetic mean
+\begin{equation}
+    \overline{h}_m=\frac{1}{m}\sum_{j=1}^mh\left(x_j\right).
+\end{equation}
+According to the Strong Law of Large Numbers, $\overline{h}_m$ is likely to converge to $\mathbb{E}_f\left[h\left(X\right)\right]$. When the expectation of $h^2$ under $f$ is finite, the convergence speed of $\overline{h}_m$ can be assessed. The variance too can be estimated from the sample $\left(X_1,...,X_n\right)$ through
+\begin{equation}
+    v_m=\frac{1}{m^2}\sum_{j=1}^m\left[h\left(x_j\right)-\overline{h}_m\right]^2.
+\end{equation}
+For $m$ large,
+\begin{equation}
+    \frac{\overline{h}_m-\mathbb{E}_f\left[h\left(X\right)\right]}{\sqrt{v_m}}
+\end{equation}
+is approximately distributed as a $\mathcal{N}(0,1)$ variable. This can be used for constructing a convergence test and to calculate confidence bounds for the approximation of $\mathbb{E}_f\left[h\left(X\right)\right]$ \autocite[][83--84]{robert2013monte}. The term Monte Carlo was first used by \cite{metropolis1949monte} to describe a method dealing with problems related to "integro-differential equations that occur in various branches of the natural sciences".
+\subsection{Markov Chains}
+Markov chains are stochastic processes that aim to provide the probability of the occurrence of future events. A Markov chain is defined by the fact that even if only a limited history is known, predictions about future developments can be made just as reliably as if the entire history of a process were known. Thus, the probability of moving from the current state to any state depends only on the current state of the chain. These probabilities are defined by a \textit{transition kernel}, which is a function $K$ on $\mathcal{X} \times \mathcal{B}\left(\mathcal{X}\right)$, such that
+\begin{itemize}
+    \item[i.] $\forall x\in\mathcal{X}, K\left(x, \cdot\right)$ is a probability measure
+    \item[ii.] $\forall A\in \mathcal{B}\left(\mathcal{X}\right), K\left(\cdot, A\right)$ is measurable.
+\end{itemize}
+In the discrete case, the transition kernel is a matrix $\pmb{K}$ with elements
+\begin{equation*}
+    \mathbb{P}_{xy}=\mathbb{P}\left(X_n=y|X_{n-1}=x\right), \hspace{20pt}x,y\in\mathcal{X}.
 \end{equation*}
-The data $\pmb{y}$ modifies the prior knowledge of $\pmb{\theta}$ through the likelihood function, and thus can be regarded as a representation of the information about  $\pmb{\theta}$ derived from the data \autocite[][]{box2011bayesian}.
+If $\mathcal{X}$ is continuous, the kernel denotes the conditional density $K\left(x,x^T\right)$ of the transition $K\left(x,\cdot\right)$,
+\begin{equation*}
+    \mathbb{P}\left(X\in A|x\right)=\int_AK\left(x,x^T\right)dx^T.
+\end{equation*}
+Given a transition kernel $K$, a sequence $X_0,X_1,...,X_t$ of random variables is a \textit{Markov chain} $\left(X_n\right)$, if, for any $t$, the conditional distribution of $X_t$ given the previous states is the same as the distribution of $X_t$ given the last state, $x_{t-1}$,
+\begin{align}
+    \mathbb{P}\left(X_{t+1}\in A|x_0,x_1,x_2,...,x_t\right) &= \mathbb{P}\left(X_{t+1}\in A|x_t\right) \nonumber\\
+    &= \int_A K\left(x_t, dx\right). 
+\end{align}
+These chains were first introduced by \cite{markov1906extension}.
+\subsection{The Metropolis-Hastings Algorithm}
+Having established the basics of Markov chains, one of the best known MCMC algorithms, the Metropolis-Hastings algorithm, is introduced next. The algorithm is based on the Metropolis algorithm, which was developed to simulate the states of a system according to the Boltzmann distribution, with the newest state always depending on the previous state \autocite[][]{metropolis1953equation}. \\ 
+The Metropolis-Hastings algorithm is a procedure for drawing random samples from a probability distribution from which direct sampling is difficult if a function proportional to the \textit{target density} $f$ is known.
+This function $q\left(\pmb{y}|\pmb{x}\right)$ is called the \textit{proposal density} and must be easy to simulate from in order for the Metropolis-Hastings algorithm to be implementable. Moreover, it must be either explicitly present or \textit{symmetric}, meaning $q\left(\pmb{x}|\pmb{y}\right)=q\left(\pmb{y}|\pmb{x}\right)$. \\
+The Metropolis-Hastings algorithm of a target density $f$ and proposal density $q$ produces a Markov chain $\left(X^{(t)}\right)$ by the following transition.
+\begin{algorithm}[H]
+\caption{The Metropolis-Hastings Algorithm}
+\begin{algorithmic}[1]
+\Statex Given $f\left(\pmb{x}\right)$ and $q\left(\pmb{y}|\pmb{x}\right)$
+\State Initialization: Choose arbitrary $x_t$ as the first sample
+\For{each iteration $t$}
+    \State Generate $Y_t\sim q\left(\pmb{y}|x_t\right)$
+    \State Take 
+    \begin{align}
+        X_{t+1}&=\begin{cases}
+        Y_t & \hbox{with probability } \mathbb{P}\left(x_t, Y_t\right) \\
+        x_t & \hbox{with probability } 1-\mathbb{P}\left(x_t, Y_t\right)
+        \end{cases} \nonumber \\
+    \hbox{where} \nonumber\\
+    \mathbb{P}\left(x,y\right) &= \min\left\lbrace\frac{f\left(\pmb{y}\right)}{f\left(\pmb{x}\right)}\frac{q\left(\pmb{x}|\pmb{y}\right)}{q\left(\pmb{y}|\pmb{x}\right)}, 1\right\rbrace.
+    \end{align} 
+    \EndFor
+\end{algorithmic}
+\end{algorithm}  $\newline$
+$\mathbb{P}\left(x,y\right)$ is the \textit{Metropolis-Hastings acceptance probability}. \\
+The algorithm always accepts values $y_t$ that lead to an increase in the ratio $f\left(y_t\right)/q\left(y_t|x_t\right)$ compared to the previous value $f\left(x_t\right)/q\left(x_t|y_t\right)$. In the symmetric case, the acceptance probability simplifies to
+\begin{equation*}
+     \mathbb{P}\left(x,y\right) = \min\left\lbrace\frac{f\left(\pmb{y}\right)}{f\left(\pmb{x}\right)}, 1\right\rbrace
+\end{equation*}
+\autocite[][]{hastings1970monte}. \\
+If the Markov chain starts with a value $x_0 > 0$, then $f\left(x_t\right) > 0\,\,\forall t\in\mathbb{N}$ since the values of $y$ such that $f\left(y_t\right) = 0$ are all rejected by the algorithm. As the number of iterations $t$ increases, the distribution of saved states $x_0,...,x_t$ converges towards the target density $f(\pmb{x})$ \autocite[][270--275]{robert2013monte}.
+\clearpage
+\section{Gaussian Markov Random Fields}
+Gaussian Markov Random Field (GMRF) models are probabilistic graphical models used in the analysis of longitudinal data, survival data and spatial statistics, among others. They are modelled with a conditional independence structure represented by undirected graphs, two concepts introduced at the beginning of this chapter. They allow for approximate Bayesian inference while remaining efficient in computation.
 \subsection{Conditional Independence}
 In probability theory, two random variables $x$ and $y$ are \textit{independent} given a third variable $z$ if and only if the occurrence of $x$ and $y$ in their conditional probability distribution given $z$ are independent events. To calculate the conditional density of $\pmb{x}_A$, given $\pmb{x}_{-A}$, the following statement is repeatedly used,
 \begin{equation}
@@ -126,272 +208,20 @@ Let $A$ be a subset of $\mathcal{V}$. A \textit{subgraph} $\mathcal{G}^A$ is a g
     \mathcal{E}^A = \left\lbrace\left\lbrace i,j\right\rbrace\in\mathcal{A} \hbox{ and } \left\lbrace i,j\right\rbrace\in A\times A\right\rbrace.
 \end{equation*}
 Let $\mathcal{G}$ be the graph in \autoref{fig:und_graph} and $\mathcal{A}=\left\lbrace2,3\right\rbrace$, then $\mathcal{V}^A=\left\lbrace2,3\right\rbrace$ and $\mathcal{E}^A=\left\lbrace\left\lbrace 2,3\right\rbrace\right\rbrace$ \autocite[][17--18]{rue2005gaussian}.
-\subsection{Calculation of Summary Statistics}\label{sec:mean_iv}
-As the posterior mean and the credibility intervals of coefficient are of interest, calculation of these is performed later on. This allows a better interpretation of the results. \\
-To receive the expected value given a marginal function $\pi\left(x\right)$, the expected value of a function $f\left(x\right)$ is calculated, i.e.
-\begin{equation}
-    \int f\left(x\right)\pi\left(x\right)dx
-\end{equation}
-\autocite[][]{aitkin1991posterior}.\\
-If necessary, e.g. if the target variable follows a (negative) binomial distribution, the value must be transformed to its original scale, as in these cases the log-likelihood is modelled. Therefore, in these cases, the expected value would have to be exponentiated to allow a clear interpretation. \\
-In practice, to obtain the credibility interval of a variable, the marginal values are first transformed to their original scale, if necessary, and the 2.5\% quantile and the 97.5\% quantiles are calculated.
-\clearpage
-\section{Prior Selection}
-A key question in Bayesian analysis is the effect of the prior on the posterior, and how that effect can be measured. Do posterior distributions derived with different priors become similar as more and more data is collected? It has been formally proven that under certain regularity conditions, the impact of the prior decreases with increasing sample size. From a practical point of view, it is more important to know what happens when the sample size $n$ is finite. In this section, different types of priors are introduced.
-\subsection{Conjugate Priors}
-One property of exponential families is that they have conjugate priors \autocite[][]{diaconis1979conjugate}, which is an important property in Bayesian statistics. If the posterior distribution $\pi\left(\pmb{\theta}|\pmb{y}\right)$ and the prior distribution $\pi\left(\pmb{\theta}\right)$ belong to the same probability distribution family, the prior and posterior distributions are called \textit{conjugate} distributions. Furthermore, the prior for the likelihood function $\pi\left(\pmb{y}|\pmb{\theta}\right)$ is called the \textit{conjugate prior}. These priors were first discussed and formalized by Raifa and Schlaifer in 1961 \autocite[][]{raiffaapplied}. \\
-The construction of a conjugate prior is done by factorizing the likelihood function into two parts. One part must be independent of the parameter(s) of interest but can be dependent on the data, while the other factor is a function that depends on the parameter(s) of interest and is dependent on the data only through the sufficient statistics. The family of conjugate priors is by definition proportional to the second factor. The posterior distribution resulting from the conjugate prior is itself a member of the same family as the conjugate prior \autocite[][]{raiffaapplied}. In cases where the prior and posterior distributions are part of the same family, the prior is said to be closed under sampling. Furthermore, since the data are only incorporated into the posterior distribution through the sufficient statistics, there exist relatively simple formulas for updating the prior into the posterior.\\
-For an example of the construction of a conjugated prior, see Fink 1997 \autocite[][]{fink1997compendium}.\\
-A drawback of conjugated priors is that the a priori known information about $\mu$ may be insufficient for determining both parameters or may be inconsistent with the structure imposed by conjugacy \autocite[][]{robert2010bayesian}. Moreover, these priors can be too restrictive and not every belief about the prior can be described \autocite[][]{irwin2005prior}. \\
-Thus, although conjugate priors are easy to handle both mathematically and computationally \autocite[][]{irwin2005prior}, they are not often used in practice because of these drawbacks.
-\subsection{Penalized Complexity Priors}\label{sec:pc_prior}
-One issue when selecting the prior distribution of a particular parameter is that it is not always intuitive when it comes to understanding and interpreting this distribution, something that is essential to ensure that it behaves as intended by the user. This problem can be addressed by using \textit{penalized complexity priors}, which is a methodology that penalizes the complexity of model components in relation to deviation from simple base model formulations.\\
-PC priors provide a systematic and unified approach to calculating prior distributions for parameters of model components by using an inherited nested structure. This structure contains two models, the base model and a flexible version of the model. The first of the two is generally characterized by a fixed value of the relevant parameter, while the second version is considered a function of the random parameter. By penalizing the deviation from the flexible model to the fixed base model, the PC prior is calculated \autocite[][]{martins2014penalising}.
-\subsubsection{The Principles Behind PC Priors}
-Four main principles should be followed to calculate priors consistently and to understand their properties.
-\subsubsection*{Support to Occam's Razor} 
-Let $\pi\left(x|\xi\right)$ denote the density of a model component $x$ and $\xi$ the parameter to which a prior distribution is to be assigned. The base model is characterized by a density $\pi\left(x|\xi=\xi_0\right)$, where $\xi_0$ is a fixed value. The prior for $\xi$ should be such that proper shrinkage is given to $\xi_0$. The simplicity of the model is therefore prioritized over the complexity of the model, preventing overfitting \autocite[][]{martins2014penalising}.
-\subsubsection*{Penalisation of Model Complexity} 
-Let $f_1=\pi\left(x|\xi\right)$ and $f_0\left(x|\xi=\xi_0\right)$ denote the flexible model and the base model respectively. The complexity of $f_1$ compared to $f_0$ is characterized using the Kullback-Leibler divergence \autocite[][]{kullback1951information} to calculate a measure of complexity between the two models,
-\begin{equation}
-    \hbox{KLD}\left(f_1||f_2\right) = \int f_1\left(x\right)\log\left(\frac{f_1\left(x\right)}{f_0\left(x\right)}\right)dx.
-\end{equation}
-This can be used to measure the information that is lost when $f_1$ is approximated by the simpler model $f_0$. For multinormal densities with zero mean, the calculation simplifies to
-\begin{equation}
-    \hbox{KLD}\left(f_1||f_0\right) = \frac{1}{2}\left(\hbox{trace}\left(\pmb{\Sigma}_0^{-1}\pmb{\Sigma}_1\right)-n-\log\left(\frac{\left|\pmb{\Sigma}_1\right|}{\left|\pmb{\Sigma}_0\right|}\right)\right),
-\end{equation}
-where $f_i\sim\mathcal{N}\left(0,\pmb{\Sigma}_i\right), i=0,1$, while $n$ represents the dimension. For easier interpretation, the Kullback-Leibler divergence is transformed into a unidirectional distance measure
-\begin{equation}
-    d\left(\xi\right) = d\left(f_1||f_0\right)=\sqrt{2\hbox{KLD}\left(f_1||f_0\right)}
-\end{equation}
-which can be interpreted as a measure of distance from $f_1$ to $f_0$ \autocite[][]{martins2014penalising}.
-\subsubsection*{Constant Rate Penalisation}
-The derivation of the PC prior is based on a system of constant rate penalization, given by
-\begin{equation}
-    \frac{\pi_d\left(d\left(\xi\right)+\delta\right)}{\pi_d\left(d\left(\xi\right)\right)}=r^{\delta}, \hspace{20pt} d\left(\xi\right),\delta\geq0.
-\end{equation}
-$r\in\left(0,1\right)$ represents the constant decay rate and thus implies that the relative change in the prior distribution for $d\left(\xi\right)$ is independent of the actual distance. Therefore, $d\left(\xi\right)$ is exponentially distributed with density $\pi\left(d\left(\xi\right)\right)=\lambda\exp\left(-\lambda d\left(\xi\right)\right)$ and rate $\lambda = -\ln\left(r\right)$. By a standard variable change transformation, the corresponding PC prior for $\xi$ is given \autocite[][]{martins2014penalising}.
-\subsubsection*{User-Defined Scaling}
-Since $\lambda$ characterizes the shrinkage properties of the prior, it is important that the rate can be chosen in an intuitive and interpretable way. One possibility is to determine $\lambda$ by including a probability statement of tail events, for example
-\begin{equation}\label{eq:pcprior}
-    \mathbb{P}\left(Q\left(\xi\right) > U\right)=\alpha,
-\end{equation}
-where $U$ represents an assumed upper bound for an interpretable transformation $Q\left(\xi\right)$ and $\alpha$ denotes a small probability \autocite[][]{martins2014penalising}.
-\subsubsection{Example: PC Prior for the Precision}
-A PC prior can be used to adjust the smoothness of a spatial field in an intuitive way by specifying such a prior for the precision $\tau$. This makes it possible to adjust the smoothness of the spatial field in an intuitive way. In this case, the penalized complexity prior is defined by the parameter $\sigma_0$. Equation~\ref{eq:pcprior} therefore looks like this,
-\begin{equation}\label{pcprec}
-    \mathbb{P}\left(\sigma > \sigma_0\right)=\alpha.
-\end{equation}
-The actual expression of the prior is given by
-\begin{equation}\label{eq:pc_prior_prec}
-    \pi\left(\tau\right)=\frac{\lambda}{2}\tau^{-3/2}\exp\left(-\lambda\tau^{-1/2}\right),\hspace{20pt}\tau>0
-\end{equation}
-and is a type-2-Gumbel distribution. \\
-The prior for $\tau$ corresponds to an exponential distribution with rate $\lambda$ for the standard deviation. \\
-$\lambda$ quantifies the size of the penalty for deviation from the base model and is increased with higher values for it. \\
-Here, $\lambda=\frac{-\log\left(\alpha\right)}{\sigma_0}$ \autocite[][]{martins2014penalising}.
-\clearpage
-\section{Markov-Chain-Monte-Carlo-Methods}
-Markov chain Monte Carlo methods, also referred to as MCMC methods, are a set of algorithms that enable sampling from probability distributions based on the construction of Markov chains. After a sufficient number of iterations, the stationary distribution of a Markov chain can be taken as the desired distribution, with the quality of this distribution improving as the number of iterations increases. Most of the time, the construction of such a chain is relatively simple; the challenge is to determine how many steps are needed before convergence towards the stationary distribution is achieved. MCMC methods are mostly used to compute numerical approximations of multidimensional integrals, for instance in Bayesian statistics or computational biology. The two main concepts used in MCMC methods are Monte Carlo integration and the aforementioned Markov chains, hence the name Markov Chain Monte Carlo.
-\subsection{Monte Carlo Integration}
-\textit{Monte Carlo integration} is a technique that uses the generation of random numbers for numerical computation of definite integrals and is especially useful for higher-dimensional integrals. The problem the method addresses is the computation of the integral
-\begin{equation}
-    \mathbb{E}_f\left[h\left(X\right)\right]=\int_\chi h(x)f(x)dx.
-\end{equation}
-The integral can be approximated by using a sample $\left(X_1,...,X_m\right)$ generated from $f$ and calculating the arithmetic mean
-\begin{equation}
-    \overline{h}_m=\frac{1}{m}\sum_{j=1}^mh\left(x_j\right).
-\end{equation}
-According to the Strong Law of Large Numbers, $\overline{h}_m$ is likely to converge to $\mathbb{E}_f\left[h\left(X\right)\right]$. When the expectation of $h^2$ under $f$ is finite, the convergence speed of $\overline{h}_m$ can be assessed. The variance too can be estimated from the sample $\left(X_1,...,X_n\right)$ through
-\begin{equation}
-    v_m=\frac{1}{m^2}\sum_{j=1}^m\left[h\left(x_j\right)-\overline{h}_m\right]^2.
-\end{equation}
-For $m$ large,
-\begin{equation}
-    \frac{\overline{h}_m-\mathbb{E}_f\left[h\left(X\right)\right]}{\sqrt{v_m}}
-\end{equation}
-is approximately distributed as a $\mathcal{N}(0,1)$ variable. This can be used for constructing a convergence test and to calculate confidence bounds for the approximation of $\mathbb{E}_f\left[h\left(X\right)\right]$ \autocite[][83--84]{robert2013monte}. The term Monte Carlo was first used in 1949 by Metropolis and Ulam to describe a method dealing with problems related to "integro-differential equations that occur in various branches of the natural sciences" \autocite[][]{metropolis1949monte}.
-\subsection{Markov Chains}
-Markov chains are stochastic processes that aim to provide the probability of the occurrence of future events. A Markov chain is defined by the fact that even if only a limited history is known, predictions about future developments can be made just as reliably as if the entire history of a process were known. Thus, the probability of moving from the current state to any state depends only on the current state of the chain. These probabilities are defined by a \textit{transition kernel}, which is a function $K$ on $\mathcal{X} \times \mathcal{B}\left(\mathcal{X}\right)$, such that
-\begin{itemize}
-    \item[i.] $\forall x\in\mathcal{X}, K\left(x, \cdot\right)$ is a probability measure;
-    \item[ii.] $\forall A\in \mathcal{B}\left(\mathcal{X}\right), K\left(\cdot, A\right)$ is measurable.
-\end{itemize}
-In the discrete case, the transition kernel is a matrix $\pmb{K}$ with elements
-\begin{equation*}
-    \mathbb{P}_{xy}=\mathbb{P}\left(X_n=y|X_{n-1}=x\right), \hspace{20pt}x,y\in\mathcal{X}.
-\end{equation*}
-If $\mathcal{X}$ is continuous, the kernel denotes the conditional density $K\left(x,x^T\right)$ of the transition $K\left(x,\cdot\right)$,
-\begin{equation*}
-    \mathbb{P}\left(X\in A|x\right)=\int_AK\left(x,x^T\right)dx^T.
-\end{equation*}
-Given a transition kernel $K$, a sequence $X_0,X_1,...,X_t$ of random variables is a \textit{Markov chain} $\left(X_n\right)$, if, for any $t$, the conditional distribution of $X_t$ given the previous states is the same as the distribution of $X_t$ given the last state, $x_{t-1}$,
-\begin{align}
-    \mathbb{P}\left(X_{t+1}\in A|x_0,x_1,x_2,...,x_t\right) &= \mathbb{P}\left(X_{t+1}\in A|x_t\right) \nonumber\\
-    &= \int_A K\left(x_t, dx\right). 
-\end{align}
-These chains were first introduced by Markov in 1906 \autocite[][]{markov1906extension}. Markov chains can have certain properties that affect their long-term behaviour and are of particular importance for MCMC algorithms. In Sections~\ref{sssec:irreducibility}--~\ref{sssec:stationary}, some of them are introduced.
-\subsubsection{Irreducibility} \label{sssec:irreducibility}
-Irreducibility is critical to the construction of Markov chain Monte Carlo algorithms, as it ensures the convergence of such an algorithm. A Markov chain is \textit{irreducible} if all states communicate, that is, for all states $i$ and $j$ the probability of going from $i$ to $j$ in finite time is true positive. \\
-Formally speaking, given a measure $\varphi$, a Markov chain $\left(X_n\right)$ with transition kernel $K\left(x,y\right)$ is $\varphi$-\textit{irreducible}, if, for every $A\in B\left(\mathcal{X}\right)$ with $\varphi\left(A\right)>0$, there exists $n$ such that $K^n\left(x,A\right) \forall x\in\mathcal{X}$. The chain is \textit{strongly} $\varphi$-\textit{irreducible} if $n=1\forall$ measurable $A$ \autocite[][213--214]{robert2013monte}.
-\subsubsection{Periodicity} 
-The behaviour of a Markov chain can sometimes be limited by deterministic constraints on the transitions from $X_n$ to $X_{n+1}$. For discrete chains, the \textit{period} of a state $w\in\mathcal{X}$ is defined as. 
-\begin{equation*}
-    d\left(w\right)=\hbox{g.c.d. } \lbrace m\geq 1;K^m\left(w,w\right)>0\rbrace,
-\end{equation*}
-with g.c.d the greatest common denominator. If a Markov chain is irreducible, the transition matrix can be written as a block matrix
-\begin{equation}
-    \pmb{P}=\begin{pmatrix}
-    0 & \pmb{D}_1 & 0 & \dots & 0\\
-    0 & 0 & \pmb{D}_2 & \dots & 0 \\
-    \vdots & \vdots & \ddots  \\
-    \pmb{D}_d & 0 & 0 & & 0
-    \end{pmatrix},
-\end{equation}
-It is evident that at every $d$-th step there is a return to the initial group. There exists only one value for the period when a chain is irreducible. If this value is 1, the irreducible chain is \textit{aperiodic} \autocite[][217--218]{robert2013monte}.
-\subsubsection{Transience and Recurrence} 
-To guarantee an acceptable approximation of a simulated model, a Markov chain needs to have good stability properties. Irreducibility is not strong enough to ensure that the trajectory of $\left(X_n\right)$ enters $A$ often enough. This leads to the formalization of \textit{recurrence} and \textit{transience}.  \\
-In a finite space $\mathcal{X}$, a state $w\in\mathcal{X}$ is \textit{transient} if it is finitely often visited and \textit{recurrent} if it is almost certainly infinitely often visited. \\
-For irreducible chains, these two properties are properties of the chain, not of a particular state \autocite[][218--219]{robert2013monte}.
-\subsubsection{Ergodicity}
-When looking at a Markov chain $\left(X_n\right)$ from a temporal point of view, it is essential to establish to what the chain is converging. A natural candidate for the limiting distribution is the stationary distribution $\pi$ which leads to the need to define sufficient conditions on $\left(X_n\right)$ for $X_n$ to be asymptotically distributed according to $\pi$. There are several conditions that can be imposed on the convergence of $P^n$, the distribution of $X_n$ to $\pi$. The most fundamental and important is that of \textit{ergodicity}, that is, independence of initial conditions.\\
-If a Markov chain $\left(X_n\right)$ is both aperiodic and positive recurrent, it is called an \textit{ergodic} Markov chain \autocite[][231--234]{robert2013monte}.
-\subsubsection{Stationary distribution} \label{sssec:stationary}
-A chain $\left(X_n\right)$ is more stable if the marginal distribution of $X_n$ is independent of $n$. This is a requirement for the existence of a probability distribution $\pi$ such that $X_{n+1}\sim\pi$ if $X_n\sim\pi$. Markov chain Monte Carlo methods rely on the fact that this condition can be satisfied. \\
-A $\sigma$-finite measure $\pi$ is \textit{invariant} for the transition kernel $K\left(\cdot,\cdot\right)$ if \begin{equation*}
-    \pi\left(B\right)=\int_\mathcal{X}K\left(x,B\right)\pi(dx), \hspace{20pt} \forall B\in\mathcal{B}\left(\mathcal{X}\right).
-\end{equation*}
-This distribution is referred to as \textit{stationary} if $\pi$ is a probability measure, as $X_0\sim\pi$ implies that $X_n\sim\pi$ is $\forall n$. An irreducible Markov chain has a stationary distribution precisely if it is positively recurrent. The distribution is given by
-\begin{equation}
-    \pi_x=\left(\mathbb{E}_x\left[\tau_x\right]\right)^{-1}, \hspace{20pt} x\in\mathcal{X},
-\end{equation}
-where $\mathbb{E}_x\left[\tau_x\right]$ can be interpreted as the average number of transitions between two passages in $x$. \\
-In practice, the stationary distributions are often of special interest. If these distributions are defined as the starting distribution of $X_0$, all following distributions of the states $X_n$ for any $n$ are equal to the starting distribution. The interesting question here is when such distributions exist and when any distribution converges against a stationary distribution of this kind \autocite[][223--224]{robert2013monte}.
-\subsection{The Metropolis-Hastings Algorithm}
-Having established the basics of MCMC methods, one of the best known MCMC algorithms, the Metropolis-Hastings algorithm, is introduced next. The algorithm is based on the Metropolis algorithm, which was developed to simulate the states of a system according to the Boltzmann distribution, with the newest state always depending on the previous state \autocite[][]{metropolis1953equation}. \\ 
-The Metropolis-Hastings algorithm is a procedure for drawing random samples from a probability distribution from which direct sampling is difficult if a function proportional to the \textit{target density} $f$ is known.
-This function $q\left(\pmb{y}|\pmb{x}\right)$ is called the \textit{proposal density} and must be easy to simulate in order for the Metropolis-Hastings algorithm to be implementable. Moreover, it must be either explicitly present or \textit{symmetric}, meaning $q\left(\pmb{x}|\pmb{y}\right)=q\left(\pmb{y}|\pmb{x}\right)$. \\
-The Metropolis-Hastings algorithm of a target density $f$ and proposal density $q$ produces a Markov chain $\left(X^{(t)}\right)$ by the following transition.
-\begin{algorithm}[H]
-\caption{The Metropolis-Hastings Algorithm}
-\begin{algorithmic}[1]
-\Statex Given $f\left(\pmb{x}\right)$ and $q\left(\pmb{y}|\pmb{x}\right)$
-\State Initialization: Choose arbitrary $x_t$ as the first sample
-\For{each iteration $t$}
-    \State Generate $Y_t\sim q\left(\pmb{y}|x^{(t)}\right)$
-    \State Take 
-    \begin{align}
-        X^{(t+1)}&=\begin{cases}
-        Y_t & \hbox{with probability } \mathbb{P}\left(x^{(t)}, Y_t\right) \\
-        x^{(t)} & \hbox{with probability } 1-\mathbb{P}\left(x^{(t)}, Y_t\right)
-        \end{cases} \nonumber \\
-    \hbox{where} \nonumber\\
-    \mathbb{P}\left(x,y\right) &= \min\left\lbrace\frac{f\left(\pmb{y}\right)}{f\left(\pmb{x}\right)}\frac{q\left(\pmb{x}|\pmb{y}\right)}{q\left(\pmb{y}|\pmb{x}\right)}, 1\right\rbrace.
-    \end{align} 
-    \EndFor
-\end{algorithmic}
-\end{algorithm}  $\newline$
-$\mathbb{P}\left(x,y\right)$ is the \textit{Metropolis-Hastings acceptance probability}. \\
-The algorithm always accepts values $y_t$ that lead to an increase in the ratio $f\left(y_t\right)/q\left(y_t|x^{(t)}\right)$ compared to the previous value $f\left(x^{(t)}\right)/q\left(x^{(t)}|y_t\right)$. In the symmetric case, the acceptance probability simplifies to
-\begin{equation*}
-     \mathbb{P}\left(x,y\right) = \min\left\lbrace\frac{f\left(\pmb{y}\right)}{f\left(\pmb{x}\right)}, 1\right\rbrace
-\end{equation*}
-\autocite[][]{hastings1970monte}. \\
-If the Markov chain starts with a value $x^{(0)} > 0$, then $f\left(x^{(t)}\right) > 0\,\,\forall t\in\mathbb{N}$ since the values of $y$ such that $f\left(y_t\right) = 0$ are all rejected by the algorithm. As the number of iterations $t$ increases, the distribution of saved states $x_0,...,x_t$ converges towards the target density $f(\pmb{x})$ \autocite[][270--275]{robert2013monte}.
-\clearpage
-\section{Latent Gaussian Models and INLA}
-In recent years, a growing amount of georeferenced data has become available, leading to an increased need for appropriate statistical modelling to handle large and complex datasets. The usual approach to inference for latent Gaussian models involves the previously introduced Markov chain Monte Carlo methods. Due to several factors, these methods may perform poorly when applied to such models. One factor is the interdependence of the components of the latent field $\pmb{x}$ while another is that $\pmb{\theta}$ and $\pmb{x}$ are highly dependent on each other, especially for large $n$. The first of these problems can potentially be overcome by constructing a joint proposal based on a Gaussian approximation of the full conditional of $\pmb{x}$ \autocite[][]{gamerman1997sampling}, while the second problem requires, at least in part, a joint update of $\pmb{\theta}$ and $\pmb{x}$. There are several proposals to solve these shortcomings, but MCMC sampling continues to show poor computational speed \autocite[][322]{rue2009approximate}.\\
-Bayesian hierarchical models have proven to be effective in capturing complex stochastic structures in spatial processes. A large proportion of these models are based on latent Gaussian models, a subclass of structured additive regression models. These models include Integrated Nested Laplace Approximations (INLA), which are a class of models used to approximate the posterior marginals of a latent Gaussian field. These approximations work by reformulating the regression model as a three-part hierarchical model. The parts are as follows:
-\begin{itemize}
-    \item[1.] Approximation of the posterior marginal of $\pmb{\theta}$ by using the Laplace approximation.
-    \item[2.] Computation of the (simplified) Laplace approximation for selected values of $\pmb{\theta}$ to improve the Gaussian approximation.
-    \item[3.] Combination of the first two parts by numerical integration.
-\end{itemize}
-$\pmb{\theta}$ is a vector of hyperparameters. The hyperparameters $\pmb{\theta}$ can be, for example, the variance in the Gaussian likelihood or the shape parameter in the likelihood of the gamma distribution. In the case of latent fields, they can be, for instance, dispersion parameters or spatial correlation parameters \autocite[][]{rue2009approximate}.
 \subsection{Notation and Basic Properties}
 \label{sec:notation}
-For structured additive regression models, the distribution of the response variable $y_i$ is assumed to be a member of the exponential family, with the mean $\mu_i$ linked to a structured additive predictor $\eta_i$ by a link function $g\left(\cdot\right)$ such that $g\left(\mu_i\right)=\eta_i$. The predictor $\eta_i$  takes into account the effect of multiple covariates in an additive way,
+For structured additive regression models, the distribution of the response variable $y_i$ is assumed to be a member of the exponential family, with the mean $\mu_i$ linked to a structured additive predictor $\eta_i$ by a link function $g\left(\cdot\right)$ such that $g\left(\mu_i\right)=\eta_i$. Following \cite{stone1985additive}, the predictor $\eta_i$  takes into account the effect of multiple covariates in an additive way,
 \begin{equation}\label{eq:predictor}
-    \eta_i=\alpha+\sum_{j=1}^{n_f}f^{(j)}\left(u_{ji}\right)+\sum_{k=1}^{n_{\beta}}\beta_kz_{ki}+\epsilon_i, \hspace{20pt}i=1,...,n
+    \eta_i=\alpha+\sum_{j=1}^{n_f}f^{(j)}\left(u_{ji}\right)+\sum_{k=1}^{n_{\beta}}\beta_kz_{ki}+\epsilon_i, \hspace{20pt}i=1,...,n.
 \end{equation}
-\autocite[][]{stone1985additive}.\\
 The $\left\lbrace f^{(j)}\left(\cdot\right)\right\rbrace$s are unknown functions of the covariates $u$, while the $\left\lbrace\beta_k\right\rbrace$s represent the linear effect of the covariates $z$ and the $\epsilon_i$s are unstructured terms. Latent Gaussian models assign a Gaussian prior to $\alpha$, $\left\lbrace f^{(j)}\left(\cdot\right)\right\rbrace$ and $\left\lbrace\epsilon_i\right\rbrace$. In the following $\pmb{x}$ shall denote the vector of all latent Gaussian variables ($\left\lbrace\eta_i\right\rbrace$, $\alpha$, $\left\lbrace f^{(j)}\right\rbrace$ and $\left\lbrace\beta_k\right\rbrace$) and $\pmb{\theta}$ the vector of hyperparameters.\\
 The conditional density $\pi\left(\pmb{x}|\theta_1\right)$ is Gaussian with an assumed zero mean and precision matrix $\pmb{Q}\left(\theta_1\right)$. The Gaussian density $\mathcal{N}\left(\mu,\pmb{\Sigma}\right)$ with mean $\mu$ and covariance $\pmb{\Sigma}$ at configuration $\pmb{x}$ is denoted by $\mathcal{N}\left(\pmb{x};\mu,\pmb{\Sigma}\right)$. For simplicity, $\left\lbrace\eta_i\right\rbrace$ is included instead of $\left\lbrace\epsilon_i\right\rbrace$. \\
-The distribution for the $n_d$ observational variables $y=\left\lbrace y_i:i\in\mathcal{I}\right\rbrace$ is denoted by $\pi\left(\pmb{y}|\pmb{x}, \theta_2\right)$ and is assumed conditionally independent given $\pmb{x}$ and $\theta_2$. Let $\pmb{\theta}=\left(\theta_1^T,\theta_2^T\right)^T$ with $\dim\left(\pmb{\theta}\right)=m$. For non-singular $\pmb{Q}\left(\pmb{\theta}\right)$ the posterior is given by
+The distribution for the $n_d$ observational variables $y=\left\lbrace y_i:i\in\mathcal{I}\right\rbrace$ is denoted by $\pi\left(\pmb{y}|\pmb{x}, \theta_2\right)$ and is assumed conditionally independent given $\pmb{x}$ and $\theta_2$. Let $\pmb{\theta}=\left(\theta_1^T,\theta_2^T\right)^T$ with $\dim\left(\pmb{\theta}\right)=m$. Following \cite{rue2009approximate}, for non-singular $\pmb{Q}\left(\pmb{\theta}\right)$ the posterior is given by
 \begin{align}
     \pi\left(\pmb{x},\pmb{\theta}|\pmb{y}\right)&\propto\pi\left(\pmb{\theta}\right)\pi\left(\pmb{x}|\pmb{\theta}\right)\prod_{i\in I}\pi\left(y_i|x_i,\pmb{\theta}\right) \nonumber\\
     &\propto \pi\left(\pmb{\theta}\right)\left|\pmb{Q}\left(\pmb{\theta}\right)\right|^{1/2}\exp\left[-\frac{1}{2}\pmb{x}^T\pmb{Q}\left(\pmb{\theta}\right)\pmb{x}+\sum_{i\in I}\log\left\lbrace\pi\left(y_i|x_i,\pmb{\theta}\right)\right\rbrace\right].
 \end{align}
-Most latent Gaussian models satisfy two basic properties:
-\begin{itemize}
-    \item[1.] The latent field $\pmb{x}$ is of large dimension, $n\approx10^2-10^5$. Therefore, the latent field is a Gaussian Markov random field with sparse precision matrix $\pmb{Q}\left(\pmb{\theta}\right)$.
-    \item[2.] The number of hyperparameters, $m$, is small, $m\leq6$.
-\end{itemize}
-In most cases, both properties are required to produce fast inference, and thus these are assumed to be true for the remainder of this work \autocite[][]{rue2009approximate}.
-\subsection{Applications for Latent Gaussian Models}
-Latent Gaussian models can be employed in a vast range of different domains, in fact most structured Bayesian models are of this particular form. Some of these domains are presented below.
-\subsubsection{Regression Models}
-Bayesian generalized linear models correspond to the linear relationship $\eta_i=\alpha+\sum_{k=1}^{n_\beta}\beta_k z_{ki}$ \autocite[][]{dey2000generalized}. Either the linear relationship of the covariates can be relaxed through the $f\left(\cdot\right)$ terms \autocite[][]{fahrmeir2013multivariate}, random effects can be introduced through them or both. Smooth covariate effects are frequently modelled using penalized spline models \autocite[][]{lang2004bayesian} or random walk models \autocite[][]{fahrmeir2013multivariate}, continuous indexed spline models \autocite[][]{rue2005gaussian} or Gaussian processes \autocite[][]{chu2005gaussian}. The incorporation of random effects allows for the consideration of overdispersion caused by unobserved heterogeneity or correlation in longitudinal data and can be introduced by defining $f\left(u_i\right)=f_i$ and $\left\lbrace f_1\right\rbrace$ to be independent, zero mean and Gaussian \autocite[][]{fahrmeir2001bayesian}.
-\subsubsection{Dynamic Models}
-Temporal dependence can be introduced by using $i$ in \eqref{eq:predictor} as temporal index $t$ and defining $f\left(\cdot\right)$ and $\pmb{u}$ such that $f\left(u_t\right)=f_t$. Both a discrete-time and a continuous-time autoregressive model can be modelled by $\left\lbrace f_t\right\rbrace$. Furthermore, a seasonal effect or the latent process of a structured time series model can be modelled \autocite[][]{kitagawa1996smoothness}. Alternatively, a smooth temporal function in the same sense as for regression models can be represented by $\left\lbrace f_t\right\rbrace$.
-\subsubsection{Spatial and Spatio-Temporal Models}
-Similar to the previous type of model, spatial dependence can be modelled by a spatial covariate $\pmb{u}$ such that $f\left(u_s\right)=f_s$, where $s$ denotes the spatial location or region $s$. The stochastic model for $f_s$ is constructed to promote spacial smooth realizations of some sort. Popular models of this type include the Besag-York-Mollié \autocite[][]{besag1991bayesian} model with extensions for regional data, continuous indexed Gaussian models \autocite[][]{banerjee2014hierarchical} and texture models \autocite[][]{marroquin2001gauss}. The dependence between spatial and temporal covariates can be achieved either by using a spatio-temporal covariate $(s,t)$ or a corresponding spatio-temporal Gaussian field \autocite[][]{kammann2003geoadditive}.\\
-Often the final model consists of a sum of several components, e.g. a spatial component, random effects and both linear and smooth effects of some covariates. In order to separate the effects of the different components in \eqref{eq:predictor}, sometimes linear or sum-to-zero constraints can be imposed \autocite[][319--321]{rue2009approximate}.
-\subsection{Gaussian Random Fields}
-Let $\pmb{s} = \left(s_1,...,s_n\right)^T$ be a vector of locations. A \textit{Gaussian random field} (GRF)
-\begin{equation}
-    \left\lbrace Z(s):s\in D\subset\mathbb{R}^2\right\rbrace
-\end{equation}
-is a set of random variables where the observations occur in a continuous domain and where each finite set of random variables follows a multivariate normal distribution. A random process $Z\left(\cdot\right)$ is strictly stationary if it is invariant to shifts, i.e., if for each set of locations and each $h\in\mathbb{R}^2$ the distribution of $\pmb{Z(s)}=\left(Z\left(s_1\right),... ,Z\left(s_n\right)\right)$ is equal to that of $\pmb{Z(s+h)}=\left(Z\left(s_1+h\right),...,Z\left(s_n+h\right)\right)$. A less constraining requirement is given by second-order stationarity. Under this condition, the process has a constant mean value
-\begin{equation}
-    \mathbb{E}\left[\pmb{Z(s)}\right] = \mu, \hspace{20pt}\forall s\in D,
-\end{equation}
-and the covariances depend only on the differences between locations
-\begin{equation}
-    \hbox{Cov}\left(\pmb{Z(s)}, \pmb{Z(s+h)}\right)=C\left(\pmb{h}\right), \hspace{20pt}\forall \pmb{s}\in D,\,\forall \pmb{h}\in\mathbb{R}^2.
-\end{equation}
-Furthermore, if the covariances depend only on the distances between the locations and not on the directions, the process is called isotropic. Else, the process is anisotropic. An intrinsically stationary process has a constant mean value and satisfies
-\begin{equation}
-    \hbox{Var}\left(Z\left(s_i\right)-Z\left(s_j\right)\right)=2\gamma\left(s_i-s_j\right),\hspace{20pt}\forall s_i,s_j.
-\end{equation}
-$2\gamma\left(\cdot\right)$ is the variogram and $\gamma\left(\cdot\right)$ is called the semivariogram \autocite[][]{cressie2015statistics}. Under the assumption of intrinsic stationarity, the constant-mean assumption implies
-\begin{equation*}
-    2\gamma\left(\pmb{h}\right)=\hbox{Var}\left(\pmb{Z(s+h)}-\pmb{Z(s)}\right)=\mathbb{E}\left[\left(\pmb{Z(s+h)}-\pmb{Z(s)}\right)^2\right],
-\end{equation*}
-and the estimation of the semivariogram can be obtained using the empirical semivariogram as follows:
-\begin{equation}
-    2\widehat{\gamma}\left(\pmb{h}\right)=\frac{1}{\left|N\left(\pmb{h}\right)\right|}\sum_{N\left(\pmb{h}\right)}\left(Z\left(s_i\right)-Z\left(s_j\right)\right)^2,
-\end{equation}
-where $N\left(\pmb{h}\right)=\left\lbrace\left(s_1,s_j\right):s_i-s_j=\pmb{h}, i,j=1,...,n\right\rbrace$ denotes the number of pairs and $\left|N\left(\pmb{h}\right)\right|$ the number of distinct pairs. For isotropic processes, the semivariogram is a function of distance $h=\left|\left|\pmb{h}\right|\right|$.   \\
-Plotting the empirical semivariogram against the separation distance conveys essential information regarding the continuity and spatial variability of the process. Given relatively short distances, the semivariogram tends to be small but increases with distance, indicating the similarity of observations in proximity. The semivariogram levels off to a nearly constant value, also called the sill, as the separation distance increases, indicating a decrease in spatial dependence with distance within the range and no spatial correlation outside the range, which is reflected in a nearly constant variance. If there is a discontinuity or a vertical jump at the origin, the process has a nugget effect, which is often due to a measurement error, but may be indicative of a spatially discontinuous process.
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{typicalsemivariogram-1.png}
-    \caption{A typical semivariogram}
-    \label{fig:semivariogram}
-\end{figure}
-The empirical semivariogram is an exploratory tool useful for assessing whether data exhibit spatial correlation. Furthermore, it can be compared to a Monte Carlo envelope of empirical semivariograms calculated from random permutations of the data while keeping the locations fixed \autocite[][]{diggle2003introduction}. If the empirical semivariogram lies outside the Monte Carlo envelope with increasing distance, this is an indication of spatial correlation.\\
-An example of a semivariogram is shown in Figure~\ref{fig:semivariogram}. This graph is taken from "Geospatial Health Data: Modelling and Visualization with R-INLA and Shiny" by Paula Moraga \autocite[][]{moraga2019geospatial}. 
-% \\ 
-% The dependence structure of a GRF is given by the covariance matrix, which is constructed from a covariance function. Matérn models and exponential functions are conventionally used for this purpose \autocite[][]{gelfand2010handbook}. For the locations $s_i, s_j\in\mathbb{R}^2$ the exponential covariance function is given by
-% \begin{equation}
-% \hbox{Cov}\left(Z\left(s_i\right), Z\left(s_j\right)\right)=\sigma^2\exp\left(-\kappa\left|\left|s_i-s_j\right|\right|\right),
-% \end{equation}
-% where the distance between the locations $s_i$ and $s_j$ is denoted by $\left|\left|s_i-s_j\right|\right|$, the variance of the spatial field is given by $\sigma^2$, while $\kappa>0$ controls the rate at which the correlation decays as the distance increases. \\
-% The Matérn family represents a flexible class of covariance functions that arises naturally in a variety of scientific fields \autocite[][]{guttorp2006studies}. The Matérn covariance function is written as
-% \begin{equation}
-%     \hbox{Cov}\left(Z\left(s_i\right),Z\left(s_j\right)\right)=\frac{\sigma^2}{2^{\nu-1}\Gamma\left(\nu\right)}\left(\kappa\left|\left|s_i-s_j\right|\right|\right)^{\nu}K_\nu\left(\kappa\left|\left|s_i-s_j\right|\right|\right).
-% \end{equation}
-% $\sigma^2$ denotes the marginal variance of the spatial field, $K_\nu\left(\cdot\right)$ represents the modified Bessel function of second kind and order $\nu>0$, where $\nu$ is an integer. The mean square differentiability of the process is determined by $\nu$ and is usually fixed since it is difficult to identify in applications. For $\nu=0.5$, this covariance function is the equivalent of the exponential covariance function. $\kappa > 0$ is related to the range $\rho$, which is defined as the distance at which there is approximately no correlation between two given points, $\rho=\sqrt{8\nu}/\kappa$ to be exact \autocite[][]{cameletti2013spatio}. Examples of these two covariance functions are shown in Figure~\ref{fig:covariance}. These graphs are again taken from "Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny" by Paula Moraga \autocite[][]{moraga2019geospatial}. 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.8\textwidth]{covariancefunctions-1.png}
-%     \includegraphics[width=0.8\textwidth]{covariancefunctions-2.png}
-%     \caption{Covariance functions corresponding to exponential and Matérn models.}
-%     \label{fig:covariance}
-% \end{figure}
-\subsection{Gaussian Markov Random Fields}
-\subsubsection{Definition of GMRFs}
+\subsection{Definition of GMRFs}
 Let $\pmb{x}=\left(x_1,...,x_n\right)^T$ be normally distributed with mean $\pmb{\mu}$ and covariance matrix $\pmb{\Sigma}$. Let $\mathcal{G}=\left(\mathcal{V}, \mathcal{E}\right)$, where $\mathcal{V}=\left\lbrace 1,...,\right\rbrace$ and $\mathcal{E}$ be such that there is no edge between nodes $i$ and $j$ exactly when $x_i\perp x_j|\pmb{x}_{ij}$. Then $\pmb{x}$ is a \textit{Gaussian Markov random field} (GMRF) with respect to $\mathcal{G}$. \\
 Since $\pmb{\mu}$ does not affect the pairwise conditional independence properties of $\pmb{x}$, this information is 'hidden' in $\pmb{\Sigma}$. Hence,
 \begin{equation*}
@@ -406,7 +236,7 @@ The elements of $\pmb{Q}$ are used for conditional interpretations. For any GMRF
 \end{align}
 \autocite[][21]{rue2005gaussian}. \\
 On the main diagonal of $\pmb{Q}$ are the conditional precisions of $x_i$ given $\pmb{x}_{-i}$ are placed, while the other elements, when scaled appropriately, provide information about the conditional correlation between $x_i$ and $x_j$ given $\pmb{x}_{ij}$. Since $\hbox{Var}\left(x_i\right)=\Sigma_{ii}$ and $\hbox{Corr}\left(x_i,x_j\right)=\Sigma_{ij}/\sqrt{\Sigma_{ii}\Sigma_{jj}}$, the information about the marginal variance of $x_i$ and the marginal correlation between $x_i$ and $x_j$ is given by $\pmb{\Sigma}$. The marginal interpretation provided by the correlation matrix is intuitive and informative, as the scope of the interpretation is reduced from a $n$-dimensional distribution to a one- or two-dimensional distribution. $\pmb{Q}$ is difficult to interpret marginally because either $\pmb{x}_{-i}$ or $\pmb{x}_{ij}$ would have to be integrated out of the joint distribution parameterized with respect to $\pmb{Q}$. $\pmb{Q}^{-1}=\pmb{\Sigma}$ by definition, and in general $\Sigma_{ii}$ depends on each element in $\pmb{Q}$ and vice versa \autocite[][20--23]{rue2005gaussian}.
-\subsubsection{Markov Properties of GMRFs}
+\subsection{Markov Properties of GMRFs}
 One property of GMRFs is that more information regarding conditional independence can be extracted from $\mathcal{G}$. The following three properties are equivalent. \\
 The \textit{pairwise Markov property}:
 \begin{equation*}
@@ -420,7 +250,7 @@ The \textit{global Markov property}:
 \begin{equation*}
     \pmb{x}_{A}\perp \pmb{x}_{B}|\pmb{x}_{C}
 \end{equation*}
-for all disjoint sets $A$, $B$ and $C$ where $A$ and $B$ are non-empty and separated by $C$. \\ Illustrations for these properties are shown in Figure~\ref{fig:pairwise}, Figure~\ref{fig:local} and Figure~\ref{fig:global}. These illustrations are taken from Rue and Held \autocite[][23--24]{rue2005gaussian}.
+for all disjoint sets $A$, $B$ and $C$ where $A$ and $B$ are non-empty and separated by $C$. \\ \clearpage Illustrations for these properties are shown in Figure~\ref{fig:pairwise}, Figure~\ref{fig:local} and Figure~\ref{fig:global}. These illustrations are taken from Rue and Held \autocite[][23--24]{rue2005gaussian}.
 \begin{figure}[H]
     \centering
     \ctikzfig{ind_fig1}
@@ -439,8 +269,8 @@ for all disjoint sets $A$, $B$ and $C$ where $A$ and $B$ are non-empty and separ
     \caption{The global Markov property; the dark grey and light grey nodes are globally independent given the black nodes.}
     \label{fig:global}
 \end{figure}
-\subsubsection{Conditional Properties of GMRFs}
-An essential result of GMRFs is the conditional distribution for a subset $\pmb{x}_a$ given $\pmb{x}_{-A}$. Here the canonical parameterization proves useful, since by definition it can be easily updated by successive conditioning. \\
+\subsection{Conditional Properties of GMRFs}
+An essential result of GMRFs is the conditional distribution for a subset $\pmb{x}_a$ given $\pmb{x}_{-A}$. Here the canonical parameterization proves useful, since by definition it can be easily updated by successive conditioning. \clearpage
 By splitting the indices into the non-empty sets A and B, of which the latter is equal to -A,
 \begin{equation}\label{eq:partition_1}
     \pmb{x}=\begin{pmatrix}\pmb{x}_A\\\pmb{x}_B\end{pmatrix}.
@@ -480,7 +310,7 @@ Let $\pmb{y}|\pmb{x}\sim\mathcal{N}\left(\pmb{x},\pmb{P}^{-1}\right)$ and $\pmb{
     \pmb{x}|\pmb{y}\sim\mathcal{N}_C\left(\pmb{b}+\pmb{Py}, \pmb{Q}+\pmb{P}\right).
 \end{equation}
 This allows the calculation of conditional densities with multiple sources of conditioning, e.g. conditioning on observed data and a subset of variables. Therefore, the canonical parameterization can be repeatedly updated without explicitly calculating the mean until it is needed. The computation of the mean requires the solution of $\pmb{Q\mu}=\pmb{b}$, but only matrix-vector products are needed for updating the canonical parameterization \autocite[][25--27]{rue2005gaussian}.
-\subsubsection{Specification Through Full Conditionals}
+\subsection{Specification Through Full Conditionals}
 Alternatively, a GMRF can be specified by the full conditionals $\left\lbrace\pi\left(x_i|\pmb{x}_{-i}\right)\right\rbrace$ in place of $\pmb{\mu}$ and $\pmb{Q}$. Suppose the full conditionals are given as normals with
 \begin{align}
     \mathbb{E}\left[x_i|\pmb{x}_{-i}\right] &= \mu_i-\sum_{j:j\sim i}\beta_{ij}\left(x_j-\mu_j\right)\hspace{20pt}\hbox{ and}\\
@@ -495,48 +325,35 @@ and $\pmb{Q}$ must be symmetrical, i.e.,
     \kappa_i\beta_{ij}=\kappa_j\beta_{ji},
 \end{equation*}
 then $\pmb{x}$ is a GMRF with respect to a labelled graph $\mathcal{G}=\left(\mathcal{V}, \mathcal{E}\right)$ with mean $\pmb{\mu}$ and precision matrix $\pmb{Q}=\left(Q_{ij}\right)$ \autocite[][27]{rue2005gaussian}.
-\subsubsection{Multivariate GMRFs}
-A \textit{multivariate GMRF} (MGMRF) is a multivariate extension of a GMRF that has proven useful in applications. Let $\pmb{x}$ be a GMRF with respect to $\mathcal{G}$, then the Markov property implies that
-\begin{equation*}
-    \pi\left(x_i|\pmb{x}_{-i}\right)=\pi\left(x_i|\left\lbrace x_j:j\sim i\right\rbrace\right).
-\end{equation*}
-$x_i$ is the value related to node $i$. Often the nodes have physical interpretations such as an administrative region of a country, which can be used to define the neighbours of node $i$. Let each of the $n$ nodes have an associated vector $\pmb{x}_i$ of dimension $p$, resulting in a GMRF of size $np$. Such a GMRF is denoted by $\pmb{x}=\left(\pmb{x}_1^T,...,\pmb{x}_n^T\right)^T$. The Markov property with respect to the nodes is preserved, i.e.,
-\begin{equation*}
-    \pi\left(\pmb{x}_i|\pmb{x}_{-i}\right)=\pi\left(\pmb{x}_i|\left\lbrace\pmb{x}_{j}:j\sim i\right\rbrace\right),
-\end{equation*}
-where $\sim$ is with respect to \textit{the same graph} $\mathcal{G}$. Let $\pmb{\mu}=\left(\pmb{\mu}_1^T,... ,\pmb{\mu}_n^T\right)^T$ be the mean of $\pmb{x}$, where $\mathbb{E}\left[\pmb{x}_i\right]=\pmb{\mu}_i$, and $\widetilde{\pmb{Q}}=\left(\widetilde{\pmb{Q}}_{ij}\right)$ its precision matrix, where each element of the matrix is a $p\times p$ matrix. \\
-It follows that
-\begin{equation*}
-    \pmb{x}_i\perp\pmb{x}_j|\pmb{x}_{-ij}\Longleftrightarrow\widetilde{\pmb{Q}}_{ij}=\pmb{0}.
-\end{equation*}
-Formally, a random vector $\pmb{x}=\left(\pmb{x}_1^T,...,\pmb{x}_n^T\right)^T$ with $\dim\left(\pmb{x}_i\right)=p$, is called a $\hbox{MGMRF}_p$ with respect to $\mathcal{G}=\left(\mathcal{V}=\left\lbrace 1,. ...,n\right\rbrace,\mathcal{E}\right)$ with mean $\pmb{\mu}$ and precision matrix $\widetilde{\pmb{Q}} >0$, exactly when its density has the form
-\begin{align*}
-    \pi\left(\pmb{x}\right) &=\left(\frac{1}{2\pi}\right)^{np/2}\left|\widetilde{\pmb{Q}}\right|^{1/2}\exp\left(-\frac{1}{2}\left(\pmb{x}-\pmb{\mu}\right)^T\widetilde{\pmb{Q}}\left(\pmb{x}-\pmb{\mu}\right)\right)\\
-    &=\left(\frac{1}{2}\right)^{np/2}\left|\widetilde{\pmb{Q}}\right|^{1/2}\exp\left(-\frac{1}{2}\sum_{ij}\left(\pmb{x}_i-\pmb{\mu}_i\right)^T\widetilde{\pmb{Q}}_{ij}\left(\pmb{x}_j-\pmb{\mu}_j\right)\right)
-\end{align*}
-and
-\begin{equation*}
-    \widetilde{\pmb{Q}}_{ij}\neq0\Longleftrightarrow\left\lbrace i,j\right\rbrace\in\mathcal{E}\,\forall\,i\neq j.
-\end{equation*}
-A $\hbox{MGMRF}_p$ is equivalent to a GMRF of dimension $np$ with identical mean vector and precision matrix.  Therefore, all results valid for a GMRF are valid for a $\hbox{MGMRF}_p$, with modifications, since the graph for a $\hbox{MGMRF}_p$ has size $n$ and is defined with respect to $\left\lbrace\pmb{x}_i\right\rbrace$, while for a GMRF it has size $np$ and is defined with respect to $\left\lbrace x_i\right\rbrace$.  \\
-The interpretation of $\widetilde{\pmb{Q}}_{ii}$ and $\widetilde{\pmb{Q}}_{ij}$ can be derived from the full conditional $\pi\left(\pmb{x}_i|\pmb{x}_{-i}\right)$. The extensions of \eqref{eq:mean_gmrf} and \eqref{eq:prec_gmrf} are
-\begin{align}
-    \mathbb{E}\left[\pmb{x}_i|\pmb{x}_{-i}\right]&=\pmb{\mu}_i-\widetilde{\pmb{Q}}_{ii}^{-1}\sum_{j:j\sim i}\widetilde{\pmb{Q}}_{ij}\left(\pmb{x}_j-\pmb{\mu}_j\right)\\
-    \hbox{Prec}\left(\pmb{x}_i|\pmb{x}_{-i}\right) &= \widetilde{\pmb{Q}}_{ii}.
-\end{align}
-In some applications, the full conditionals
-\begin{align}
-    \mathbb{E}\left[\pmb{x}_i|\pmb{x}_{-i}\right] &= \pmb{\mu}_i-\sum_{j:j\sim i}\pmb{\beta}_{ij}\left(\pmb{x}_j-\pmb{\mu}_j\right) \\
-    \hbox{Prec}\left(\pmb{x}_i|\pmb{x}_{-i}\right) &= \pmb{\kappa}_i > 0,
-\end{align}
-In some applications, the full conditionals are used to define the $\hbox{MGMRF}_p$, for given $p\times p$-matrices $\left\lbrace\pmb{\beta}_{ij},i\neq j\right\rbrace$, $\left\lbrace\pmb{\kappa}_i\right\rbrace$, and vectors $\pmb{\mu}_i$. Again, $\sim$ is implicitly defined by the non-zero matrices $\left\lbrace\pmb{\kappa}_i\right\rbrace$. Similar requirements as for $p=1$ apply to the existence of the joint density: $\pmb{\kappa}_i\pmb{\beta}_{ij}=\pmb{\beta}_{ij}^T\pmb{\kappa}_j$ for $i\neq j$ and $\widetilde{\pmb{Q}} > 0$. The $p\times p$ elements of $\widetilde{\pmb{Q}}$ are
-\begin{equation*}
-    \widetilde{\pmb{Q}}_{ij}=\begin{cases}
-    \pmb{\kappa}_i\pmb{\beta}_{ij} & i\neq j \\
-    \pmb{\kappa}_i & i=j
-    \end{cases};
-\end{equation*}
-therefore $\widetilde{\pmb{Q}}>0\Longleftrightarrow\left(\pmb{I}+\left(\pmb{\beta}_{ij}\right)\right) > 0$ \autocite[][29--30]{rue2005gaussian}.
+\subsection{Lattices and Tori}
+$\mathcal{I}_{\pmb{n}}$ denotes a (regular) \textbf{lattice} (or grid) of size $\pmb{n}=\left(n_1, n_2\right)$ (in the two-dimensional case). $\pmb{y}$ can take values on $\mathcal{I}_{\pmb{n}}$ and $y_{i,j}$ denotes the value of $\pmb{y}$ at location $ij$, for $i=1,...,n_1$ and $j=1,...,n_2$. For easier reading this is shortened to $y_{ij}$. On an \textit{infinite lattice} $\mathcal{I}_{\pmb{\infty}}$, $ij$ are numbered as $i=0,\pm1,\pm2,...,$ and $j=0,\pm1,\pm2,...$. \\
+A lattice with cyclic or toroidal boundary conditions is referred to as \textit{torus} and is denoted by $\mathcal{I}_{\pmb{\infty}}$. The dimension is $\pmb{n}=\left(n_1,n_2\right)$ (in the two-dimensional case) and all indices are modulus $\pmb{n}$ and run from 0 to $n_1-1$ or $n_2-1$. If a GMRF $\pmb{y}$ is defined on $\mathcal{I}_{\pmb{n}}$, the toroidal boundary conditions imply that $y_{-2,n_2}$ is equal to $y_{n_1-2,0}$ since $-2\mod n_1$ is equal to $n_1-2$ and $n_2\mod n_2$ is equal to 0.\\
+An \textit{irregular lattice} refers to a spatial configuration of regions $i=1,...,n$ where the regions (mostly) have common boundaries, for instance the states of a nation \autocite[][15--16]{rue2005gaussian}. An example of an irregular lattice is shown in Figure~\ref{fig:lattice}.
+\begin{figure}[H]
+   \centering
+       \includegraphics[page=1,width=\textwidth]{switzerland.pdf}
+ \caption{The cantons of Switzerland, an example of an irregular lattice.}
+ \label{fig:lattice}
+\end{figure}
+\clearpage
+\section{Latent Gaussian Models and INLA}
+In recent years, a growing amount of georeferenced data has become available, leading to an increased need for appropriate statistical modelling to handle large and complex datasets. The usual approach to inference in this field involves the previously introduced Markov chain Monte Carlo methods. Due to several factors, these methods may perform poorly when applied to such models. One issue is the high dependence from $\pmb{\theta}$ and $\pmb{x}$ on each other, especially for large $n$. This problem requires, at least in part, a joint update of $\pmb{\theta}$ and $\pmb{x}$. There are several proposals to solve these shortcomings, but MCMC sampling continues to show poor computational speed \autocite[][322]{rue2009approximate}.\\
+Bayesian hierarchical models have proven to be effective in capturing complex stochastic structures in spatial processes. A large proportion of these models are based on latent Gaussian models, a subclass of structured additive regression models. The methodology used for these models includes Integrated Nested Laplace Approximations (INLA), which is a method used to approximate the posterior marginals of a latent Gaussian field and hyperparameters $\pmb{\theta}$. The hyperparameters $\pmb{\theta}$ can be, for example, the variance in the Gaussian likelihood or the shape parameter in the likelihood of the gamma distribution. In the case of latent fields, they can be, for instance, dispersion parameters or spatial correlation parameters. 
+Most latent Gaussian models satisfy two basic properties:
+\begin{itemize}
+    \item[1.] The latent field $\pmb{x}$ is of large dimension, $n\approx10^2-10^5$. Therefore, the latent field is a Gaussian Markov random field with sparse precision matrix $\pmb{Q}\left(\pmb{\theta}\right)$.
+    \item[2.] The number of hyperparameters, $m$, is small, $m\leq6$.
+\end{itemize}
+In most cases, both properties are required to produce fast inference, and thus these are assumed to be true for the remainder of this work \autocite[][]{rue2009approximate}.
+\subsection{Applications for Latent Gaussian Models}
+Latent Gaussian models can be employed in a vast range of different domains, in fact most structured Bayesian models are of this particular form. Some of these domains are presented next. \clearpage
+\subsubsection{Regression Models}
+Bayesian generalized linear models correspond to the linear relationship $\eta_i=\alpha+\sum_{k=1}^{n_\beta}\beta_k z_{ki}$ \autocite[][]{dey2000generalized}. Either the linear relationship of the covariates can be relaxed through the $f\left(\cdot\right)$ terms \autocite[][]{fahrmeir2013multivariate}, random effects can be introduced through them or both. Smooth covariate effects are frequently modelled using penalized spline models \autocite[][]{lang2004bayesian} or random walk models \autocite[][]{fahrmeir2013multivariate}, continuous indexed spline models \autocite[][]{rue2005gaussian} or Gaussian processes \autocite[][]{chu2005gaussian}. The incorporation of random effects allows for the consideration of overdispersion caused by unobserved heterogeneity or correlation in longitudinal data and can be introduced by defining $f\left(u_i\right)=f_i$ and $\left\lbrace f_1\right\rbrace$ to be independent, zero mean and Gaussian \autocite[][]{fahrmeir2001bayesian}.
+\subsubsection{Dynamic Models}
+Temporal dependence can be introduced by using $i$ in \eqref{eq:predictor} as temporal index $t$ and defining $f\left(\cdot\right)$ and $\pmb{u}$ such that $f\left(u_t\right)=f_t$. Both a discrete-time and a continuous-time autoregressive model can be modelled by $\left\lbrace f_t\right\rbrace$. Furthermore, a seasonal effect or the latent process of a structured time series model can be modelled \autocite[][]{kitagawa1996smoothness}. Alternatively, a smooth temporal function in the same sense as for regression models can be represented by $\left\lbrace f_t\right\rbrace$.
+\subsubsection{Spatial and Spatio-Temporal Models}
+Similar to the previous type of model, spatial dependence can be modelled by a spatial covariate $\pmb{u}$ such that $f\left(u_s\right)=f_s$, where $s$ denotes the spatial location or region $s$. The stochastic model for $f_s$ is constructed to promote spatial smooth realizations of some sort. Popular models of this type include the Besag-York-Mollié \autocite[][]{besag1991bayesian} model with extensions for regional data, continuous indexed Gaussian models \autocite[][]{banerjee2014hierarchical} and texture models \autocite[][]{marroquin2001gauss}. The dependence between spatial and temporal covariates can be achieved either by using a spatio-temporal covariate $(s,t)$ or a corresponding spatio-temporal Gaussian field \autocite[][]{kammann2003geoadditive}.\\
+Often the final model consists of a sum of several components, e.g. a spatial component, random effects and both linear and smooth effects of some covariates. In order to separate the effects of the different components in \eqref{eq:predictor}, sometimes linear or sum-to-zero constraints can be imposed \autocite[][319--321]{rue2009approximate}.
 \subsection{Integrated Nested Laplace Approximation}
 An alternative to MCMC methods that is both less computationally intensive and suitable for performing approximate Bayesian inference in latent Gaussian models is \textit{Integrated Nested Laplace Approximation} (INLA). The basis of INLA is the use of a combination of analytical approximations and numerical algorithms for sparse matrices to approximate the posterior distribution using closed-form expressions. This speeds up inference and circumvents problems of sample convergence and mixing, making it suitable for fitting large data sets or exploring other models \autocite[][]{rue2009approximate}.  \\
 INLA can be used for all models of the following form,
@@ -547,7 +364,7 @@ INLA can be used for all models of the following form,
 \end{align*}
 As introduced in \autoref{sec:notation}, $\pmb{y}$ are the observed data, $\pmb{x}$ is a Gaussian field, $\pmb{\theta}$ represents the hyperparameters, while $\mu\left(\pmb{\theta}\right)$ and $\pmb{Q}\left(\pmb{\theta}\right)$ denote the mean and precision matrix respectively. To ensure fast inference, the dimension of the hyperparameter vector $\pmb{\theta}$ should be small, since the approximations are computed by numerical integration over the hyperparameter space. \\
 In most cases, the observations $y_i$ are assumed to belong to the exponential family with mean $\mu_i=g^{-1}\left(\eta_i\right)$. As shown in equation \eqref{eq:predictor}, $\eta_i$ accounts for the effects of several covariates in an additive way, which makes it suitable for a wide range of models, including spatial and spatio-temporal models, since $\left\lbrace f^{(j)}\right\rbrace$ can take different forms. \\
-Let $\pmb{x}=\left(\alpha,\left\lbrace\beta_k\right\rbrace|\theta\sim\mathcal{N}\left(\mu\left(\theta\right), \pmb{Q}\left(\theta\right)^{-1}\right)\right)$ be the vector of latent Gaussian variables, and let $\pmb{\theta}$ be the vector of hyperparameters, which are not required to be Gaussian. INLA calculates accurate and fast approximations for the posterior marginals of the components of the latent Gaussian variables
+Let $\pmb{x}$ be a GMRF, and let $\pmb{\theta}$ be the vector of hyperparameters, which are not required to be Gaussian. INLA calculates accurate and fast approximations for the posterior marginals of the components of the latent Gaussian variables
 \begin{equation*}
     \pi\left(x_i|\pmb{y}\right),\hspace{20pt}i=1,...,n,
 \end{equation*}
@@ -577,7 +394,7 @@ Finally, these approximations are numerically integrated with respect to $\pmb{\
     \widetilde{\pi}\left(\theta_j|\pmb{y}\right)&=\sum_l\widetilde{\pi}\left(\theta_l^*|\pmb{y}\right)\times\Delta_l^*,
 \end{align}
 with $\Delta_k$ and $\Delta_l^*$ representing the area weights corresponding to $\theta_k$ and $\theta_l^*$. \\
-To obtain the approximations for the posterior marginals for the $x_i$'s conditioned on selected values of $\theta_k$ and $\widetilde{\pi}\left(x_i|\theta_k,\pmb{y}\right)$, a Gaussian, Laplace or simplified Laplace approximation can be used. Using a Gaussian approximation derived from $\widetilde{\pi}_G\left(\pmb{x}|\pmb{\theta},\pmb{y}\right)$ is the simplest and fastest solution, but in some situations it produces errors in the location and is unable to capture skewness behaviour. Therefore, the Laplace approximation is favoured over the Gaussian approximation, although it is relatively expensive. The simplified Laplace approximation is associated with lower costs and addresses inaccuracies of the Gaussian approximation in terms of location and skewness in a satisfactory manner \autocite[][]{moraga2019geospatial}.
+To obtain the approximations for the posterior marginals for the $x_i$'s conditioned on selected values of $\theta_k$ and $\widetilde{\pi}\left(x_i|\theta_k,\pmb{y}\right)$, a Gaussian, Laplace or simplified Laplace approximation can be used. Using a Gaussian approximation derived from $\widetilde{\pi}_G\left(\pmb{x}|\pmb{\theta},\pmb{y}\right)$ is the simplest and fastest solution, but in some situations it produces errors in the location and is unable to capture skewness behaviour. Therefore, the Laplace approximation is favoured over the Gaussian approximation, although it is relatively expensive. The simplified Laplace approximation is associated with lower costs and addresses inaccuracies of the Gaussian approximation in terms of location and skewness in a satisfactory manner \autocite[][]{rue2009approximate, rue2017bayesian}.
 \clearpage
 \section{Bayesian Spatial Models}
 Bayesian spatial models are often used in the field of disease mapping. Bayesian hierarchical
@@ -585,14 +402,14 @@ models improve estimates of log risk by providing information about neighbouring
 In general, it can be assumed that areas in proximity to each other have a more frequent burden of disease than areas that are further away from each other. By setting up a neighbourhood structure, this "proximity" can be defined. It is assumed that $i$ and $j$ are neighbours if they share a common boundary, denoted $i\sim j$. The set of neighbours of the region $i$ is denoted by $\delta_i$ and its size is given by $n_{\delta_i}$.
 \subsection{Besag Spatial Models}\label{sec:besag}
 \subsubsection{Besags' Improper Spatial Model}
-A commonly used approach to modelling spatial correlation is the Besag model, also known as an intrinsic GMRF model. The conditional distribution for a random vector $\pmb{x}=\left(x_1,...,x_n\right)^T$ is given by
+A commonly used approach to modelling spatial correlation is the Besag model, also known as an intrinsic or improper GMRF model. The conditional distribution for a random vector $\pmb{x}=\left(x_1,...,x_n\right)^T$ is given by
 \begin{equation}
     x_i|\pmb{x}_{-i},\tau_x\sim\mathcal{N}\left(\frac{1}{n_{\delta_i}}\sum_{j\in\delta_i}x_j,\frac{1}{n_{\delta_i}\tau_x}\right),
 \end{equation}
 with $\tau_x$ as a precision parameter. The mean of the effects over all neighbours is given by the mean of $x_i$, while the precision is proportional to the number of neighbours. The joint distribution for $\pmb{x}$ is given by
 \begin{equation}
     \pi\left(\pmb{x}|\tau_x\right)\propto\exp\left(-\frac{\tau_x}{2}\sum_{i\sim j}\left(x_i-x_j\right)^2\right)\propto\exp\left(-\frac{\tau_x}{2}\pmb{x}^T\pmb{Q}\pmb{x}\right).
-\end{equation}
+\end{equation} \clearpage
 The precision matrix $\pmb{Q}$ is given by
 \begin{equation}
     Q_{ij}=\begin{cases}
@@ -606,9 +423,9 @@ The Besag model for spatial effects has one hyperparameter, the precision $\tau_
 \begin{equation}
     \theta_1 = \log\tau_x.
 \end{equation}
-The prior is defined on $\theta_1$ \autocite[][]{besag1974spatial, riebler2016intuitive}.
+The prior is defined on $\theta_1$. This model implies that the conditional expected value of $x_i$ is equivalent to the mean of the random effects at the neighbouring locations \autocite[][]{besag1974spatial, riebler2016intuitive}.
 \subsubsection{Besags' Proper Spatial Model}
-To overcome this impropriety, the precision matrix has to be redefined as follows,
+Since the joint distribution of the intrinsic Besag model is improper due to the singular precision matrix, this impropriety can be overcome by redefining the precision matrix as follows,
 \begin{equation}
     Q_{ij} = \begin{cases}
     \tau_x\left(n_{\delta_i}+d\right) & i=j,\\
@@ -629,7 +446,7 @@ and the diagonal parameter $d$, which is represented as
 \end{equation}
 The priors are defined on $\theta_1$ and $\theta_2$, respectively \autocite[][]{besag1974spatial, riebler2016intuitive}.
 \subsection{The Besag-York-Mollié Model}\label{sec:bym}
-The Besag-York-Mollié (BYM) model is a lognormal Poisson model that is a combination of a Besag model $u$ and an ordinary random effect component $v$ for non-spatial heterogeneity. It combines the regional spatial effect $\pmb{x}$ into the sum of an unstructured and a structured spatial component, so that $\pmb{x}=\pmb{v}+\pmb{u}$.\\
+The Besag-York-Mollié (BYM) model is a lognormal Poisson model that is a combination of an improper Besag model $u$ and an ordinary random effect component $v$ for non-spatial heterogeneity. It combines the regional spatial effect $\pmb{x}$ into the sum of an unstructured and a structured spatial component, so that $\pmb{x}=\pmb{v}+\pmb{u}$.\\
 $\pmb{v}\sim\mathcal{N}\left(0,\tau_v^{-1}\pmb{I}\right)$ accounts for pure overdispersion, while $\pmb{u}\sim\mathcal{N}\left(\pmb{0}, \tau_u^{-1}\pmb{Q}^{-}\right)$ is the Besag model. \\
 By using a spatial and a non-spatial error term, the overdispersion that is not modelled by the Poisson variables is taken into account. Thus, if the observed variance is not fully explained by the spatial structure of the data, the error terms explain the rest of the variance. \\
 The resulting covariance matrix of $\pmb{x}$ is given by
@@ -664,71 +481,10 @@ A modification of the BYM model that addresses this scaling problem is the BYM2 
 with covariance matrix
 \begin{equation}
     \hbox{Var}\left(\pmb{x}|\tau_x,\phi\right)=\frac{1}{\tau_x}\left(\left(1-\phi\right)\pmb{I}+\phi\pmb{Q}_{*}^{-}\right).
-\end{equation}
-Equation~\ref{eq:bym2_1} emphasizes the trade-off between pure overdispersion and spatially structured correlation, where $0\leq\phi\leq1$ measures the fraction of the marginal variance explained by the structured effect. For $\phi=0$ the model reduces to pure overdispersion, while for $\phi=1$ it becomes a Besag model \autocite[][]{martins2014penalising, riebler2016intuitive}.
+\end{equation} \clearpage
+Equation~\ref{eq:bym2_1} emphasizes the trade-off between pure overdispersion and spatially structured correlation, where $0\leq\phi\leq1$ measures the fraction of the marginal variance explained by the structured effect. For $\phi=0$ the model reduces to pure overdispersion, while for $\phi=1$ it becomes a Besag model \autocite[][]{sorbye2017penalised, riebler2016intuitive}.
 \clearpage
-\section{Goodness-of-Fit indicators}\label{sec:performance}
-The goodness of fit indicates "how well" an estimated model can explain a set of observations. Measures of goodness of fit allow a statement to be made about the discrepancy between the theoretical values of the random variables under investigation, which are expected or predicted on the basis of the model, and the values actually measured. \\
-The goodness of fit of a model to available data can be assessed with the help of statistical tests or suitable ratios.
-\subsection{The Akaike Information Criterion}
-The historically oldest criterion was proposed in 1973 by Hirotsugu Akaike (1927-2009) as an information criterion and is known today as the Akaike information criterion (AIC). The AIC is one of the most frequently used criteria for model selection in the context of likelihood-based inference.  \\
-Let the population contain the distribution of a variable with unknown density function $p$. The maximum likelihood estimation assumes a known distribution with an unknown parameter $\theta$, hence the density function can be written as $q\left(\theta\right)$. The Kullback-Leibler divergence is used as a distance measure between $p$ and $q\left(\widehat{\theta}\right)$ with $\widehat{\theta}$ the estimated parameter from the maximum likelihood estimation. The better the maximum likelihood model, the small the Kullback-Leibler divergence $D\left(P||Q\right)$. \\
-For a maximum likelihood model with a $p$-dimensional parameter vector $\widehat{\pmb{\theta}}$, the Akaike information criterion is defined as
-\begin{equation}
-    \hbox{AIC}=-2l\left(\widehat{\pmb{\theta}}_{ML}\right)+2p,
-\end{equation}
-with $l$ the log-likelihood function \autocite[][]{akaike1974new}.
-\subsection{The Deviance Information Criterion}
-In statistics, the deviance information criterion, or DIC for short, is a measure (criterion) for the prediction error of a model.
-This measure is an information criterion and belongs to the environment of the Bayesian method for model comparisons. The smaller the deviance information criterion, the better the model fit. The deviance information criterion can be regarded as the Bayesian equivalent of the Akaike information criterion. \\
-The deviance is defined as 
-\begin{equation}
-    D\left(\pmb{\theta}\right)=-2\log\left(l\left(\pmb{y}|\pmb{\theta}\right)\right)+C,
-\end{equation}
-with $\pmb{y}$ the data, $\pmb{\theta}$ the unknown parameters of the model and l the likelihood function. $C$ is a constant that cancels out in all calculations that compare different models and therefore it does not need to be known \autocite[][]{nelder1972generalized}. \\
-The DIC is given by
-\begin{equation}
-    \hbox{DIC}=D\left(\overline{\pmb{\theta}}\right)+2p_D,
-\end{equation}
-with
-\begin{equation}
-    p_D=\overline{D\left(\pmb{\theta}\right)}-D\left(\overline{\pmb{\theta}}\right),
-\end{equation}
-where $\overline{\pmb{\theta}}$ is the expected value of $\pmb{\theta}$ \autocite[][]{spiegelhalter2014deviance}.
-\subsection{The Watanabe-Akaike Information Criterion}
-The Watanabe-Akaike information criterion (WAIC) is the generalized AIC onto singular statistical models. \\
-The WAIC is given by
-\begin{equation}
-    \hbox{WAIC} = -2\hbox{LLPD}+2p_{\hbox{WAIC}},
-\end{equation}
-with the log pointwise predictive density (LLPD) given by
-\begin{equation}
-    \hbox{LLPD} = \sum_{i=1}^n\log\left(\int \pi\left(y_i|\pmb{\theta}\right)\pi_{\hbox{post}}\left(\pmb{\theta}\right)\right)d\pmb{\theta}.
-\end{equation}
-LLPD can be seen as the Bayesian analogue of $l\left(\widehat{\pmb{\theta}}_{ML}\right)$ in the calculation of the AIC.\\
-The penalty term of the WAIC is fully Bayesian and given by
-\begin{equation}
-    p_{\hbox{WAIC}}=\sum_{i=1}^n\hbox{Var}_{\hbox{post}}\left(\log\left(\pi\left(y_i|\pmb{\theta}\right)\right)\right),
-\end{equation}
-where the term represents the variance of the individual terms in the LLPD over all data points \autocite[][]{watanabe2010asymptotic, yong2018loo}.
-\subsection{The Conditional Predictive Ordinate}
-The conditional predictive ordinate (CPO) is a Bayesian diagnostic that can be used to detect surprising observations. It is often used in the context of univariate sampling, the multivariate normal distribution and regression models. \\
-The conditional predictive ordinate is given by
-\begin{equation}
-    \hbox{CPO} = \pi\left(y_i|\pmb{y}_{-i}\right)
-\end{equation}
-with $\pmb{y}$ the data, $\pmb{y}_{-i}$ the data without the $i$-th observation, and $\pi\left(\cdot|\pmb{y}_{-i}\right)$ the predictive distribution of a new observation at $\pmb{y}_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
-\clearpage
-\section{Model Issues}\label{sec:issues}
-One problem that plagues these models is that they cannot be directly compared due to their different parameterizations and the fact that the precision in these models is interpreted differently. Since neither a Besag model nor a BYM model nor a Leroux model is scaled, the precision parameter is not representative of the marginal precision but is confounded with the mixing parameter. Therefore, the effect of a prior assigned to the precision parameter is dependent on the graph structure of the application. Thus, a given prior is not transferable between different applications if the underlying graph changes. Furthermore, the goal of the BYM2 model is not to optimize goodness-of-fit indicators, but to provide a meaningful model formulation where all parameters have a clear meaning. By mapping the precision parameter to the marginal standard deviation, the model parameters are flexible and the assignment of meaningful hyperpriors is made easier \autocite[][]{riebler2016intuitive}. \\
+\section{Prior Sensitivity}\label{sec:issues}
+One problem that plagues Bayesian spatial models is that they cannot be directly compared due to their different parameterizations and the fact that the precision in these models is interpreted differently. Since neither a Besag model nor a BYM model nor a Leroux model is scaled, the precision parameter is not representative of the marginal precision but is confounded with the mixing parameter. Therefore, the effect of a prior assigned to the precision parameter is dependent on the graph structure of the application. Thus, a given prior is not transferable between different applications if the underlying graph changes. Furthermore, the goal of the BYM2 model is not to optimize goodness-of-fit indicators, but to provide a meaningful model formulation where all parameters have a clear meaning. By mapping the precision parameter to the marginal standard deviation, the model parameters are flexible and the assignment of meaningful hyperpriors is made easier \autocite[][]{riebler2016intuitive}. \\
 Additionally, the goodness-of-fit indicators introduced in Section~\ref{sec:performance} have their own problems. The DIC, for example, produces unreasonable results if the posterior distribution is not well summarized by its mean, while the WAIC is based on a data partition that would create difficulties for structured models, such as for spatial or network data \autocite[][]{gelman2014understanding}. \\
 Finally, the choice of the prior affects the value of these criteria and depending on the values chosen for the PC priors used in this work, overfitting of the models may occur, which is reflected in these criteria, but more on this later.
-\clearpage
-\section{The Variance Inflation Factor}\label{sec:vif}
-The Variance Inflation Factor ($\hbox{VIF}$) is a measurement that can be used to avoid multicollinearity between covariates. The $\hbox{VIF}$ quantifies the severity of multicollinearity in a generalized linear model. It provides an index that measures the extent to which the variance of an estimated regression coefficient is increased due to collinearity. \\
-For $p-1$ independent variables, 
-\begin{equation}
-    \hbox{VIF}_i = \frac{1}{1-R^2},\hspace{20pt}i=1,...,p-1,
-\end{equation}
-with $R^2$ the coefficient of determination. In most literature, a value of at least 5 is suggested as too high and is therefore used as the threshold in this work \autocite[][]{craney2002model}.
-\clearpage

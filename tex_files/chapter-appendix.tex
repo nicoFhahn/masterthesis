@@ -30,7 +30,7 @@ Important members of the exponential family are the normal, binomial, Poisson, g
 The normal distribution is an important type of continuous probability distribution in stochastics. The special significance of the normal distribution is based, among other things, on the central limit theorem, according to which distributions that result from the additive combination of a large number of independent influences are approximately normally distributed under weak conditions. \\
 The density is given by
 \begin{equation}
-    f\left(\pmb{x}|\mu,\sigma\right)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{\pmb{x}-\mu}{\sigma}\right)^2\right).
+    f\left(x|\mu,\sigma\right)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{1}{2}\left(\frac{\pmb{x}-\mu}{\sigma}\right)^2\right).
 \end{equation}
 The first two moments of the distribution are given by
 \begin{align}
@@ -75,7 +75,7 @@ The first two moments of the distribution are given by
     \mathbb{E}\left[X\right] &= \lambda \label{eq:poisson_exp}\\
     \hbox{Var}\left[X\right] &= \lambda \label{eq:poisson_var}.
 \end{align}
-For $\lambda\geq10$ the distribution becomes approximately symmetrical and can thus be approximated by a normal distribution \autocite[][243]{fahrmeir2016statistik}.
+For $\lambda\geq10$ the distribution becomes approximately symmetrical and can thus be approximated by a normal distribution \autocite[][243]{fahrmeir2016statistik}. \clearpage
 \subsection{The Negative Binomial Distribution}
 The negative binomial distribution is a univariate probability distribution that belongs to the discrete probability distributions. It models the number of trials required to achieve a given number of successes in a Bernoulli process. \\
 The density is given by
@@ -91,6 +91,113 @@ The first two moments of the distribution are given by
 For large values of $r$, the negative binomial distribution can be approximated by a normal distribution
 \autocite[][]{haldane1941fitting}.
 \clearpage
+\section{Symmetric Positive Definite Matrices}
+An $n \times n$ matrix $\pmb{A}$ is \textit{positive definite} exactly if
+\begin{equation*}
+    \pmb{x}^T\pmb{A}\pmb{x}>0,\hspace{20pt}\forall\pmb{x}\neq\pmb{0}.
+\end{equation*}
+If $\pmb{A}$ is also symmetric, it is called a symmetric positive definite (SPD) matrix. Only SPD matrices are considered and sometimes the notation '$\pmb{A}>0$' is used for an SPD matrix $\pmb{A}$. \\
+An SPD matrix $\pmb{A}$ has some of the following properties.
+\begin{itemize}
+    \item[1.] $\hbox{rank}\left(\pmb{A}\right)=n$.
+    \item[2.] $|\pmb{A}|>0$.
+    \item[3.] $A_{ii}>0$.
+    \item[4.] $A_{ii}A_{jj}-A_{ij}^2>0$, for $i\neq j$.
+    \item[5.] $A_{ii} + A_{jj}-2|A_{ij}|>0$ for $i\neq j$.
+    \item[6.] $\max A_{ii}>\max_{i\neq j}|A_{ij}|$.
+    \item[7.] $\pmb{A}^{-1}$ is SPD.
+    \item[8.] All principal submatrices of $\pmb{A}$ are SPD.
+\end{itemize}
+If $\pmb{A}$ and $\pmb{B}$ are SPD, $\pmb{A}+\pmb{B}$ is SPD, but the reverse is generally not true. Additionally, if $\pmb{AB}=\pmb{BA}$, $\pmb{AB}$ is SPD. \\
+The following conditions are all sufficient and necessary for a symmetric matrix $\pmb{A}$ to be SPD:
+\begin{itemize}
+    \item[1.] All eigenvalues $\lambda_1,...,\lambda_n$ of $\pmb{A}$ are strictly positive.
+    \item[2.] There exists such a matrix $\pmb{C}$ that $\pmb{A}=\pmb{CC}^T$. If $\pmb{C}$ is lower triangular, it is called the \textit{Cholesky triangle} of $\pmb{A}$.
+    \item[3.] All leading principal submatrices have strictly positive determinants.
+\end{itemize}    
+A sufficient, but not necessary condition for a (symmetrical) matrix to be SPD is the criterion of \textit{diagonal dominance}:
+    \begin{equation*}
+        A_{ii}-\sum_{j:j\neq i}|A_{ij}|>0,\hspace{20pt}\forall i.
+    \end{equation*}
+    A $n\times n$ matrix $\pmb{A}$ is called a \textit{symmetric positive semidefinite} (SPSD) matrix. An SPSD matrix $\pmb{A}$ is sometimes denoted '$\pmb{A}\geq0$' \autocite[][18--19]{rue2005gaussian}.
+\clearpage
+\section{Example: PC Prior for the Precision}
+A PC prior can be used to adjust the smoothness of a spatial field in an intuitive way by specifying such a prior for the precision $\tau$. This makes it possible to adjust the smoothness of the spatial field in an intuitive way. In this case, the penalized complexity prior is defined by the upper limit $\sigma_0$. Equation~\ref{eq:pcprior} therefore looks like this,
+\begin{equation}\label{pcprec}
+    \mathbb{P}\left(\sigma > \sigma_0\right)=\alpha.
+\end{equation}
+The actual expression of the prior is given by
+\begin{equation}\label{eq:pc_prior_prec}
+    \pi\left(\tau\right)=\frac{\lambda}{2}\tau^{-3/2}\exp\left(-\lambda\tau^{-1/2}\right),\hspace{20pt}\tau>0
+\end{equation}
+and is a type-2-Gumbel distribution. \\
+The prior for $\tau$ corresponds to an exponential distribution with rate $\lambda$ for the standard deviation. $\lambda$ quantifies the size of the penalty for deviation from the base model and is increased with higher values for it. Here, $\lambda=\frac{-\log\left(\alpha\right)}{\sigma_0}$ \autocite[][]{sorbye2017penalised}.
+\clearpage
+\section{Goodness-of-Fit indicators}\label{sec:performance}
+The goodness of fit indicates "how well" an estimated model can explain a set of observations. Measures of goodness of fit allow a statement to be made about the discrepancy between the theoretical values of the random variables under investigation, which are expected or predicted on the basis of the model, and the values actually measured. \\
+The goodness of fit of a model to available data can be assessed with the help of statistical tests or suitable ratios.
+\subsection{The Akaike Information Criterion}
+The historically oldest criterion was proposed in 1973 by Hirotsugu Akaike (1927-2009) as an information criterion and is known today as the Akaike information criterion (AIC). The AIC is one of the most frequently used criteria for model selection in the context of likelihood-based inference.  \\
+Let the population contain the distribution of a variable with unknown density function $p$. The maximum likelihood estimation assumes a known distribution with an unknown parameter $\theta$, hence the density function can be written as $q\left(\theta\right)$. The Kullback-Leibler divergence is used as a distance measure between $p$ and $q\left(\widehat{\theta}\right)$ with $\widehat{\theta}$ the estimated parameter from the maximum likelihood estimation. The better the maximum likelihood model, the small the Kullback-Leibler divergence $D\left(P||Q\right)$. \\
+For a maximum likelihood model with a $p$-dimensional parameter vector $\widehat{\pmb{\theta}}$, the Akaike information criterion is defined as
+\begin{equation}
+    \hbox{AIC}=-2l\left(\widehat{\pmb{\theta}}_{ML}\right)+2p,
+\end{equation}
+with $l$ the log-likelihood function \autocite[][]{akaike1974new}.
+\subsection{The Deviance Information Criterion}
+In statistics, the deviance information criterion, or DIC for short, is a measure (criterion) for the prediction error of a model.
+This measure is an information criterion and belongs to the environment of the Bayesian method for model comparisons. The smaller the deviance information criterion, the better the model fit. The deviance information criterion can be regarded as the Bayesian equivalent of the Akaike information criterion. \\
+The deviance is defined as 
+\begin{equation}
+    D\left(\pmb{\theta}\right)=-2\log\left(l\left(\pmb{y}|\pmb{\theta}\right)\right)+C,
+\end{equation}
+with $\pmb{y}$ the data, $\pmb{\theta}$ the unknown parameters of the model and $l$ the likelihood function. $C$ is a constant that cancels out in all calculations that compare different models and therefore it does not need to be known \autocite[][]{nelder1972generalized}. \\
+The DIC is given by
+\begin{equation}
+    \hbox{DIC}=D\left(\overline{\pmb{\theta}}\right)+2p_D,
+\end{equation}
+with
+\begin{equation}
+    p_D=\overline{D\left(\pmb{\theta}\right)}-D\left(\overline{\pmb{\theta}}\right),
+\end{equation}
+where $\overline{\pmb{\theta}}$ is the expected value of $\pmb{\theta}$ \autocite[][]{spiegelhalter2014deviance}.
+\subsection{The Watanabe-Akaike Information Criterion}
+The Watanabe-Akaike information criterion (WAIC) is the generalized AIC onto singular statistical models.
+The WAIC is given by
+\begin{equation}
+    \hbox{WAIC} = -2\hbox{LLPD}+2p_{\hbox{WAIC}},
+\end{equation}
+with the log pointwise predictive density (LLPD) given by
+\begin{equation}
+    \hbox{LLPD} = \sum_{i=1}^n\log\left(\int \pi\left(y_i|\pmb{\theta}\right)\pi_{\hbox{post}}\left(\pmb{\theta}\right)\right)d\pmb{\theta}.
+\end{equation}
+LLPD can be seen as the Bayesian analogue of $l\left(\widehat{\pmb{\theta}}_{ML}\right)$ in the calculation of the AIC.\\
+The penalty term of the WAIC is fully Bayesian and given by
+\begin{equation}
+    p_{\hbox{WAIC}}=\sum_{i=1}^n\hbox{Var}_{\hbox{post}}\left(\log\left(\pi\left(y_i|\pmb{\theta}\right)\right)\right),
+\end{equation}
+where the term represents the variance of the individual terms in the LLPD over all data points \autocite[][]{watanabe2010asymptotic, yong2018loo}. \clearpage
+\subsection{The Conditional Predictive Ordinate}
+The conditional predictive ordinate (CPO) is a Bayesian diagnostic that can be used to detect surprising observations. It is often used in the context of univariate sampling, the multivariate normal distribution and regression models. \\
+The conditional predictive ordinate is given by
+\begin{equation}
+    \hbox{CPO} = \pi\left(y_i|\pmb{y}_{-i}\right)
+\end{equation}
+with $\pmb{y}$ the data, $\pmb{y}_{-i}$ the data without the $i$-th observation, and $\pi\left(\cdot|\pmb{y}_{-i}\right)$ the predictive distribution of a new observation at $\pmb{y}_{-i}$. Low values of CPO are an indication that $y_i$ is surprising given prior knowledge and the other observations \autocite[][]{pettit1990conditional, cox1980discussion}.
+\subsection{The Mean Absolute Error}
+The mean absolute error (MAE) is a statistical quantity that can be used to determine the accuracy of predictions. Let $\widehat{x}_i$ be the predicted value and $x_i$ the true value, then
+\begin{equation}
+    \frac{1}{n}\sum_{i=1}^n\left|\widehat{x}_i-x_i\right|
+\end{equation}
+\autocite[][]{willmott2005advantages}.
+\clearpage
+\section{The Variance Inflation Factor}\label{sec:vif}
+The Variance Inflation Factor ($\hbox{VIF}$) is a measurement that can be used to avoid multicollinearity between covariates. The $\hbox{VIF}$ quantifies the severity of multicollinearity in a generalized linear model. It provides an index that measures the extent to which the variance of an estimated regression coefficient is increased due to collinearity. \\
+For $p-1$ independent variables, 
+\begin{equation}
+    \hbox{VIF}_i = \frac{1}{1-R^2},\hspace{20pt}i=1,...,p-1,
+\end{equation}
+with $R^2$ the coefficient of determination. In most literature, a value of at least 5 is suggested as too high and is therefore used as the threshold in this work \autocite[][]{craney2002model}.
 \clearpage
 \section{Moments}
 \subsection{Skewness}
@@ -113,20 +220,21 @@ with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \auto
 \subsubsection{Fits for the Non-Temporal Models}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.8\textwidth]{fit_normal_germany.png}
+    \includegraphics[width = 0.9\textwidth]{fit_normal_germany.png}
     \caption{A normal fit to the number of cases in German municipalities}
     \label{fitNormalGermany}
 \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.8\textwidth]{fit_poisson_germany.png}
+    \includegraphics[width = 0.9\textwidth]{fit_poisson_germany.png}
     \caption{A Poisson fit to the number of cases in German municipalities}
     \label{fitPoissonGermany}
 \end{figure}
+\clearpage
 \subsubsection{Fits for the Temporal Models}\label{sec:temp_fit_germany}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{fit_poisson_germany_ts.png}
+  \includegraphics[width = 0.9\textwidth]{fit_poisson_germany_ts.png}
   \caption{A Poisson fit to the number of cases in German municipalities}
   \label{fitPoissonGermany_ts}
 \end{figure}
@@ -134,42 +242,45 @@ with $\mu_4$ the fourth central moment and $\sigma$ the standard deviation \auto
 \subsubsection{Fits for the Non-Temporal Models}\label{sec:temp_fit_norway}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.8\textwidth]{fit_normal_norway.png}
+    \includegraphics[width = 0.9\textwidth]{fit_normal_norway.png}
     \caption{A normal fit to the number of cases in Norwegian municipalities}
     \label{fitNormalNorway}
 \end{figure}
+\clearpage
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.8\textwidth]{fit_poisson_norway.png}
+    \includegraphics[width = 0.9\textwidth]{fit_poisson_norway.png}
     \caption{A Poisson fit to the number of cases in Norwegian municipalities}
     \label{fitPoissonNorway}
 \end{figure}
-\clearpage
 \subsubsection{Fits for the Temporal Models}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{fit_nbinom_norway_ts.png}
+  \includegraphics[width = 0.9\textwidth]{fit_nbinom_norway_ts.png}
   \caption{A negative binomial fit to the number of cases in Norwegian municipalities}
   \label{fitNegbinomNorway_ts}
 \end{figure}
+\clearpage
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{fit_normal_norway_ts.png}
+  \includegraphics[width = 0.9\textwidth]{fit_normal_norway_ts.png}
   \caption{A normal fit to the number of cases in Norwegian municipalities}
   \label{fitNormalNorway_ts}
 \end{figure}
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{fit_poisson_norway_ts.png}
+  \includegraphics[width = 0.9\textwidth]{fit_poisson_norway_ts.png}
   \caption{A Poisson fit to the number of cases in Norwegian municipalities}
   \label{fitPoissonNorway_ts}
 \end{figure}
+\clearpage
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{distrfit_norway_ts.png}
+  \includegraphics[width = 0.9\textwidth]{distrfit_norway_ts.png}
   \caption{Histogram for the number of cases in Norwegian municipalities with a normal and a negative binomial distribution overlayed.}
   \label{fitDistrNorway_ts}
 \end{figure}
+\clearpage
 \section{Choice of Hyperpriors for Germany}
 \begin{figure}[H]
     \centering
@@ -428,6 +539,7 @@ public\_transport & platform & Public transport platforms \\
 \bottomrule
 \end{tabular}
 \end{table}
+\clearpage
 \subsection*{Combination of Key-Value Pairs}
 The following table shows which key-value pairs were combined, due to their similarity.
 \begin{table}[H]
@@ -505,3 +617,7 @@ All the analysis that was carried out was done so using the 4.1 version of the s
     \item \texttt{units} \autocite[][]{units}
     \item \texttt{waiter} \autocite[][]{waiter}
 \end{itemize}
+All of the code used in this work is available through the following GitHub repository:
+\begin{center}
+    \href{https://github.com/nicoFhahn/masterthesis}{https://github.com/nicoFhahn/masterthesis}
+\end{center}
